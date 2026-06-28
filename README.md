@@ -18,25 +18,26 @@ React 19 + Vite 6 + Tailwind CSS v4 SPA for the Cocos workshop ERP.
 
 ## Setup
 
-Requires Node.js 22 LTS (use `.nvmrc`).
+Requires Node.js 22 LTS (use `.nvmrc`) and pnpm (see `packageManager` in `package.json`).
 
 ### Supply-chain safety
 
-This project pins exact dependency versions and requires the Node version declared in `.nvmrc`:
+This project pins exact dependency versions and requires the Node version declared in `.nvmrc` and pnpm declared in `packageManager`:
 
 ```bash
 nvm use          # reads .nvmrc
-npm ci           # installs exact versions from package-lock.json
+corepack enable  # optional, lets Node use the packageManager field automatically
+pnpm install     # installs exact versions from pnpm-lock.yaml
 ```
 
-Never use `npm install` in production or before a release; it can bump versions silently. Run `npm run audit` periodically to check for known vulnerabilities.
+Never use `npm install` or `pnpm update` in production or before a release; they can bump versions silently. Run `pnpm audit` periodically to check for known vulnerabilities.
 
 ### Install and run
 
 ```bash
 cp .env.template .env
-npm ci
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Environment variables
@@ -55,19 +56,18 @@ cp .env.template .env
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview the production build |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Biome |
-| `npm run format:check` | Check Biome formatting |
-| `npm run lint` | Biome lint |
-| `npm run lint:fix` | Biome lint with auto-fix |
-| `npm run check` | Biome lint + format |
-| `npm test` | Run the Vitest suite |
-| `npm run test:ui` | Open the Vitest UI |
-| `npm run audit` | Check for known vulnerabilities |
-| `npm run audit:fix` | Auto-fix non-breaking vulnerabilities |
+| `pnpm dev` | Start the Vite development server |
+| `pnpm build` | Build for production |
+| `pnpm preview` | Preview the production build |
+| `pnpm format` | Format code with Biome |
+| `pnpm format:check` | Check Biome formatting |
+| `pnpm lint` | Biome lint |
+| `pnpm lint:fix` | Biome lint with auto-fix |
+| `pnpm check` | Biome lint + format |
+| `pnpm test` | Run the Vitest suite |
+| `pnpm test:ui` | Open the Vitest UI |
+| `pnpm audit` | Check for known vulnerabilities |
+| `pnpm audit:fix` | Auto-fix non-breaking vulnerabilities |
 
 ## Project structure
 
