@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Button as BaseButton } from '@base-ui/react/button';
 import { cn } from '@/lib/utils';
+import { Button as BaseButton } from '@base-ui/react/button';
+import * as React from 'react';
 
 export interface ButtonProps
   extends React.ComponentPropsWithoutRef<typeof BaseButton> {

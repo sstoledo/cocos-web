@@ -14,6 +14,7 @@ React 19 + Vite 6 + Tailwind CSS v4 SPA for the Cocos workshop ERP.
 - **Charts:** Recharts
 - **Toasts:** Sonner
 - **Testing:** Vitest + Testing Library
+- **Lint/Format:** Biome
 
 ## Setup
 
@@ -58,7 +59,11 @@ cp .env.template .env
 | `npm run build` | Build for production |
 | `npm run preview` | Preview the production build |
 | `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Prettier |
+| `npm run format` | Format code with Biome |
+| `npm run format:check` | Check Biome formatting |
+| `npm run lint` | Biome lint |
+| `npm run lint:fix` | Biome lint with auto-fix |
+| `npm run check` | Biome lint + format |
 | `npm test` | Run the Vitest suite |
 | `npm run test:ui` | Open the Vitest UI |
 | `npm run audit` | Check for known vulnerabilities |

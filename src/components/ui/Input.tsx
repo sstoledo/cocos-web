@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Input as BaseInput } from '@base-ui/react/input';
 import { cn } from '@/lib/utils';
+import { Input as BaseInput } from '@base-ui/react/input';
+import * as React from 'react';
 
 export type InputProps = React.ComponentPropsWithoutRef<typeof BaseInput>;
 

@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router';
 import { ThemeToggle } from '@/features/shell/components/ThemeToggle';
+import { Outlet } from 'react-router';
 
 export function Layout() {
   return (

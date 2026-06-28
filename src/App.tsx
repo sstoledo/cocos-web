@@ -1,5 +1,9 @@
-import { type RouteObject, RouterProvider, createBrowserRouter } from 'react-router';
 import { Layout } from '@/features/shell/pages/Layout';
+import {
+  type RouteObject,
+  RouterProvider,
+  createBrowserRouter,
+} from 'react-router';
 
 const routes: RouteObject[] = [
   {
