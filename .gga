@@ -1,0 +1,6 @@
+PROVIDER="opencode"
+FILE_PATTERNS="*.ts,*.tsx,*.js,*.jsx,*.json,*.css,*.yml,*.yaml,*.sh,.nvmrc"
+EXCLUDE_PATTERNS="*.d.ts,node_modules/*,dist/*,build/*,coverage/*"
+RULES_FILE="AGENTS.md"
+STRICT_MODE="false"
+TIMEOUT="300"
