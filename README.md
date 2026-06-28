@@ -7,7 +7,7 @@ React 19 + Vite 6 + Tailwind CSS v4 SPA for the Cocos workshop ERP.
 - **Framework:** React 19, React Router v7
 - **Build tool:** Vite 6
 - **Styling:** Tailwind CSS v4
-- **UI primitives:** @base-ui-components/react
+- **UI primitives:** @base-ui/react
 - **Data fetching:** TanStack Query
 - **Forms:** React Hook Form + Zod
 - **State:** nuqs, TanStack Query, React context
@@ -17,10 +17,25 @@ React 19 + Vite 6 + Tailwind CSS v4 SPA for the Cocos workshop ERP.
 
 ## Setup
 
-Requires Node.js 20+.
+Requires Node.js 22 LTS (use `.nvmrc`).
+
+### Supply-chain safety
+
+This project pins exact dependency versions and requires the Node version declared in `.nvmrc`:
 
 ```bash
-npm install
+nvm use          # reads .nvmrc
+npm ci           # installs exact versions from package-lock.json
+```
+
+Never use `npm install` in production or before a release; it can bump versions silently. Run `npm run audit` periodically to check for known vulnerabilities.
+
+### Install and run
+
+```bash
+cp .env.template .env
+npm ci
+npm run dev
 ```
 
 ## Environment variables
@@ -46,6 +61,8 @@ cp .env.template .env
 | `npm run format` | Format code with Prettier |
 | `npm test` | Run the Vitest suite |
 | `npm run test:ui` | Open the Vitest UI |
+| `npm run audit` | Check for known vulnerabilities |
+| `npm run audit:fix` | Auto-fix non-breaking vulnerabilities |
 
 ## Project structure
 
