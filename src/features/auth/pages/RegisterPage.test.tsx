@@ -39,7 +39,7 @@ describe('RegisterPage', () => {
       mutate,
       isPending: false,
       error: null,
-    });
+    } as unknown as ReturnType<typeof useRegister>);
   });
 
   it('renders name, email and password fields and submit button', () => {
@@ -92,7 +92,7 @@ describe('RegisterPage', () => {
       mutate,
       isPending: false,
       error: new Error('Email already in use'),
-    });
+    } as unknown as ReturnType<typeof useRegister>);
 
     renderWithRouter();
 
