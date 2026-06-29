@@ -30,7 +30,9 @@ function renderWithRouter() {
 }
 
 describe('RegisterPage', () => {
-  const mutate = vi.fn();
+  const mutate = vi.fn((_values, options) => {
+    options?.onSuccess?.();
+  });
 
   beforeEach(() => {
     mutate.mockClear();
@@ -42,10 +44,14 @@ describe('RegisterPage', () => {
     } as unknown as ReturnType<typeof useRegister>);
   });
 
-  it('renders name, email and password fields and submit button', () => {
+  it('renders header, name, email and password fields and submit button', () => {
     renderWithRouter();
 
-    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /create account/i })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/get started with cocos/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Full name')).toBeInTheDocument();
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(screen.getByLabelText('Password')).toBeInTheDocument();
     expect(
@@ -57,7 +63,7 @@ describe('RegisterPage', () => {
     const user = userEvent.setup();
     renderWithRouter();
 
-    await user.type(screen.getByLabelText('Name'), 'Test User');
+    await user.type(screen.getByLabelText('Full name'), 'Test User');
     await user.type(screen.getByLabelText('Email'), 'user@example.com');
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.click(screen.getByRole('button', { name: /create account/i }));
@@ -80,7 +86,9 @@ describe('RegisterPage', () => {
 
     await user.click(screen.getByRole('button', { name: /create account/i }));
 
-    expect(await screen.findByText(/name is required/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/full name is required/i)
+    ).toBeInTheDocument();
     expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
     expect(
       await screen.findByText(/password is required/i)
@@ -101,13 +109,9 @@ describe('RegisterPage', () => {
 
   it('navigates to /dashboard on success', async () => {
     const user = userEvent.setup();
-    mutate.mockImplementation((_input, options) => {
-      options?.onSuccess?.();
-    });
-
     renderWithRouter();
 
-    await user.type(screen.getByLabelText('Name'), 'Test User');
+    await user.type(screen.getByLabelText('Full name'), 'Test User');
     await user.type(screen.getByLabelText('Email'), 'user@example.com');
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.click(screen.getByRole('button', { name: /create account/i }));

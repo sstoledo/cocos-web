@@ -30,7 +30,9 @@ function renderWithRouter() {
 }
 
 describe('LoginPage', () => {
-  const mutate = vi.fn();
+  const mutate = vi.fn((_values, options) => {
+    options?.onSuccess?.();
+  });
 
   beforeEach(() => {
     mutate.mockClear();
@@ -42,9 +44,13 @@ describe('LoginPage', () => {
     });
   });
 
-  it('renders email and password fields and submit button', () => {
+  it('renders header, email and password fields and submit button', () => {
     renderWithRouter();
 
+    expect(
+      screen.getByRole('heading', { name: /welcome back/i })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/sign in to your account/i)).toBeInTheDocument();
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(screen.getByLabelText('Password')).toBeInTheDocument();
     expect(
@@ -94,10 +100,6 @@ describe('LoginPage', () => {
 
   it('navigates to /dashboard on success', async () => {
     const user = userEvent.setup();
-    mutate.mockImplementation((_input, options) => {
-      options?.onSuccess?.();
-    });
-
     renderWithRouter();
 
     await user.type(screen.getByLabelText('Email'), 'user@example.com');

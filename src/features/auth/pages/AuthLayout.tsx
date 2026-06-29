@@ -5,7 +5,7 @@ import { Outlet } from 'react-router';
 export function AuthLayout() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="fixed top-4 right-4">
+      <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
       <Outlet />

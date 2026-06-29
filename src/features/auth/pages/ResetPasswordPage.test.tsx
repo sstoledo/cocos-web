@@ -19,7 +19,9 @@ function renderWithRouter() {
 }
 
 describe('ResetPasswordPage', () => {
-  const mutate = vi.fn();
+  const mutate = vi.fn((_values, options) => {
+    options?.onSuccess?.();
+  });
 
   beforeEach(() => {
     mutate.mockClear();
@@ -30,9 +32,15 @@ describe('ResetPasswordPage', () => {
     } as unknown as ReturnType<typeof useResetPassword>);
   });
 
-  it('renders email field, submit button and link to login', () => {
+  it('renders header, email field, submit button and link to login', () => {
     renderWithRouter();
 
+    expect(
+      screen.getByRole('heading', { name: /reset password/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/enter your email to receive a reset link/i)
+    ).toBeInTheDocument();
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /send reset link/i })
@@ -81,10 +89,6 @@ describe('ResetPasswordPage', () => {
 
   it('shows success message after submitting', async () => {
     const user = userEvent.setup();
-    mutate.mockImplementation((_input, options) => {
-      options?.onSuccess?.();
-    });
-
     renderWithRouter();
 
     await user.type(screen.getByLabelText('Email'), 'user@example.com');
