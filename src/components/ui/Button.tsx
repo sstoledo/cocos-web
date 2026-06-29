@@ -5,7 +5,7 @@ import * as React from 'react';
 export interface ButtonProps
   extends React.ComponentPropsWithoutRef<typeof BaseButton> {
   variant?: 'default' | 'ghost' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'icon';
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -25,6 +25,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             'h-8 px-3 text-sm': size === 'sm',
             'h-10 px-4': size === 'md',
             'h-11 px-6': size === 'lg',
+            'h-9 w-9': size === 'icon',
           },
           className
         )}
