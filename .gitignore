@@ -40,3 +40,6 @@ lerna-debug.log*
 
 # Testing
 coverage/
+
+# Local AI review cache
+.atl/
