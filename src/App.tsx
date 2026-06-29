@@ -1,4 +1,6 @@
+import { authRoutes } from '@/features/auth/routes';
 import { Layout } from '@/features/shell/pages/Layout';
+import * as React from 'react';
 import {
   type RouteObject,
   RouterProvider,
@@ -12,7 +14,7 @@ const routes: RouteObject[] = [
     children: [
       { index: true, element: <div>Dashboard placeholder</div> },
       { path: 'dashboard', element: <div>Dashboard placeholder</div> },
-      { path: 'login', element: <div>Login placeholder</div> },
+      ...authRoutes,
       { path: '*', element: <div>404 Not Found</div> },
     ],
   },
