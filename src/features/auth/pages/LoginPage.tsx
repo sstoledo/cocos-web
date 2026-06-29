@@ -78,6 +78,15 @@ export function LoginPage() {
             )}
           </div>
 
+          <div className="text-right">
+            <Link
+              to="/reset-password"
+              className="text-sm text-primary hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
           {error && <p className="text-sm text-destructive">{error.message}</p>}
 
           <Button type="submit" className="w-full" disabled={isPending}>
