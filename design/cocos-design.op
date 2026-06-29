@@ -1,0 +1,752 @@
+{
+  "version": "1.0.0",
+  "name": "Cocos Design",
+  "children": [
+    {
+      "id": "login-mobile",
+      "type": "frame",
+      "name": "Login Mobile",
+      "x": 0,
+      "y": 0,
+      "width": 375,
+      "height": 812,
+      "layout": "vertical",
+      "fill": [
+        {
+          "type": "solid",
+          "color": "#FAFAF9"
+        }
+      ],
+      "padding": [
+        24,
+        24
+      ],
+      "gap": 24,
+      "alignItems": "center",
+      "justifyContent": "center",
+      "children": [
+        {
+          "id": "logo",
+          "type": "frame",
+          "name": "Logo",
+          "width": 64,
+          "height": 64,
+          "cornerRadius": 16,
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#2563EB"
+            }
+          ],
+          "layout": "horizontal",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "logo-icon",
+              "type": "path",
+              "name": "WrenchIcon",
+              "width": 32,
+              "height": 32,
+              "stroke": {
+                "thickness": 2,
+                "fill": [
+                  {
+                    "type": "solid",
+                    "color": "#FFFFFF"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "header",
+          "type": "frame",
+          "name": "Header",
+          "width": "fill_container",
+          "height": "fit_content",
+          "layout": "vertical",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "title",
+              "type": "text",
+              "name": "Title",
+              "content": "Bienvenido a Cocos",
+              "fontSize": 28,
+              "fontWeight": 700,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#18181B"
+                }
+              ],
+              "textAlign": "center"
+            },
+            {
+              "id": "subtitle",
+              "type": "text",
+              "name": "Subtitle",
+              "content": "Ingres\u00e1 tus credenciales para continuar",
+              "fontSize": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#71717A"
+                }
+              ],
+              "textAlign": "center"
+            }
+          ]
+        },
+        {
+          "id": "form",
+          "type": "frame",
+          "name": "Login Form",
+          "width": "fill_container",
+          "height": "fit_content",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "id": "email-field",
+              "type": "frame",
+              "name": "Email Field",
+              "width": "fill_container",
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "id": "email-label",
+                  "type": "text",
+                  "name": "Email Label",
+                  "content": "Correo electr\u00f3nico",
+                  "fontSize": 14,
+                  "fontWeight": 500,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#18181B"
+                    }
+                  ]
+                },
+                {
+                  "id": "email-input",
+                  "type": "frame",
+                  "name": "Email Input",
+                  "role": "form-input",
+                  "width": "fill_container",
+                  "height": 48,
+                  "cornerRadius": 10,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": [
+                      {
+                        "type": "solid",
+                        "color": "#E4E4E7"
+                      }
+                    ]
+                  },
+                  "layout": "horizontal",
+                  "alignItems": "center",
+                  "padding": [
+                    0,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "id": "email-placeholder",
+                      "type": "text",
+                      "name": "Email Placeholder",
+                      "content": "tu@email.com",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "password-field",
+              "type": "frame",
+              "name": "Password Field",
+              "width": "fill_container",
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "id": "password-label",
+                  "type": "text",
+                  "name": "Password Label",
+                  "content": "Contrase\u00f1a",
+                  "fontSize": 14,
+                  "fontWeight": 500,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#18181B"
+                    }
+                  ]
+                },
+                {
+                  "id": "password-input",
+                  "type": "frame",
+                  "name": "Password Input",
+                  "role": "form-input",
+                  "width": "fill_container",
+                  "height": 48,
+                  "cornerRadius": 10,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": [
+                      {
+                        "type": "solid",
+                        "color": "#E4E4E7"
+                      }
+                    ]
+                  },
+                  "layout": "horizontal",
+                  "alignItems": "center",
+                  "padding": [
+                    0,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "id": "password-placeholder",
+                      "type": "text",
+                      "name": "Password Placeholder",
+                      "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "forgot-password",
+              "type": "text",
+              "name": "Forgot Password",
+              "content": "\u00bfOlvidaste tu contrase\u00f1a?",
+              "fontSize": 14,
+              "fontWeight": 500,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#2563EB"
+                }
+              ],
+              "textAlign": "right"
+            },
+            {
+              "id": "submit-button",
+              "type": "frame",
+              "name": "Submit Button",
+              "role": "button",
+              "width": "fill_container",
+              "height": 48,
+              "cornerRadius": 10,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#2563EB"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "submit-text",
+                  "type": "text",
+                  "name": "Submit Text",
+                  "content": "Iniciar sesi\u00f3n",
+                  "fontSize": 16,
+                  "fontWeight": 600,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FFFFFF"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "register-link",
+          "type": "frame",
+          "name": "Register Link",
+          "width": "fill_container",
+          "height": "fit_content",
+          "layout": "horizontal",
+          "gap": 4,
+          "justifyContent": "center",
+          "children": [
+            {
+              "id": "no-account",
+              "type": "text",
+              "name": "No Account",
+              "content": "\u00bfNo ten\u00e9s cuenta?",
+              "fontSize": 14,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#71717A"
+                }
+              ]
+            },
+            {
+              "id": "register-text",
+              "type": "text",
+              "name": "Register Text",
+              "content": "Registrate",
+              "fontSize": 14,
+              "fontWeight": 600,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#2563EB"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "login-desktop",
+      "type": "frame",
+      "name": "Login Desktop",
+      "x": 500,
+      "y": 0,
+      "width": 1200,
+      "height": 800,
+      "layout": "horizontal",
+      "fill": [
+        {
+          "type": "solid",
+          "color": "#FAFAF9"
+        }
+      ],
+      "padding": [
+        40,
+        40
+      ],
+      "gap": 0,
+      "alignItems": "center",
+      "justifyContent": "center",
+      "children": [
+        {
+          "id": "login-card",
+          "type": "frame",
+          "name": "Login Card",
+          "width": 420,
+          "height": "fit_content",
+          "layout": "vertical",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "padding": [
+            40,
+            40
+          ],
+          "gap": 24,
+          "cornerRadius": 16,
+          "effects": [
+            {
+              "type": "shadow",
+              "offsetX": 0,
+              "offsetY": 4,
+              "blur": 16,
+              "spread": 0,
+              "color": "rgba(0,0,0,0.08)"
+            }
+          ],
+          "children": [
+            {
+              "id": "logo-desktop",
+              "type": "frame",
+              "name": "Logo",
+              "width": 64,
+              "height": 64,
+              "cornerRadius": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#2563EB"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "logo-icon-desktop",
+                  "type": "path",
+                  "name": "WrenchIcon",
+                  "width": 32,
+                  "height": 32,
+                  "stroke": {
+                    "thickness": 2,
+                    "fill": [
+                      {
+                        "type": "solid",
+                        "color": "#FFFFFF"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "header-desktop",
+              "type": "frame",
+              "name": "Header",
+              "width": "fill_container",
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "title-desktop",
+                  "type": "text",
+                  "name": "Title",
+                  "content": "Bienvenido a Cocos",
+                  "fontSize": 28,
+                  "fontWeight": 700,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#18181B"
+                    }
+                  ],
+                  "textAlign": "center"
+                },
+                {
+                  "id": "subtitle-desktop",
+                  "type": "text",
+                  "name": "Subtitle",
+                  "content": "Ingres\u00e1 tus credenciales para continuar",
+                  "fontSize": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#71717A"
+                    }
+                  ],
+                  "textAlign": "center"
+                }
+              ]
+            },
+            {
+              "id": "form-desktop",
+              "type": "frame",
+              "name": "Login Form",
+              "width": "fill_container",
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "children": [
+                {
+                  "id": "email-field-desktop",
+                  "type": "frame",
+                  "name": "Email Field",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "id": "email-label-desktop",
+                      "type": "text",
+                      "name": "Email Label",
+                      "content": "Correo electr\u00f3nico",
+                      "fontSize": 14,
+                      "fontWeight": 500,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#18181B"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "email-input-desktop",
+                      "type": "frame",
+                      "name": "Email Input",
+                      "role": "form-input",
+                      "width": "fill_container",
+                      "height": 48,
+                      "cornerRadius": 10,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#E4E4E7"
+                          }
+                        ]
+                      },
+                      "layout": "horizontal",
+                      "alignItems": "center",
+                      "padding": [
+                        0,
+                        16
+                      ],
+                      "children": [
+                        {
+                          "id": "email-placeholder-desktop",
+                          "type": "text",
+                          "name": "Email Placeholder",
+                          "content": "tu@email.com",
+                          "fontSize": 16,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#A1A1AA"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "password-field-desktop",
+                  "type": "frame",
+                  "name": "Password Field",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "id": "password-label-desktop",
+                      "type": "text",
+                      "name": "Password Label",
+                      "content": "Contrase\u00f1a",
+                      "fontSize": 14,
+                      "fontWeight": 500,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#18181B"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "password-input-desktop",
+                      "type": "frame",
+                      "name": "Password Input",
+                      "role": "form-input",
+                      "width": "fill_container",
+                      "height": 48,
+                      "cornerRadius": 10,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#E4E4E7"
+                          }
+                        ]
+                      },
+                      "layout": "horizontal",
+                      "alignItems": "center",
+                      "padding": [
+                        0,
+                        16
+                      ],
+                      "children": [
+                        {
+                          "id": "password-placeholder-desktop",
+                          "type": "text",
+                          "name": "Password Placeholder",
+                          "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+                          "fontSize": 16,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#A1A1AA"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "forgot-password-desktop",
+                  "type": "text",
+                  "name": "Forgot Password",
+                  "content": "\u00bfOlvidaste tu contrase\u00f1a?",
+                  "fontSize": 14,
+                  "fontWeight": 500,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "textAlign": "right"
+                },
+                {
+                  "id": "submit-button-desktop",
+                  "type": "frame",
+                  "name": "Submit Button",
+                  "role": "button",
+                  "width": "fill_container",
+                  "height": 48,
+                  "cornerRadius": 10,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "submit-text-desktop",
+                      "type": "text",
+                      "name": "Submit Text",
+                      "content": "Iniciar sesi\u00f3n",
+                      "fontSize": 16,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FFFFFF"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "register-link-desktop",
+              "type": "frame",
+              "name": "Register Link",
+              "width": "fill_container",
+              "height": "fit_content",
+              "layout": "horizontal",
+              "gap": 4,
+              "justifyContent": "center",
+              "children": [
+                {
+                  "id": "no-account-desktop",
+                  "type": "text",
+                  "name": "No Account",
+                  "content": "\u00bfNo ten\u00e9s cuenta?",
+                  "fontSize": 14,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#71717A"
+                    }
+                  ]
+                },
+                {
+                  "id": "register-text-desktop",
+                  "type": "text",
+                  "name": "Register Text",
+                  "content": "Registrate",
+                  "fontSize": 14,
+                  "fontWeight": 600,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "background": {
+      "type": "color",
+      "value": "#FAFAF9"
+    },
+    "foreground": {
+      "type": "color",
+      "value": "#18181B"
+    },
+    "muted-foreground": {
+      "type": "color",
+      "value": "#71717A"
+    },
+    "primary": {
+      "type": "color",
+      "value": "oklch(0.55 0.22 258)"
+    },
+    "primary-foreground": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "card": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "border": {
+      "type": "color",
+      "value": "#E4E4E7"
+    },
+    "placeholder": {
+      "type": "color",
+      "value": "#A1A1AA"
+    }
+  }
+}
