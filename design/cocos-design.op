@@ -42,400 +42,32 @@
       "name": "Page 1",
       "children": [
         {
-          "id": "login-mobile",
           "type": "frame",
           "name": "Login Mobile",
           "x": 0,
           "y": 0,
           "width": 375,
           "height": 812,
-          "layout": "vertical",
+          "layout": "none",
           "fill": [
             {
               "type": "solid",
               "color": "#FAFAF9"
             }
           ],
-          "padding": [
-            24,
-            24
-          ],
-          "gap": 24,
-          "alignItems": "center",
-          "justifyContent": "center",
           "children": [
             {
-              "id": "logo",
               "type": "frame",
-              "name": "Logo",
-              "width": 64,
-              "height": 64,
-              "cornerRadius": 16,
-              "fill": [
-                {
-                  "type": "solid",
-                  "color": "#2563EB"
-                }
-              ],
-              "layout": "horizontal",
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "id": "logo-icon",
-                  "type": "path",
-                  "name": "WrenchIcon",
-                  "width": 32,
-                  "height": 32,
-                  "stroke": {
-                    "thickness": 2,
-                    "fill": [
-                      {
-                        "type": "solid",
-                        "color": "#FFFFFF"
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "id": "header",
-              "type": "frame",
-              "name": "Header",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "id": "title",
-                  "type": "text",
-                  "name": "Title",
-                  "content": "Bienvenido a Cocos",
-                  "fontSize": 28,
-                  "fontWeight": 700,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#18181B"
-                    }
-                  ],
-                  "textAlign": "center"
-                },
-                {
-                  "id": "subtitle",
-                  "type": "text",
-                  "name": "Subtitle",
-                  "content": "Ingres\u00e1 tus credenciales para continuar",
-                  "fontSize": 16,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#71717A"
-                    }
-                  ],
-                  "textAlign": "center"
-                }
-              ]
-            },
-            {
-              "id": "form",
-              "type": "frame",
-              "name": "Login Form",
-              "width": "fill_container",
+              "name": "Auth Content",
+              "x": 24,
+              "y": 160,
+              "width": 327,
               "height": "fit_content",
               "layout": "vertical",
               "gap": 16,
+              "alignItems": "center",
               "children": [
                 {
-                  "id": "email-field",
-                  "type": "frame",
-                  "name": "Email Field",
-                  "width": "fill_container",
-                  "height": "fit_content",
-                  "layout": "vertical",
-                  "gap": 6,
-                  "children": [
-                    {
-                      "id": "email-label",
-                      "type": "text",
-                      "name": "Email Label",
-                      "content": "Correo electr\u00f3nico",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#18181B"
-                        }
-                      ]
-                    },
-                    {
-                      "id": "email-input",
-                      "type": "frame",
-                      "name": "Email Input",
-                      "role": "form-input",
-                      "width": "fill_container",
-                      "height": 48,
-                      "cornerRadius": 10,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "stroke": {
-                        "thickness": 1,
-                        "fill": [
-                          {
-                            "type": "solid",
-                            "color": "#E4E4E7"
-                          }
-                        ]
-                      },
-                      "layout": "horizontal",
-                      "alignItems": "center",
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "children": [
-                        {
-                          "id": "email-placeholder",
-                          "type": "text",
-                          "name": "Email Placeholder",
-                          "content": "tu@email.com",
-                          "fontSize": 16,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#A1A1AA"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "id": "password-field",
-                  "type": "frame",
-                  "name": "Password Field",
-                  "width": "fill_container",
-                  "height": "fit_content",
-                  "layout": "vertical",
-                  "gap": 6,
-                  "children": [
-                    {
-                      "id": "password-label",
-                      "type": "text",
-                      "name": "Password Label",
-                      "content": "Contrase\u00f1a",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#18181B"
-                        }
-                      ]
-                    },
-                    {
-                      "id": "password-input",
-                      "type": "frame",
-                      "name": "Password Input",
-                      "role": "form-input",
-                      "width": "fill_container",
-                      "height": 48,
-                      "cornerRadius": 10,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "stroke": {
-                        "thickness": 1,
-                        "fill": [
-                          {
-                            "type": "solid",
-                            "color": "#E4E4E7"
-                          }
-                        ]
-                      },
-                      "layout": "horizontal",
-                      "alignItems": "center",
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "children": [
-                        {
-                          "id": "password-placeholder",
-                          "type": "text",
-                          "name": "Password Placeholder",
-                          "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
-                          "fontSize": 16,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#A1A1AA"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "id": "forgot-password",
-                  "type": "text",
-                  "name": "Forgot Password",
-                  "content": "\u00bfOlvidaste tu contrase\u00f1a?",
-                  "fontSize": 14,
-                  "fontWeight": 500,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#2563EB"
-                    }
-                  ],
-                  "textAlign": "right"
-                },
-                {
-                  "id": "submit-button",
-                  "type": "frame",
-                  "name": "Submit Button",
-                  "role": "button",
-                  "width": "fill_container",
-                  "height": 48,
-                  "cornerRadius": 10,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#2563EB"
-                    }
-                  ],
-                  "layout": "horizontal",
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "id": "submit-text",
-                      "type": "text",
-                      "name": "Submit Text",
-                      "content": "Iniciar sesi\u00f3n",
-                      "fontSize": 16,
-                      "fontWeight": 600,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "register-link",
-              "type": "frame",
-              "name": "Register Link",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "horizontal",
-              "gap": 4,
-              "justifyContent": "center",
-              "children": [
-                {
-                  "id": "no-account",
-                  "type": "text",
-                  "name": "No Account",
-                  "content": "\u00bfNo ten\u00e9s cuenta?",
-                  "fontSize": 14,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#71717A"
-                    }
-                  ]
-                },
-                {
-                  "id": "register-text",
-                  "type": "text",
-                  "name": "Register Text",
-                  "content": "Registrate",
-                  "fontSize": 14,
-                  "fontWeight": 600,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#2563EB"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "login-desktop",
-          "type": "frame",
-          "name": "Login Desktop",
-          "x": 403.23660714285734,
-          "y": -32.25446428571422,
-          "width": 1200,
-          "height": 800,
-          "layout": "horizontal",
-          "fill": [
-            {
-              "type": "solid",
-              "color": "#FAFAF9"
-            }
-          ],
-          "padding": [
-            40,
-            40
-          ],
-          "gap": 0,
-          "alignItems": "center",
-          "justifyContent": "center",
-          "children": [
-            {
-              "id": "login-card",
-              "type": "frame",
-              "name": "Login Card",
-              "width": 420,
-              "height": "fit_content",
-              "layout": "vertical",
-              "fill": [
-                {
-                  "type": "solid",
-                  "color": "#FFFFFF"
-                }
-              ],
-              "padding": [
-                40,
-                40
-              ],
-              "gap": 24,
-              "cornerRadius": 16,
-              "effects": [
-                {
-                  "type": "shadow",
-                  "offsetX": 0,
-                  "offsetY": 4,
-                  "blur": 16,
-                  "spread": 0,
-                  "color": "rgba(0,0,0,0.08)"
-                }
-              ],
-              "children": [
-                {
-                  "id": "logo-desktop",
                   "type": "frame",
                   "name": "Logo",
                   "width": 64,
@@ -452,7 +84,6 @@
                   "alignItems": "center",
                   "children": [
                     {
-                      "id": "logo-icon-desktop",
                       "type": "path",
                       "name": "WrenchIcon",
                       "width": 32,
@@ -465,12 +96,13 @@
                             "color": "#FFFFFF"
                           }
                         ]
-                      }
+                      },
+                      "id": "wrenchicon"
                     }
-                  ]
+                  ],
+                  "id": "logo"
                 },
                 {
-                  "id": "header-desktop",
                   "type": "frame",
                   "name": "Header",
                   "width": "fill_container",
@@ -480,7 +112,6 @@
                   "alignItems": "center",
                   "children": [
                     {
-                      "id": "title-desktop",
                       "type": "text",
                       "name": "Title",
                       "content": "Bienvenido a Cocos",
@@ -492,13 +123,13 @@
                           "color": "#18181B"
                         }
                       ],
-                      "textAlign": "center"
+                      "textAlign": "center",
+                      "id": "title"
                     },
                     {
-                      "id": "subtitle-desktop",
                       "type": "text",
                       "name": "Subtitle",
-                      "content": "Ingres\u00e1 tus credenciales para continuar",
+                      "content": "Ingresa tus credenciales para continuar",
                       "fontSize": 16,
                       "fill": [
                         {
@@ -506,12 +137,13 @@
                           "color": "#71717A"
                         }
                       ],
-                      "textAlign": "center"
+                      "textAlign": "center",
+                      "id": "subtitle"
                     }
-                  ]
+                  ],
+                  "id": "header"
                 },
                 {
-                  "id": "form-desktop",
                   "type": "frame",
                   "name": "Login Form",
                   "width": "fill_container",
@@ -520,19 +152,17 @@
                   "gap": 16,
                   "children": [
                     {
-                      "id": "email-field-desktop",
                       "type": "frame",
-                      "name": "Email Field",
+                      "name": "Correo electronico Field",
                       "width": "fill_container",
                       "height": "fit_content",
                       "layout": "vertical",
                       "gap": 6,
                       "children": [
                         {
-                          "id": "email-label-desktop",
                           "type": "text",
-                          "name": "Email Label",
-                          "content": "Correo electr\u00f3nico",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
                           "fontSize": 14,
                           "fontWeight": 500,
                           "fill": [
@@ -540,16 +170,20 @@
                               "type": "solid",
                               "color": "#18181B"
                             }
-                          ]
+                          ],
+                          "id": "correo-electronico-label"
                         },
                         {
-                          "id": "email-input-desktop",
                           "type": "frame",
-                          "name": "Email Input",
-                          "role": "form-input",
+                          "name": "Correo electronico Input",
                           "width": "fill_container",
                           "height": 48,
-                          "cornerRadius": 10,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
                           "fill": [
                             {
                               "type": "solid",
@@ -565,17 +199,12 @@
                               }
                             ]
                           },
-                          "layout": "horizontal",
-                          "alignItems": "center",
-                          "padding": [
-                            0,
-                            16
-                          ],
+                          "cornerRadius": 10,
+                          "role": "form-input",
                           "children": [
                             {
-                              "id": "email-placeholder-desktop",
                               "type": "text",
-                              "name": "Email Placeholder",
+                              "name": "Correo electronico Placeholder",
                               "content": "tu@email.com",
                               "fontSize": 16,
                               "fill": [
@@ -583,26 +212,27 @@
                                   "type": "solid",
                                   "color": "#A1A1AA"
                                 }
-                              ]
+                              ],
+                              "id": "correo-electronico-placeholder"
                             }
-                          ]
+                          ],
+                          "id": "correo-electronico-input"
                         }
-                      ]
+                      ],
+                      "id": "correo-electronico-field"
                     },
                     {
-                      "id": "password-field-desktop",
                       "type": "frame",
-                      "name": "Password Field",
+                      "name": "Contrasena Field",
                       "width": "fill_container",
                       "height": "fit_content",
                       "layout": "vertical",
                       "gap": 6,
                       "children": [
                         {
-                          "id": "password-label-desktop",
                           "type": "text",
-                          "name": "Password Label",
-                          "content": "Contrase\u00f1a",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
                           "fontSize": 14,
                           "fontWeight": 500,
                           "fill": [
@@ -610,16 +240,20 @@
                               "type": "solid",
                               "color": "#18181B"
                             }
-                          ]
+                          ],
+                          "id": "contrasena-label"
                         },
                         {
-                          "id": "password-input-desktop",
                           "type": "frame",
-                          "name": "Password Input",
-                          "role": "form-input",
+                          "name": "Contrasena Input",
                           "width": "fill_container",
                           "height": 48,
-                          "cornerRadius": 10,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
                           "fill": [
                             {
                               "type": "solid",
@@ -635,68 +269,49 @@
                               }
                             ]
                           },
-                          "layout": "horizontal",
-                          "alignItems": "center",
-                          "padding": [
-                            0,
-                            16
-                          ],
+                          "cornerRadius": 10,
+                          "role": "form-input",
                           "children": [
                             {
-                              "id": "password-placeholder-desktop",
                               "type": "text",
-                              "name": "Password Placeholder",
-                              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
                               "fontSize": 16,
                               "fill": [
                                 {
                                   "type": "solid",
                                   "color": "#A1A1AA"
                                 }
-                              ]
+                              ],
+                              "id": "contrasena-placeholder"
                             }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "id": "forgot-password-desktop",
-                      "type": "text",
-                      "name": "Forgot Password",
-                      "content": "\u00bfOlvidaste tu contrase\u00f1a?",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#2563EB"
+                          ],
+                          "id": "contrasena-input"
                         }
                       ],
-                      "textAlign": "right"
+                      "id": "contrasena-field"
                     },
                     {
-                      "id": "submit-button-desktop",
                       "type": "frame",
                       "name": "Submit Button",
-                      "role": "button",
                       "width": "fill_container",
                       "height": 48,
-                      "cornerRadius": 10,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#2563EB"
-                        }
-                      ],
                       "layout": "horizontal",
                       "justifyContent": "center",
                       "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
                       "children": [
                         {
-                          "id": "submit-text-desktop",
                           "type": "text",
                           "name": "Submit Text",
-                          "content": "Iniciar sesi\u00f3n",
+                          "content": "Iniciar sesion",
                           "fontSize": 16,
                           "fontWeight": 600,
                           "fill": [
@@ -704,16 +319,18 @@
                               "type": "solid",
                               "color": "#FFFFFF"
                             }
-                          ]
+                          ],
+                          "id": "submit-text"
                         }
-                      ]
+                      ],
+                      "id": "submit-button"
                     }
-                  ]
+                  ],
+                  "id": "login-form"
                 },
                 {
-                  "id": "register-link-desktop",
                   "type": "frame",
-                  "name": "Register Link",
+                  "name": "Footer Link",
                   "width": "fill_container",
                   "height": "fit_content",
                   "layout": "horizontal",
@@ -721,22 +338,21 @@
                   "justifyContent": "center",
                   "children": [
                     {
-                      "id": "no-account-desktop",
                       "type": "text",
-                      "name": "No Account",
-                      "content": "\u00bfNo ten\u00e9s cuenta?",
+                      "name": "Footer Prefix",
+                      "content": "No tenes cuenta?",
                       "fontSize": 14,
                       "fill": [
                         {
                           "type": "solid",
                           "color": "#71717A"
                         }
-                      ]
+                      ],
+                      "id": "footer-prefix"
                     },
                     {
-                      "id": "register-text-desktop",
                       "type": "text",
-                      "name": "Register Text",
+                      "name": "Footer Action",
                       "content": "Registrate",
                       "fontSize": 14,
                       "fontWeight": 600,
@@ -745,46 +361,25 @@
                           "type": "solid",
                           "color": "#2563EB"
                         }
-                      ]
+                      ],
+                      "id": "footer-action"
                     }
-                  ]
+                  ],
+                  "id": "footer-link"
                 }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "name": "Register Mobile",
-          "x": 0,
-          "y": 900,
-          "width": 375,
-          "height": 812,
-          "layout": "vertical",
-          "fill": [
-            {
-              "type": "solid",
-              "color": "#FAFAF9"
-            }
-          ],
-          "padding": [
-            24,
-            24
-          ],
-          "gap": 24,
-          "alignItems": "center",
-          "justifyContent": "center",
-          "children": [
+              ],
+              "id": "auth-content"
+            },
             {
               "type": "frame",
-              "name": "Logo",
-              "width": 64,
-              "height": 64,
-              "cornerRadius": 16,
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
               "fill": [
                 {
                   "type": "solid",
-                  "color": "#2563EB"
+                  "color": "#F4F4F5"
                 }
               ],
               "layout": "horizontal",
@@ -793,389 +388,50 @@
               "children": [
                 {
                   "type": "path",
-                  "name": "WrenchIcon",
-                  "width": 32,
-                  "height": 32,
-                  "stroke": {
-                    "thickness": 2,
-                    "fill": [
-                      {
-                        "type": "solid",
-                        "color": "#FFFFFF"
-                      }
-                    ]
-                  },
-                  "id": "wrenchicon"
+                  "name": "MoonIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#3F3F46"
+                    }
+                  ],
+                  "id": "moonicon"
                 }
               ],
-              "id": "logo-1"
-            },
-            {
-              "type": "frame",
-              "name": "Header",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "name": "Title",
-                  "content": "Crear cuenta",
-                  "fontSize": 28,
-                  "fontWeight": 700,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#18181B"
-                    }
-                  ],
-                  "textAlign": "center",
-                  "id": "title-1"
-                },
-                {
-                  "type": "text",
-                  "name": "Subtitle",
-                  "content": "Registrate para empezar a usar Cocos",
-                  "fontSize": 16,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#71717A"
-                    }
-                  ],
-                  "textAlign": "center",
-                  "id": "subtitle-1"
-                }
-              ],
-              "id": "header-1"
-            },
-            {
-              "type": "frame",
-              "name": "Register Form",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "vertical",
-              "gap": 16,
-              "children": [
-                {
-                  "type": "frame",
-                  "name": "Name Field",
-                  "width": "fill_container",
-                  "height": "fit_content",
-                  "layout": "vertical",
-                  "gap": 6,
-                  "children": [
-                    {
-                      "type": "text",
-                      "name": "Name Label",
-                      "content": "Nombre completo",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#18181B"
-                        }
-                      ],
-                      "id": "name-label"
-                    },
-                    {
-                      "type": "frame",
-                      "name": "Name Input",
-                      "width": "fill_container",
-                      "height": 48,
-                      "layout": "horizontal",
-                      "alignItems": "center",
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "stroke": {
-                        "thickness": 1,
-                        "fill": [
-                          {
-                            "type": "solid",
-                            "color": "#E4E4E7"
-                          }
-                        ]
-                      },
-                      "cornerRadius": 10,
-                      "role": "form-input",
-                      "children": [
-                        {
-                          "type": "text",
-                          "name": "Name Placeholder",
-                          "content": "Juan Perez",
-                          "fontSize": 16,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#A1A1AA"
-                            }
-                          ],
-                          "id": "name-placeholder"
-                        }
-                      ],
-                      "id": "name-input"
-                    }
-                  ],
-                  "id": "name-field"
-                },
-                {
-                  "type": "frame",
-                  "name": "Email Field",
-                  "width": "fill_container",
-                  "height": "fit_content",
-                  "layout": "vertical",
-                  "gap": 6,
-                  "children": [
-                    {
-                      "type": "text",
-                      "name": "Email Label",
-                      "content": "Correo electronico",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#18181B"
-                        }
-                      ],
-                      "id": "email-label-1"
-                    },
-                    {
-                      "type": "frame",
-                      "name": "Email Input",
-                      "width": "fill_container",
-                      "height": 48,
-                      "layout": "horizontal",
-                      "alignItems": "center",
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "stroke": {
-                        "thickness": 1,
-                        "fill": [
-                          {
-                            "type": "solid",
-                            "color": "#E4E4E7"
-                          }
-                        ]
-                      },
-                      "cornerRadius": 10,
-                      "role": "form-input",
-                      "children": [
-                        {
-                          "type": "text",
-                          "name": "Email Placeholder",
-                          "content": "tu@email.com",
-                          "fontSize": 16,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#A1A1AA"
-                            }
-                          ],
-                          "id": "email-placeholder-1"
-                        }
-                      ],
-                      "id": "email-input-1"
-                    }
-                  ],
-                  "id": "email-field-1"
-                },
-                {
-                  "type": "frame",
-                  "name": "Password Field",
-                  "width": "fill_container",
-                  "height": "fit_content",
-                  "layout": "vertical",
-                  "gap": 6,
-                  "children": [
-                    {
-                      "type": "text",
-                      "name": "Password Label",
-                      "content": "Contrasena",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#18181B"
-                        }
-                      ],
-                      "id": "password-label-1"
-                    },
-                    {
-                      "type": "frame",
-                      "name": "Password Input",
-                      "width": "fill_container",
-                      "height": 48,
-                      "layout": "horizontal",
-                      "alignItems": "center",
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "stroke": {
-                        "thickness": 1,
-                        "fill": [
-                          {
-                            "type": "solid",
-                            "color": "#E4E4E7"
-                          }
-                        ]
-                      },
-                      "cornerRadius": 10,
-                      "role": "form-input",
-                      "children": [
-                        {
-                          "type": "text",
-                          "name": "Password Placeholder",
-                          "content": "********",
-                          "fontSize": 16,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#A1A1AA"
-                            }
-                          ],
-                          "id": "password-placeholder-1"
-                        }
-                      ],
-                      "id": "password-input-1"
-                    }
-                  ],
-                  "id": "password-field-1"
-                },
-                {
-                  "type": "frame",
-                  "name": "Submit Button",
-                  "width": "fill_container",
-                  "height": 48,
-                  "layout": "horizontal",
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#2563EB"
-                    }
-                  ],
-                  "cornerRadius": 10,
-                  "role": "button",
-                  "children": [
-                    {
-                      "type": "text",
-                      "name": "Submit Text",
-                      "content": "Crear cuenta",
-                      "fontSize": 16,
-                      "fontWeight": 600,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "id": "submit-text-1"
-                    }
-                  ],
-                  "id": "submit-button-1"
-                }
-              ],
-              "id": "register-form"
-            },
-            {
-              "type": "frame",
-              "name": "Login Link",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "horizontal",
-              "gap": 4,
-              "justifyContent": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "name": "Has Account",
-                  "content": "Ya tenes cuenta?",
-                  "fontSize": 14,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#71717A"
-                    }
-                  ],
-                  "id": "has-account"
-                },
-                {
-                  "type": "text",
-                  "name": "Login Text",
-                  "content": "Iniciar sesion",
-                  "fontSize": 14,
-                  "fontWeight": 600,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#2563EB"
-                    }
-                  ],
-                  "id": "login-text"
-                }
-              ],
-              "id": "login-link"
+              "x": 323,
+              "y": 16,
+              "id": "theme-toggle"
             }
           ],
-          "id": "register-mobile"
+          "id": "login-mobile"
         },
         {
           "type": "frame",
-          "name": "Register Desktop",
+          "name": "Login Desktop",
           "x": 500,
-          "y": 900,
+          "y": 0,
           "width": 1200,
           "height": 800,
-          "layout": "horizontal",
+          "layout": "none",
           "fill": [
             {
               "type": "solid",
               "color": "#FAFAF9"
             }
           ],
-          "padding": [
-            40,
-            40
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
           "children": [
             {
               "type": "frame",
-              "name": "Register Card",
+              "name": "Auth Card",
+              "x": 390,
+              "y": 120,
               "width": 420,
               "height": "fit_content",
               "layout": "vertical",
-              "gap": 24,
+              "gap": 16,
               "fill": [
                 {
                   "type": "solid",
@@ -1197,6 +453,7 @@
                   "spread": 0
                 }
               ],
+              "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
@@ -1231,7 +488,7 @@
                       "id": "wrenchicon-1"
                     }
                   ],
-                  "id": "logo-2"
+                  "id": "logo-1"
                 },
                 {
                   "type": "frame",
@@ -1245,7 +502,7 @@
                     {
                       "type": "text",
                       "name": "Title",
-                      "content": "Crear cuenta",
+                      "content": "Bienvenido a Cocos",
                       "fontSize": 28,
                       "fontWeight": 700,
                       "fill": [
@@ -1255,12 +512,12 @@
                         }
                       ],
                       "textAlign": "center",
-                      "id": "title-2"
+                      "id": "title-1"
                     },
                     {
                       "type": "text",
                       "name": "Subtitle",
-                      "content": "Registrate para empezar a usar Cocos",
+                      "content": "Ingresa tus credenciales para continuar",
                       "fontSize": 16,
                       "fill": [
                         {
@@ -1269,14 +526,14 @@
                         }
                       ],
                       "textAlign": "center",
-                      "id": "subtitle-2"
+                      "id": "subtitle-1"
                     }
                   ],
-                  "id": "header-2"
+                  "id": "header-1"
                 },
                 {
                   "type": "frame",
-                  "name": "Register Form",
+                  "name": "Login Form",
                   "width": "fill_container",
                   "height": "fit_content",
                   "layout": "vertical",
@@ -1284,7 +541,7 @@
                   "children": [
                     {
                       "type": "frame",
-                      "name": "Name Field",
+                      "name": "Correo electronico Field",
                       "width": "fill_container",
                       "height": "fit_content",
                       "layout": "vertical",
@@ -1292,77 +549,7 @@
                       "children": [
                         {
                           "type": "text",
-                          "name": "Name Label",
-                          "content": "Nombre completo",
-                          "fontSize": 14,
-                          "fontWeight": 500,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#18181B"
-                            }
-                          ],
-                          "id": "name-label-1"
-                        },
-                        {
-                          "type": "frame",
-                          "name": "Name Input",
-                          "width": "fill_container",
-                          "height": 48,
-                          "layout": "horizontal",
-                          "alignItems": "center",
-                          "padding": [
-                            0,
-                            16
-                          ],
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#FFFFFF"
-                            }
-                          ],
-                          "stroke": {
-                            "thickness": 1,
-                            "fill": [
-                              {
-                                "type": "solid",
-                                "color": "#E4E4E7"
-                              }
-                            ]
-                          },
-                          "cornerRadius": 10,
-                          "role": "form-input",
-                          "children": [
-                            {
-                              "type": "text",
-                              "name": "Name Placeholder",
-                              "content": "Juan Perez",
-                              "fontSize": 16,
-                              "fill": [
-                                {
-                                  "type": "solid",
-                                  "color": "#A1A1AA"
-                                }
-                              ],
-                              "id": "name-placeholder-1"
-                            }
-                          ],
-                          "id": "name-input-1"
-                        }
-                      ],
-                      "id": "name-field-1"
-                    },
-                    {
-                      "type": "frame",
-                      "name": "Email Field",
-                      "width": "fill_container",
-                      "height": "fit_content",
-                      "layout": "vertical",
-                      "gap": 6,
-                      "children": [
-                        {
-                          "type": "text",
-                          "name": "Email Label",
+                          "name": "Correo electronico Label",
                           "content": "Correo electronico",
                           "fontSize": 14,
                           "fontWeight": 500,
@@ -1372,11 +559,11 @@
                               "color": "#18181B"
                             }
                           ],
-                          "id": "email-label-2"
+                          "id": "correo-electronico-label-1"
                         },
                         {
                           "type": "frame",
-                          "name": "Email Input",
+                          "name": "Correo electronico Input",
                           "width": "fill_container",
                           "height": 48,
                           "layout": "horizontal",
@@ -1405,7 +592,7 @@
                           "children": [
                             {
                               "type": "text",
-                              "name": "Email Placeholder",
+                              "name": "Correo electronico Placeholder",
                               "content": "tu@email.com",
                               "fontSize": 16,
                               "fill": [
@@ -1414,17 +601,17 @@
                                   "color": "#A1A1AA"
                                 }
                               ],
-                              "id": "email-placeholder-2"
+                              "id": "correo-electronico-placeholder-1"
                             }
                           ],
-                          "id": "email-input-2"
+                          "id": "correo-electronico-input-1"
                         }
                       ],
-                      "id": "email-field-2"
+                      "id": "correo-electronico-field-1"
                     },
                     {
                       "type": "frame",
-                      "name": "Password Field",
+                      "name": "Contrasena Field",
                       "width": "fill_container",
                       "height": "fit_content",
                       "layout": "vertical",
@@ -1432,7 +619,7 @@
                       "children": [
                         {
                           "type": "text",
-                          "name": "Password Label",
+                          "name": "Contrasena Label",
                           "content": "Contrasena",
                           "fontSize": 14,
                           "fontWeight": 500,
@@ -1442,11 +629,11 @@
                               "color": "#18181B"
                             }
                           ],
-                          "id": "password-label-2"
+                          "id": "contrasena-label-1"
                         },
                         {
                           "type": "frame",
-                          "name": "Password Input",
+                          "name": "Contrasena Input",
                           "width": "fill_container",
                           "height": 48,
                           "layout": "horizontal",
@@ -1475,7 +662,7 @@
                           "children": [
                             {
                               "type": "text",
-                              "name": "Password Placeholder",
+                              "name": "Contrasena Placeholder",
                               "content": "********",
                               "fontSize": 16,
                               "fill": [
@@ -1484,13 +671,13 @@
                                   "color": "#A1A1AA"
                                 }
                               ],
-                              "id": "password-placeholder-2"
+                              "id": "contrasena-placeholder-1"
                             }
                           ],
-                          "id": "password-input-2"
+                          "id": "contrasena-input-1"
                         }
                       ],
-                      "id": "password-field-2"
+                      "id": "contrasena-field-1"
                     },
                     {
                       "type": "frame",
@@ -1512,7 +699,7 @@
                         {
                           "type": "text",
                           "name": "Submit Text",
-                          "content": "Crear cuenta",
+                          "content": "Iniciar sesion",
                           "fontSize": 16,
                           "fontWeight": 600,
                           "fill": [
@@ -1521,17 +708,17 @@
                               "color": "#FFFFFF"
                             }
                           ],
-                          "id": "submit-text-2"
+                          "id": "submit-text-1"
                         }
                       ],
-                      "id": "submit-button-2"
+                      "id": "submit-button-1"
                     }
                   ],
-                  "id": "register-form-1"
+                  "id": "login-form-1"
                 },
                 {
                   "type": "frame",
-                  "name": "Login Link",
+                  "name": "Footer Link",
                   "width": "fill_container",
                   "height": "fit_content",
                   "layout": "horizontal",
@@ -1540,8 +727,8 @@
                   "children": [
                     {
                       "type": "text",
-                      "name": "Has Account",
-                      "content": "Ya tenes cuenta?",
+                      "name": "Footer Prefix",
+                      "content": "No tenes cuenta?",
                       "fontSize": 14,
                       "fill": [
                         {
@@ -1549,12 +736,12 @@
                           "color": "#71717A"
                         }
                       ],
-                      "id": "has-account-1"
+                      "id": "footer-prefix-1"
                     },
                     {
                       "type": "text",
-                      "name": "Login Text",
-                      "content": "Iniciar sesion",
+                      "name": "Footer Action",
+                      "content": "Registrate",
                       "fontSize": 14,
                       "fontWeight": 600,
                       "fill": [
@@ -1563,49 +750,24 @@
                           "color": "#2563EB"
                         }
                       ],
-                      "id": "login-text-1"
+                      "id": "footer-action-1"
                     }
                   ],
-                  "id": "login-link-1"
+                  "id": "footer-link-1"
                 }
               ],
-              "id": "register-card"
-            }
-          ],
-          "id": "register-desktop"
-        },
-        {
-          "type": "frame",
-          "name": "Reset Password Mobile",
-          "x": 0,
-          "y": 1800,
-          "width": 375,
-          "height": 812,
-          "layout": "vertical",
-          "fill": [
-            {
-              "type": "solid",
-              "color": "#FAFAF9"
-            }
-          ],
-          "padding": [
-            24,
-            24
-          ],
-          "gap": 24,
-          "alignItems": "center",
-          "justifyContent": "center",
-          "children": [
+              "id": "auth-card"
+            },
             {
               "type": "frame",
-              "name": "Logo",
-              "width": 64,
-              "height": 64,
-              "cornerRadius": 16,
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
               "fill": [
                 {
                   "type": "solid",
-                  "color": "#2563EB"
+                  "color": "#F4F4F5"
                 }
               ],
               "layout": "horizontal",
@@ -1614,253 +776,421 @@
               "children": [
                 {
                   "type": "path",
-                  "name": "WrenchIcon",
-                  "width": 32,
-                  "height": 32,
-                  "stroke": {
-                    "thickness": 2,
-                    "fill": [
-                      {
-                        "type": "solid",
-                        "color": "#FFFFFF"
-                      }
-                    ]
-                  },
-                  "id": "wrenchicon-2"
-                }
-              ],
-              "id": "logo-3"
-            },
-            {
-              "type": "frame",
-              "name": "Header",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "name": "Title",
-                  "content": "Restablecer contrasena",
-                  "fontSize": 28,
-                  "fontWeight": 700,
+                  "name": "MoonIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z",
                   "fill": [
                     {
                       "type": "solid",
-                      "color": "#18181B"
+                      "color": "#3F3F46"
                     }
                   ],
-                  "textAlign": "center",
-                  "id": "title-3"
-                },
-                {
-                  "type": "text",
-                  "name": "Subtitle",
-                  "content": "Ingresa tu correo para recibir un enlace",
-                  "fontSize": 16,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#71717A"
-                    }
-                  ],
-                  "textAlign": "center",
-                  "id": "subtitle-3"
+                  "id": "moonicon-1"
                 }
               ],
-              "id": "header-3"
-            },
+              "x": 1136,
+              "y": 24,
+              "id": "theme-toggle-1"
+            }
+          ],
+          "id": "login-desktop"
+        },
+        {
+          "type": "frame",
+          "name": "Login Mobile Dark",
+          "x": 0,
+          "y": 2700,
+          "width": 375,
+          "height": 812,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#18181B"
+            }
+          ],
+          "children": [
             {
               "type": "frame",
-              "name": "Reset Form",
-              "width": "fill_container",
+              "name": "Auth Content",
+              "x": 24,
+              "y": 160,
+              "width": 327,
               "height": "fit_content",
               "layout": "vertical",
               "gap": 16,
+              "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "name": "Email Field",
-                  "width": "fill_container",
-                  "height": "fit_content",
-                  "layout": "vertical",
-                  "gap": 6,
-                  "children": [
-                    {
-                      "type": "text",
-                      "name": "Email Label",
-                      "content": "Correo electronico",
-                      "fontSize": 14,
-                      "fontWeight": 500,
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#18181B"
-                        }
-                      ],
-                      "id": "email-label-3"
-                    },
-                    {
-                      "type": "frame",
-                      "name": "Email Input",
-                      "width": "fill_container",
-                      "height": 48,
-                      "layout": "horizontal",
-                      "alignItems": "center",
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "fill": [
-                        {
-                          "type": "solid",
-                          "color": "#FFFFFF"
-                        }
-                      ],
-                      "stroke": {
-                        "thickness": 1,
-                        "fill": [
-                          {
-                            "type": "solid",
-                            "color": "#E4E4E7"
-                          }
-                        ]
-                      },
-                      "cornerRadius": 10,
-                      "role": "form-input",
-                      "children": [
-                        {
-                          "type": "text",
-                          "name": "Email Placeholder",
-                          "content": "tu@email.com",
-                          "fontSize": 16,
-                          "fill": [
-                            {
-                              "type": "solid",
-                              "color": "#A1A1AA"
-                            }
-                          ],
-                          "id": "email-placeholder-3"
-                        }
-                      ],
-                      "id": "email-input-3"
-                    }
-                  ],
-                  "id": "email-field-3"
-                },
-                {
-                  "type": "frame",
-                  "name": "Submit Button",
-                  "width": "fill_container",
-                  "height": 48,
-                  "layout": "horizontal",
-                  "justifyContent": "center",
-                  "alignItems": "center",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
                   "fill": [
                     {
                       "type": "solid",
                       "color": "#2563EB"
                     }
                   ],
-                  "cornerRadius": 10,
-                  "role": "button",
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-2"
+                    }
+                  ],
+                  "id": "logo-2"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "text",
-                      "name": "Submit Text",
-                      "content": "Enviar enlace",
+                      "name": "Title",
+                      "content": "Bienvenido a Cocos",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FAFAF9"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-2"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Ingresa tus credenciales para continuar",
                       "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-2"
+                    }
+                  ],
+                  "id": "header-2"
+                },
+                {
+                  "type": "frame",
+                  "name": "Login Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "correo-electronico-label-2"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-2"
+                            }
+                          ],
+                          "id": "correo-electronico-input-2"
+                        }
+                      ],
+                      "id": "correo-electronico-field-2"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Contrasena Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "contrasena-label-2"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Contrasena Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "contrasena-placeholder-2"
+                            }
+                          ],
+                          "id": "contrasena-input-2"
+                        }
+                      ],
+                      "id": "contrasena-field-2"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Iniciar sesion",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "id": "submit-text-2"
+                        }
+                      ],
+                      "id": "submit-button-2"
+                    }
+                  ],
+                  "id": "login-form-2"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "No tenes cuenta?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "id": "footer-prefix-2"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Registrate",
+                      "fontSize": 14,
                       "fontWeight": 600,
                       "fill": [
                         {
                           "type": "solid",
-                          "color": "#FFFFFF"
+                          "color": "#2563EB"
                         }
                       ],
-                      "id": "submit-text-3"
+                      "id": "footer-action-2"
                     }
                   ],
-                  "id": "submit-button-3"
+                  "id": "footer-link-2"
                 }
               ],
-              "id": "reset-form"
+              "id": "auth-content-1"
             },
             {
               "type": "frame",
-              "name": "Login Link",
-              "width": "fill_container",
-              "height": "fit_content",
-              "layout": "horizontal",
-              "gap": 4,
-              "justifyContent": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "name": "Remember",
-                  "content": "Recordas tu contrasena?",
-                  "fontSize": 14,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#71717A"
-                    }
-                  ],
-                  "id": "remember"
-                },
-                {
-                  "type": "text",
-                  "name": "Login Text",
-                  "content": "Iniciar sesion",
-                  "fontSize": 14,
-                  "fontWeight": 600,
-                  "fill": [
-                    {
-                      "type": "solid",
-                      "color": "#2563EB"
-                    }
-                  ],
-                  "id": "login-text-2"
-                }
-              ],
-              "id": "login-link-2"
-            }
-          ],
-          "id": "reset-password-mobile"
-        },
-        {
-          "type": "frame",
-          "name": "Reset Password Desktop",
-          "x": 500,
-          "y": 1800,
-          "width": 1200,
-          "height": 800,
-          "layout": "horizontal",
-          "fill": [
-            {
-              "type": "solid",
-              "color": "#FAFAF9"
-            }
-          ],
-          "padding": [
-            40,
-            40
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "frame",
-              "name": "Reset Card",
-              "width": 420,
-              "height": "fit_content",
-              "layout": "vertical",
-              "gap": 24,
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
               "fill": [
                 {
                   "type": "solid",
-                  "color": "#FFFFFF"
+                  "color": "#27272A"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "SunIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M10 1V3M10 17V19M1 10H3M17 10H19M4.22 4.22L5.64 5.64M14.36 14.36L15.78 15.78M4.22 15.78L5.64 14.36M14.36 5.64L15.78 4.22M10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FACC15"
+                    }
+                  ],
+                  "id": "sunicon"
+                }
+              ],
+              "x": 323,
+              "y": 16,
+              "id": "theme-toggle-2"
+            }
+          ],
+          "id": "login-mobile-dark"
+        },
+        {
+          "type": "frame",
+          "name": "Login Desktop Dark",
+          "x": 500,
+          "y": 2700,
+          "width": 1200,
+          "height": 800,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#18181B"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Card",
+              "x": 390,
+              "y": 120,
+              "width": 420,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
                 }
               ],
               "padding": [
@@ -1871,13 +1201,14 @@
               "effects": [
                 {
                   "type": "shadow",
-                  "color": "rgba(0,0,0,0.08)",
+                  "color": "rgba(0,0,0,0.25)",
                   "offsetX": 0,
                   "offsetY": 4,
                   "blur": 16,
                   "spread": 0
                 }
               ],
+              "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
@@ -1912,6 +1243,373 @@
                       "id": "wrenchicon-3"
                     }
                   ],
+                  "id": "logo-3"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Bienvenido a Cocos",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FAFAF9"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-3"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Ingresa tus credenciales para continuar",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-3"
+                    }
+                  ],
+                  "id": "header-3"
+                },
+                {
+                  "type": "frame",
+                  "name": "Login Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "correo-electronico-label-3"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-3"
+                            }
+                          ],
+                          "id": "correo-electronico-input-3"
+                        }
+                      ],
+                      "id": "correo-electronico-field-3"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Contrasena Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "contrasena-label-3"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Contrasena Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "contrasena-placeholder-3"
+                            }
+                          ],
+                          "id": "contrasena-input-3"
+                        }
+                      ],
+                      "id": "contrasena-field-3"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Iniciar sesion",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "id": "submit-text-3"
+                        }
+                      ],
+                      "id": "submit-button-3"
+                    }
+                  ],
+                  "id": "login-form-3"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "No tenes cuenta?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "id": "footer-prefix-3"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Registrate",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-3"
+                    }
+                  ],
+                  "id": "footer-link-3"
+                }
+              ],
+              "id": "auth-card-1"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "SunIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M10 1V3M10 17V19M1 10H3M17 10H19M4.22 4.22L5.64 5.64M14.36 14.36L15.78 15.78M4.22 15.78L5.64 14.36M14.36 5.64L15.78 4.22M10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FACC15"
+                    }
+                  ],
+                  "id": "sunicon-1"
+                }
+              ],
+              "x": 1136,
+              "y": 24,
+              "id": "theme-toggle-3"
+            }
+          ],
+          "id": "login-desktop-dark"
+        },
+        {
+          "type": "frame",
+          "name": "Register Mobile",
+          "x": 0,
+          "y": 900,
+          "width": 375,
+          "height": 812,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#FAFAF9"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Content",
+              "x": 24,
+              "y": 160,
+              "width": 327,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-4"
+                    }
+                  ],
                   "id": "logo-4"
                 },
                 {
@@ -1926,7 +1624,7 @@
                     {
                       "type": "text",
                       "name": "Title",
-                      "content": "Restablecer contrasena",
+                      "content": "Crear cuenta",
                       "fontSize": 28,
                       "fontWeight": 700,
                       "fill": [
@@ -1941,7 +1639,7 @@
                     {
                       "type": "text",
                       "name": "Subtitle",
-                      "content": "Ingresa tu correo para recibir un enlace",
+                      "content": "Registrate para empezar a usar Cocos",
                       "fontSize": 16,
                       "fill": [
                         {
@@ -1957,7 +1655,7 @@
                 },
                 {
                   "type": "frame",
-                  "name": "Reset Form",
+                  "name": "Register Form",
                   "width": "fill_container",
                   "height": "fit_content",
                   "layout": "vertical",
@@ -1965,7 +1663,7 @@
                   "children": [
                     {
                       "type": "frame",
-                      "name": "Email Field",
+                      "name": "Nombre completo Field",
                       "width": "fill_container",
                       "height": "fit_content",
                       "layout": "vertical",
@@ -1973,8 +1671,8 @@
                       "children": [
                         {
                           "type": "text",
-                          "name": "Email Label",
-                          "content": "Correo electronico",
+                          "name": "Nombre completo Label",
+                          "content": "Nombre completo",
                           "fontSize": 14,
                           "fontWeight": 500,
                           "fill": [
@@ -1983,11 +1681,11 @@
                               "color": "#18181B"
                             }
                           ],
-                          "id": "email-label-4"
+                          "id": "nombre-completo-label"
                         },
                         {
                           "type": "frame",
-                          "name": "Email Input",
+                          "name": "Nombre completo Input",
                           "width": "fill_container",
                           "height": 48,
                           "layout": "horizontal",
@@ -2016,7 +1714,77 @@
                           "children": [
                             {
                               "type": "text",
-                              "name": "Email Placeholder",
+                              "name": "Nombre completo Placeholder",
+                              "content": "Juan Perez",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "nombre-completo-placeholder"
+                            }
+                          ],
+                          "id": "nombre-completo-input"
+                        }
+                      ],
+                      "id": "nombre-completo-field"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "correo-electronico-label-4"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
                               "content": "tu@email.com",
                               "fontSize": 16,
                               "fill": [
@@ -2025,13 +1793,1733 @@
                                   "color": "#A1A1AA"
                                 }
                               ],
-                              "id": "email-placeholder-4"
+                              "id": "correo-electronico-placeholder-4"
                             }
                           ],
-                          "id": "email-input-4"
+                          "id": "correo-electronico-input-4"
                         }
                       ],
-                      "id": "email-field-4"
+                      "id": "correo-electronico-field-4"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Contrasena Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "contrasena-label-4"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Contrasena Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "contrasena-placeholder-4"
+                            }
+                          ],
+                          "id": "contrasena-input-4"
+                        }
+                      ],
+                      "id": "contrasena-field-4"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Crear cuenta",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "id": "submit-text-4"
+                        }
+                      ],
+                      "id": "submit-button-4"
+                    }
+                  ],
+                  "id": "register-form"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Ya tenes cuenta?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#71717A"
+                        }
+                      ],
+                      "id": "footer-prefix-4"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-4"
+                    }
+                  ],
+                  "id": "footer-link-4"
+                }
+              ],
+              "id": "auth-content-2"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#F4F4F5"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "MoonIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#3F3F46"
+                    }
+                  ],
+                  "id": "moonicon-2"
+                }
+              ],
+              "x": 323,
+              "y": 16,
+              "id": "theme-toggle-4"
+            }
+          ],
+          "id": "register-mobile"
+        },
+        {
+          "type": "frame",
+          "name": "Register Desktop",
+          "x": 500,
+          "y": 900,
+          "width": 1200,
+          "height": 800,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#FAFAF9"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Card",
+              "x": 390,
+              "y": 120,
+              "width": 420,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "padding": [
+                40,
+                40
+              ],
+              "cornerRadius": 16,
+              "effects": [
+                {
+                  "type": "shadow",
+                  "color": "rgba(0,0,0,0.08)",
+                  "offsetX": 0,
+                  "offsetY": 4,
+                  "blur": 16,
+                  "spread": 0
+                }
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-5"
+                    }
+                  ],
+                  "id": "logo-5"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Crear cuenta",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#18181B"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-5"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Registrate para empezar a usar Cocos",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#71717A"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-5"
+                    }
+                  ],
+                  "id": "header-5"
+                },
+                {
+                  "type": "frame",
+                  "name": "Register Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Nombre completo Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Nombre completo Label",
+                          "content": "Nombre completo",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "nombre-completo-label-1"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Nombre completo Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Nombre completo Placeholder",
+                              "content": "Juan Perez",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "nombre-completo-placeholder-1"
+                            }
+                          ],
+                          "id": "nombre-completo-input-1"
+                        }
+                      ],
+                      "id": "nombre-completo-field-1"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "correo-electronico-label-5"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-5"
+                            }
+                          ],
+                          "id": "correo-electronico-input-5"
+                        }
+                      ],
+                      "id": "correo-electronico-field-5"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Contrasena Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "contrasena-label-5"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Contrasena Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "contrasena-placeholder-5"
+                            }
+                          ],
+                          "id": "contrasena-input-5"
+                        }
+                      ],
+                      "id": "contrasena-field-5"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Crear cuenta",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "id": "submit-text-5"
+                        }
+                      ],
+                      "id": "submit-button-5"
+                    }
+                  ],
+                  "id": "register-form-1"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Ya tenes cuenta?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#71717A"
+                        }
+                      ],
+                      "id": "footer-prefix-5"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-5"
+                    }
+                  ],
+                  "id": "footer-link-5"
+                }
+              ],
+              "id": "auth-card-2"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#F4F4F5"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "MoonIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#3F3F46"
+                    }
+                  ],
+                  "id": "moonicon-3"
+                }
+              ],
+              "x": 1136,
+              "y": 24,
+              "id": "theme-toggle-5"
+            }
+          ],
+          "id": "register-desktop"
+        },
+        {
+          "type": "frame",
+          "name": "Register Mobile Dark",
+          "x": 0,
+          "y": 3600,
+          "width": 375,
+          "height": 812,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#18181B"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Content",
+              "x": 24,
+              "y": 160,
+              "width": 327,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-6"
+                    }
+                  ],
+                  "id": "logo-6"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Crear cuenta",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FAFAF9"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-6"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Registrate para empezar a usar Cocos",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-6"
+                    }
+                  ],
+                  "id": "header-6"
+                },
+                {
+                  "type": "frame",
+                  "name": "Register Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Nombre completo Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Nombre completo Label",
+                          "content": "Nombre completo",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "nombre-completo-label-2"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Nombre completo Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Nombre completo Placeholder",
+                              "content": "Juan Perez",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "nombre-completo-placeholder-2"
+                            }
+                          ],
+                          "id": "nombre-completo-input-2"
+                        }
+                      ],
+                      "id": "nombre-completo-field-2"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "correo-electronico-label-6"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-6"
+                            }
+                          ],
+                          "id": "correo-electronico-input-6"
+                        }
+                      ],
+                      "id": "correo-electronico-field-6"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Contrasena Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "contrasena-label-6"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Contrasena Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "contrasena-placeholder-6"
+                            }
+                          ],
+                          "id": "contrasena-input-6"
+                        }
+                      ],
+                      "id": "contrasena-field-6"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Crear cuenta",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "id": "submit-text-6"
+                        }
+                      ],
+                      "id": "submit-button-6"
+                    }
+                  ],
+                  "id": "register-form-2"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Ya tenes cuenta?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "id": "footer-prefix-6"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-6"
+                    }
+                  ],
+                  "id": "footer-link-6"
+                }
+              ],
+              "id": "auth-content-3"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "SunIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M10 1V3M10 17V19M1 10H3M17 10H19M4.22 4.22L5.64 5.64M14.36 14.36L15.78 15.78M4.22 15.78L5.64 14.36M14.36 5.64L15.78 4.22M10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FACC15"
+                    }
+                  ],
+                  "id": "sunicon-2"
+                }
+              ],
+              "x": 323,
+              "y": 16,
+              "id": "theme-toggle-6"
+            }
+          ],
+          "id": "register-mobile-dark"
+        },
+        {
+          "type": "frame",
+          "name": "Register Desktop Dark",
+          "x": 500,
+          "y": 3600,
+          "width": 1200,
+          "height": 800,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#18181B"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Card",
+              "x": 390,
+              "y": 120,
+              "width": 420,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "padding": [
+                40,
+                40
+              ],
+              "cornerRadius": 16,
+              "effects": [
+                {
+                  "type": "shadow",
+                  "color": "rgba(0,0,0,0.25)",
+                  "offsetX": 0,
+                  "offsetY": 4,
+                  "blur": 16,
+                  "spread": 0
+                }
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-7"
+                    }
+                  ],
+                  "id": "logo-7"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Crear cuenta",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FAFAF9"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-7"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Registrate para empezar a usar Cocos",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-7"
+                    }
+                  ],
+                  "id": "header-7"
+                },
+                {
+                  "type": "frame",
+                  "name": "Register Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Nombre completo Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Nombre completo Label",
+                          "content": "Nombre completo",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "nombre-completo-label-3"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Nombre completo Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Nombre completo Placeholder",
+                              "content": "Juan Perez",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "nombre-completo-placeholder-3"
+                            }
+                          ],
+                          "id": "nombre-completo-input-3"
+                        }
+                      ],
+                      "id": "nombre-completo-field-3"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "correo-electronico-label-7"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-7"
+                            }
+                          ],
+                          "id": "correo-electronico-input-7"
+                        }
+                      ],
+                      "id": "correo-electronico-field-7"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Contrasena Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Contrasena Label",
+                          "content": "Contrasena",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "contrasena-label-7"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Contrasena Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Contrasena Placeholder",
+                              "content": "********",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "contrasena-placeholder-7"
+                            }
+                          ],
+                          "id": "contrasena-input-7"
+                        }
+                      ],
+                      "id": "contrasena-field-7"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Crear cuenta",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "id": "submit-text-7"
+                        }
+                      ],
+                      "id": "submit-button-7"
+                    }
+                  ],
+                  "id": "register-form-3"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Ya tenes cuenta?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "id": "footer-prefix-7"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-7"
+                    }
+                  ],
+                  "id": "footer-link-7"
+                }
+              ],
+              "id": "auth-card-3"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "SunIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M10 1V3M10 17V19M1 10H3M17 10H19M4.22 4.22L5.64 5.64M14.36 14.36L15.78 15.78M4.22 15.78L5.64 14.36M14.36 5.64L15.78 4.22M10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FACC15"
+                    }
+                  ],
+                  "id": "sunicon-3"
+                }
+              ],
+              "x": 1136,
+              "y": 24,
+              "id": "theme-toggle-7"
+            }
+          ],
+          "id": "register-desktop-dark"
+        },
+        {
+          "type": "frame",
+          "name": "Reset Password Mobile",
+          "x": 0,
+          "y": 1800,
+          "width": 375,
+          "height": 812,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#FAFAF9"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Content",
+              "x": 24,
+              "y": 160,
+              "width": 327,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-8"
+                    }
+                  ],
+                  "id": "logo-8"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Restablecer contrasena",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#18181B"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-8"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Ingresa tu correo para recibir un enlace",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#71717A"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-8"
+                    }
+                  ],
+                  "id": "header-8"
+                },
+                {
+                  "type": "frame",
+                  "name": "Reset Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "correo-electronico-label-8"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-8"
+                            }
+                          ],
+                          "id": "correo-electronico-input-8"
+                        }
+                      ],
+                      "id": "correo-electronico-field-8"
                     },
                     {
                       "type": "frame",
@@ -2062,17 +3550,17 @@
                               "color": "#FFFFFF"
                             }
                           ],
-                          "id": "submit-text-4"
+                          "id": "submit-text-8"
                         }
                       ],
-                      "id": "submit-button-4"
+                      "id": "submit-button-8"
                     }
                   ],
-                  "id": "reset-form-1"
+                  "id": "reset-form"
                 },
                 {
                   "type": "frame",
-                  "name": "Login Link",
+                  "name": "Footer Link",
                   "width": "fill_container",
                   "height": "fit_content",
                   "layout": "horizontal",
@@ -2081,7 +3569,7 @@
                   "children": [
                     {
                       "type": "text",
-                      "name": "Remember",
+                      "name": "Footer Prefix",
                       "content": "Recordas tu contrasena?",
                       "fontSize": 14,
                       "fill": [
@@ -2090,11 +3578,11 @@
                           "color": "#71717A"
                         }
                       ],
-                      "id": "remember-1"
+                      "id": "footer-prefix-8"
                     },
                     {
                       "type": "text",
-                      "name": "Login Text",
+                      "name": "Footer Action",
                       "content": "Iniciar sesion",
                       "fontSize": 14,
                       "fontWeight": 600,
@@ -2104,16 +3592,984 @@
                           "color": "#2563EB"
                         }
                       ],
-                      "id": "login-text-3"
+                      "id": "footer-action-8"
                     }
                   ],
-                  "id": "login-link-3"
+                  "id": "footer-link-8"
                 }
               ],
-              "id": "reset-card"
+              "id": "auth-content-4"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#F4F4F5"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "MoonIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#3F3F46"
+                    }
+                  ],
+                  "id": "moonicon-4"
+                }
+              ],
+              "x": 323,
+              "y": 16,
+              "id": "theme-toggle-8"
+            }
+          ],
+          "id": "reset-password-mobile"
+        },
+        {
+          "type": "frame",
+          "name": "Reset Password Desktop",
+          "x": 500,
+          "y": 1800,
+          "width": 1200,
+          "height": 800,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#FAFAF9"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Card",
+              "x": 390,
+              "y": 120,
+              "width": 420,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "padding": [
+                40,
+                40
+              ],
+              "cornerRadius": 16,
+              "effects": [
+                {
+                  "type": "shadow",
+                  "color": "rgba(0,0,0,0.08)",
+                  "offsetX": 0,
+                  "offsetY": 4,
+                  "blur": 16,
+                  "spread": 0
+                }
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-9"
+                    }
+                  ],
+                  "id": "logo-9"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Restablecer contrasena",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#18181B"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-9"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Ingresa tu correo para recibir un enlace",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#71717A"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-9"
+                    }
+                  ],
+                  "id": "header-9"
+                },
+                {
+                  "type": "frame",
+                  "name": "Reset Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#18181B"
+                            }
+                          ],
+                          "id": "correo-electronico-label-9"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#E4E4E7"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#A1A1AA"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-9"
+                            }
+                          ],
+                          "id": "correo-electronico-input-9"
+                        }
+                      ],
+                      "id": "correo-electronico-field-9"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Enviar enlace",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FFFFFF"
+                            }
+                          ],
+                          "id": "submit-text-9"
+                        }
+                      ],
+                      "id": "submit-button-9"
+                    }
+                  ],
+                  "id": "reset-form-1"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Recordas tu contrasena?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#71717A"
+                        }
+                      ],
+                      "id": "footer-prefix-9"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-9"
+                    }
+                  ],
+                  "id": "footer-link-9"
+                }
+              ],
+              "id": "auth-card-4"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#F4F4F5"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "MoonIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#3F3F46"
+                    }
+                  ],
+                  "id": "moonicon-5"
+                }
+              ],
+              "x": 1136,
+              "y": 24,
+              "id": "theme-toggle-9"
             }
           ],
           "id": "reset-password-desktop"
+        },
+        {
+          "type": "frame",
+          "name": "Reset Password Mobile Dark",
+          "x": 0,
+          "y": 4500,
+          "width": 375,
+          "height": 812,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#18181B"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Content",
+              "x": 24,
+              "y": 160,
+              "width": 327,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-10"
+                    }
+                  ],
+                  "id": "logo-10"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Restablecer contrasena",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FAFAF9"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-10"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Ingresa tu correo para recibir un enlace",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-10"
+                    }
+                  ],
+                  "id": "header-10"
+                },
+                {
+                  "type": "frame",
+                  "name": "Reset Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "correo-electronico-label-10"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-10"
+                            }
+                          ],
+                          "id": "correo-electronico-input-10"
+                        }
+                      ],
+                      "id": "correo-electronico-field-10"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Enviar enlace",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "id": "submit-text-10"
+                        }
+                      ],
+                      "id": "submit-button-10"
+                    }
+                  ],
+                  "id": "reset-form-2"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Recordas tu contrasena?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "id": "footer-prefix-10"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-10"
+                    }
+                  ],
+                  "id": "footer-link-10"
+                }
+              ],
+              "id": "auth-content-5"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "SunIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M10 1V3M10 17V19M1 10H3M17 10H19M4.22 4.22L5.64 5.64M14.36 14.36L15.78 15.78M4.22 15.78L5.64 14.36M14.36 5.64L15.78 4.22M10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FACC15"
+                    }
+                  ],
+                  "id": "sunicon-4"
+                }
+              ],
+              "x": 323,
+              "y": 16,
+              "id": "theme-toggle-10"
+            }
+          ],
+          "id": "reset-password-mobile-dark"
+        },
+        {
+          "type": "frame",
+          "name": "Reset Password Desktop Dark",
+          "x": 500,
+          "y": 4500,
+          "width": 1200,
+          "height": 800,
+          "layout": "none",
+          "fill": [
+            {
+              "type": "solid",
+              "color": "#18181B"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "name": "Auth Card",
+              "x": 390,
+              "y": 120,
+              "width": 420,
+              "height": "fit_content",
+              "layout": "vertical",
+              "gap": 16,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "padding": [
+                40,
+                40
+              ],
+              "cornerRadius": 16,
+              "effects": [
+                {
+                  "type": "shadow",
+                  "color": "rgba(0,0,0,0.25)",
+                  "offsetX": 0,
+                  "offsetY": 4,
+                  "blur": 16,
+                  "spread": 0
+                }
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Logo",
+                  "width": 64,
+                  "height": 64,
+                  "cornerRadius": 16,
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#2563EB"
+                    }
+                  ],
+                  "layout": "horizontal",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "path",
+                      "name": "WrenchIcon",
+                      "width": 32,
+                      "height": 32,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": [
+                          {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                          }
+                        ]
+                      },
+                      "id": "wrenchicon-11"
+                    }
+                  ],
+                  "id": "logo-11"
+                },
+                {
+                  "type": "frame",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Title",
+                      "content": "Restablecer contrasena",
+                      "fontSize": 28,
+                      "fontWeight": 700,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#FAFAF9"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "title-11"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Subtitle",
+                      "content": "Ingresa tu correo para recibir un enlace",
+                      "fontSize": 16,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "id": "subtitle-11"
+                    }
+                  ],
+                  "id": "header-11"
+                },
+                {
+                  "type": "frame",
+                  "name": "Reset Form",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Correo electronico Field",
+                      "width": "fill_container",
+                      "height": "fit_content",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Correo electronico Label",
+                          "content": "Correo electronico",
+                          "fontSize": 14,
+                          "fontWeight": 500,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#FAFAF9"
+                            }
+                          ],
+                          "id": "correo-electronico-label-11"
+                        },
+                        {
+                          "type": "frame",
+                          "name": "Correo electronico Input",
+                          "width": "fill_container",
+                          "height": 48,
+                          "layout": "horizontal",
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            16
+                          ],
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": [
+                              {
+                                "type": "solid",
+                                "color": "#3F3F46"
+                              }
+                            ]
+                          },
+                          "cornerRadius": 10,
+                          "role": "form-input",
+                          "children": [
+                            {
+                              "type": "text",
+                              "name": "Correo electronico Placeholder",
+                              "content": "tu@email.com",
+                              "fontSize": 16,
+                              "fill": [
+                                {
+                                  "type": "solid",
+                                  "color": "#71717A"
+                                }
+                              ],
+                              "id": "correo-electronico-placeholder-11"
+                            }
+                          ],
+                          "id": "correo-electronico-input-11"
+                        }
+                      ],
+                      "id": "correo-electronico-field-11"
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Submit Button",
+                      "width": "fill_container",
+                      "height": 48,
+                      "layout": "horizontal",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "cornerRadius": 10,
+                      "role": "button",
+                      "children": [
+                        {
+                          "type": "text",
+                          "name": "Submit Text",
+                          "content": "Enviar enlace",
+                          "fontSize": 16,
+                          "fontWeight": 600,
+                          "fill": [
+                            {
+                              "type": "solid",
+                              "color": "#27272A"
+                            }
+                          ],
+                          "id": "submit-text-11"
+                        }
+                      ],
+                      "id": "submit-button-11"
+                    }
+                  ],
+                  "id": "reset-form-3"
+                },
+                {
+                  "type": "frame",
+                  "name": "Footer Link",
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "name": "Footer Prefix",
+                      "content": "Recordas tu contrasena?",
+                      "fontSize": 14,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#A1A1AA"
+                        }
+                      ],
+                      "id": "footer-prefix-11"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Footer Action",
+                      "content": "Iniciar sesion",
+                      "fontSize": 14,
+                      "fontWeight": 600,
+                      "fill": [
+                        {
+                          "type": "solid",
+                          "color": "#2563EB"
+                        }
+                      ],
+                      "id": "footer-action-11"
+                    }
+                  ],
+                  "id": "footer-link-11"
+                }
+              ],
+              "id": "auth-card-5"
+            },
+            {
+              "type": "frame",
+              "name": "Theme Toggle",
+              "width": 36,
+              "height": 36,
+              "cornerRadius": 18,
+              "fill": [
+                {
+                  "type": "solid",
+                  "color": "#27272A"
+                }
+              ],
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "path",
+                  "name": "SunIcon",
+                  "width": 18,
+                  "height": 18,
+                  "d": "M10 1V3M10 17V19M1 10H3M17 10H19M4.22 4.22L5.64 5.64M14.36 14.36L15.78 15.78M4.22 15.78L5.64 14.36M14.36 5.64L15.78 4.22M10 14C12.2091 14 14 12.2091 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 12.2091 7.79086 14 10 14Z",
+                  "fill": [
+                    {
+                      "type": "solid",
+                      "color": "#FACC15"
+                    }
+                  ],
+                  "id": "sunicon-5"
+                }
+              ],
+              "x": 1136,
+              "y": 24,
+              "id": "theme-toggle-11"
+            }
+          ],
+          "id": "reset-password-desktop-dark"
         }
       ]
     }
