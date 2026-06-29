@@ -8,13 +8,13 @@ import {
 } from 'react-router';
 
 const routes: RouteObject[] = [
+  ...authRoutes,
   {
     path: '/',
     element: <Layout />,
     children: [
       { index: true, element: <div>Dashboard placeholder</div> },
       { path: 'dashboard', element: <div>Dashboard placeholder</div> },
-      ...authRoutes,
       { path: '*', element: <div>404 Not Found</div> },
     ],
   },
