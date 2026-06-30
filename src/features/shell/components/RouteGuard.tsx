@@ -23,6 +23,10 @@ export function RouteGuard({ routePath, children }: RouteGuardProps) {
     return <Navigate to="/login" replace />;
   }
 
+  if (!user.role) {
+    return <Navigate to="/login" replace />;
+  }
+
   if (!isRouteAllowed(user.role.name, routePath)) {
     return <Navigate to="/unauthorized" replace />;
   }
