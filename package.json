@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "prepare": "git config core.hooksPath .githooks",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",

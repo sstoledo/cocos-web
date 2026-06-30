@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Pre-commit hook for cocos-web.
+# Source of truth for commit-time validation: Biome + TypeScript + Vitest + Vite.
+# This replaces the previous GGA AI review hook, which duplicated rules from
+# AGENTS.md and conflicted with the project's React 19 automatic JSX runtime.
+
+pnpm check
+pnpm test
+pnpm build
