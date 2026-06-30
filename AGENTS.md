@@ -61,7 +61,9 @@ Cocos Web is the React frontend for the Cocos mechanic-shop ERP. It consumes a N
 
 - Enforced by Biome: 2-space indentation, LF line endings, 80-character line width.
 - Single quotes, semicolons always, trailing commas ES5.
-- Biome uses `jsxRuntime: "reactClassic"`; import React explicitly when JSX requires it.
+- Biome uses `jsxRuntime: "reactClassic"` (Biome 1.9.4 does not expose an automatic runtime option). TypeScript's `jsx: "react-jsx"` is the source of truth for the JSX transform.
+- Do **not** add `import * as React from 'react'` just because a file contains JSX. TypeScript's `noUnusedLocals` will reject an unused React import.
+- Import React only when its APIs are actually used (e.g. `useState`, `forwardRef`). Prefer named/type imports when only types are needed.
 - Run `pnpm check:fix` before committing.
 
 ## Testing Rules
