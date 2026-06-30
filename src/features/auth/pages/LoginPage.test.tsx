@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLogin } from '../hooks/useLogin';
@@ -41,7 +40,7 @@ describe('LoginPage', () => {
       mutate,
       isPending: false,
       error: null,
-    });
+    } as unknown as ReturnType<typeof useLogin>);
   });
 
   it('renders header, email and password fields and submit button', () => {
@@ -91,7 +90,7 @@ describe('LoginPage', () => {
       mutate,
       isPending: false,
       error: new Error('Invalid credentials'),
-    });
+    } as unknown as ReturnType<typeof useLogin>);
 
     renderWithRouter();
 

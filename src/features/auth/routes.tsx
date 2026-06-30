@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { RouteObject } from 'react-router';
 import { AuthLayout } from './pages/AuthLayout';
 import { LoginPage } from './pages/LoginPage';

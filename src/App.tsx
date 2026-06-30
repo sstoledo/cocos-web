@@ -1,6 +1,6 @@
 import { authRoutes } from '@/features/auth/routes';
 import { Layout } from '@/features/shell/pages/Layout';
-import * as React from 'react';
+
 import {
   type RouteObject,
   RouterProvider,
