@@ -18,6 +18,10 @@ export function Layout() {
     return <Navigate to="/login" replace />;
   }
 
+  if (!user.role) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="flex h-screen bg-background text-foreground">
       <Sidebar role={user.role.name} />

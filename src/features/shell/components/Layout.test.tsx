@@ -61,6 +61,28 @@ describe('Layout', () => {
     expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument();
   });
 
+  it('does not render header or sidebar when user has no role', () => {
+    useUserMock.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'Juan',
+        email: 'juan@example.com',
+        role: null,
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/dashboard']}>
+        <Layout />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByTestId('header')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument();
+  });
+
   it('renders header and sidebar for authenticated user', () => {
     useUserMock.mockReturnValue({
       user: {
