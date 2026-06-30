@@ -46,6 +46,27 @@ describe('RouteGuard', () => {
     expect(screen.queryByText('protected')).not.toBeInTheDocument();
   });
 
+  it('redirects to login when user has no role', () => {
+    useUserMock.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'Ana',
+        email: 'ana@example.com',
+        role: null,
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/users']}>
+        <RouteGuard routePath="/users">protected</RouteGuard>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('protected')).not.toBeInTheDocument();
+  });
+
   it('allows access for authorized role', () => {
     useUserMock.mockReturnValue({
       user: {
