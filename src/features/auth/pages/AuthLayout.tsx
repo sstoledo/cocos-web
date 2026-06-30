@@ -1,5 +1,4 @@
 import { ThemeToggle } from '@/features/shell/components/ThemeToggle';
-import * as React from 'react';
 import { Outlet } from 'react-router';
 
 export function AuthLayout() {
