@@ -3,7 +3,7 @@ import type { ComponentType } from 'react';
 
 export type StatCardProps = {
   label: string;
-  value: string | number;
+  value?: string | number;
   icon?: ComponentType<{ className?: string }>;
   description?: string;
   className?: string;
@@ -18,21 +18,22 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={cn(
-        'rounded-lg border border-border bg-card p-4 shadow-card',
-        className
-      )}
+      className={cn('flex flex-col gap-3 rounded-xl bg-card p-4', className)}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1 space-y-1">
-          <p className="text-body-sm text-muted-foreground">{label}</p>
-          <p className="text-h3 text-foreground">{value}</p>
-          {description && (
-            <p className="text-body-sm text-muted-foreground">{description}</p>
-          )}
+      {Icon && (
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+          <Icon className="h-5 w-5 text-muted-foreground" />
         </div>
-        {Icon && <Icon className="h-5 w-5 shrink-0 text-muted-foreground" />}
+      )}
+      <div className="space-y-1">
+        <p className="text-body font-medium text-foreground">{label}</p>
+        {description && (
+          <p className="text-body-sm text-muted-foreground">{description}</p>
+        )}
       </div>
+      {value !== undefined && value !== '—' && (
+        <p className="text-h3 text-foreground">{value}</p>
+      )}
     </div>
   );
 }

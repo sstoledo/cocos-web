@@ -70,7 +70,7 @@ describe('DashboardPage', () => {
     expect(screen.getByText('Resumen')).toBeInTheDocument();
     expect(screen.getByText('Órdenes')).toBeInTheDocument();
     expect(screen.getByText('Ventas')).toBeInTheDocument();
-    expect(screen.getAllByText('—')).toHaveLength(3);
+    expect(screen.queryByText('—')).not.toBeInTheDocument();
     expect(screen.getByText('No hay actividad reciente.')).toBeInTheDocument();
   });
 

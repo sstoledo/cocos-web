@@ -39,7 +39,7 @@ export function DashboardPage() {
     <div className={statsGridClassName}>
       {statDefinitions.map(({ label, description, icon }) => {
         const stat = stats.find((item) => item.label === label);
-        const value = stat ? stat.value : '—';
+        const value = stat ? stat.value : undefined;
         return (
           <StatCard
             key={label}
