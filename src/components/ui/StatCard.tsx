@@ -25,10 +25,10 @@ export function StatCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1 space-y-1">
-          <p className="text-sm text-muted-foreground">{label}</p>
+          <p className="text-body-sm text-muted-foreground">{label}</p>
           <p className="text-h3 text-foreground">{value}</p>
           {description && (
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <p className="text-body-sm text-muted-foreground">{description}</p>
           )}
         </div>
         {Icon && <Icon className="h-5 w-5 shrink-0 text-muted-foreground" />}

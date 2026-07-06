@@ -15,7 +15,7 @@ export function Header({ title, onMenuClick, className }: HeaderProps) {
         className
       )}
     >
-      <span className="text-lg font-semibold text-foreground">{title}</span>
+      <span className="text-h3 font-semibold text-foreground">{title}</span>
       {onMenuClick && (
         <button
           type="button"
