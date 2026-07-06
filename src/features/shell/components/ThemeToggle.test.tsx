@@ -40,4 +40,14 @@ describe('ThemeToggle', () => {
 
     expect(screen.getByTestId('sun-icon')).toBeInTheDocument();
   });
+
+  it('renders an accessible toggle button with the moon icon in light mode', () => {
+    render(<ThemeToggle />);
+
+    expect(
+      screen.getByRole('button', { name: /toggle theme/i })
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('moon-icon')).toBeInTheDocument();
+    expect(screen.queryByTestId('sun-icon')).not.toBeInTheDocument();
+  });
 });

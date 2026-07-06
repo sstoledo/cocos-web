@@ -2,27 +2,46 @@ import { cn } from '@/lib/utils';
 import { NavLink } from 'react-router';
 import { getAllowedNavItems } from '../lib/navigation';
 import type { RoleName } from '../types';
+import { ThemeToggle } from './ThemeToggle';
+import { UserMenu } from './UserMenu';
 
 type SidebarProps = {
   role: RoleName;
+  userName?: string;
+  userEmail?: string;
   className?: string;
 };
 
-export function Sidebar({ role, className }: SidebarProps) {
+export function Sidebar({
+  role,
+  userName = '',
+  userEmail = '',
+  className,
+}: SidebarProps) {
   const groups = getAllowedNavItems(role);
 
   return (
     <aside
-      className={cn('flex h-full w-64 flex-col border-r bg-card', className)}
+      className={cn(
+        'flex h-full w-[260px] flex-col border-r bg-card',
+        className
+      )}
       aria-label="Navegación principal"
     >
-      <div className="flex h-14 items-center border-b px-4">
-        <span className="text-lg font-semibold">Cocos</span>
+      <div className="flex h-14 items-center gap-3 border-b px-4">
+        <div
+          data-testid="logo-mark"
+          className="h-8 w-8 rounded-lg bg-primary"
+          aria-hidden="true"
+        />
+        <span className="font-display text-lg font-semibold text-foreground">
+          Cocos
+        </span>
       </div>
-      <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+      <nav className="flex-1 space-y-6 overflow-y-auto p-3">
         {groups.map((group) => (
           <div key={group.label}>
-            <p className="mb-1 px-2 text-xs font-medium text-muted-foreground">
+            <p className="mb-2 px-2 text-xs font-medium text-muted-foreground">
               {group.label}
             </p>
             <ul className="space-y-0.5">
@@ -51,6 +70,15 @@ export function Sidebar({ role, className }: SidebarProps) {
           </div>
         ))}
       </nav>
+      <div className="flex h-14 items-center justify-between border-t px-4">
+        <span className="text-sm font-medium text-muted-foreground">
+          Apariencia
+        </span>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <UserMenu name={userName} email={userEmail} compact />
+        </div>
+      </div>
     </aside>
   );
 }
