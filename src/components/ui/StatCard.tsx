@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
-import type { ComponentType, ReactNode } from 'react';
+import type { ComponentType } from 'react';
 
 export type StatCardProps = {
   label: string;
   value: string | number;
   icon?: ComponentType<{ className?: string }>;
-  description?: ReactNode;
+  description?: string;
   className?: string;
 };
 
@@ -26,9 +26,7 @@ export function StatCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1 space-y-1">
           <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="text-2xl font-semibold tracking-tight text-foreground">
-            {value}
-          </p>
+          <p className="text-h3 text-foreground">{value}</p>
           {description && (
             <p className="text-sm text-muted-foreground">{description}</p>
           )}

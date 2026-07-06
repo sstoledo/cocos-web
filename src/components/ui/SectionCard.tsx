@@ -15,7 +15,7 @@ export function SectionCard({ title, children, className }: SectionCardProps) {
         className
       )}
     >
-      <h2 className="mb-4 text-lg font-semibold text-foreground">{title}</h2>
+      <h2 className="mb-4 text-h4 text-foreground">{title}</h2>
       {children}
     </section>
   );

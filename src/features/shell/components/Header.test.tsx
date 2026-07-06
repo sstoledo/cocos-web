@@ -9,6 +9,14 @@ describe('Header', () => {
     expect(screen.getByText('Productos')).toBeInTheDocument();
   });
 
+  it('does not render the title as a heading', () => {
+    render(<Header title="Productos" />);
+
+    expect(
+      screen.queryByRole('heading', { name: 'Productos' })
+    ).not.toBeInTheDocument();
+  });
+
   it('shows the hamburger menu button when onMenuClick is provided', () => {
     render(<Header title="Dashboard" onMenuClick={() => {}} />);
 
