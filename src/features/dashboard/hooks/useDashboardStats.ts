@@ -1,3 +1,4 @@
+import { useUser } from '@/features/shell/hooks/useUser';
 import { useQuery } from '@tanstack/react-query';
 
 export type DashboardStat = {
@@ -6,11 +7,15 @@ export type DashboardStat = {
 };
 
 export function useDashboardStats() {
-  const { data: stats = [], isLoading } = useQuery<DashboardStat[]>({
-    queryKey: ['dashboard', 'stats'],
+  const { user } = useUser();
+  const {
+    data: stats = [],
+    isLoading,
+    error,
+  } = useQuery<DashboardStat[]>({
+    queryKey: ['dashboard', 'stats', user?.id ?? 'anonymous'],
     queryFn: async () => [],
-    staleTime: Number.POSITIVE_INFINITY,
   });
 
-  return { stats, isLoading };
+  return { stats, isLoading, error };
 }

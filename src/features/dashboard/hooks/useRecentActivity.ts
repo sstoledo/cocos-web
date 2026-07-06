@@ -1,3 +1,4 @@
+import { useUser } from '@/features/shell/hooks/useUser';
 import { useQuery } from '@tanstack/react-query';
 
 export type ActivityItem = {
@@ -7,11 +8,15 @@ export type ActivityItem = {
 };
 
 export function useRecentActivity() {
-  const { data: activities = [], isLoading } = useQuery<ActivityItem[]>({
-    queryKey: ['dashboard', 'activity'],
+  const { user } = useUser();
+  const {
+    data: activities = [],
+    isLoading,
+    error,
+  } = useQuery<ActivityItem[]>({
+    queryKey: ['dashboard', 'activity', user?.id ?? 'anonymous'],
     queryFn: async () => [],
-    staleTime: Number.POSITIVE_INFINITY,
   });
 
-  return { activities, isLoading };
+  return { activities, isLoading, error };
 }

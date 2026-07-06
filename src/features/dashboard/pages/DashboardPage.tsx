@@ -9,27 +9,43 @@ import { useDashboardStats } from '../hooks/useDashboardStats';
 import { useRecentActivity } from '../hooks/useRecentActivity';
 
 const statDefinitions = [
-  { label: 'Resumen', icon: IconLayoutDashboard },
-  { label: 'Órdenes', icon: IconTools },
-  { label: 'Ventas', icon: IconCash },
+  {
+    label: 'Resumen',
+    description: 'Métricas del día',
+    icon: IconLayoutDashboard,
+  },
+  { label: 'Órdenes', description: 'Pendientes hoy', icon: IconTools },
+  { label: 'Ventas', description: 'Total mensual', icon: IconCash },
 ] as const;
 
 const statsGridClassName =
   'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3';
 
 export function DashboardPage() {
-  const { stats, isLoading: isStatsLoading } = useDashboardStats();
-  const { activities, isLoading: isActivityLoading } = useRecentActivity();
+  const {
+    stats,
+    isLoading: isStatsLoading,
+    error: statsError,
+  } = useDashboardStats();
+  const {
+    activities,
+    isLoading: isActivityLoading,
+    error: activityError,
+  } = useRecentActivity();
+
+  const hasError = statsError != null || activityError != null;
 
   const statsGrid = (
     <div className={statsGridClassName}>
-      {statDefinitions.map(({ label, icon }) => {
+      {statDefinitions.map(({ label, description, icon }) => {
         const stat = stats.find((item) => item.label === label);
+        const value = stat ? stat.value : '—';
         return (
           <StatCard
             key={label}
             label={label}
-            value={isStatsLoading ? '' : (stat?.value ?? 0)}
+            value={value}
+            description={description}
             icon={icon}
             className={cn(isStatsLoading && 'animate-pulse')}
           />
@@ -43,6 +59,12 @@ export function DashboardPage() {
       <PageHeader>
         <PageTitle>Dashboard</PageTitle>
       </PageHeader>
+
+      {hasError && (
+        <p className="text-body-sm text-destructive" role="alert">
+          No se pudieron cargar los datos
+        </p>
+      )}
 
       {isStatsLoading ? (
         <output aria-busy="true" aria-label="Cargando estadísticas">

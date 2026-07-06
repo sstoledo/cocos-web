@@ -20,8 +20,16 @@ describe('DashboardPage', () => {
   });
 
   it('renders the dashboard title and stat cards while loading', () => {
-    useDashboardStatsMock.mockReturnValue({ stats: [], isLoading: true });
-    useRecentActivityMock.mockReturnValue({ activities: [], isLoading: true });
+    useDashboardStatsMock.mockReturnValue({
+      stats: [],
+      isLoading: true,
+      error: null,
+    });
+    useRecentActivityMock.mockReturnValue({
+      activities: [],
+      isLoading: true,
+      error: null,
+    });
 
     render(<DashboardPage />);
 
@@ -31,6 +39,9 @@ describe('DashboardPage', () => {
     expect(screen.getByText('Resumen')).toBeInTheDocument();
     expect(screen.getByText('Órdenes')).toBeInTheDocument();
     expect(screen.getByText('Ventas')).toBeInTheDocument();
+    expect(screen.getByText('Métricas del día')).toBeInTheDocument();
+    expect(screen.getByText('Pendientes hoy')).toBeInTheDocument();
+    expect(screen.getByText('Total mensual')).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: 'Actividad reciente' })
     ).toBeInTheDocument();
@@ -42,16 +53,24 @@ describe('DashboardPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows zero values and an empty activity message when data is empty', () => {
-    useDashboardStatsMock.mockReturnValue({ stats: [], isLoading: false });
-    useRecentActivityMock.mockReturnValue({ activities: [], isLoading: false });
+  it('shows placeholder values and an empty activity message when data is empty', () => {
+    useDashboardStatsMock.mockReturnValue({
+      stats: [],
+      isLoading: false,
+      error: null,
+    });
+    useRecentActivityMock.mockReturnValue({
+      activities: [],
+      isLoading: false,
+      error: null,
+    });
 
     render(<DashboardPage />);
 
     expect(screen.getByText('Resumen')).toBeInTheDocument();
     expect(screen.getByText('Órdenes')).toBeInTheDocument();
     expect(screen.getByText('Ventas')).toBeInTheDocument();
-    expect(screen.getAllByText('0')).toHaveLength(3);
+    expect(screen.getAllByText('—')).toHaveLength(3);
     expect(screen.getByText('No hay actividad reciente.')).toBeInTheDocument();
   });
 
@@ -63,6 +82,7 @@ describe('DashboardPage', () => {
         { label: 'Ventas', value: 5 },
       ],
       isLoading: false,
+      error: null,
     });
     useRecentActivityMock.mockReturnValue({
       activities: [
@@ -70,6 +90,7 @@ describe('DashboardPage', () => {
         { id: 'a2', description: 'Venta #2 finalizada', time: '11:00' },
       ],
       isLoading: false,
+      error: null,
     });
 
     render(<DashboardPage />);
@@ -81,5 +102,24 @@ describe('DashboardPage', () => {
     expect(screen.getByText('Venta #2 finalizada')).toBeInTheDocument();
     expect(screen.getByText('10:30')).toBeInTheDocument();
     expect(screen.getByText('11:00')).toBeInTheDocument();
+  });
+
+  it('shows an error message when a hook fails', () => {
+    useDashboardStatsMock.mockReturnValue({
+      stats: [],
+      isLoading: false,
+      error: new Error('fetch failed'),
+    });
+    useRecentActivityMock.mockReturnValue({
+      activities: [],
+      isLoading: false,
+      error: null,
+    });
+
+    render(<DashboardPage />);
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'No se pudieron cargar los datos'
+    );
   });
 });
