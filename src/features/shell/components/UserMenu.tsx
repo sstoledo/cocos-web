@@ -5,9 +5,10 @@ import { useLogout } from '../hooks/useLogout';
 type UserMenuProps = {
   name: string;
   email: string;
+  compact?: boolean;
 };
 
-export function UserMenu({ name, email }: UserMenuProps) {
+export function UserMenu({ name, email, compact = false }: UserMenuProps) {
   const { mutate: logout, isPending } = useLogout();
 
   return (
@@ -15,10 +16,12 @@ export function UserMenu({ name, email }: UserMenuProps) {
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
         <IconUser className="h-4 w-4" />
       </div>
-      <div className="hidden text-sm md:block">
-        <p className="font-medium leading-none">{name}</p>
-        <p className="text-xs text-muted-foreground">{email}</p>
-      </div>
+      {!compact && (
+        <div className="hidden text-sm md:block">
+          <p className="font-medium leading-none">{name}</p>
+          <p className="text-xs text-muted-foreground">{email}</p>
+        </div>
+      )}
       <Button
         variant="ghost"
         size="icon"

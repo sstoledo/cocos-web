@@ -82,4 +82,16 @@ describe('UserMenu', () => {
     );
     await waitFor(() => expect(navigateMock).toHaveBeenCalledWith('/login'));
   });
+
+  it('renders only avatar and logout when compact', () => {
+    renderWithQueryClient(
+      <UserMenu name="Juan Pérez" email="juan@example.com" compact />
+    );
+
+    expect(screen.queryByText('Juan Pérez')).not.toBeInTheDocument();
+    expect(screen.queryByText('juan@example.com')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /cerrar sesión/i })
+    ).toBeInTheDocument();
+  });
 });
