@@ -20,6 +20,51 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Bricolage Grotesque", "Inter", sans-serif;
 
+  --text-display: var(--font-display-size);
+  --text-display--line-height: var(--line-height-display);
+  --text-display--letter-spacing: var(--letter-spacing-display);
+  --text-display--font-weight: 700;
+
+  --text-h1: var(--font-h1-size);
+  --text-h1--line-height: var(--line-height-h1);
+  --text-h1--letter-spacing: var(--letter-spacing-h1);
+  --text-h1--font-weight: 700;
+
+  --text-h2: var(--font-h2-size);
+  --text-h2--line-height: var(--line-height-h2);
+  --text-h2--letter-spacing: var(--letter-spacing-h2);
+  --text-h2--font-weight: 600;
+
+  --text-h3: var(--font-h3-size);
+  --text-h3--line-height: var(--line-height-h3);
+  --text-h3--letter-spacing: var(--letter-spacing-h3);
+  --text-h3--font-weight: 600;
+
+  --text-h4: var(--font-h4-size);
+  --text-h4--line-height: var(--line-height-h4);
+  --text-h4--letter-spacing: var(--letter-spacing-h4);
+  --text-h4--font-weight: 600;
+
+  --text-body: var(--font-body-size);
+  --text-body--line-height: var(--line-height-body);
+  --text-body--letter-spacing: var(--letter-spacing-body);
+  --text-body--font-weight: 400;
+
+  --text-body-sm: var(--font-body-sm-size);
+  --text-body-sm--line-height: var(--line-height-body-sm);
+  --text-body-sm--letter-spacing: var(--letter-spacing-body-sm);
+  --text-body-sm--font-weight: 400;
+
+  --text-caption: var(--font-caption-size);
+  --text-caption--line-height: var(--line-height-caption);
+  --text-caption--letter-spacing: var(--letter-spacing-caption);
+  --text-caption--font-weight: 400;
+
+  --text-label: var(--font-label-size);
+  --text-label--line-height: var(--line-height-label);
+  --text-label--letter-spacing: var(--letter-spacing-label);
+  --text-label--font-weight: 500;
+
   --radius-sm: 6px;
   --radius: 8px;
   --radius-md: 10px;

@@ -1,10 +1,26 @@
+import { PageContent } from '@/components/ui/PageContent';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { PageTitle } from '@/components/ui/PageTitle';
+import { SectionCard } from '@/components/ui/SectionCard';
+import { getPageTitle } from '@/features/shell/lib/pageTitles';
+import { useLocation } from 'react-router';
+
 export function ServiceListPage() {
+  const location = useLocation();
+  const title = getPageTitle(location.pathname);
+
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Servicios</h1>
-      <p className="text-muted-foreground">
-        Catálogo de servicios próximamente.
-      </p>
-    </div>
+    <>
+      <PageHeader>
+        <PageTitle>{title}</PageTitle>
+      </PageHeader>
+      <PageContent>
+        <SectionCard title={title}>
+          <p className="text-muted-foreground">
+            Catálogo de servicios próximamente.
+          </p>
+        </SectionCard>
+      </PageContent>
+    </>
   );
 }
