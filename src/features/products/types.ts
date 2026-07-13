@@ -22,6 +22,14 @@ export interface Product {
   updatedAt: string;
 }
 
+export interface ProductReference {
+  id: string;
+  name: string;
+  parent?: { id: string; name: string } | null;
+}
+
+export type { ProductFormValues } from './schemas/product-schema';
+
 export interface ProductListFilters {
   q?: string;
   isActive?: boolean;
