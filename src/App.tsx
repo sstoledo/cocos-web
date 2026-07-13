@@ -4,6 +4,7 @@ import { ClientListPage } from '@/features/clients/pages/ClientListPage';
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
 import { LotListPage } from '@/features/lots/pages/LotListPage';
 import { NotificationListPage } from '@/features/notifications/pages/NotificationListPage';
+import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
 import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
 import { RefundPage } from '@/features/refunds/pages/RefundPage';
@@ -13,6 +14,7 @@ import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import { Layout } from '@/features/shell/pages/Layout';
 import { NotFoundPage } from '@/features/shell/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
+import type { RoleName } from '@/features/shell/types';
 import { UserListPage } from '@/features/users/pages/UserListPage';
 import { WorkOrderListPage } from '@/features/work-orders/pages/WorkOrderListPage';
 import * as React from 'react';
@@ -23,10 +25,18 @@ import {
   createBrowserRouter,
 } from 'react-router';
 
-function guardedRoute(path: string, element: React.ReactNode) {
+function guardedRoute(
+  path: string,
+  element: React.ReactNode,
+  requiredRole?: RoleName
+) {
   return {
     path,
-    element: <RouteGuard routePath={path}>{element}</RouteGuard>,
+    element: (
+      <RouteGuard routePath={path} requiredRole={requiredRole}>
+        {element}
+      </RouteGuard>
+    ),
   };
 }
 
@@ -39,6 +49,7 @@ const routes: RouteObject[] = [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       guardedRoute('dashboard', <DashboardPage />),
       guardedRoute('products', <ProductListPage />),
+      guardedRoute('products/new', <ProductFormPage />, 'Admin'),
       guardedRoute('lots', <LotListPage />),
       guardedRoute('clients', <ClientListPage />),
       guardedRoute('services', <ServiceListPage />),
