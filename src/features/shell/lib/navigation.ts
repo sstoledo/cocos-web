@@ -64,7 +64,14 @@ export const navigationGroups: NavGroup[] = [
         label: 'Clientes',
         path: '/clients',
         icon: IconUsers,
-        allowedRoles: ['Admin', 'Reception'],
+        allowedRoles: [
+          'Admin',
+          'Reception',
+          'Mechanic',
+          'Warehouse',
+          'Purchasing',
+          'ReadOnly',
+        ],
       },
       {
         label: 'Órdenes de trabajo',
