@@ -12,6 +12,20 @@ const references = {
 
 const onSubmit = vi.fn();
 
+const initialValues = {
+  code: 'COD-001',
+  name: 'Aceite 20W50',
+  description: 'Descripción inicial',
+  price: 25,
+  presentationId: 'p1',
+  brandId: 'b1',
+  categoryId: 'c1',
+  barcode: '123456',
+  taxRate: 21,
+  notes: 'Notas iniciales',
+  isActive: true,
+};
+
 describe('ProductForm', () => {
   beforeEach(() => {
     onSubmit.mockReset();
@@ -29,6 +43,20 @@ describe('ProductForm', () => {
           presentations={references.presentations}
           brands={references.brands}
           categories={references.categories}
+        />
+      </MemoryRouter>
+    );
+  }
+
+  function renderEditForm() {
+    return render(
+      <MemoryRouter>
+        <ProductForm
+          onSubmit={onSubmit}
+          presentations={references.presentations}
+          brands={references.brands}
+          categories={references.categories}
+          initialValues={initialValues}
         />
       </MemoryRouter>
     );
@@ -105,5 +133,28 @@ describe('ProductForm', () => {
         null
       );
     });
+  });
+
+  it('shows edit mode submit button', () => {
+    renderEditForm();
+
+    expect(
+      screen.getByRole('button', { name: 'Guardar cambios' })
+    ).toBeInTheDocument();
+  });
+
+  it('prefills fields with initial values in edit mode', () => {
+    renderEditForm();
+
+    expect(screen.getByLabelText('Código')).toHaveValue(initialValues.code);
+    expect(screen.getByLabelText('Nombre')).toHaveValue(initialValues.name);
+    expect(screen.getByLabelText('Precio')).toHaveValue(initialValues.price);
+    expect(screen.getByLabelText('Presentación')).toHaveValue(
+      initialValues.presentationId
+    );
+    expect(screen.getByLabelText('Marca')).toHaveValue(initialValues.brandId);
+    expect(screen.getByLabelText('Categoría')).toHaveValue(
+      initialValues.categoryId
+    );
   });
 });
