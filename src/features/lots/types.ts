@@ -29,3 +29,5 @@ export interface Lot {
 export interface LotListFilters {
   q?: string;
 }
+
+export type { LotFormValues } from './schemas/lot-schema';
