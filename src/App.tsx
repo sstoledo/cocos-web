@@ -2,6 +2,7 @@ import { authRoutes } from '@/features/auth/routes';
 import { CashClosingPage } from '@/features/cash-register/pages/CashClosingPage';
 import { ClientListPage } from '@/features/clients/pages/ClientListPage';
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
+import { LotFormPage } from '@/features/lots/pages/LotFormPage';
 import { LotListPage } from '@/features/lots/pages/LotListPage';
 import { NotificationListPage } from '@/features/notifications/pages/NotificationListPage';
 import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
@@ -52,6 +53,7 @@ const routes: RouteObject[] = [
       guardedRoute('products/new', <ProductFormPage />, 'Admin'),
       guardedRoute('products/:id/edit', <ProductFormPage />, 'Admin'),
       guardedRoute('lots', <LotListPage />),
+      guardedRoute('lots/new', <LotFormPage />),
       guardedRoute('clients', <ClientListPage />),
       guardedRoute('services', <ServiceListPage />),
       guardedRoute('work-orders', <WorkOrderListPage />),
