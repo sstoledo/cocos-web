@@ -16,6 +16,7 @@ import { Layout } from '@/features/shell/pages/Layout';
 import { NotFoundPage } from '@/features/shell/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
 import type { RoleName } from '@/features/shell/types';
+import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
 import { UserListPage } from '@/features/users/pages/UserListPage';
 import { WorkOrderListPage } from '@/features/work-orders/pages/WorkOrderListPage';
 import * as React from 'react';
@@ -52,6 +53,7 @@ const routes: RouteObject[] = [
       guardedRoute('products', <ProductListPage />),
       guardedRoute('products/new', <ProductFormPage />, 'Admin'),
       guardedRoute('products/:id/edit', <ProductFormPage />, 'Admin'),
+      guardedRoute('products/:id/stock', <ProductStockPage />),
       guardedRoute('lots', <LotListPage />),
       guardedRoute('lots/new', <LotFormPage />),
       guardedRoute('clients', <ClientListPage />),
