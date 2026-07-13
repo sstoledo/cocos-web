@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { Link } from 'react-router';
 import type { Product } from '../types';
 
 export type ProductTableProps = {
@@ -32,6 +33,9 @@ export function ProductTable({ products }: ProductTableProps) {
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Estado
+            </th>
+            <th className="h-12 px-4 font-medium text-muted-foreground">
+              Stock
             </th>
           </tr>
         </thead>
@@ -76,6 +80,17 @@ export function ProductTable({ products }: ProductTableProps) {
                     </>
                   )}
                 </span>
+              </td>
+              <td className="p-4">
+                <Link
+                  to={`/products/${product.id}/stock`}
+                  className={cn(
+                    'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
+                    'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                  )}
+                >
+                  Stock
+                </Link>
               </td>
             </tr>
           ))}
