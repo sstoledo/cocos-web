@@ -5,6 +5,7 @@ import { useId, useState } from 'react';
 export type ProductImageUploadProps = {
   imageUrl?: string;
   onChange: (file: File | null) => void;
+  onRemove?: () => void;
 };
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
@@ -13,8 +14,10 @@ const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 export function ProductImageUpload({
   imageUrl,
   onChange,
+  onRemove,
 }: ProductImageUploadProps) {
   const inputId = useId();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(imageUrl ?? null);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,8 +26,6 @@ export function ProductImageUpload({
     setError(null);
 
     if (!file) {
-      onChange(null);
-      setPreviewUrl(imageUrl ?? null);
       return;
     }
 
@@ -42,20 +43,33 @@ export function ProductImageUpload({
       return;
     }
 
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
     onChange(file);
-
-    return () => {
-      URL.revokeObjectURL(objectUrl);
-    };
   }
 
-  function handleRemove() {
-    onChange(null);
+  function handleClearSelection() {
+    if (selectedFile) {
+      URL.revokeObjectURL(previewUrl ?? '');
+    }
+
+    setSelectedFile(null);
     setPreviewUrl(imageUrl ?? null);
     setError(null);
+    onChange(null);
+
+    const input = document.getElementById(inputId) as HTMLInputElement | null;
+    if (input) {
+      input.value = '';
+    }
   }
+
+  function handleRemoveImage() {
+    onRemove?.();
+  }
+
+  const hasImage = Boolean(previewUrl);
+  const hasExistingImage = Boolean(imageUrl) && !selectedFile;
 
   return (
     <div className="space-y-2">
@@ -75,16 +89,26 @@ export function ProductImageUpload({
           size="sm"
           onClick={() => document.getElementById(inputId)?.click()}
         >
-          Seleccionar imagen
+          {hasImage ? 'Cambiar imagen' : 'Seleccionar imagen'}
         </Button>
-        {previewUrl && (
+        {selectedFile && (
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            onClick={handleRemove}
+            onClick={handleClearSelection}
           >
             Quitar
+          </Button>
+        )}
+        {hasExistingImage && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleRemoveImage}
+          >
+            Eliminar imagen
           </Button>
         )}
       </div>

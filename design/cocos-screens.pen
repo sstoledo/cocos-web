@@ -1,0 +1,4006 @@
+{
+  "version": "2.14",
+  "children": [
+    {
+      "type": "frame",
+      "id": "JhFDi",
+      "x": 880,
+      "y": 0,
+      "name": "Variant A - Classic Sidebar",
+      "clip": true,
+      "width": 1200,
+      "height": 800,
+      "fill": "$background",
+      "children": [
+        {
+          "type": "frame",
+          "id": "MoYJm",
+          "name": "Sidebar",
+          "width": 260,
+          "height": "fill_container",
+          "fill": "$card",
+          "stroke": "$border",
+          "strokeWidth": {
+            "right": 1
+          },
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "LNWm2",
+              "name": "Logo Row",
+              "height": 56,
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "bTgB5",
+                  "name": "Logo",
+                  "fill": "$primary",
+                  "width": 32,
+                  "height": 32
+                },
+                {
+                  "type": "text",
+                  "id": "Z8ojlK",
+                  "name": "Brand",
+                  "fill": "$foreground",
+                  "content": "Cocos",
+                  "fontFamily": "$font-display",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "o546i",
+              "name": "Navigation",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-4",
+              "padding": "$spacing-3",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "HEk1Q",
+                  "name": "Group: Principal",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "KD04L",
+                      "name": "Section: Principal",
+                      "fill": "$muted-foreground",
+                      "content": "Principal",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RT3EY",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g2jk2i",
+                          "name": "Nav: Dashboard",
+                          "fill": "$primary",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "L4GwB",
+                              "name": "Icon",
+                              "fill": "$primary-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "S1HJI",
+                              "name": "Label",
+                              "fill": "$primary-foreground",
+                              "content": "Dashboard",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "XtZzD",
+                  "name": "Group: Catálogo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "wDw2I",
+                      "name": "Section: Catálogo",
+                      "fill": "$muted-foreground",
+                      "content": "Catálogo",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "WmCJ6",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "m7yky2",
+                          "name": "Nav: Productos",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "udKjK",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "ua3Os",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Productos",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "q78dfi",
+                          "name": "Nav: Lotes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "MS6C8",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "f4K85o",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Lotes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "OJVvm",
+                          "name": "Nav: Servicios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "d3Vcg",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "zkM7I",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Servicios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "QG4D0",
+                  "name": "Group: Operaciones",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "sB5Ws",
+                      "name": "Section: Operaciones",
+                      "fill": "$muted-foreground",
+                      "content": "Operaciones",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "tEa45",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jccxP",
+                          "name": "Nav: Clientes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "OhsZe",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "htgUh",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Clientes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "yXEzK",
+                          "name": "Nav: Órdenes de trabajo",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "OUkFI",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "VYMXC",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de trabajo",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "S6gMV",
+                          "name": "Nav: Ventas",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "xfSWo",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZY8KK",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Ventas",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ODnZW",
+                          "name": "Nav: Devoluciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "SS5Qb",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "UAzL0",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Devoluciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "x51ZJU",
+                          "name": "Nav: Órdenes de compra",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "LlRpL",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "SGKZr",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de compra",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Zm4Wi",
+                  "name": "Group: Administración",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "baZGL",
+                      "name": "Section: Administración",
+                      "fill": "$muted-foreground",
+                      "content": "Administración",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QsKRk",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "eKXkK",
+                          "name": "Nav: Usuarios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "FJVOb",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "dGG8s",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Usuarios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "O7WDq",
+                          "name": "Nav: Cierre de caja",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "ym4hI",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "G9Ks3f",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Cierre de caja",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "USZmn",
+                  "name": "Group: Sistema",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pUhCp",
+                      "name": "Section: Sistema",
+                      "fill": "$muted-foreground",
+                      "content": "Sistema",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BAnNj",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "mVHhO",
+                          "name": "Nav: Notificaciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "DUmb3",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "efDr2",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Notificaciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "E7KdC",
+              "name": "Sidebar Bottom",
+              "width": "fill_container",
+              "height": 56,
+              "fill": "$card",
+              "stroke": "$border",
+              "strokeWidth": {
+                "top": 1
+              },
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "TSGBm",
+                  "name": "Settings Icon",
+                  "width": 20,
+                  "height": 20,
+                  "icon": "settings",
+                  "library": "lucide",
+                  "fill": "$muted-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "y2nB8g",
+                  "name": "Settings Label",
+                  "fill": "$muted-foreground",
+                  "content": "Apariencia",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body-sm",
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "Hm3c9",
+                  "type": "ref",
+                  "ref": "v3iqMK",
+                  "name": "Theme Toggle"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "oBwkN",
+          "name": "Main Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "U9NkM7",
+              "name": "Header",
+              "height": 56,
+              "fill": "$card",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "D73x8",
+                  "name": "Page Title",
+                  "fill": "$foreground",
+                  "content": "Dashboard",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-h3",
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TjNvY",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-6",
+              "padding": "$spacing-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "TidMB",
+                  "name": "Dashboard Title",
+                  "fill": "$foreground",
+                  "content": "Dashboard",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-h2",
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "mRNFW",
+                  "name": "Cards Row",
+                  "width": "fill_container",
+                  "gap": "$spacing-4",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d7E1x",
+                      "name": "Card 1",
+                      "width": 280,
+                      "height": 140,
+                      "fill": "$card",
+                      "cornerRadius": "$radius-lg",
+                      "layout": "vertical",
+                      "gap": "$spacing-2",
+                      "padding": "$spacing-4",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": "$radius",
+                          "id": "CbKuO",
+                          "name": "Card Icon",
+                          "fill": "$border",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "text",
+                          "id": "T2JP7",
+                          "name": "Card Title",
+                          "fill": "$foreground",
+                          "content": "Resumen",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body",
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "zSgCE",
+                          "name": "Card Desc",
+                          "fill": "$muted-foreground",
+                          "content": "Métricas del día",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body-sm",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EO78w",
+                      "name": "Card 2",
+                      "width": 280,
+                      "height": 140,
+                      "fill": "$card",
+                      "cornerRadius": "$radius-lg",
+                      "layout": "vertical",
+                      "gap": "$spacing-2",
+                      "padding": "$spacing-4",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": "$radius",
+                          "id": "XARAJ",
+                          "name": "Card Icon",
+                          "fill": "$border",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "text",
+                          "id": "UoYWk",
+                          "name": "Card Title",
+                          "fill": "$foreground",
+                          "content": "Órdenes",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body",
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Aq8VL",
+                          "name": "Card Desc",
+                          "fill": "$muted-foreground",
+                          "content": "Pendientes hoy",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body-sm",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "P7720",
+                      "name": "Card 3",
+                      "width": 280,
+                      "height": 140,
+                      "fill": "$card",
+                      "cornerRadius": "$radius-lg",
+                      "layout": "vertical",
+                      "gap": "$spacing-2",
+                      "padding": "$spacing-4",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": "$radius",
+                          "id": "uhIME",
+                          "name": "Card Icon",
+                          "fill": "$border",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "text",
+                          "id": "xA93i",
+                          "name": "Card Title",
+                          "fill": "$foreground",
+                          "content": "Ventas",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body",
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DLqn3",
+                          "name": "Card Desc",
+                          "fill": "$muted-foreground",
+                          "content": "Total mensual",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body-sm",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KLlhV",
+                  "name": "Main Card",
+                  "height": 300,
+                  "fill": "$card",
+                  "cornerRadius": "$radius-lg",
+                  "layout": "vertical",
+                  "gap": "$spacing-3",
+                  "padding": "$spacing-4",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "UqfCB",
+                      "name": "Section Title",
+                      "fill": "$foreground",
+                      "content": "Actividad reciente",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": "$radius",
+                      "id": "Kj4D1",
+                      "name": "Placeholder",
+                      "fill": "$border",
+                      "width": 0,
+                      "height": 200
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "l4Uac",
+      "x": 2160,
+      "y": 0,
+      "name": "Variant A - Mobile Default",
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "GFDFA",
+          "name": "Mobile Header",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "$card",
+          "gap": "$spacing-3",
+          "padding": [
+            0,
+            "$spacing-4"
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "b8BnIG",
+              "width": 24,
+              "height": 24,
+              "icon": "menu",
+              "library": "lucide",
+              "fill": "$foreground"
+            },
+            {
+              "type": "text",
+              "id": "nFNL3",
+              "name": "Brand",
+              "fill": "$foreground",
+              "content": "Cocos",
+              "fontFamily": "$font-display",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "P0dju",
+          "name": "Mobile Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": "$spacing-4",
+          "padding": "$spacing-4",
+          "children": [
+            {
+              "type": "text",
+              "id": "Jcc97",
+              "name": "Page Title",
+              "fill": "$foreground",
+              "content": "Dashboard",
+              "fontFamily": "$font-sans",
+              "fontSize": "$text-h3",
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "DIjcQ",
+              "name": "Card 1",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "BDRAo",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "UnQes",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Resumen",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mW5zV",
+              "name": "Card 2",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "OLFzX",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "b123b",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Órdenes",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kAn7v",
+              "name": "Placeholder",
+              "width": "fill_container",
+              "height": 200,
+              "fill": "$border",
+              "cornerRadius": "$radius-lg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "FpXXZ",
+      "x": 2615,
+      "y": 0,
+      "name": "Variant A - Mobile Drawer Open",
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "eu2kE",
+          "name": "Mobile Header",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "$card",
+          "gap": "$spacing-3",
+          "padding": [
+            0,
+            "$spacing-4"
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "bDQt8",
+              "width": 24,
+              "height": 24,
+              "icon": "menu",
+              "library": "lucide",
+              "fill": "$foreground"
+            },
+            {
+              "type": "text",
+              "id": "g2UvW1",
+              "name": "Brand",
+              "fill": "$foreground",
+              "content": "Cocos",
+              "fontFamily": "$font-display",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "RKHi4",
+          "name": "Mobile Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": "$spacing-4",
+          "padding": "$spacing-4",
+          "children": [
+            {
+              "type": "text",
+              "id": "D6h3A2",
+              "name": "Page Title",
+              "fill": "$foreground",
+              "content": "Dashboard",
+              "fontFamily": "$font-sans",
+              "fontSize": "$text-h3",
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "e561gb",
+              "name": "Card 1",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "fHyaA",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "rzPpa",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Resumen",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "axFf6",
+              "name": "Card 2",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "jK6ym",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "U9Pndd",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Órdenes",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tdZfa",
+              "name": "Placeholder",
+              "width": "fill_container",
+              "height": 200,
+              "fill": "$border",
+              "cornerRadius": "$radius-lg"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bvzja",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Overlay",
+          "width": 375,
+          "height": 812,
+          "fill": "#00000080",
+          "layout": "none"
+        },
+        {
+          "type": "frame",
+          "id": "p2ihO",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Drawer Sidebar",
+          "width": 280,
+          "height": 812,
+          "fill": "$card",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "SvSBt",
+              "name": "Logo Row",
+              "height": 56,
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "rj0uF",
+                  "name": "Logo",
+                  "fill": "$primary",
+                  "width": 32,
+                  "height": 32
+                },
+                {
+                  "type": "text",
+                  "id": "sPA2k",
+                  "name": "Brand",
+                  "fill": "$foreground",
+                  "content": "Cocos",
+                  "fontFamily": "$font-display",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "vncnw",
+              "name": "Navigation",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-4",
+              "padding": "$spacing-3",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "oialb",
+                  "name": "Group: Principal",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "xOPiK",
+                      "name": "Section: Principal",
+                      "fill": "$muted-foreground",
+                      "content": "Principal",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "wwsO2",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "zJbdr",
+                          "name": "Nav: Dashboard",
+                          "fill": "$primary",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "uMLBZ",
+                              "name": "Icon",
+                              "fill": "$primary-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "rckGn",
+                              "name": "Label",
+                              "fill": "$primary-foreground",
+                              "content": "Dashboard",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Os3nw",
+                  "name": "Group: Catálogo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "s3PCn",
+                      "name": "Section: Catálogo",
+                      "fill": "$muted-foreground",
+                      "content": "Catálogo",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Un6wa",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "CMune",
+                          "name": "Nav: Productos",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "XafOw",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "HspQm",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Productos",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "R86zB",
+                          "name": "Nav: Lotes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "n6TW7",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "DcK4P",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Lotes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mKAN5",
+                          "name": "Nav: Servicios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "noYPp",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "Q6Cbr",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Servicios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ynP5R",
+                  "name": "Group: Operaciones",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "uwTaA",
+                      "name": "Section: Operaciones",
+                      "fill": "$muted-foreground",
+                      "content": "Operaciones",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "icFRN",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "wyceX",
+                          "name": "Nav: Clientes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "J92Fs",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "UG79s",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Clientes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "snGKd",
+                          "name": "Nav: Órdenes de trabajo",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "NlSNX",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "Y251A",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de trabajo",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PC8oU",
+                          "name": "Nav: Ventas",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "Ch7tN",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "r8Hb3",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Ventas",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RPVjX",
+                          "name": "Nav: Devoluciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "u6Rtv",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "Z39xkS",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Devoluciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UArwi",
+                          "name": "Nav: Órdenes de compra",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "HvHuT",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "N2lum",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de compra",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "CVOmR",
+                  "name": "Group: Administración",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "UKeSk",
+                      "name": "Section: Administración",
+                      "fill": "$muted-foreground",
+                      "content": "Administración",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CWDo4",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "WVWcy",
+                          "name": "Nav: Usuarios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "VAC5i",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "JdEez",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Usuarios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "eqENT",
+                          "name": "Nav: Cierre de caja",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "mKHmD",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "TUKCn",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Cierre de caja",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UIuro",
+                  "name": "Group: Sistema",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "E7UTs2",
+                      "name": "Section: Sistema",
+                      "fill": "$muted-foreground",
+                      "content": "Sistema",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ONGCg",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "BPToU",
+                          "name": "Nav: Notificaciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "Q5915l",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "V2wSV",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Notificaciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ScSFD",
+              "name": "Sidebar Bottom",
+              "width": "fill_container",
+              "height": 56,
+              "fill": "$card",
+              "stroke": "$border",
+              "strokeWidth": {
+                "top": 1
+              },
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "oCFrm",
+                  "name": "Settings Icon",
+                  "width": 20,
+                  "height": 20,
+                  "icon": "settings",
+                  "library": "lucide",
+                  "fill": "$muted-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "b8UNhs",
+                  "name": "Settings Label",
+                  "fill": "$muted-foreground",
+                  "content": "Apariencia",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body-sm",
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "uWQuX",
+                  "type": "ref",
+                  "ref": "v3iqMK",
+                  "name": "Theme Toggle"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "v3iqMK",
+      "x": 880,
+      "y": -120,
+      "name": "Theme Toggle",
+      "reusable": true,
+      "width": 40,
+      "height": 40,
+      "fill": "$card",
+      "cornerRadius": 999,
+      "stroke": "$border",
+      "strokeWidth": 1,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon",
+          "id": "ftEbK",
+          "name": "Theme Icon",
+          "width": 20,
+          "height": 20,
+          "icon": "$theme-toggle-icon",
+          "library": "lucide",
+          "fill": "$foreground"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "z9udW",
+      "x": 880,
+      "y": 860,
+      "name": "Variant A - Classic Sidebar (Dark)",
+      "theme": {
+        "mode": "dark"
+      },
+      "clip": true,
+      "width": 1200,
+      "height": 800,
+      "fill": "$background",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "l6Q692",
+          "x": 0,
+          "y": 0,
+          "name": "Sidebar",
+          "width": 260,
+          "height": "fill_container(800)",
+          "fill": "$card",
+          "stroke": "$border",
+          "strokeWidth": {
+            "right": 1
+          },
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "s7oZF",
+              "name": "Logo Row",
+              "height": 56,
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "s0cgsT",
+                  "name": "Logo",
+                  "fill": "$primary",
+                  "width": 32,
+                  "height": 32
+                },
+                {
+                  "type": "text",
+                  "id": "Re875",
+                  "name": "Brand",
+                  "fill": "$foreground",
+                  "content": "Cocos",
+                  "fontFamily": "$font-display",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MQIJ7",
+              "name": "Navigation",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-4",
+              "padding": "$spacing-3",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ne3Hd",
+                  "name": "Group: Principal",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "BhP9L",
+                      "name": "Section: Principal",
+                      "fill": "$muted-foreground",
+                      "content": "Principal",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "JyoJZ",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "cQ32G",
+                          "name": "Nav: Dashboard",
+                          "fill": "$primary",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "jAegI",
+                              "name": "Icon",
+                              "fill": "$primary-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "sw0Rx",
+                              "name": "Label",
+                              "fill": "$primary-foreground",
+                              "content": "Dashboard",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "x2QQg",
+                  "name": "Group: Catálogo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PboA2",
+                      "name": "Section: Catálogo",
+                      "fill": "$muted-foreground",
+                      "content": "Catálogo",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LXoC6",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "hyt54",
+                          "name": "Nav: Productos",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "lCrmO",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "irZrc",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Productos",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "J9BgYr",
+                          "name": "Nav: Lotes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "bfGrb",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "y2g2D",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Lotes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "oRrQx",
+                          "name": "Nav: Servicios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "wvVEE",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "iGoad",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Servicios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MYOXF",
+                  "name": "Group: Operaciones",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LcR4I",
+                      "name": "Section: Operaciones",
+                      "fill": "$muted-foreground",
+                      "content": "Operaciones",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jJJ02",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "WBQxr",
+                          "name": "Nav: Clientes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "eKi5c",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "A9et0",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Clientes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "B0mU8b",
+                          "name": "Nav: Órdenes de trabajo",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "RP5h3",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "jwRLE",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de trabajo",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YXeru",
+                          "name": "Nav: Ventas",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "At3WH",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "yLH7D",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Ventas",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "teyhR",
+                          "name": "Nav: Devoluciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "X0HRTZ",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "dgjO0",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Devoluciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "p2OVKg",
+                          "name": "Nav: Órdenes de compra",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "TekQe",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "lS25j",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de compra",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "y1RxZc",
+                  "name": "Group: Administración",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "jzSdg",
+                      "name": "Section: Administración",
+                      "fill": "$muted-foreground",
+                      "content": "Administración",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MWOGm",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "NCvfb",
+                          "name": "Nav: Usuarios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "JtLEP",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "bfjLN",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Usuarios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "X2sia",
+                          "name": "Nav: Cierre de caja",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "ExxsM",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "U1AG1N",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Cierre de caja",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KH2O8",
+                  "name": "Group: Sistema",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "tsDNI",
+                      "name": "Section: Sistema",
+                      "fill": "$muted-foreground",
+                      "content": "Sistema",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QvqgZ",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ik7Mn",
+                          "name": "Nav: Notificaciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "z192y",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "DhKPY",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Notificaciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KOiGP",
+              "name": "Sidebar Bottom",
+              "width": "fill_container",
+              "height": 56,
+              "fill": "$card",
+              "stroke": "$border",
+              "strokeWidth": {
+                "top": 1
+              },
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "zs21V",
+                  "name": "Settings Icon",
+                  "width": 20,
+                  "height": 20,
+                  "icon": "settings",
+                  "library": "lucide",
+                  "fill": "$muted-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "sea4C",
+                  "name": "Settings Label",
+                  "fill": "$muted-foreground",
+                  "content": "Apariencia",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body-sm",
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "E8arVO",
+                  "type": "ref",
+                  "ref": "v3iqMK",
+                  "name": "Theme Toggle"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "leSGY",
+          "x": 260,
+          "y": 0,
+          "name": "Main Area",
+          "width": "fill_container(940)",
+          "height": "fill_container(800)",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fECth",
+              "name": "Header",
+              "height": 56,
+              "fill": "$card",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "qbBPM",
+                  "name": "Page Title",
+                  "fill": "$foreground",
+                  "content": "Dashboard",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-h3",
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WZYAg",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-6",
+              "padding": "$spacing-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "k1TzC",
+                  "name": "Dashboard Title",
+                  "fill": "$foreground",
+                  "content": "Dashboard",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-h2",
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "e8S7F",
+                  "name": "Cards Row",
+                  "width": "fill_container",
+                  "gap": "$spacing-4",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d66Af1",
+                      "name": "Card 1",
+                      "width": 280,
+                      "height": 140,
+                      "fill": "$card",
+                      "cornerRadius": "$radius-lg",
+                      "layout": "vertical",
+                      "gap": "$spacing-2",
+                      "padding": "$spacing-4",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": "$radius",
+                          "id": "fsOgh",
+                          "name": "Card Icon",
+                          "fill": "$border",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "text",
+                          "id": "RtDYu",
+                          "name": "Card Title",
+                          "fill": "$foreground",
+                          "content": "Resumen",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body",
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "uNyh7",
+                          "name": "Card Desc",
+                          "fill": "$muted-foreground",
+                          "content": "Métricas del día",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body-sm",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ffhUh",
+                      "name": "Card 2",
+                      "width": 280,
+                      "height": 140,
+                      "fill": "$card",
+                      "cornerRadius": "$radius-lg",
+                      "layout": "vertical",
+                      "gap": "$spacing-2",
+                      "padding": "$spacing-4",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": "$radius",
+                          "id": "Urf75",
+                          "name": "Card Icon",
+                          "fill": "$border",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "text",
+                          "id": "a6tLXE",
+                          "name": "Card Title",
+                          "fill": "$foreground",
+                          "content": "Órdenes",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body",
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "IhOdA",
+                          "name": "Card Desc",
+                          "fill": "$muted-foreground",
+                          "content": "Pendientes hoy",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body-sm",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "E2WwL",
+                      "name": "Card 3",
+                      "width": 280,
+                      "height": 140,
+                      "fill": "$card",
+                      "cornerRadius": "$radius-lg",
+                      "layout": "vertical",
+                      "gap": "$spacing-2",
+                      "padding": "$spacing-4",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": "$radius",
+                          "id": "U2K1L",
+                          "name": "Card Icon",
+                          "fill": "$border",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "text",
+                          "id": "iq8yx",
+                          "name": "Card Title",
+                          "fill": "$foreground",
+                          "content": "Ventas",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body",
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Z8lid",
+                          "name": "Card Desc",
+                          "fill": "$muted-foreground",
+                          "content": "Total mensual",
+                          "fontFamily": "$font-sans",
+                          "fontSize": "$text-body-sm",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "u6pSx",
+                  "name": "Main Card",
+                  "height": 300,
+                  "fill": "$card",
+                  "cornerRadius": "$radius-lg",
+                  "layout": "vertical",
+                  "gap": "$spacing-3",
+                  "padding": "$spacing-4",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "p8bUU5",
+                      "name": "Section Title",
+                      "fill": "$foreground",
+                      "content": "Actividad reciente",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": "$radius",
+                      "id": "rTHTC",
+                      "name": "Placeholder",
+                      "fill": "$border",
+                      "width": 0,
+                      "height": 200
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Yne1v",
+      "x": 2140,
+      "y": 860,
+      "name": "Variant A - Mobile Default (Dark)",
+      "theme": {
+        "mode": "dark"
+      },
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Gofwx",
+          "name": "Mobile Header (Dark)",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "$card",
+          "gap": "$spacing-3",
+          "padding": [
+            0,
+            "$spacing-4"
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "yzLMv",
+              "width": 24,
+              "height": 24,
+              "icon": "menu",
+              "library": "lucide",
+              "fill": "$foreground"
+            },
+            {
+              "type": "text",
+              "id": "Lkqid",
+              "name": "Brand",
+              "fill": "$foreground",
+              "content": "Cocos",
+              "fontFamily": "$font-display",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "zk83p",
+          "name": "Mobile Content (Dark)",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": "$spacing-4",
+          "padding": "$spacing-4",
+          "children": [
+            {
+              "type": "text",
+              "id": "RnCN8",
+              "name": "Page Title",
+              "fill": "$foreground",
+              "content": "Dashboard",
+              "fontFamily": "$font-sans",
+              "fontSize": "$text-h3",
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "kp1Bm",
+              "name": "Card 1",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "h0oZFa",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "Zyask",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Resumen",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Ok3a6",
+              "name": "Card 2",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "YGRfU",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "sCa8r",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Órdenes",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kmW2d",
+              "name": "Placeholder",
+              "width": "fill_container",
+              "height": 200,
+              "fill": "$border",
+              "cornerRadius": "$radius-lg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "r3gnUa",
+      "x": 2575,
+      "y": 860,
+      "name": "Variant A - Mobile Drawer Open (Dark)",
+      "theme": {
+        "mode": "dark"
+      },
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ND0C8",
+          "name": "Mobile Header",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "$card",
+          "gap": "$spacing-3",
+          "padding": [
+            0,
+            "$spacing-4"
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "RXpqg",
+              "width": 24,
+              "height": 24,
+              "icon": "menu",
+              "library": "lucide",
+              "fill": "$foreground"
+            },
+            {
+              "type": "text",
+              "id": "Z1lQL",
+              "name": "Brand",
+              "fill": "$foreground",
+              "content": "Cocos",
+              "fontFamily": "$font-display",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hDhz5",
+          "name": "Mobile Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": "$spacing-4",
+          "padding": "$spacing-4",
+          "children": [
+            {
+              "type": "text",
+              "id": "nUK4P",
+              "name": "Page Title",
+              "fill": "$foreground",
+              "content": "Dashboard",
+              "fontFamily": "$font-sans",
+              "fontSize": "$text-h3",
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "TMwJJ",
+              "name": "Card 1",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "r3qqhE",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "fTswa",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Resumen",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ryAHB",
+              "name": "Card 2",
+              "width": "fill_container",
+              "height": 120,
+              "fill": "$card",
+              "cornerRadius": "$radius-lg",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "padding": "$spacing-4",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "b3LEBX",
+                  "name": "Card Icon",
+                  "fill": "$border",
+                  "width": 36,
+                  "height": 36
+                },
+                {
+                  "type": "text",
+                  "id": "bmG25",
+                  "name": "Card Title",
+                  "fill": "$foreground",
+                  "content": "Órdenes",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body",
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZG9l5",
+              "name": "Placeholder",
+              "width": "fill_container",
+              "height": 200,
+              "fill": "$border",
+              "cornerRadius": "$radius-lg"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "M4gfK8",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Overlay",
+          "width": 375,
+          "height": 812,
+          "fill": "#00000080",
+          "layout": "none"
+        },
+        {
+          "type": "frame",
+          "id": "NLULX",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Drawer Sidebar",
+          "width": 280,
+          "height": 812,
+          "fill": "$card",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Q1pCfw",
+              "name": "Logo Row",
+              "height": 56,
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": "$radius",
+                  "id": "YlT51",
+                  "name": "Logo",
+                  "fill": "$primary",
+                  "width": 32,
+                  "height": 32
+                },
+                {
+                  "type": "text",
+                  "id": "Z4Wqi",
+                  "name": "Brand",
+                  "fill": "$foreground",
+                  "content": "Cocos",
+                  "fontFamily": "$font-display",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "w0OkYj",
+              "name": "Navigation",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-4",
+              "padding": "$spacing-3",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "K8GFP",
+                  "name": "Group: Principal",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ph6P5",
+                      "name": "Section: Principal",
+                      "fill": "$muted-foreground",
+                      "content": "Principal",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "L0Ms7s",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ZhAfR",
+                          "name": "Nav: Dashboard",
+                          "fill": "$primary",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "X9JUab",
+                              "name": "Icon",
+                              "fill": "$primary-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "eC2Pn",
+                              "name": "Label",
+                              "fill": "$primary-foreground",
+                              "content": "Dashboard",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "TnWU3",
+                  "name": "Group: Catálogo",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fe1e5",
+                      "name": "Section: Catálogo",
+                      "fill": "$muted-foreground",
+                      "content": "Catálogo",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "j17el",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "k3W60n",
+                          "name": "Nav: Productos",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "HYmXU",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "PMftC",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Productos",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "TsHns",
+                          "name": "Nav: Lotes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "hM4M5",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "z1gtt",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Lotes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "W9WnFI",
+                          "name": "Nav: Servicios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "NG3uS",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "efsPw",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Servicios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "i2BiCu",
+                  "name": "Group: Operaciones",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d6z93",
+                      "name": "Section: Operaciones",
+                      "fill": "$muted-foreground",
+                      "content": "Operaciones",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bcJrS",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "mrUbq",
+                          "name": "Nav: Clientes",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "FB7dA",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "HpaM8",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Clientes",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PEd9A",
+                          "name": "Nav: Órdenes de trabajo",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "QRwXx",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "dBUPh",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de trabajo",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Vy6Iu",
+                          "name": "Nav: Ventas",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "NBvwf",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "RnNQF",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Ventas",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "FqxU5",
+                          "name": "Nav: Devoluciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "S3jzh",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "c4fzK",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Devoluciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ds2vx",
+                          "name": "Nav: Órdenes de compra",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "KrnhJ",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "uISat",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Órdenes de compra",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GGvO3",
+                  "name": "Group: Administración",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "eEDBy",
+                      "name": "Section: Administración",
+                      "fill": "$muted-foreground",
+                      "content": "Administración",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "dSf8U",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "l2tL6v",
+                          "name": "Nav: Usuarios",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "r1Xgax",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "LLHze",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Usuarios",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "P9F64q",
+                          "name": "Nav: Cierre de caja",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "BFeKg",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "gYCLX",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Cierre de caja",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "aiSxz",
+                  "name": "Group: Sistema",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$spacing-2",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vAUG8",
+                      "name": "Section: Sistema",
+                      "fill": "$muted-foreground",
+                      "content": "Sistema",
+                      "fontFamily": "$font-sans",
+                      "fontSize": "$text-caption",
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "FWS9V",
+                      "name": "Items",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "YMftd",
+                          "name": "Nav: Notificaciones",
+                          "fill": "$card",
+                          "cornerRadius": "$radius-sm",
+                          "gap": "$spacing-3",
+                          "padding": [
+                            8,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-sm",
+                              "id": "dmlzF",
+                              "name": "Icon",
+                              "fill": "$muted-foreground",
+                              "width": 20,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "E1XA8",
+                              "name": "Label",
+                              "fill": "$foreground",
+                              "content": "Notificaciones",
+                              "fontFamily": "$font-sans",
+                              "fontSize": "$text-body-sm",
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "iD9TD",
+              "name": "Sidebar Bottom",
+              "width": "fill_container",
+              "height": 56,
+              "fill": "$card",
+              "stroke": "$border",
+              "strokeWidth": {
+                "top": 1
+              },
+              "gap": "$spacing-3",
+              "padding": [
+                0,
+                "$spacing-4"
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "SlyOg",
+                  "name": "Settings Icon",
+                  "width": 20,
+                  "height": 20,
+                  "icon": "settings",
+                  "library": "lucide",
+                  "fill": "$muted-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "VSelE",
+                  "name": "Settings Label",
+                  "fill": "$muted-foreground",
+                  "content": "Apariencia",
+                  "fontFamily": "$font-sans",
+                  "fontSize": "$text-body-sm",
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "G4SRK",
+                  "type": "ref",
+                  "ref": "v3iqMK",
+                  "name": "Theme Toggle"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
+  "variables": {
+    "background": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FAFAF9",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#09090B",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#18181B",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FAFAFA",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "card": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#18181B",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "border": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#E4E4E7",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#27272A",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2563EB",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#3B82F6",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "primary-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "muted-foreground": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#71717A",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#A1A1AA",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "font-sans": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font-display": {
+      "type": "string",
+      "value": "Bricolage Grotesque"
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 6
+    },
+    "radius": {
+      "type": "number",
+      "value": 8
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 12
+    },
+    "spacing-1": {
+      "type": "number",
+      "value": 4
+    },
+    "spacing-2": {
+      "type": "number",
+      "value": 8
+    },
+    "spacing-3": {
+      "type": "number",
+      "value": 12
+    },
+    "spacing-4": {
+      "type": "number",
+      "value": 16
+    },
+    "spacing-5": {
+      "type": "number",
+      "value": 20
+    },
+    "spacing-6": {
+      "type": "number",
+      "value": 24
+    },
+    "text-display": {
+      "type": "number",
+      "value": 40
+    },
+    "text-h1": {
+      "type": "number",
+      "value": 32
+    },
+    "text-h2": {
+      "type": "number",
+      "value": 28
+    },
+    "text-h3": {
+      "type": "number",
+      "value": 24
+    },
+    "text-body": {
+      "type": "number",
+      "value": 16
+    },
+    "text-body-sm": {
+      "type": "number",
+      "value": 14
+    },
+    "text-caption": {
+      "type": "number",
+      "value": 13
+    },
+    "theme-toggle-icon": {
+      "type": "string",
+      "value": [
+        {
+          "value": "moon",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "sun",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    }
+  },
+  "fileToken": "7f617d91-6471-4379-a6e6-1672dd64e8df"
+}

@@ -19,6 +19,9 @@ export type ProductFormProps = {
   brands: ProductReference[];
   categories: ProductReference[];
   isPending?: boolean;
+  initialValues?: ProductFormValues;
+  imageUrl?: string;
+  onRemoveImage?: () => void;
 };
 
 function toSelectOptions(references: ProductReference[]) {
@@ -34,7 +37,11 @@ export function ProductForm({
   brands,
   categories,
   isPending = false,
+  initialValues,
+  imageUrl,
+  onRemoveImage,
 }: ProductFormProps) {
+  const isEditMode = Boolean(initialValues);
   const {
     register,
     handleSubmit,
@@ -42,7 +49,7 @@ export function ProductForm({
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
+    defaultValues: initialValues ?? {
       code: '',
       name: '',
       description: '',
@@ -111,7 +118,11 @@ export function ProductForm({
         />
       </div>
 
-      <ProductImageUpload onChange={setImage} />
+      <ProductImageUpload
+        imageUrl={imageUrl}
+        onChange={setImage}
+        onRemove={onRemoveImage}
+      />
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
@@ -227,7 +238,13 @@ export function ProductForm({
 
       <div className="flex items-center gap-4 pt-4">
         <Button type="submit" disabled={isPending}>
-          {isPending ? 'Creando…' : 'Crear producto'}
+          {isPending
+            ? isEditMode
+              ? 'Guardando…'
+              : 'Creando…'
+            : isEditMode
+              ? 'Guardar cambios'
+              : 'Crear producto'}
         </Button>
         <Link
           to="/products"

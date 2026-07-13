@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
-import { MemoryRouter, useLocation } from 'react-router';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ProductFormPage } from './ProductFormPage';
 
@@ -18,7 +18,54 @@ function createWrapper() {
     return createElement(
       MemoryRouter,
       { initialEntries: ['/products/new'] },
-      createElement(QueryClientProvider, { client: queryClient }, children)
+      createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        createElement(
+          Routes,
+          null,
+          createElement(Route, {
+            path: '/products/new',
+            element: children,
+          }),
+          createElement(Route, {
+            path: '/products',
+            element: createElement(LocationDisplay),
+          })
+        )
+      )
+    );
+  };
+}
+
+function createEditWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(
+      MemoryRouter,
+      { initialEntries: ['/products/prod-1/edit'] },
+      createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        createElement(
+          Routes,
+          null,
+          createElement(Route, {
+            path: '/products/:id/edit',
+            element: children,
+          }),
+          createElement(Route, {
+            path: '/products',
+            element: createElement(LocationDisplay),
+          })
+        )
+      )
     );
   };
 }
@@ -34,11 +81,38 @@ const references = {
   categories: [{ id: 'c1', name: 'Lubricantes' }],
 };
 
+const updatedProduct = {
+  id: 'prod-1',
+  code: 'COD-001',
+  name: 'Aceite 20W50 actualizado',
+  price: '30.00',
+  isActive: true,
+  presentation: { id: 'p1', name: 'Litro' },
+  brand: { id: 'b1', name: 'Castrol' },
+  category: { id: 'c1', name: 'Lubricantes' },
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
 const createdProduct = {
   id: 'prod-1',
   code: 'COD-001',
   name: 'Aceite 20W50',
   price: '25.00',
+  isActive: true,
+  presentation: { id: 'p1', name: 'Litro' },
+  brand: { id: 'b1', name: 'Castrol' },
+  category: { id: 'c1', name: 'Lubricantes' },
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
+const existingProduct = {
+  id: 'prod-1',
+  code: 'COD-001',
+  name: 'Aceite 20W50',
+  price: '25.00',
+  description: 'Descripción',
   isActive: true,
   presentation: { id: 'p1', name: 'Litro' },
   brand: { id: 'b1', name: 'Castrol' },
@@ -110,15 +184,9 @@ describe('ProductFormPage', () => {
         json: async () => createdProduct,
       });
 
-    render(
-      <>
-        <ProductFormPage />
-        <LocationDisplay />
-      </>,
-      {
-        wrapper: createWrapper(),
-      }
-    );
+    render(<ProductFormPage />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() =>
       expect(screen.getByLabelText('Código')).toBeInTheDocument()
@@ -149,6 +217,116 @@ describe('ProductFormPage', () => {
     expect(formData.get('code')).toBe('COD-001');
     expect(formData.get('name')).toBe('Aceite 20W50');
     expect(formData.get('price')).toBe('25');
+
+    await waitFor(() =>
+      expect(screen.getByTestId('location')).toHaveTextContent('/products')
+    );
+  });
+
+  it('renders the edit page title and prefills the form', async () => {
+    globalThis.fetch = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => references.presentations,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => references.brands,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => references.categories,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => existingProduct,
+      });
+
+    render(<ProductFormPage />, {
+      wrapper: createEditWrapper(),
+    });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('heading', { name: 'Editar producto' })
+      ).toBeInTheDocument()
+    );
+
+    await waitFor(() =>
+      expect(screen.getByLabelText('Código')).toHaveValue('COD-001')
+    );
+
+    expect(screen.getByLabelText('Nombre')).toHaveValue('Aceite 20W50');
+    expect(
+      screen.getByRole('button', { name: 'Guardar cambios' })
+    ).toBeInTheDocument();
+  });
+
+  it('updates the product and navigates to the product list', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => references.presentations,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => references.brands,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => references.categories,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => existingProduct,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => updatedProduct,
+      });
+
+    render(<ProductFormPage />, {
+      wrapper: createEditWrapper(),
+    });
+
+    await waitFor(() =>
+      expect(screen.getByLabelText('Código')).toBeInTheDocument()
+    );
+
+    await user.clear(screen.getByLabelText('Nombre'));
+    await user.type(
+      screen.getByLabelText('Nombre'),
+      'Aceite 20W50 actualizado'
+    );
+    await user.clear(screen.getByLabelText('Precio'));
+    await user.type(screen.getByLabelText('Precio'), '30');
+
+    await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/products/prod-1',
+        expect.objectContaining({
+          method: 'PATCH',
+          credentials: 'include',
+        })
+      )
+    );
+
+    const patchCall = (
+      globalThis.fetch as ReturnType<typeof vi.fn>
+    ).mock.calls.find(
+      (call) =>
+        call[0] === 'http://localhost:3000/api/products/prod-1' &&
+        (call[1] as RequestInit).method === 'PATCH'
+    );
+    const requestInit = patchCall?.[1] as RequestInit;
+    const formData = requestInit.body as FormData;
+    expect(formData.get('name')).toBe('Aceite 20W50 actualizado');
+    expect(formData.get('price')).toBe('30');
 
     await waitFor(() =>
       expect(screen.getByTestId('location')).toHaveTextContent('/products')

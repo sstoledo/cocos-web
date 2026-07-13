@@ -50,6 +50,7 @@ const routes: RouteObject[] = [
       guardedRoute('dashboard', <DashboardPage />),
       guardedRoute('products', <ProductListPage />),
       guardedRoute('products/new', <ProductFormPage />, 'Admin'),
+      guardedRoute('products/:id/edit', <ProductFormPage />, 'Admin'),
       guardedRoute('lots', <LotListPage />),
       guardedRoute('clients', <ClientListPage />),
       guardedRoute('services', <ServiceListPage />),
