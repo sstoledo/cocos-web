@@ -108,4 +108,50 @@ describe('RouteGuard', () => {
 
     expect(screen.queryByText('protected')).not.toBeInTheDocument();
   });
+
+  it('redirects to unauthorized when requiredRole does not match', () => {
+    useUserMock.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'Pedro',
+        email: 'pedro@example.com',
+        role: { id: 'r2', name: 'Warehouse' },
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/products/new']}>
+        <RouteGuard routePath="/products/new" requiredRole="Admin">
+          protected
+        </RouteGuard>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('protected')).not.toBeInTheDocument();
+  });
+
+  it('allows access when requiredRole matches', () => {
+    useUserMock.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'Ana',
+        email: 'ana@example.com',
+        role: { id: 'r1', name: 'Admin' },
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <RouteGuard routePath="/products/new" requiredRole="Admin">
+          protected
+        </RouteGuard>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('protected')).toBeInTheDocument();
+  });
 });
