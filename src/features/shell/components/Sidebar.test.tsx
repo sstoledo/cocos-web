@@ -95,9 +95,7 @@ describe('Sidebar', () => {
     expect(
       screen.queryByRole('link', { name: /productos/i })
     ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('link', { name: /clientes/i })
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /clientes/i })).toBeInTheDocument();
   });
 
   it('shows warehouse links for Warehouse', () => {
@@ -110,9 +108,7 @@ describe('Sidebar', () => {
     expect(
       screen.getByRole('link', { name: /órdenes de compra/i })
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('link', { name: /clientes/i })
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /clientes/i })).toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: /usuarios/i })
     ).not.toBeInTheDocument();
@@ -127,6 +123,7 @@ describe('Sidebar', () => {
     expect(
       screen.getByRole('link', { name: /notificaciones/i })
     ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /clientes/i })).toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: /productos/i })
     ).not.toBeInTheDocument();
