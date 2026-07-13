@@ -47,7 +47,7 @@ export const navigationGroups: NavGroup[] = [
         label: 'Lotes',
         path: '/lots',
         icon: IconPackages,
-        allowedRoles: ['Admin', 'Warehouse'],
+        allowedRoles: ['Admin', 'Warehouse', 'Purchasing'],
       },
       {
         label: 'Servicios',
