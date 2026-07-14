@@ -1,5 +1,6 @@
 import { authRoutes } from '@/features/auth/routes';
 import { CashClosingPage } from '@/features/cash-register/pages/CashClosingPage';
+import { ClientFormPage } from '@/features/clients/pages/ClientFormPage';
 import { ClientListPage } from '@/features/clients/pages/ClientListPage';
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
 import { LotFormPage } from '@/features/lots/pages/LotFormPage';
@@ -30,12 +31,18 @@ import {
 function guardedRoute(
   path: string,
   element: React.ReactNode,
-  requiredRole?: RoleName
+  requiredRole?: RoleName | RoleName[]
 ) {
+  const roles = Array.isArray(requiredRole)
+    ? requiredRole
+    : requiredRole
+      ? [requiredRole]
+      : undefined;
+
   return {
     path,
     element: (
-      <RouteGuard routePath={path} requiredRole={requiredRole}>
+      <RouteGuard routePath={path} requiredRoles={roles}>
         {element}
       </RouteGuard>
     ),
@@ -57,6 +64,7 @@ const routes: RouteObject[] = [
       guardedRoute('lots', <LotListPage />),
       guardedRoute('lots/new', <LotFormPage />),
       guardedRoute('clients', <ClientListPage />),
+      guardedRoute('clients/new', <ClientFormPage />, ['Admin', 'Reception']),
       guardedRoute('services', <ServiceListPage />),
       guardedRoute('work-orders', <WorkOrderListPage />),
       guardedRoute('sales', <SalesPage />),
