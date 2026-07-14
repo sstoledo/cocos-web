@@ -1,11 +1,21 @@
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 import type { Vehicle } from '../types';
 
 export type VehicleListProps = {
   vehicles: Vehicle[];
+  canEdit?: boolean;
+  onEdit?: (vehicle: Vehicle) => void;
+  onDelete?: (vehicle: Vehicle) => void;
 };
 
-export function VehicleList({ vehicles }: VehicleListProps) {
+export function VehicleList({
+  vehicles,
+  canEdit = false,
+  onEdit,
+  onDelete,
+}: VehicleListProps) {
   const activeVehicles = vehicles.filter((vehicle) => vehicle.isActive);
 
   return (
@@ -29,6 +39,11 @@ export function VehicleList({ vehicles }: VehicleListProps) {
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Notas
             </th>
+            {canEdit && (
+              <th className="h-12 px-4 font-medium text-muted-foreground">
+                Acciones
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -53,6 +68,32 @@ export function VehicleList({ vehicles }: VehicleListProps) {
               >
                 {vehicle.notes ?? '—'}
               </td>
+              {canEdit && (
+                <td className="p-4">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onEdit?.(vehicle)}
+                      aria-label={`Editar ${vehicle.plate}`}
+                    >
+                      <IconPencil className="mr-1.5 h-3.5 w-3.5" />
+                      Editar
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onDelete?.(vehicle)}
+                      aria-label={`Eliminar ${vehicle.plate}`}
+                    >
+                      <IconTrash className="mr-1.5 h-3.5 w-3.5" />
+                      Eliminar
+                    </Button>
+                  </div>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

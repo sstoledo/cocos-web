@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 import type { Vehicle } from '../types';
 import { VehicleList } from './VehicleList';
 
@@ -22,8 +23,22 @@ const inactiveVehicle: Vehicle = {
   isActive: false,
 };
 
-function renderVehicleList(vehicles: Vehicle[]) {
-  return render(<VehicleList vehicles={vehicles} />);
+function renderVehicleList(
+  vehicles: Vehicle[],
+  props?: {
+    canEdit?: boolean;
+    onEdit?: (vehicle: Vehicle) => void;
+    onDelete?: (vehicle: Vehicle) => void;
+  }
+) {
+  return render(
+    <VehicleList
+      vehicles={vehicles}
+      canEdit={props?.canEdit}
+      onEdit={props?.onEdit}
+      onDelete={props?.onDelete}
+    />
+  );
 }
 
 describe('VehicleList', () => {
@@ -71,5 +86,45 @@ describe('VehicleList', () => {
     expect(
       screen.getByText('No se encontraron vehículos.')
     ).toBeInTheDocument();
+  });
+
+  it('hides action buttons when canEdit is false', () => {
+    renderVehicleList([activeVehicle]);
+
+    expect(
+      screen.queryByRole('button', { name: 'Editar ABC-123' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Eliminar ABC-123' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders edit and delete buttons when canEdit is true', () => {
+    renderVehicleList([activeVehicle], { canEdit: true });
+
+    expect(
+      screen.getByRole('button', { name: 'Editar ABC-123' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Eliminar ABC-123' })
+    ).toBeInTheDocument();
+  });
+
+  it('calls onEdit and onDelete when buttons are clicked', async () => {
+    const user = userEvent.setup();
+    const onEdit = vi.fn();
+    const onDelete = vi.fn();
+
+    renderVehicleList([activeVehicle], {
+      canEdit: true,
+      onEdit,
+      onDelete,
+    });
+
+    await user.click(screen.getByRole('button', { name: 'Editar ABC-123' }));
+    expect(onEdit).toHaveBeenCalledWith(activeVehicle);
+
+    await user.click(screen.getByRole('button', { name: 'Eliminar ABC-123' }));
+    expect(onDelete).toHaveBeenCalledWith(activeVehicle);
   });
 });
