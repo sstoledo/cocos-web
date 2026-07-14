@@ -4,7 +4,7 @@ import type { GetVehiclesFilters } from '../api/get-vehicles';
 
 export function useVehicles(filters: GetVehiclesFilters) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['vehicles', filters],
+    queryKey: ['vehicles', filters.clientId, filters],
     queryFn: () => getVehicles(filters),
     enabled: Boolean(filters.clientId),
   });
