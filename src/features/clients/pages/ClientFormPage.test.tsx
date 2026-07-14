@@ -19,7 +19,17 @@ const createdClient = {
   updatedAt: '2024-01-01T00:00:00.000Z',
 };
 
-function createWrapper() {
+const existingClient = {
+  ...createdClient,
+  id: 'c2',
+  name: 'María López',
+  identification: '87654321',
+  phone: '111222333',
+  email: 'maria@example.com',
+  address: 'Av. Secundaria 456',
+};
+
+function createWrapper(initialPath: string) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -30,7 +40,7 @@ function createWrapper() {
   return function Wrapper({ children }: { children: ReactNode }) {
     return createElement(
       MemoryRouter,
-      { initialEntries: ['/clients/new'] },
+      { initialEntries: [initialPath] },
       createElement(
         QueryClientProvider,
         { client: queryClient },
@@ -38,6 +48,10 @@ function createWrapper() {
           Routes,
           null,
           createElement(Route, { path: '/clients/new', element: children }),
+          createElement(Route, {
+            path: '/clients/:id/edit',
+            element: children,
+          }),
           createElement(Route, {
             path: '/clients',
             element: createElement(LocationDisplay),
@@ -53,6 +67,18 @@ function LocationDisplay() {
   return <span data-testid="location">{location.pathname}</span>;
 }
 
+function renderPage(
+  path: string,
+  response: { ok: boolean; status?: number; json?: () => Promise<unknown> }
+) {
+  globalThis.fetch = vi.fn().mockResolvedValue(response);
+
+  const user = userEvent.setup();
+  render(<ClientFormPage />, { wrapper: createWrapper(path) });
+
+  return { user };
+}
+
 describe('ClientFormPage', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
@@ -63,12 +89,7 @@ describe('ClientFormPage', () => {
   });
 
   it('renders the create page title', () => {
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({}),
-    });
-
-    render(<ClientFormPage />, { wrapper: createWrapper() });
+    renderPage('/clients/new', { ok: true, json: async () => ({}) });
 
     expect(
       screen.getByRole('heading', { name: 'Nuevo cliente' })
@@ -76,13 +97,10 @@ describe('ClientFormPage', () => {
   });
 
   it('submits the form and redirects to the client list', async () => {
-    const user = userEvent.setup();
-    globalThis.fetch = vi.fn().mockResolvedValue({
+    const { user } = renderPage('/clients/new', {
       ok: true,
       json: async () => createdClient,
     });
-
-    render(<ClientFormPage />, { wrapper: createWrapper() });
 
     await waitFor(() =>
       expect(screen.getByLabelText('Nombre')).toBeInTheDocument()
@@ -104,6 +122,52 @@ describe('ClientFormPage', () => {
 
     await waitFor(() =>
       expect(screen.getByTestId('location')).toHaveTextContent('/clients')
+    );
+  });
+
+  it('prefills the form in edit mode and submits a PATCH', async () => {
+    const { user } = renderPage('/clients/c2/edit', {
+      ok: true,
+      json: async () => existingClient,
+    });
+
+    await waitFor(() =>
+      expect(screen.getByLabelText('Nombre')).toHaveValue('María López')
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'Editar cliente' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Guardar cambios' })
+    ).toBeInTheDocument();
+
+    await user.clear(screen.getByLabelText('Nombre'));
+    await user.type(screen.getByLabelText('Nombre'), 'María López Actualizada');
+    await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/clients/c2',
+        expect.objectContaining({
+          method: 'PATCH',
+          credentials: 'include',
+        })
+      )
+    );
+
+    await waitFor(() =>
+      expect(screen.getByTestId('location')).toHaveTextContent('/clients')
+    );
+  });
+
+  it('shows a not-found message when the client does not exist', async () => {
+    renderPage('/clients/missing/edit', { ok: false, status: 404 });
+
+    await waitFor(() =>
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'No se pudieron cargar los datos'
+      )
     );
   });
 });
