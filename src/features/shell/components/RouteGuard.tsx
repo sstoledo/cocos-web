@@ -7,12 +7,14 @@ import type { RoleName } from '../types';
 type RouteGuardProps = {
   routePath: string;
   requiredRole?: RoleName;
+  requiredRoles?: RoleName[];
   children: React.ReactNode;
 };
 
 export function RouteGuard({
   routePath,
   requiredRole,
+  requiredRoles,
   children,
 }: RouteGuardProps) {
   const { user, isLoading } = useUser();
@@ -37,7 +39,13 @@ export function RouteGuard({
     return <Navigate to="/unauthorized" replace />;
   }
 
-  if (requiredRole && user.role.name !== requiredRole) {
+  const requiredRolesList =
+    requiredRoles ?? (requiredRole ? [requiredRole] : []);
+
+  if (
+    requiredRolesList.length > 0 &&
+    !requiredRolesList.includes(user.role.name)
+  ) {
     return <Navigate to="/unauthorized" replace />;
   }
 

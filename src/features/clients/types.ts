@@ -48,6 +48,7 @@ export type ClientFormValues = {
   identification: string;
   phone?: string;
   email?: string;
+  address?: string;
 };
 
 export type VehicleFormValues = {

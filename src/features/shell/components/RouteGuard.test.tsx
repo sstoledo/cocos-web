@@ -132,13 +132,39 @@ describe('RouteGuard', () => {
     expect(screen.queryByText('protected')).not.toBeInTheDocument();
   });
 
-  it('allows access when requiredRole matches', () => {
+  it('redirects to unauthorized when requiredRoles do not include user role', () => {
+    useUserMock.mockReturnValue({
+      user: {
+        id: '1',
+        name: 'Pedro',
+        email: 'pedro@example.com',
+        role: { id: 'r2', name: 'Warehouse' },
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/clients/new']}>
+        <RouteGuard
+          routePath="/clients/new"
+          requiredRoles={['Admin', 'Reception']}
+        >
+          protected
+        </RouteGuard>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('protected')).not.toBeInTheDocument();
+  });
+
+  it('allows access when requiredRoles include user role', () => {
     useUserMock.mockReturnValue({
       user: {
         id: '1',
         name: 'Ana',
         email: 'ana@example.com',
-        role: { id: 'r1', name: 'Admin' },
+        role: { id: 'r1', name: 'Reception' },
       },
       isLoading: false,
       error: null,
@@ -146,7 +172,10 @@ describe('RouteGuard', () => {
 
     render(
       <MemoryRouter>
-        <RouteGuard routePath="/products/new" requiredRole="Admin">
+        <RouteGuard
+          routePath="/clients/new"
+          requiredRoles={['Admin', 'Reception']}
+        >
           protected
         </RouteGuard>
       </MemoryRouter>
