@@ -1,0 +1,107 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
+import { type ReactNode, createElement } from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Client } from '../types';
+import { useUpdateClient } from './use-update-client';
+
+const id = 'c1';
+
+const values = {
+  name: 'Juan Pérez',
+  identificationType: 'DNI' as const,
+  identification: '12345678',
+  phone: '999888777',
+  email: 'juan@example.com',
+  address: 'Av. Principal 123',
+};
+
+const updatedClient: Client = {
+  id,
+  ...values,
+  isActive: true,
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children
+    );
+  };
+}
+
+describe('useUpdateClient', () => {
+  beforeEach(() => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('updates a client and returns the result', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => updatedClient,
+    });
+
+    const { result } = renderHook(() => useUpdateClient(), {
+      wrapper: createWrapper(),
+    });
+
+    result.current.mutate({ id, values });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data).toEqual(updatedClient);
+  });
+
+  it('invalidates the clients list and detail queries on success', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => updatedClient,
+    });
+
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+    const invalidateQueriesSpy = vi.spyOn(queryClient, 'invalidateQueries');
+
+    function Wrapper({ children }: { children: ReactNode }) {
+      return createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        children
+      );
+    }
+
+    const { result } = renderHook(() => useUpdateClient(), {
+      wrapper: Wrapper,
+    });
+
+    result.current.mutate({ id, values });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(invalidateQueriesSpy).toHaveBeenCalledWith({
+      queryKey: ['clients'],
+    });
+    expect(invalidateQueriesSpy).toHaveBeenCalledWith({
+      queryKey: ['client', 'c1'],
+    });
+  });
+});

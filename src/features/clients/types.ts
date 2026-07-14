@@ -3,6 +3,7 @@ export interface Client {
   name: string;
   phone?: string;
   email?: string;
+  address?: string;
   identification?: string;
   identificationType?: 'DNI' | 'RUC';
   isActive: boolean;
