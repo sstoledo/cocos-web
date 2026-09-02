@@ -79,6 +79,10 @@ const routes: RouteObject[] = [
         'Admin',
         'Reception',
       ]),
+      guardedRoute('work-orders/:id/edit', <WorkOrderFormPage />, [
+        'Admin',
+        'Reception',
+      ]),
       guardedRoute('work-orders/:id', <WorkOrderDetailPage />),
       guardedRoute('sales', <SalesPage />),
       guardedRoute('refunds', <RefundPage />),

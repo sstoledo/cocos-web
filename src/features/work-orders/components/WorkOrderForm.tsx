@@ -57,13 +57,15 @@ export function WorkOrderForm({
   const serviceLines = useWatch({ control, name: 'services' });
   const productLines = useWatch({ control, name: 'products' });
 
-  const { clients } = useClients({ limit: SELECTOR_LIMIT });
-  const { vehicles } = useVehicles({
+  const { clients, isLoading: isLoadingClients } = useClients({
+    limit: SELECTOR_LIMIT,
+  });
+  const { vehicles, isLoading: isLoadingVehicles } = useVehicles({
     clientId: clientId ?? '',
     limit: SELECTOR_LIMIT,
   });
-  const { services } = useServices({});
-  const { products } = useProducts({});
+  const { services, isLoading: isLoadingServices } = useServices({});
+  const { products, isLoading: isLoadingProducts } = useProducts({});
 
   // Dependent selector: reset the vehicle whenever the client changes.
   const previousClientId = useRef(clientId);
@@ -97,6 +99,23 @@ export function WorkOrderForm({
   const linesError =
     errors.services?.root?.message ??
     (errors.services as { message?: string } | undefined)?.message;
+
+  // Edit mode renders uncontrolled selects pre-filled via defaultValues; the
+  // defaults are only applied on mount, so wait for the selector catalogs
+  // before mounting the form (ProductFormPage precedent).
+  if (
+    isEditMode &&
+    (isLoadingClients ||
+      isLoadingVehicles ||
+      isLoadingServices ||
+      isLoadingProducts)
+  ) {
+    return (
+      <output className="block py-8 text-center text-muted-foreground">
+        Cargando…
+      </output>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>

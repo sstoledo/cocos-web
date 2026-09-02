@@ -1,9 +1,12 @@
+import { Button } from '@/components/ui/Button';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
-import { Link, useParams } from 'react-router';
+import { useUser } from '@/features/shell/hooks/useUser';
+import { Link, useNavigate, useParams } from 'react-router';
 import { WorkOrderStatusBadge } from '../components/WorkOrderStatusBadge';
+import { useDeleteWorkOrder } from '../hooks/use-delete-work-order';
 import { useWorkOrder } from '../hooks/use-work-order';
 import type { WorkOrderProductLine, WorkOrderServiceLine } from '../types';
 
@@ -13,7 +16,28 @@ function formatDate(value: string) {
 
 export function WorkOrderDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data: workOrder, isLoading, error } = useWorkOrder(id ?? '');
+  const { user } = useUser();
+  const deleteWorkOrder = useDeleteWorkOrder();
+
+  const canManage =
+    user?.role?.name === 'Admin' || user?.role?.name === 'Reception';
+
+  function handleDelete() {
+    if (!id) {
+      return;
+    }
+    if (
+      window.confirm(
+        '¿Estás seguro de que querés eliminar esta orden de trabajo?'
+      )
+    ) {
+      deleteWorkOrder.mutate(id, {
+        onSuccess: () => navigate('/work-orders'),
+      });
+    }
+  }
 
   if (isLoading) {
     return (
@@ -54,6 +78,25 @@ export function WorkOrderDetailPage() {
       <PageHeader>
         <PageTitle>Orden {workOrder.orderNumber}</PageTitle>
         <WorkOrderStatusBadge status={workOrder.status} />
+        {canManage && (
+          <div className="flex items-center gap-2">
+            <Link
+              to={`/work-orders/${workOrder.id}/edit`}
+              className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Editar
+            </Link>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleDelete}
+              disabled={deleteWorkOrder.isPending}
+              className="border-destructive/50 text-destructive hover:bg-destructive/10"
+            >
+              {deleteWorkOrder.isPending ? 'Eliminando…' : 'Eliminar'}
+            </Button>
+          </div>
+        )}
       </PageHeader>
       <PageContent>
         <SectionCard title="Información general">

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { type ReactNode, createElement } from 'react';
+import { createElement } from 'react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -17,13 +17,16 @@ function LocationDisplay() {
   return <span data-testid="location">{location.pathname}</span>;
 }
 
-function createWrapper(initialPath = '/work-orders/new') {
+function renderPage(initialPath = '/work-orders/new') {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
 
-  return function Wrapper({ children }: { children: ReactNode }) {
-    return createElement(
+  // NOTE: each route gets its own page element. Reusing a single element
+  // across routes (RTL wrapper-children pattern) breaks useParams context
+  // under React 19 / React Router 7.
+  return render(
+    createElement(
       MemoryRouter,
       { initialEntries: [initialPath] },
       createElement(
@@ -32,10 +35,13 @@ function createWrapper(initialPath = '/work-orders/new') {
         createElement(
           Routes,
           null,
-          createElement(Route, { path: '/work-orders/new', element: children }),
+          createElement(Route, {
+            path: '/work-orders/new',
+            element: createElement(WorkOrderFormPage),
+          }),
           createElement(Route, {
             path: '/work-orders/:id/edit',
-            element: children,
+            element: createElement(WorkOrderFormPage),
           }),
           createElement(Route, {
             path: '/work-orders/:id',
@@ -43,8 +49,8 @@ function createWrapper(initialPath = '/work-orders/new') {
           })
         )
       )
-    );
-  };
+    )
+  );
 }
 
 type PostResponse = {
@@ -121,7 +127,7 @@ describe('WorkOrderFormPage (create)', () => {
   it('S1: creates a services-only order and navigates to the detail', async () => {
     const postCalls = mockFetch({ ok: true, body: buildWorkOrder() });
     const user = userEvent.setup();
-    render(<WorkOrderFormPage />, { wrapper: createWrapper() });
+    renderPage();
 
     await fillAndSubmit(user);
 
@@ -147,7 +153,7 @@ describe('WorkOrderFormPage (create)', () => {
       body: { message: 'Conflict', errorCode: 'VEHICLE_CLIENT_MISMATCH' },
     });
     const user = userEvent.setup();
-    render(<WorkOrderFormPage />, { wrapper: createWrapper() });
+    renderPage();
 
     await fillAndSubmit(user);
 
@@ -159,7 +165,7 @@ describe('WorkOrderFormPage (create)', () => {
   it('S8: falls back to a generic message on unknown errors', async () => {
     mockFetch({ ok: false, status: 500, body: {} });
     const user = userEvent.setup();
-    render(<WorkOrderFormPage />, { wrapper: createWrapper() });
+    renderPage();
 
     await fillAndSubmit(user);
 
@@ -223,9 +229,7 @@ describe('WorkOrderFormPage (edit)', () => {
 
   it('S6: pre-fills the form from the loaded order', async () => {
     mockEditFetch({ ok: true, body: buildWorkOrder() });
-    render(<WorkOrderFormPage />, {
-      wrapper: createWrapper('/work-orders/wo1/edit'),
-    });
+    renderPage('/work-orders/wo1/edit');
 
     expect(await screen.findByLabelText('Cliente')).toBeInTheDocument();
     await screen.findByRole('option', { name: 'Juan Pérez' });
@@ -244,9 +248,7 @@ describe('WorkOrderFormPage (edit)', () => {
   it('S6: submits PATCH with both line arrays and navigates to the detail', async () => {
     const patchCalls = mockEditFetch({ ok: true, body: buildWorkOrder() });
     const user = userEvent.setup();
-    render(<WorkOrderFormPage />, {
-      wrapper: createWrapper('/work-orders/wo1/edit'),
-    });
+    renderPage('/work-orders/wo1/edit');
 
     expect(await screen.findByLabelText('Cliente')).toBeInTheDocument();
     await screen.findByRole('option', { name: 'Juan Pérez' });
@@ -272,9 +274,7 @@ describe('WorkOrderFormPage (edit)', () => {
 
   it('S9: shows a loading state while the order is being fetched', () => {
     globalThis.fetch = vi.fn().mockImplementation(() => new Promise(() => {}));
-    render(<WorkOrderFormPage />, {
-      wrapper: createWrapper('/work-orders/wo1/edit'),
-    });
+    renderPage('/work-orders/wo1/edit');
 
     expect(screen.getByText('Cargando…')).toBeInTheDocument();
   });
