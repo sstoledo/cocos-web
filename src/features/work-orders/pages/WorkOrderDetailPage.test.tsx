@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { WorkOrderDetailPage } from './WorkOrderDetailPage';
 
@@ -208,5 +209,130 @@ describe('WorkOrderDetailPage', () => {
         'No se pudieron cargar los datos'
       )
     );
+  });
+});
+
+const adminUser = {
+  id: 'u1',
+  name: 'Admin',
+  email: 'admin@example.com',
+  role: { id: 'r1', name: 'Admin' },
+};
+
+function LocationDisplay() {
+  const location = useLocation();
+  return <span data-testid="location">{location.pathname}</span>;
+}
+
+function renderActionsPage(user: unknown) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
+  const deleteCalls: string[] = [];
+
+  globalThis.fetch = vi.fn(
+    async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url.includes('/users/me')) {
+        return { ok: true, json: async () => user } as Response;
+      }
+
+      if (init?.method === 'DELETE') {
+        deleteCalls.push(url);
+        return { ok: true, json: async () => ({}) } as Response;
+      }
+
+      return { ok: true, json: async () => workOrder } as Response;
+    }
+  );
+
+  render(
+    createElement(
+      MemoryRouter,
+      { initialEntries: ['/work-orders/wo1'] },
+      createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        createElement(
+          Routes,
+          null,
+          createElement(Route, {
+            path: '/work-orders/:id',
+            element: createElement(WorkOrderDetailPage),
+          }),
+          createElement(Route, {
+            path: '/work-orders',
+            element: createElement(LocationDisplay),
+          })
+        )
+      )
+    )
+  );
+
+  return deleteCalls;
+}
+
+describe('WorkOrderDetailPage actions', () => {
+  beforeEach(() => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it('shows Editar and Eliminar actions for Admin and links to the edit route', async () => {
+    renderActionsPage(adminUser);
+
+    const editLink = await screen.findByRole('link', { name: 'Editar' });
+    expect(editLink).toHaveAttribute('href', '/work-orders/wo1/edit');
+    expect(
+      screen.getByRole('button', { name: 'Eliminar' })
+    ).toBeInTheDocument();
+  });
+
+  it('hides Editar and Eliminar for non-privileged roles', async () => {
+    renderActionsPage({ ...adminUser, role: { id: 'r2', name: 'Mechanic' } });
+
+    await screen.findByRole('heading', { name: 'Orden OT-0001' });
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('link', { name: 'Editar' })
+      ).not.toBeInTheDocument()
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Eliminar' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('S7: deletes the order after confirm and navigates to the list', async () => {
+    const deleteCalls = renderActionsPage(adminUser);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const user = userEvent.setup();
+
+    await user.click(await screen.findByRole('button', { name: 'Eliminar' }));
+
+    expect(window.confirm).toHaveBeenCalledWith(
+      '¿Estás seguro de que querés eliminar esta orden de trabajo?'
+    );
+    await waitFor(() => expect(deleteCalls).toHaveLength(1));
+    expect(deleteCalls[0]).toBe('http://localhost:3000/api/work-orders/wo1');
+    await waitFor(() =>
+      expect(screen.getByTestId('location')).toHaveTextContent('/work-orders')
+    );
+  });
+
+  it('S7: does not send the request when the confirm is cancelled', async () => {
+    const deleteCalls = renderActionsPage(adminUser);
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    const user = userEvent.setup();
+
+    await user.click(await screen.findByRole('button', { name: 'Eliminar' }));
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(deleteCalls).toHaveLength(0);
+    expect(screen.queryByTestId('location')).not.toBeInTheDocument();
   });
 });
