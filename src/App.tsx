@@ -20,6 +20,7 @@ import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
 import type { RoleName } from '@/features/shell/types';
 import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
 import { UserListPage } from '@/features/users/pages/UserListPage';
+import { WorkOrderDetailPage } from '@/features/work-orders/pages/WorkOrderDetailPage';
 import { WorkOrderListPage } from '@/features/work-orders/pages/WorkOrderListPage';
 import * as React from 'react';
 import {
@@ -73,6 +74,7 @@ const routes: RouteObject[] = [
       ]),
       guardedRoute('services', <ServiceListPage />),
       guardedRoute('work-orders', <WorkOrderListPage />),
+      guardedRoute('work-orders/:id', <WorkOrderDetailPage />),
       guardedRoute('sales', <SalesPage />),
       guardedRoute('refunds', <RefundPage />),
       guardedRoute('purchase-orders', <PurchaseOrderListPage />),
