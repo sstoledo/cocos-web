@@ -72,6 +72,29 @@ export interface WorkOrder {
   deletedAt?: string | null;
 }
 
+export interface WorkOrderLineInput {
+  quantity: number;
+  unitPrice?: number;
+}
+
+export interface WorkOrderServiceLineInput extends WorkOrderLineInput {
+  serviceId: string;
+}
+
+export interface WorkOrderProductLineInput extends WorkOrderLineInput {
+  productId: string;
+}
+
+export interface CreateWorkOrderPayload {
+  clientId: string;
+  vehicleId: string;
+  description?: string;
+  services?: WorkOrderServiceLineInput[];
+  products?: WorkOrderProductLineInput[];
+}
+
+export type UpdateWorkOrderPayload = CreateWorkOrderPayload;
+
 export interface WorkOrderListFilters {
   query?: string;
   page?: number;
