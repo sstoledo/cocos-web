@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { buildWorkOrder } from '../test/fixtures';
+import type { WorkOrder, WorkOrderStatus } from '../types';
 import { WorkOrderDetailPage } from './WorkOrderDetailPage';
 
 const workOrder = {
@@ -334,5 +336,216 @@ describe('WorkOrderDetailPage actions', () => {
     expect(window.confirm).toHaveBeenCalled();
     expect(deleteCalls).toHaveLength(0);
     expect(screen.queryByTestId('location')).not.toBeInTheDocument();
+  });
+});
+
+describe('WorkOrderDetailPage status transitions', () => {
+  const mechanicUser = {
+    ...adminUser,
+    role: { id: 'r3', name: 'Mechanic' },
+  };
+  const viewerUser = { ...adminUser, role: { id: 'r9', name: 'Viewer' } };
+
+  function renderTransitionsPage(
+    user: unknown,
+    order: WorkOrder,
+    patchResponse?: { ok: boolean; status?: number; body: object }
+  ) {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+    const patchCalls: { url: string; body: unknown }[] = [];
+    const invalidateQueriesSpy = vi.spyOn(queryClient, 'invalidateQueries');
+
+    globalThis.fetch = vi.fn(
+      async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = String(input);
+
+        if (url.includes('/users/me')) {
+          return { ok: true, json: async () => user } as Response;
+        }
+
+        if (init?.method === 'PATCH') {
+          patchCalls.push({ url, body: JSON.parse(init.body as string) });
+          const response = patchResponse ?? {
+            ok: true,
+            body: { ...order, status: 'in_progress' },
+          };
+          return {
+            ok: response.ok,
+            status: response.status ?? (response.ok ? 200 : 409),
+            json: async () => response.body,
+          } as Response;
+        }
+
+        return { ok: true, json: async () => order } as Response;
+      }
+    );
+
+    render(
+      createElement(
+        MemoryRouter,
+        { initialEntries: [`/work-orders/${order.id}`] },
+        createElement(
+          QueryClientProvider,
+          { client: queryClient },
+          createElement(
+            Routes,
+            null,
+            createElement(Route, {
+              path: '/work-orders/:id',
+              element: createElement(WorkOrderDetailPage),
+            })
+          )
+        )
+      )
+    );
+
+    return { patchCalls, invalidateQueriesSpy };
+  }
+
+  beforeEach(() => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it('S1: a pending order shows Iniciar trabajo and Cancelar orden for Admin', async () => {
+    renderTransitionsPage(adminUser, buildWorkOrder({ status: 'pending' }));
+
+    expect(
+      await screen.findByRole('button', { name: 'Iniciar trabajo' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Cancelar orden' })
+    ).toBeInTheDocument();
+  });
+
+  it('S2: an in_progress order shows Marcar como terminada and Cancelar orden for Mechanic', async () => {
+    renderTransitionsPage(
+      mechanicUser,
+      buildWorkOrder({ status: 'in_progress' })
+    );
+
+    expect(
+      await screen.findByRole('button', { name: 'Marcar como terminada' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Cancelar orden' })
+    ).toBeInTheDocument();
+    // Mechanic must NOT get the canManage actions.
+    expect(
+      screen.queryByRole('link', { name: 'Editar' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Eliminar' })
+    ).not.toBeInTheDocument();
+  });
+
+  it.each(['done', 'cancelled'] as WorkOrderStatus[])(
+    'S3: a %s order shows no transition buttons for any role',
+    async (status) => {
+      renderTransitionsPage(adminUser, buildWorkOrder({ status }));
+
+      await screen.findByRole('heading', { name: 'Orden OT-0001' });
+      await waitFor(() =>
+        expect(
+          screen.queryByRole('button', { name: 'Cancelar orden' })
+        ).not.toBeInTheDocument()
+      );
+      expect(
+        screen.queryByRole('button', { name: 'Iniciar trabajo' })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Marcar como terminada' })
+      ).not.toBeInTheDocument();
+    }
+  );
+
+  it('S4: shows no transition buttons for a role outside Admin/Reception/Mechanic', async () => {
+    renderTransitionsPage(viewerUser, buildWorkOrder({ status: 'pending' }));
+
+    await screen.findByRole('heading', { name: 'Orden OT-0001' });
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('button', { name: 'Iniciar trabajo' })
+      ).not.toBeInTheDocument()
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Cancelar orden' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('S5: clicking Iniciar trabajo fires the PATCH without confirm and refetches the detail', async () => {
+    const confirmSpy = vi.spyOn(window, 'confirm');
+    const { patchCalls } = renderTransitionsPage(
+      adminUser,
+      buildWorkOrder({ status: 'pending' })
+    );
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Iniciar trabajo' })
+    );
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    await waitFor(() => expect(patchCalls).toHaveLength(1));
+    expect(patchCalls[0].url).toBe(
+      'http://localhost:3000/api/work-orders/wo1/status'
+    );
+    expect(patchCalls[0].body).toEqual({ status: 'in_progress' });
+  });
+
+  it('S7: cancel confirm dismissal fires no request', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    const { patchCalls } = renderTransitionsPage(
+      adminUser,
+      buildWorkOrder({ status: 'pending' })
+    );
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Cancelar orden' })
+    );
+
+    expect(window.confirm).toHaveBeenCalledWith(
+      '¿Cancelar esta orden? Esta acción es irreversible.'
+    );
+    expect(patchCalls).toHaveLength(0);
+  });
+
+  it('S9: INVALID_STATUS_TRANSITION shows the message and refetches the work order', async () => {
+    const { invalidateQueriesSpy } = renderTransitionsPage(
+      adminUser,
+      buildWorkOrder({ status: 'pending' }),
+      {
+        ok: false,
+        status: 409,
+        body: {
+          message: 'Invalid transition',
+          errorCode: 'INVALID_STATUS_TRANSITION',
+        },
+      }
+    );
+    const user = userEvent.setup();
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Iniciar trabajo' })
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'El estado de la orden ya cambió. Actualizamos los datos.'
+      )
+    );
+    expect(invalidateQueriesSpy).toHaveBeenCalledWith({
+      queryKey: ['work-order', 'wo1'],
+    });
   });
 });

@@ -5,6 +5,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { Link, useNavigate, useParams } from 'react-router';
+import { WorkOrderStatusActions } from '../components/WorkOrderStatusActions';
 import { WorkOrderStatusBadge } from '../components/WorkOrderStatusBadge';
 import { useDeleteWorkOrder } from '../hooks/use-delete-work-order';
 import { useWorkOrder } from '../hooks/use-work-order';
@@ -78,6 +79,11 @@ export function WorkOrderDetailPage() {
       <PageHeader>
         <PageTitle>Orden {workOrder.orderNumber}</PageTitle>
         <WorkOrderStatusBadge status={workOrder.status} />
+        <WorkOrderStatusActions
+          orderId={workOrder.id}
+          status={workOrder.status}
+          products={workOrder.products}
+        />
         {canManage && (
           <div className="flex items-center gap-2">
             <Link
