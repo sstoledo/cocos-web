@@ -1,13 +1,15 @@
 interface ApiErrorBody {
   message?: string;
   errorCode?: string;
+  details?: unknown;
 }
 
 export class ApiError extends Error {
   constructor(
     message: string,
     public readonly status: number,
-    public readonly errorCode?: string
+    public readonly errorCode?: string,
+    public readonly details?: unknown
   ) {
     super(message);
     this.name = 'ApiError';
@@ -29,6 +31,7 @@ export async function parseApiError(
   return new ApiError(
     `${fallbackPrefix}: ${response.status}`,
     response.status,
-    body?.errorCode
+    body?.errorCode,
+    body?.details
   );
 }
