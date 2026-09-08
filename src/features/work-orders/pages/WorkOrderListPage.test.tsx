@@ -128,6 +128,26 @@ describe('WorkOrderListPage', () => {
     );
   });
 
+  it('S13: does not render transition buttons in list rows', async () => {
+    mockFetch(paginatedResponse);
+
+    render(<WorkOrderListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(screen.getByRole('cell', { name: 'OT-0001' })).toBeInTheDocument()
+    );
+
+    expect(
+      screen.queryByRole('button', { name: 'Iniciar trabajo' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Marcar como terminada' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Cancelar orden' })
+    ).not.toBeInTheDocument();
+  });
+
   it('syncs search and page to the URL', async () => {
     const testUser = userEvent.setup();
     const fetchMock = vi.fn().mockImplementation(async (url: string) => {
