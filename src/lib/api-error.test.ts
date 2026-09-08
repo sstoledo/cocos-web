@@ -45,6 +45,33 @@ describe('parseApiError', () => {
     expect(error.errorCode).toBeUndefined();
   });
 
+  it('passes through the details payload when present', async () => {
+    const details = [{ productId: 'p1', requested: 3, available: 1 }];
+    const response = {
+      status: 409,
+      json: async () => ({
+        message: 'Insufficient stock',
+        errorCode: 'INSUFFICIENT_STOCK',
+        details,
+      }),
+    } as unknown as Response;
+
+    const error = await parseApiError(response, 'Failed to transition');
+
+    expect(error.details).toEqual(details);
+  });
+
+  it('omits details when the body has none', async () => {
+    const response = {
+      status: 500,
+      json: async () => ({ message: 'Internal server error' }),
+    } as unknown as Response;
+
+    const error = await parseApiError(response, 'Failed to create work order');
+
+    expect(error.details).toBeUndefined();
+  });
+
   it('falls back gracefully when the body is not JSON', async () => {
     const response = {
       status: 502,
