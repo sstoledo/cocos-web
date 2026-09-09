@@ -10,6 +10,7 @@ describe('getPageTitle', () => {
     expect(getPageTitle('/services')).toBe('Servicios');
     expect(getPageTitle('/work-orders')).toBe('Órdenes de trabajo');
     expect(getPageTitle('/sales')).toBe('Ventas');
+    expect(getPageTitle('/sales/new')).toBe('Nueva venta');
     expect(getPageTitle('/refunds')).toBe('Devoluciones');
     expect(getPageTitle('/purchase-orders')).toBe('Órdenes de compra');
     expect(getPageTitle('/notifications')).toBe('Notificaciones');

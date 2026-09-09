@@ -11,7 +11,7 @@ import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
 import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
 import { RefundPage } from '@/features/refunds/pages/RefundPage';
-import { SalesPage } from '@/features/sales/pages/SalesPage';
+import { SalesListPage } from '@/features/sales/pages/SalesListPage';
 import { ServiceListPage } from '@/features/services/pages/ServiceListPage';
 import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import { Layout } from '@/features/shell/pages/Layout';
@@ -84,7 +84,7 @@ const routes: RouteObject[] = [
         'Reception',
       ]),
       guardedRoute('work-orders/:id', <WorkOrderDetailPage />),
-      guardedRoute('sales', <SalesPage />),
+      guardedRoute('sales', <SalesListPage />, ['Admin', 'Reception']),
       guardedRoute('refunds', <RefundPage />),
       guardedRoute('purchase-orders', <PurchaseOrderListPage />),
       guardedRoute('notifications', <NotificationListPage />),
