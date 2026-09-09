@@ -18,6 +18,11 @@ describe('getPageTitle', () => {
     expect(getPageTitle('/cash-closing')).toBe('Cierre de caja');
   });
 
+  it('returns titles for parameterized detail routes', () => {
+    expect(getPageTitle('/sales/sale1')).toBe('Detalle de venta');
+    expect(getPageTitle('/sales')).toBe('Ventas');
+  });
+
   it('returns an empty string for unknown paths', () => {
     expect(getPageTitle('/unknown')).toBe('');
     expect(getPageTitle('/')).toBe('');

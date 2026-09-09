@@ -6,6 +6,7 @@ const titles: Record<string, string> = {
   '/services': 'Servicios',
   '/work-orders': 'Órdenes de trabajo',
   '/sales': 'Ventas',
+  '/sales/:id': 'Detalle de venta',
   '/sales/new': 'Nueva venta',
   '/refunds': 'Devoluciones',
   '/purchase-orders': 'Órdenes de compra',
@@ -15,5 +16,19 @@ const titles: Record<string, string> = {
 };
 
 export function getPageTitle(path: string): string {
-  return titles[path] ?? '';
+  if (titles[path]) {
+    return titles[path];
+  }
+
+  for (const [pattern, title] of Object.entries(titles)) {
+    if (!pattern.includes(':')) {
+      continue;
+    }
+    const regex = new RegExp(`^${pattern.replace(/:[^/]+/g, '[^/]+')}$`);
+    if (regex.test(path)) {
+      return title;
+    }
+  }
+
+  return '';
 }
