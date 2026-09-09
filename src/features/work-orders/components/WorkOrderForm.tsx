@@ -6,12 +6,12 @@ import { useClients } from '@/features/clients/hooks/use-clients';
 import { useVehicles } from '@/features/clients/hooks/use-vehicles';
 import { useProducts } from '@/features/products/hooks/use-products';
 import { useServices } from '@/features/services/hooks/use-services';
+import { formatCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useRef } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
-import { formatCents } from '../lib/cents';
 import {
   type WorkOrderFormValues,
   workOrderSchema,
