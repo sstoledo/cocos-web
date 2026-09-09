@@ -1,4 +1,23 @@
-import type { Sale, SaleProductLine, SaleServiceLine } from '../types';
+import type {
+  CreateSalePayload,
+  Sale,
+  SaleProductLine,
+  SaleServiceLine,
+} from '../types';
+
+// Checkout line inputs as sent to POST /api/sales: id + quantity only,
+// the backend owns pricing (SL-F4).
+export function buildProductLineInput(
+  overrides: Partial<{ productId: string; quantity: number }> = {}
+): NonNullable<CreateSalePayload['productLines']>[number] {
+  return { productId: 'p1', quantity: 1, ...overrides };
+}
+
+export function buildServiceLineInput(
+  overrides: Partial<{ serviceId: string; quantity: number }> = {}
+): NonNullable<CreateSalePayload['serviceLines']>[number] {
+  return { serviceId: 's1', quantity: 1, ...overrides };
+}
 
 // Self-contained sales fixtures (SL-NF3). Do NOT refactor the shared
 // work-orders fixtures from here; these builders stand on their own.
