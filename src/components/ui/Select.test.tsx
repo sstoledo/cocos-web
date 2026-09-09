@@ -36,6 +36,33 @@ describe('Select', () => {
     ).toBeInTheDocument();
   });
 
+  it('disables the placeholder option by default', () => {
+    render(
+      <Select
+        options={options}
+        placeholder="Choose a status"
+        data-testid="status-select"
+      />
+    );
+
+    expect(
+      screen.getByRole('option', { name: 'Choose a status' })
+    ).toBeDisabled();
+  });
+
+  it('keeps the placeholder selectable when optional', () => {
+    render(
+      <Select
+        optional
+        options={options}
+        placeholder="All statuses"
+        data-testid="status-select"
+      />
+    );
+
+    expect(screen.getByRole('option', { name: 'All statuses' })).toBeEnabled();
+  });
+
   it('calls onChange when a value is selected', async () => {
     const handleChange = vi.fn();
     render(

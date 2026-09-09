@@ -12,10 +12,23 @@ export type SelectProps = React.ComponentPropsWithoutRef<'select'> & {
   error?: string;
   options: SelectOption[];
   placeholder?: string;
+  optional?: boolean;
 };
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, options, placeholder, id, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      error,
+      options,
+      placeholder,
+      optional = false,
+      id,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = React.useId();
     const selectId = id ?? generatedId;
     const errorId = error ? `${selectId}-error` : undefined;
@@ -48,7 +61,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           {...props}
         >
           {placeholder && (
-            <option value="" disabled>
+            <option value="" disabled={!optional}>
               {placeholder}
             </option>
           )}

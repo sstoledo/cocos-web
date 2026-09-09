@@ -6,6 +6,7 @@ const titles: Record<string, string> = {
   '/services': 'Servicios',
   '/work-orders': 'Órdenes de trabajo',
   '/sales': 'Ventas',
+  '/sales/new': 'Nueva venta',
   '/refunds': 'Devoluciones',
   '/purchase-orders': 'Órdenes de compra',
   '/notifications': 'Notificaciones',
