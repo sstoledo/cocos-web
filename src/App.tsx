@@ -11,6 +11,7 @@ import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
 import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
 import { RefundPage } from '@/features/refunds/pages/RefundPage';
+import { CheckoutPage } from '@/features/sales/pages/CheckoutPage';
 import { SaleDetailPage } from '@/features/sales/pages/SaleDetailPage';
 import { SalesListPage } from '@/features/sales/pages/SalesListPage';
 import { ServiceListPage } from '@/features/services/pages/ServiceListPage';
@@ -86,6 +87,7 @@ const routes: RouteObject[] = [
       ]),
       guardedRoute('work-orders/:id', <WorkOrderDetailPage />),
       guardedRoute('sales', <SalesListPage />, ['Admin', 'Reception']),
+      guardedRoute('sales/new', <CheckoutPage />, ['Admin', 'Reception']),
       guardedRoute('sales/:id', <SaleDetailPage />, ['Admin', 'Reception']),
       guardedRoute('refunds', <RefundPage />),
       guardedRoute('purchase-orders', <PurchaseOrderListPage />),
