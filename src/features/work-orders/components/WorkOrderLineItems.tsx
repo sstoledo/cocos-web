@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import type { Product } from '@/features/products/types';
 import type { Service } from '@/features/services/types';
+import { formatCents, toCents } from '@/lib/cents';
 import {
   type Control,
   type FieldError,
@@ -13,7 +14,6 @@ import {
   useFormState,
   useWatch,
 } from 'react-hook-form';
-import { formatCents, toCents } from '../lib/cents';
 import type { WorkOrderFormValues } from '../schemas/work-order-schema';
 
 type LineEntity = { id: string; name: string; price: string };
