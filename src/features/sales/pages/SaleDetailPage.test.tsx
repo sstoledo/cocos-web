@@ -107,6 +107,21 @@ describe('SaleDetailPage', () => {
     useUserMock.mockReset();
   });
 
+  it('S1: renders the cancel action for an Admin on a completed sale', async () => {
+    globalThis.fetch = mockFetchWithSale(sale);
+
+    renderDetailPage();
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('heading', { name: 'Venta VTA-2026-000001' })
+      ).toBeInTheDocument()
+    );
+    expect(
+      screen.getByRole('button', { name: 'Cancelar venta' })
+    ).toBeInTheDocument();
+  });
+
   it('S6: renders product and service lines with snapshot and subtotal verbatim plus the total', async () => {
     globalThis.fetch = mockFetchWithSale(sale);
 
