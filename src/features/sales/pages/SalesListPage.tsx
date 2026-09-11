@@ -24,7 +24,8 @@ function filtersFromSearchParams(
     from: searchParams.get('from') || undefined,
     to: searchParams.get('to') || undefined,
     clientId: searchParams.get('clientId') || undefined,
-    status: status === 'completed' ? 'completed' : undefined,
+    status:
+      status === 'completed' || status === 'cancelled' ? status : undefined,
     page: Number.parseInt(searchParams.get('page') ?? '1', 10) || 1,
     limit: DEFAULT_LIMIT,
   };

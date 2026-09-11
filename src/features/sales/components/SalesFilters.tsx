@@ -72,8 +72,10 @@ export function SalesFilters({
           optional
           aria-label="Estado"
           placeholder="Todos los estados"
-          // Status filter only offers `completed` until refunds/cancel (B9).
-          options={[{ value: 'completed', label: 'Completada' }]}
+          options={[
+            { value: 'completed', label: 'Completada' },
+            { value: 'cancelled', label: 'Cancelada' },
+          ]}
           value={filters.status ?? ''}
           onChange={(event) =>
             onChange({
