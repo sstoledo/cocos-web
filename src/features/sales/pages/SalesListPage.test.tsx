@@ -218,6 +218,32 @@ describe('SalesListPage', () => {
     });
   });
 
+  it('S7: filters by cancelled status with URL sync and page reset', async () => {
+    const testUser = userEvent.setup();
+    const fetchMock = mockFetchWithSales(multiPageResponse);
+    globalThis.fetch = fetchMock;
+
+    render(<SalesListPage />, {
+      wrapper: createWrapper(['/sales?page=2']),
+    });
+
+    await waitFor(() =>
+      expect(screen.queryByText('Cargando ventas…')).not.toBeInTheDocument()
+    );
+    expect(lastSalesUrl(fetchMock).searchParams.get('page')).toBe('2');
+
+    await testUser.selectOptions(
+      screen.getByRole('combobox', { name: 'Estado' }),
+      'cancelled'
+    );
+
+    await waitFor(() => {
+      const url = lastSalesUrl(fetchMock);
+      expect(url.searchParams.get('status')).toBe('cancelled');
+      expect(url.searchParams.get('page')).toBe('1');
+    });
+  });
+
   it('resets the page to 1 when a filter changes', async () => {
     const testUser = userEvent.setup();
     const fetchMock = mockFetchWithSales(multiPageResponse);
