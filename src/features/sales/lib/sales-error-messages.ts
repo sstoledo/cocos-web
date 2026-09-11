@@ -9,6 +9,8 @@ const SALE_ERROR_MESSAGES: Record<string, string> = {
   BRANCH_NOT_FOUND: 'La sucursal seleccionada no existe o está inactiva.',
   EMPLOYEE_NOT_FOUND: 'El empleado seleccionado no existe o está inactivo.',
   SALE_NOT_FOUND: 'La venta no existe o fue eliminada.',
+  // B9 cancel guard; fits the cancel context verbatim (D6).
+  SALE_ALREADY_CANCELLED: 'Esta venta ya fue cancelada.',
   // Backend guard (B8); the zod schema blocks this client-side first (D8).
   SALE_DUPLICATE_LINE: 'No podés cargar el mismo producto dos veces.',
 };
@@ -16,10 +18,13 @@ const SALE_ERROR_MESSAGES: Record<string, string> = {
 const BAD_REQUEST_FALLBACK = 'Revisá los datos ingresados.';
 const UNKNOWN_FALLBACK =
   'No se pudo registrar la venta. Intentá de nuevo más tarde.';
+const CANCEL_FALLBACK =
+  'No se pudo cancelar la venta. Intentá de nuevo más tarde.';
 const STOCK_FALLBACK = 'No hay stock suficiente para completar la venta.';
 
 export interface SalesErrorContext {
   products?: Product[];
+  action?: 'cancel';
 }
 
 interface InsufficientStockDetail {
@@ -79,5 +84,5 @@ export function getSalesErrorMessage(
     }
   }
 
-  return UNKNOWN_FALLBACK;
+  return ctx?.action === 'cancel' ? CANCEL_FALLBACK : UNKNOWN_FALLBACK;
 }

@@ -5,6 +5,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { ApiError } from '@/lib/api-error';
 import { Link, useParams } from 'react-router';
 import { PaymentMethodBadge } from '../components/PaymentMethodBadge';
+import { SaleCancelAction } from '../components/SaleCancelAction';
 import { SaleStatusBadge } from '../components/SaleStatusBadge';
 import { useSale } from '../hooks/use-sale';
 import type { SaleProductLine, SaleServiceLine } from '../types';
@@ -112,6 +113,7 @@ export function SaleDetailPage() {
       <PageHeader>
         <PageTitle>Venta {sale.saleNumber}</PageTitle>
         <SaleStatusBadge status={sale.status} />
+        <SaleCancelAction sale={sale} />
       </PageHeader>
       <PageContent>
         <SectionCard title="Información general">

@@ -31,6 +31,7 @@ describe('getSalesErrorMessage', () => {
       'El empleado seleccionado no existe o está inactivo.',
     ],
     ['SALE_NOT_FOUND', 'La venta no existe o fue eliminada.'],
+    ['SALE_ALREADY_CANCELLED', 'Esta venta ya fue cancelada.'],
   ])('maps %s to its Spanish message', (errorCode, expected) => {
     const error = new ApiError('Failed: 404', 404, errorCode);
 
@@ -118,6 +119,28 @@ describe('getSalesErrorMessage', () => {
 
     expect(getSalesErrorMessage(error)).toBe(
       'No se pudo registrar la venta. Intentá de nuevo más tarde.'
+    );
+  });
+
+  it('S5: maps SALE_NOT_FOUND to the not-found message on cancel context', () => {
+    const error = new ApiError('Failed: 404', 404, 'SALE_NOT_FOUND');
+
+    expect(getSalesErrorMessage(error, { action: 'cancel' })).toBe(
+      'La venta no existe o fue eliminada.'
+    );
+  });
+
+  it('S4: falls back to the cancel message for unknown errorCodes in cancel context', () => {
+    const error = new ApiError('Failed: 409', 409, 'SOMETHING_ELSE');
+
+    expect(getSalesErrorMessage(error, { action: 'cancel' })).toBe(
+      'No se pudo cancelar la venta. Intentá de nuevo más tarde.'
+    );
+  });
+
+  it('falls back to the cancel message for non-ApiError errors in cancel context', () => {
+    expect(getSalesErrorMessage(new Error('boom'), { action: 'cancel' })).toBe(
+      'No se pudo cancelar la venta. Intentá de nuevo más tarde.'
     );
   });
 
