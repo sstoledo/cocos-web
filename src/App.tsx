@@ -9,7 +9,10 @@ import { LotListPage } from '@/features/lots/pages/LotListPage';
 import { NotificationListPage } from '@/features/notifications/pages/NotificationListPage';
 import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
+import { PurchaseOrderDetailPage } from '@/features/purchase-orders/pages/PurchaseOrderDetailPage';
+import { PurchaseOrderFormPage } from '@/features/purchase-orders/pages/PurchaseOrderFormPage';
 import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
+import { PurchaseOrderReceivePage } from '@/features/purchase-orders/pages/PurchaseOrderReceivePage';
 import { RefundPage } from '@/features/refunds/pages/RefundPage';
 import { CheckoutPage } from '@/features/sales/pages/CheckoutPage';
 import { SaleDetailPage } from '@/features/sales/pages/SaleDetailPage';
@@ -90,7 +93,29 @@ const routes: RouteObject[] = [
       guardedRoute('sales/new', <CheckoutPage />, ['Admin', 'Reception']),
       guardedRoute('sales/:id', <SaleDetailPage />, ['Admin', 'Reception']),
       guardedRoute('refunds', <RefundPage />),
-      guardedRoute('purchase-orders', <PurchaseOrderListPage />),
+      guardedRoute('purchase-orders', <PurchaseOrderListPage />, [
+        'Admin',
+        'Purchasing',
+        'Warehouse',
+      ]),
+      guardedRoute('purchase-orders/new', <PurchaseOrderFormPage />, [
+        'Admin',
+        'Purchasing',
+      ]),
+      guardedRoute('purchase-orders/:id', <PurchaseOrderDetailPage />, [
+        'Admin',
+        'Purchasing',
+        'Warehouse',
+      ]),
+      guardedRoute('purchase-orders/:id/edit', <PurchaseOrderFormPage />, [
+        'Admin',
+        'Purchasing',
+      ]),
+      guardedRoute(
+        'purchase-orders/:id/receive',
+        <PurchaseOrderReceivePage />,
+        ['Admin', 'Purchasing', 'Warehouse']
+      ),
       guardedRoute('notifications', <NotificationListPage />),
       guardedRoute('users', <UserListPage />),
       guardedRoute('cash-closing', <CashClosingPage />),
