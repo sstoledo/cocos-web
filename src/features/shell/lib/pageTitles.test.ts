@@ -16,11 +16,14 @@ describe('getPageTitle', () => {
     expect(getPageTitle('/notifications')).toBe('Notificaciones');
     expect(getPageTitle('/users')).toBe('Usuarios');
     expect(getPageTitle('/cash-closing')).toBe('Cierre de caja');
+    expect(getPageTitle('/cash-closings')).toBe('Cierres de caja');
+    expect(getPageTitle('/cash-closings/close')).toBe('Cierre de caja');
   });
 
   it('returns titles for parameterized detail routes', () => {
     expect(getPageTitle('/sales/sale1')).toBe('Detalle de venta');
     expect(getPageTitle('/sales')).toBe('Ventas');
+    expect(getPageTitle('/cash-closings/cc1')).toBe('Detalle de cierre');
   });
 
   it('returns an empty string for unknown paths', () => {
