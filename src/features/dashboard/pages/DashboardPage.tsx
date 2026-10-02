@@ -1,56 +1,91 @@
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { SectionCard } from '@/components/ui/SectionCard';
 import { StatCard } from '@/components/ui/StatCard';
 import { cn } from '@/lib/utils';
-import { IconCash, IconLayoutDashboard, IconTools } from '@tabler/icons-react';
-import { useDashboardStats } from '../hooks/useDashboardStats';
-import { useRecentActivity } from '../hooks/useRecentActivity';
+import {
+  IconBell,
+  IconCalendarMonth,
+  IconCash,
+  IconClipboardList,
+  IconShoppingCart,
+  IconTools,
+} from '@tabler/icons-react';
+import type { ComponentType } from 'react';
+import { Link } from 'react-router';
+import { useDashboardSummary } from '../hooks/use-dashboard-summary';
+import type { DashboardSummary } from '../types';
 
-const statDefinitions = [
+type StatCardDefinition = {
+  label: string;
+  to: string;
+  icon: ComponentType<{ className?: string }>;
+  getValue: (summary: DashboardSummary) => number;
+};
+
+// Card definitions per the F11 doc decisions: OC por recibir sums
+// ordered + partiallyReceived; the notifications card links to /notifications.
+const statDefinitions: StatCardDefinition[] = [
   {
-    label: 'Resumen',
-    description: 'Métricas del día',
-    icon: IconLayoutDashboard,
+    label: 'Ventas de hoy',
+    to: '/sales',
+    icon: IconCash,
+    getValue: (summary) => summary.salesTodayCount,
   },
-  { label: 'Órdenes', description: 'Pendientes hoy', icon: IconTools },
-  { label: 'Ventas', description: 'Total mensual', icon: IconCash },
-] as const;
+  {
+    label: 'Ventas del mes',
+    to: '/sales',
+    icon: IconCalendarMonth,
+    getValue: (summary) => summary.salesMonthCount,
+  },
+  {
+    label: 'Órdenes pendientes',
+    to: '/work-orders',
+    icon: IconClipboardList,
+    getValue: (summary) => summary.workOrders.pending,
+  },
+  {
+    label: 'Órdenes en curso',
+    to: '/work-orders',
+    icon: IconTools,
+    getValue: (summary) => summary.workOrders.inProgress,
+  },
+  {
+    label: 'OC por recibir',
+    to: '/purchase-orders',
+    icon: IconShoppingCart,
+    getValue: (summary) =>
+      summary.purchaseOrders.ordered + summary.purchaseOrders.partiallyReceived,
+  },
+  {
+    label: 'Notificaciones sin leer',
+    to: '/notifications',
+    icon: IconBell,
+    getValue: (summary) => summary.notificationsUnread,
+  },
+];
 
 const statsGridClassName =
   'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3';
 
 export function DashboardPage() {
-  const {
-    stats,
-    isLoading: isStatsLoading,
-    error: statsError,
-  } = useDashboardStats();
-  const {
-    activities,
-    isLoading: isActivityLoading,
-    error: activityError,
-  } = useRecentActivity();
-
-  const hasError = statsError != null || activityError != null;
+  const { summary, isLoading, error } = useDashboardSummary();
 
   const statsGrid = (
     <div className={statsGridClassName}>
-      {statDefinitions.map(({ label, description, icon }) => {
-        const stat = stats.find((item) => item.label === label);
-        const value = stat ? stat.value : undefined;
-        return (
+      {statDefinitions.map(({ label, to, icon, getValue }) => (
+        <Link key={label} to={to} className="block">
           <StatCard
-            key={label}
             label={label}
-            value={value}
-            description={description}
+            value={summary ? getValue(summary) : undefined}
             icon={icon}
-            className={cn(isStatsLoading && 'animate-pulse')}
+            className={cn(
+              'h-full transition-colors hover:bg-muted/50',
+              isLoading && 'animate-pulse'
+            )}
           />
-        );
-      })}
+        </Link>
+      ))}
     </div>
   );
 
@@ -60,52 +95,20 @@ export function DashboardPage() {
         <PageTitle>Dashboard</PageTitle>
       </PageHeader>
 
-      {hasError && (
-        <p className="text-body-sm text-destructive" role="alert">
-          No se pudieron cargar los datos
-        </p>
-      )}
-
-      {isStatsLoading ? (
+      {error != null ? (
+        <div
+          className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
+          role="alert"
+        >
+          {error.message}
+        </div>
+      ) : isLoading ? (
         <output aria-busy="true" aria-label="Cargando estadísticas">
           {statsGrid}
         </output>
       ) : (
         statsGrid
       )}
-
-      <SectionCard title="Actividad reciente">
-        {isActivityLoading ? (
-          <output
-            aria-busy="true"
-            aria-label="Cargando actividad"
-            className="space-y-3"
-          >
-            <div className="h-4 w-3/4 rounded bg-muted" />
-            <div className="h-4 w-1/2 rounded bg-muted" />
-          </output>
-        ) : activities.length === 0 ? (
-          <p className="text-body text-muted-foreground">
-            No hay actividad reciente.
-          </p>
-        ) : (
-          <ul className="space-y-3">
-            {activities.map((activity) => (
-              <li
-                key={activity.id}
-                className="flex items-center justify-between"
-              >
-                <span className="text-body text-foreground">
-                  {activity.description}
-                </span>
-                <span className="text-body-sm text-muted-foreground">
-                  {activity.time}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </SectionCard>
     </PageContent>
   );
 }
