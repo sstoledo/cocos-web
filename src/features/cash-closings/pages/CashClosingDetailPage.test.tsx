@@ -1,10 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { generateCashClosingPdf } from '../lib/cash-closing-pdf';
 import type { CashClosing } from '../types';
 import { CashClosingDetailPage } from './CashClosingDetailPage';
+
+vi.mock('../lib/cash-closing-pdf', () => ({
+  generateCashClosingPdf: vi.fn(),
+}));
 
 const API = 'http://localhost:3000/api';
 
@@ -193,7 +199,7 @@ describe('CashClosingDetailPage', () => {
     );
   });
 
-  it('renders the PDF download button disabled until F12.4', async () => {
+  it('renders the PDF download button enabled', async () => {
     globalThis.fetch = mockFetchWith({});
 
     renderPage();
@@ -203,6 +209,23 @@ describe('CashClosingDetailPage', () => {
     );
     expect(
       screen.getByRole('button', { name: /descargar pdf/i })
-    ).toBeDisabled();
+    ).toBeEnabled();
+  });
+
+  it('generates the PDF with the loaded closing on click', async () => {
+    const user = userEvent.setup();
+    const closing = buildClosing();
+    globalThis.fetch = mockFetchWith({ body: closing });
+
+    renderPage();
+
+    await waitFor(() =>
+      expect(screen.getByText('Ana García')).toBeInTheDocument()
+    );
+    await user.click(screen.getByRole('button', { name: /descargar pdf/i }));
+
+    await waitFor(() =>
+      expect(generateCashClosingPdf).toHaveBeenCalledWith(closing)
+    );
   });
 });
