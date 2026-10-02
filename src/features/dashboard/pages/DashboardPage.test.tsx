@@ -1,125 +1,179 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { type ReactNode, createElement } from 'react';
+import { MemoryRouter, useLocation } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { DashboardSummary } from '../types';
 import { DashboardPage } from './DashboardPage';
 
-const useDashboardStatsMock = vi.fn();
-const useRecentActivityMock = vi.fn();
+const summary: DashboardSummary = {
+  salesTodayCount: 4,
+  salesMonthCount: 87,
+  workOrders: { pending: 3, inProgress: 2, done: 41, cancelled: 1 },
+  purchaseOrders: {
+    draft: 2,
+    ordered: 5,
+    partiallyReceived: 1,
+    received: 18,
+    cancelled: 0,
+  },
+  notificationsUnread: 7,
+  generatedAt: '2026-09-23T15:30:00.000Z',
+};
 
-vi.mock('../hooks/useDashboardStats', () => ({
-  useDashboardStats: () => useDashboardStatsMock(),
+const useDashboardSummaryMock = vi.fn();
+
+vi.mock('../hooks/use-dashboard-summary', () => ({
+  useDashboardSummary: () => useDashboardSummaryMock(),
 }));
 
-vi.mock('../hooks/useRecentActivity', () => ({
-  useRecentActivity: () => useRecentActivityMock(),
-}));
+function LocationProbe() {
+  const location = useLocation();
+  return <output data-testid="location">{location.pathname}</output>;
+}
+
+function renderPage() {
+  function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(MemoryRouter, null, children, <LocationProbe />);
+  }
+
+  return render(<DashboardPage />, { wrapper: Wrapper });
+}
 
 describe('DashboardPage', () => {
   beforeEach(() => {
-    useDashboardStatsMock.mockReset();
-    useRecentActivityMock.mockReset();
+    useDashboardSummaryMock.mockReset();
   });
 
-  it('renders the dashboard title and stat cards while loading', () => {
-    useDashboardStatsMock.mockReturnValue({
-      stats: [],
-      isLoading: true,
-      error: null,
-    });
-    useRecentActivityMock.mockReturnValue({
-      activities: [],
-      isLoading: true,
+  it('renders the six stat cards with real values from the summary', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary,
+      isLoading: false,
       error: null,
     });
 
-    render(<DashboardPage />);
+    renderPage();
 
     expect(
       screen.getByRole('heading', { name: 'Dashboard' })
     ).toBeInTheDocument();
-    expect(screen.getByText('Resumen')).toBeInTheDocument();
-    expect(screen.getByText('Órdenes')).toBeInTheDocument();
-    expect(screen.getByText('Ventas')).toBeInTheDocument();
-    expect(screen.getByText('Métricas del día')).toBeInTheDocument();
-    expect(screen.getByText('Pendientes hoy')).toBeInTheDocument();
-    expect(screen.getByText('Total mensual')).toBeInTheDocument();
+    expect(screen.getByText('Ventas de hoy')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+    expect(screen.getByText('Ventas del mes')).toBeInTheDocument();
+    expect(screen.getByText('87')).toBeInTheDocument();
+    expect(screen.getByText('Órdenes pendientes')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('Órdenes en curso')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('OC por recibir')).toBeInTheDocument();
+    expect(screen.getByText('Notificaciones sin leer')).toBeInTheDocument();
+    expect(screen.getByText('7')).toBeInTheDocument();
+  });
+
+  it('sums ordered and partially received for the OC por recibir card', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary,
+      isLoading: false,
+      error: null,
+    });
+
+    renderPage();
+
+    // ordered (5) + partiallyReceived (1) = 6
+    const card = screen.getByText('OC por recibir').closest('a');
+    expect(card).toHaveTextContent('6');
+  });
+
+  it('links the cards to their list pages', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary,
+      isLoading: false,
+      error: null,
+    });
+
+    renderPage();
+
+    expect(screen.getByText('Ventas de hoy').closest('a')).toHaveAttribute(
+      'href',
+      '/sales'
+    );
+    expect(screen.getByText('Ventas del mes').closest('a')).toHaveAttribute(
+      'href',
+      '/sales'
+    );
+    expect(screen.getByText('Órdenes pendientes').closest('a')).toHaveAttribute(
+      'href',
+      '/work-orders'
+    );
+    expect(screen.getByText('Órdenes en curso').closest('a')).toHaveAttribute(
+      'href',
+      '/work-orders'
+    );
+    expect(screen.getByText('OC por recibir').closest('a')).toHaveAttribute(
+      'href',
+      '/purchase-orders'
+    );
     expect(
-      screen.getByRole('heading', { name: 'Actividad reciente' })
-    ).toBeInTheDocument();
+      screen.getByText('Notificaciones sin leer').closest('a')
+    ).toHaveAttribute('href', '/notifications');
+  });
+
+  it('navigates to /notifications when the notifications card is clicked', async () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary,
+      isLoading: false,
+      error: null,
+    });
+
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(screen.getByText('Notificaciones sin leer'));
+
+    expect(screen.getByTestId('location')).toHaveTextContent('/notifications');
+  });
+
+  it('renders skeleton cards while loading without fake values', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary: undefined,
+      isLoading: true,
+      error: null,
+    });
+
+    renderPage();
+
     expect(
       screen.getByRole('status', { name: /cargando estadísticas/i })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('status', { name: /cargando actividad/i })
-    ).toBeInTheDocument();
+    expect(screen.getByText('Ventas de hoy')).toBeInTheDocument();
+    expect(screen.getByText('Notificaciones sin leer')).toBeInTheDocument();
+    expect(screen.queryByText('4')).not.toBeInTheDocument();
+    expect(screen.queryByText('87')).not.toBeInTheDocument();
   });
 
-  it('shows placeholder values and an empty activity message when data is empty', () => {
-    useDashboardStatsMock.mockReturnValue({
-      stats: [],
+  it('shows the parsed API error message when the summary fails to load', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary: undefined,
       isLoading: false,
-      error: null,
-    });
-    useRecentActivityMock.mockReturnValue({
-      activities: [],
-      isLoading: false,
-      error: null,
+      error: new Error('Failed to fetch dashboard summary: 500'),
     });
 
-    render(<DashboardPage />);
-
-    expect(screen.getByText('Resumen')).toBeInTheDocument();
-    expect(screen.getByText('Órdenes')).toBeInTheDocument();
-    expect(screen.getByText('Ventas')).toBeInTheDocument();
-    expect(screen.queryByText('—')).not.toBeInTheDocument();
-    expect(screen.getByText('No hay actividad reciente.')).toBeInTheDocument();
-  });
-
-  it('renders real stats and recent activity', () => {
-    useDashboardStatsMock.mockReturnValue({
-      stats: [
-        { label: 'Resumen', value: 12 },
-        { label: 'Órdenes', value: 8 },
-        { label: 'Ventas', value: 5 },
-      ],
-      isLoading: false,
-      error: null,
-    });
-    useRecentActivityMock.mockReturnValue({
-      activities: [
-        { id: 'a1', description: 'Orden #1 creada', time: '10:30' },
-        { id: 'a2', description: 'Venta #2 finalizada', time: '11:00' },
-      ],
-      isLoading: false,
-      error: null,
-    });
-
-    render(<DashboardPage />);
-
-    expect(screen.getByText('12')).toBeInTheDocument();
-    expect(screen.getByText('8')).toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('Orden #1 creada')).toBeInTheDocument();
-    expect(screen.getByText('Venta #2 finalizada')).toBeInTheDocument();
-    expect(screen.getByText('10:30')).toBeInTheDocument();
-    expect(screen.getByText('11:00')).toBeInTheDocument();
-  });
-
-  it('shows an error message when a hook fails', () => {
-    useDashboardStatsMock.mockReturnValue({
-      stats: [],
-      isLoading: false,
-      error: new Error('fetch failed'),
-    });
-    useRecentActivityMock.mockReturnValue({
-      activities: [],
-      isLoading: false,
-      error: null,
-    });
-
-    render(<DashboardPage />);
+    renderPage();
 
     expect(screen.getByRole('alert')).toHaveTextContent(
-      'No se pudieron cargar los datos'
+      'Failed to fetch dashboard summary: 500'
     );
+  });
+
+  it('does not render the removed recent activity section', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary,
+      isLoading: false,
+      error: null,
+    });
+
+    renderPage();
+
+    expect(screen.queryByText('Actividad reciente')).not.toBeInTheDocument();
   });
 });
