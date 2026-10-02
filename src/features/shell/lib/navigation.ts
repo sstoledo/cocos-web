@@ -11,6 +11,7 @@ import {
   IconTruckDelivery,
   IconUserCog,
   IconUsers,
+  IconWallet,
 } from '@tabler/icons-react';
 
 import type { NavGroup, RoleName } from '../types';
@@ -89,6 +90,12 @@ export const navigationGroups: NavGroup[] = [
         label: 'Devoluciones',
         path: '/refunds',
         icon: IconReceiptRefund,
+        allowedRoles: ['Admin', 'Reception'],
+      },
+      {
+        label: 'Cierres de caja',
+        path: '/cash-closings',
+        icon: IconWallet,
         allowedRoles: ['Admin', 'Reception'],
       },
       {

@@ -17,6 +17,9 @@ const titles: Record<string, string> = {
   '/notifications': 'Notificaciones',
   '/users': 'Usuarios',
   '/cash-closing': 'Cierre de caja',
+  '/cash-closings': 'Cierres de caja',
+  '/cash-closings/close': 'Cierre de caja',
+  '/cash-closings/:id': 'Detalle de cierre',
 };
 
 export function getPageTitle(path: string): string {

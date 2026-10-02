@@ -6,7 +6,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { Textarea } from '@/components/ui/Textarea';
-import { toCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -14,6 +13,7 @@ import { Link } from 'react-router';
 import { useClosingPreview } from '../hooks/use-closing-preview';
 import { useCreateCashClosing } from '../hooks/use-create-cash-closing';
 import { getCashClosingErrorMessage } from '../lib/cash-closing-error-messages';
+import { differenceClassName } from '../lib/difference-class-name';
 import {
   type CloseCashClosingFormValues,
   closeCashClosingSchema,
@@ -25,18 +25,6 @@ function formatDateTime(value: string) {
     dateStyle: 'short',
     timeStyle: 'short',
   });
-}
-
-// Sign detection only — no arithmetic. Negative values carry a '-' prefix
-// in the DTO; zero/positive amounts parse through the cents helper.
-function differenceClassName(difference: string): string {
-  if (difference.startsWith('-')) {
-    return 'text-destructive';
-  }
-  if (toCents(difference) === 0) {
-    return 'text-foreground';
-  }
-  return 'text-green-700 dark:text-green-400';
 }
 
 const SKELETON_CELLS = ['cash', 'card', 'transfer', 'sales'] as const;

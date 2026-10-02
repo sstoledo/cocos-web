@@ -66,7 +66,10 @@ describe('Sidebar', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /usuarios/i })).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: /cierre de caja/i })
+      screen.getByRole('link', { name: 'Cierre de caja' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Cierres de caja' })
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: /notificaciones/i })
@@ -130,6 +133,34 @@ describe('Sidebar', () => {
     expect(
       screen.queryByRole('link', { name: /usuarios/i })
     ).not.toBeInTheDocument();
+  });
+
+  it('shows the cash closings entry for Reception', () => {
+    renderSidebar('Reception');
+
+    expect(
+      screen.getByRole('link', { name: 'Cierres de caja' })
+    ).toBeInTheDocument();
+  });
+
+  it('hides the cash closings entry from ReadOnly', () => {
+    renderSidebar('ReadOnly');
+
+    expect(
+      screen.queryByRole('link', { name: 'Cierres de caja' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('hides the cash closings entry from Mechanic, Purchasing and Warehouse', () => {
+    for (const role of ['Mechanic', 'Purchasing', 'Warehouse'] as const) {
+      const { unmount } = renderSidebar(role);
+
+      expect(
+        screen.queryByRole('link', { name: 'Cierres de caja' })
+      ).not.toBeInTheDocument();
+
+      unmount();
+    }
   });
 
   it('renders the appearance footer with theme toggle and user menu', () => {
