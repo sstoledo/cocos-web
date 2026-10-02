@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { IconMenu2 } from '@tabler/icons-react';
+import { NotificationBell } from './NotificationBell';
 
 export type HeaderProps = {
   title: string;
@@ -16,16 +17,19 @@ export function Header({ title, onMenuClick, className }: HeaderProps) {
       )}
     >
       <span className="text-h3 font-semibold text-foreground">{title}</span>
-      {onMenuClick && (
-        <button
-          type="button"
-          onClick={onMenuClick}
-          aria-label="Abrir menú"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
-        >
-          <IconMenu2 className="h-5 w-5" />
-        </button>
-      )}
+      <div className="flex items-center gap-2">
+        <NotificationBell />
+        {onMenuClick && (
+          <button
+            type="button"
+            onClick={onMenuClick}
+            aria-label="Abrir menú"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+          >
+            <IconMenu2 className="h-5 w-5" />
+          </button>
+        )}
+      </div>
     </header>
   );
 }
