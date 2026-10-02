@@ -6,9 +6,11 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { ApiError } from '@/lib/api-error';
 import { cn } from '@/lib/utils';
 import { IconFileTypePdf } from '@tabler/icons-react';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useCashClosing } from '../hooks/use-cash-closing';
 import { differenceClassName } from '../lib/difference-class-name';
+import type { CashClosing } from '../types';
 
 function formatDateTime(value: string) {
   return new Date(value).toLocaleString('es-AR', {
@@ -20,6 +22,20 @@ function formatDateTime(value: string) {
 export function CashClosingDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: closing, isLoading, error } = useCashClosing(id ?? '');
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  // jsPDF is heavy, so the report module loads on demand on first click.
+  async function handleDownloadPdf(current: CashClosing) {
+    setIsGeneratingPdf(true);
+    try {
+      const { generateCashClosingPdf } = await import(
+        '../lib/cash-closing-pdf'
+      );
+      generateCashClosingPdf(current);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -59,9 +75,12 @@ export function CashClosingDetailPage() {
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle>Detalle de cierre</PageTitle>
-        {/* F12.4 wires the jsPDF download here. The button stays disabled
-            until the report generator lands. */}
-        <Button type="button" variant="outline" disabled>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={isGeneratingPdf}
+          onClick={() => handleDownloadPdf(closing)}
+        >
           <IconFileTypePdf className="mr-1.5 h-3.5 w-3.5" />
           Descargar PDF
         </Button>
