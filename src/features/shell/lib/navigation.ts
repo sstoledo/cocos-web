@@ -1,6 +1,5 @@
 import {
   IconBell,
-  IconCash,
   IconCashRegister,
   IconLayoutDashboard,
   IconPackage,
@@ -113,12 +112,6 @@ export const navigationGroups: NavGroup[] = [
         label: 'Usuarios',
         path: '/users',
         icon: IconUserCog,
-        allowedRoles: ['Admin'],
-      },
-      {
-        label: 'Cierre de caja',
-        path: '/cash-closing',
-        icon: IconCash,
         allowedRoles: ['Admin'],
       },
     ],
