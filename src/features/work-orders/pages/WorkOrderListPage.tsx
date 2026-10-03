@@ -3,7 +3,9 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
-import { useSearchParams } from 'react-router';
+import { useUser } from '@/features/shell/hooks/useUser';
+import { cn } from '@/lib/utils';
+import { Link, useSearchParams } from 'react-router';
 import { WorkOrderFilters } from '../components/WorkOrderFilters';
 import { WorkOrderTable } from '../components/WorkOrderTable';
 import { useWorkOrders } from '../hooks/use-work-orders';
@@ -25,6 +27,10 @@ export function WorkOrderListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
   const { workOrders, meta, isLoading, error } = useWorkOrders(filters);
+  const { user } = useUser();
+
+  const canEdit =
+    user?.role?.name === 'Admin' || user?.role?.name === 'Reception';
 
   function handleFiltersChange(nextFilters: WorkOrderListFilters) {
     const nextSearchParams = new URLSearchParams();
@@ -52,6 +58,17 @@ export function WorkOrderListPage() {
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle>Órdenes de trabajo</PageTitle>
+        {canEdit && (
+          <Link
+            to="/work-orders/new"
+            className={cn(
+              'inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors',
+              'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            Nueva orden de trabajo
+          </Link>
+        )}
       </PageHeader>
       <PageContent>
         <SectionCard title="Listado de órdenes de trabajo">
