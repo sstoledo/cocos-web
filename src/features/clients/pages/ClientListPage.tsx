@@ -4,7 +4,8 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
-import { useSearchParams } from 'react-router';
+import { cn } from '@/lib/utils';
+import { Link, useSearchParams } from 'react-router';
 import { ClientFilters } from '../components/ClientFilters';
 import { ClientTable } from '../components/ClientTable';
 import { useClients } from '../hooks/use-clients';
@@ -57,6 +58,17 @@ export function ClientListPage() {
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle>Clientes</PageTitle>
+        {canEdit && (
+          <Link
+            to="/clients/new"
+            className={cn(
+              'inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors',
+              'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            Nuevo cliente
+          </Link>
+        )}
       </PageHeader>
       <PageContent>
         <SectionCard title="Listado de clientes">

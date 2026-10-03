@@ -113,6 +113,65 @@ describe('ClientListPage', () => {
     );
   });
 
+  it('shows the create link for Admin users', async () => {
+    mockFetch(paginatedResponse);
+
+    render(<ClientListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', { name: 'Nuevo cliente' })
+      ).toHaveAttribute('href', '/clients/new')
+    );
+  });
+
+  it('shows the create link for Reception users', async () => {
+    globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+      if (url.includes('/users/me')) {
+        return {
+          ok: true,
+          json: async () => ({
+            ...user,
+            role: { id: 'r2', name: 'Reception' },
+          }),
+        };
+      }
+      return { ok: true, json: async () => paginatedResponse };
+    });
+
+    render(<ClientListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', { name: 'Nuevo cliente' })
+      ).toBeInTheDocument()
+    );
+  });
+
+  it('does not show the create link for non-authorized roles', async () => {
+    globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+      if (url.includes('/users/me')) {
+        return {
+          ok: true,
+          json: async () => ({ ...user, role: { id: 'r3', name: 'Mechanic' } }),
+        };
+      }
+      return { ok: true, json: async () => paginatedResponse };
+    });
+
+    render(<ClientListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('cell', { name: 'Juan Pérez' })
+      ).toBeInTheDocument()
+    );
+
+    expect(
+      screen.queryByRole('link', { name: 'Nuevo cliente' })
+    ).not.toBeInTheDocument();
+  });
+
   it('syncs search and page to the URL', async () => {
     const testUser = userEvent.setup();
     const fetchMock = vi.fn().mockImplementation(async (url: string) => {
