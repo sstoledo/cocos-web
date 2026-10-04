@@ -1,10 +1,12 @@
 import {
   IconBell,
   IconCashRegister,
+  IconCategory2,
   IconLayoutDashboard,
   IconPackage,
   IconPackages,
   IconReceiptRefund,
+  IconTag,
   IconTool,
   IconTools,
   IconTruck,
@@ -49,6 +51,24 @@ export const navigationGroups: NavGroup[] = [
         path: '/lots',
         icon: IconPackages,
         allowedRoles: ['Admin', 'Warehouse', 'Purchasing'],
+      },
+      {
+        label: 'Marcas',
+        path: '/brands',
+        icon: IconTag,
+        allowedRoles: ['Admin'],
+      },
+      {
+        label: 'Categorías',
+        path: '/categories',
+        icon: IconCategory2,
+        allowedRoles: ['Admin'],
+      },
+      {
+        label: 'Presentaciones',
+        path: '/presentations',
+        icon: IconPackage,
+        allowedRoles: ['Admin'],
       },
       {
         label: 'Servicios',
