@@ -1,7 +1,11 @@
 import { authRoutes } from '@/features/auth/routes';
+import { BrandFormPage } from '@/features/brands/pages/BrandFormPage';
+import { BrandListPage } from '@/features/brands/pages/BrandListPage';
 import { CashClosingDetailPage } from '@/features/cash-closings/pages/CashClosingDetailPage';
 import { CashClosingsListPage } from '@/features/cash-closings/pages/CashClosingsListPage';
 import { CloseCashClosingPage } from '@/features/cash-closings/pages/CloseCashClosingPage';
+import { CategoryFormPage } from '@/features/categories/pages/CategoryFormPage';
+import { CategoryListPage } from '@/features/categories/pages/CategoryListPage';
 import { ClientDetailPage } from '@/features/clients/pages/ClientDetailPage';
 import { ClientFormPage } from '@/features/clients/pages/ClientFormPage';
 import { ClientListPage } from '@/features/clients/pages/ClientListPage';
@@ -9,6 +13,8 @@ import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
 import { LotFormPage } from '@/features/lots/pages/LotFormPage';
 import { LotListPage } from '@/features/lots/pages/LotListPage';
 import { NotificationListPage } from '@/features/notifications/pages/NotificationListPage';
+import { PresentationFormPage } from '@/features/presentations/pages/PresentationFormPage';
+import { PresentationListPage } from '@/features/presentations/pages/PresentationListPage';
 import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
 import { PurchaseOrderDetailPage } from '@/features/purchase-orders/pages/PurchaseOrderDetailPage';
@@ -106,6 +112,15 @@ const routes: RouteObject[] = [
         'Admin',
         'Purchasing',
       ]),
+      guardedRoute('brands', <BrandListPage />),
+      guardedRoute('brands/new', <BrandFormPage />, 'Admin'),
+      guardedRoute('brands/:id/edit', <BrandFormPage />, 'Admin'),
+      guardedRoute('categories', <CategoryListPage />),
+      guardedRoute('categories/new', <CategoryFormPage />, 'Admin'),
+      guardedRoute('categories/:id/edit', <CategoryFormPage />, 'Admin'),
+      guardedRoute('presentations', <PresentationListPage />),
+      guardedRoute('presentations/new', <PresentationFormPage />, 'Admin'),
+      guardedRoute('presentations/:id/edit', <PresentationFormPage />, 'Admin'),
       guardedRoute('work-orders', <WorkOrderListPage />),
       guardedRoute('work-orders/new', <WorkOrderFormPage />, [
         'Admin',
