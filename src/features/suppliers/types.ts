@@ -1,0 +1,24 @@
+export interface Supplier {
+  id: string;
+  name: string;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  isActive: boolean;
+  deletedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SupplierListFilters {
+  q?: string;
+  isActive?: boolean;
+}
+
+export type SupplierFormValues = {
+  name: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  isActive: boolean;
+};
