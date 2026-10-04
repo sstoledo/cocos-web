@@ -1,4 +1,5 @@
 import * as useUserModule from '@/features/shell/hooks/useUser';
+import type { User } from '@/features/shell/types';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -40,8 +41,15 @@ describe('CategoryListPage', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
     vi.spyOn(useUserModule, 'useUser').mockReturnValue({
-      user: { role: { name: 'Admin' } },
-    } as any);
+      user: {
+        id: '1',
+        name: 'Admin',
+        email: 'admin@test.com',
+        role: { id: '1', name: 'Admin' },
+      } as User,
+      isLoading: false,
+      error: null,
+    });
   });
 
   afterEach(() => {
@@ -71,8 +79,15 @@ describe('CategoryListPage', () => {
 
   it('hides new category button for non-Admin', async () => {
     vi.spyOn(useUserModule, 'useUser').mockReturnValue({
-      user: { role: { name: 'Reception' } },
-    } as any);
+      user: {
+        id: '2',
+        name: 'Reception',
+        email: 'reception@test.com',
+        role: { id: '2', name: 'Reception' },
+      } as User,
+      isLoading: false,
+      error: null,
+    });
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => mockCategories,
