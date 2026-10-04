@@ -20,6 +20,7 @@ import { RefundPage } from '@/features/refunds/pages/RefundPage';
 import { CheckoutPage } from '@/features/sales/pages/CheckoutPage';
 import { SaleDetailPage } from '@/features/sales/pages/SaleDetailPage';
 import { SalesListPage } from '@/features/sales/pages/SalesListPage';
+import { ServiceFormPage } from '@/features/services/pages/ServiceFormPage';
 import { ServiceListPage } from '@/features/services/pages/ServiceListPage';
 import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import { Layout } from '@/features/shell/pages/Layout';
@@ -82,6 +83,11 @@ const routes: RouteObject[] = [
         'Reception',
       ]),
       guardedRoute('services', <ServiceListPage />),
+      guardedRoute('services/new', <ServiceFormPage />, ['Admin', 'Reception']),
+      guardedRoute('services/:id/edit', <ServiceFormPage />, [
+        'Admin',
+        'Reception',
+      ]),
       guardedRoute('work-orders', <WorkOrderListPage />),
       guardedRoute('work-orders/new', <WorkOrderFormPage />, [
         'Admin',

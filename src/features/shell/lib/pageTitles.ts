@@ -1,9 +1,13 @@
 const titles: Record<string, string> = {
   '/dashboard': 'Dashboard',
   '/products': 'Productos',
+  '/products/new': 'Nuevo producto',
+  '/products/:id/edit': 'Editar producto',
   '/lots': 'Lotes',
   '/clients': 'Clientes',
   '/services': 'Servicios',
+  '/services/new': 'Nuevo servicio',
+  '/services/:id/edit': 'Editar servicio',
   '/work-orders': 'Órdenes de trabajo',
   '/sales': 'Ventas',
   '/sales/:id': 'Detalle de venta',
