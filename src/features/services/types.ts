@@ -14,3 +14,5 @@ export interface ServiceListFilters {
   q?: string;
   isActive?: boolean;
 }
+
+export type { ServiceFormValues } from './schemas/service-schema';
