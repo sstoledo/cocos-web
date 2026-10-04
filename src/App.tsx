@@ -28,6 +28,8 @@ import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
 import type { RoleName } from '@/features/shell/types';
 import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
 import { UserListPage } from '@/features/users/pages/UserListPage';
+import { VehicleFormPage } from '@/features/vehicles/pages/VehicleFormPage';
+import { VehicleListPage } from '@/features/vehicles/pages/VehicleListPage';
 import { WorkOrderDetailPage } from '@/features/work-orders/pages/WorkOrderDetailPage';
 import { WorkOrderFormPage } from '@/features/work-orders/pages/WorkOrderFormPage';
 import { WorkOrderListPage } from '@/features/work-orders/pages/WorkOrderListPage';
@@ -84,6 +86,12 @@ const routes: RouteObject[] = [
       guardedRoute('services', <ServiceListPage />),
       guardedRoute('services/new', <ServiceFormPage />, ['Admin', 'Reception']),
       guardedRoute('services/:id/edit', <ServiceFormPage />, [
+        'Admin',
+        'Reception',
+      ]),
+      guardedRoute('vehicles', <VehicleListPage />),
+      guardedRoute('vehicles/new', <VehicleFormPage />, ['Admin', 'Reception']),
+      guardedRoute('vehicles/:id/edit', <VehicleFormPage />, [
         'Admin',
         'Reception',
       ]),
