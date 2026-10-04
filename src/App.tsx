@@ -27,6 +27,8 @@ import { NotFoundPage } from '@/features/shell/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
 import type { RoleName } from '@/features/shell/types';
 import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
+import { SupplierFormPage } from '@/features/suppliers/pages/SupplierFormPage';
+import { SupplierListPage } from '@/features/suppliers/pages/SupplierListPage';
 import { UserListPage } from '@/features/users/pages/UserListPage';
 import { VehicleFormPage } from '@/features/vehicles/pages/VehicleFormPage';
 import { VehicleListPage } from '@/features/vehicles/pages/VehicleListPage';
@@ -94,6 +96,15 @@ const routes: RouteObject[] = [
       guardedRoute('vehicles/:id/edit', <VehicleFormPage />, [
         'Admin',
         'Reception',
+      ]),
+      guardedRoute('suppliers', <SupplierListPage />),
+      guardedRoute('suppliers/new', <SupplierFormPage />, [
+        'Admin',
+        'Purchasing',
+      ]),
+      guardedRoute('suppliers/:id/edit', <SupplierFormPage />, [
+        'Admin',
+        'Purchasing',
       ]),
       guardedRoute('work-orders', <WorkOrderListPage />),
       guardedRoute('work-orders/new', <WorkOrderFormPage />, [
