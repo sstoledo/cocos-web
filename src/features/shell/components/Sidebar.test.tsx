@@ -66,9 +66,6 @@ describe('Sidebar', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /usuarios/i })).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Cierre de caja' })
-    ).toBeInTheDocument();
-    expect(
       screen.getByRole('link', { name: 'Cierres de caja' })
     ).toBeInTheDocument();
     expect(

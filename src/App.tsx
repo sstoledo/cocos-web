@@ -2,7 +2,6 @@ import { authRoutes } from '@/features/auth/routes';
 import { CashClosingDetailPage } from '@/features/cash-closings/pages/CashClosingDetailPage';
 import { CashClosingsListPage } from '@/features/cash-closings/pages/CashClosingsListPage';
 import { CloseCashClosingPage } from '@/features/cash-closings/pages/CloseCashClosingPage';
-import { CashClosingPage } from '@/features/cash-register/pages/CashClosingPage';
 import { ClientDetailPage } from '@/features/clients/pages/ClientDetailPage';
 import { ClientFormPage } from '@/features/clients/pages/ClientFormPage';
 import { ClientListPage } from '@/features/clients/pages/ClientListPage';
@@ -121,7 +120,6 @@ const routes: RouteObject[] = [
       ),
       guardedRoute('notifications', <NotificationListPage />),
       guardedRoute('users', <UserListPage />),
-      guardedRoute('cash-closing', <CashClosingPage />),
       guardedRoute('cash-closings', <CashClosingsListPage />, [
         'Admin',
         'Reception',
