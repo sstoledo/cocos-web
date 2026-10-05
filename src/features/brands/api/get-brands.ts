@@ -1,6 +1,8 @@
-import type { Brand, BrandListFilters } from '../types';
+import type { BrandListFilters, BrandListResponse } from '../types';
 
-export async function getBrands(filters: BrandListFilters): Promise<Brand[]> {
+export async function getBrands(
+  filters: BrandListFilters
+): Promise<BrandListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -18,5 +20,5 @@ export async function getBrands(filters: BrandListFilters): Promise<Brand[]> {
     throw new Error(`Failed to fetch brands: ${response.status}`);
   }
 
-  return (await response.json()) as Brand[];
+  return (await response.json()) as BrandListResponse;
 }

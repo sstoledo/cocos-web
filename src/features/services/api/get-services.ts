@@ -1,8 +1,8 @@
-import type { Service, ServiceListFilters } from '../types';
+import type { ServiceListFilters, ServiceListResponse } from '../types';
 
 export async function getServices(
   filters: ServiceListFilters
-): Promise<Service[]> {
+): Promise<ServiceListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -24,5 +24,5 @@ export async function getServices(
     throw new Error(`Failed to fetch services: ${response.status}`);
   }
 
-  return (await response.json()) as Service[];
+  return (await response.json()) as ServiceListResponse;
 }

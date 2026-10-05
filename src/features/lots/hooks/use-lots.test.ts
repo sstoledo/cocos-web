@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Lot } from '../types';
+import type { Lot, LotListResponse } from '../types';
 import { useLots } from './use-lots';
 
 const lot: Lot = {
@@ -21,6 +21,11 @@ const lot: Lot = {
       expirationDate: '2027-01-01T00:00:00.000Z',
     },
   ],
+};
+
+const mockResponse: LotListResponse = {
+  data: [lot],
+  meta: { page: 1, limit: 10, total: 1 },
 };
 
 function createWrapper() {
@@ -51,7 +56,7 @@ describe('useLots', () => {
   it('fetches lots without filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [lot],
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => useLots(), {
@@ -73,7 +78,7 @@ describe('useLots', () => {
   it('builds the query string with filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [lot],
+      json: async () => mockResponse,
     });
 
     const filters = { q: 'L-2026' };
@@ -108,7 +113,7 @@ describe('useLots', () => {
   it('scopes the query key by filters', async () => {
     const firstFetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => [lot],
+      json: async () => mockResponse,
     });
     globalThis.fetch = firstFetch;
 

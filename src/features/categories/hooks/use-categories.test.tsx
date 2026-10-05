@@ -2,9 +2,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { CategoryListResponse } from '../types';
 import { useCategories } from './use-categories';
 
-const mockCategories: Category[] = [
+const mockCategories = [
   {
     id: 'c1',
     name: 'Categoría 1',
@@ -22,6 +23,11 @@ const mockCategories: Category[] = [
     updatedAt: '',
   },
 ];
+
+const mockResponse: CategoryListResponse = {
+  data: mockCategories,
+  meta: { page: 1, limit: 10, total: 2 },
+};
 
 function wrapper({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
@@ -44,7 +50,7 @@ describe('useCategories', () => {
   it('fetches categories', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => mockCategories,
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => useCategories({}), { wrapper });
@@ -69,12 +75,3 @@ describe('useCategories', () => {
     expect(result.current.categories).toEqual([]);
   });
 });
-
-interface Category {
-  id: string;
-  name: string;
-  parentId: string | null;
-  parent: Category | null;
-  createdAt: string;
-  updatedAt: string;
-}

@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { Service } from '../types';
+import type { Service, ServiceListResponse } from '../types';
 import { ServiceListPage } from './ServiceListPage';
 
 function createWrapper() {
@@ -21,18 +21,21 @@ function createWrapper() {
 
 type ReactNode = React.ReactNode;
 
-const services: Service[] = [
-  {
-    id: 'srv-1',
-    code: 'SRV-001',
-    name: 'Cambio de aceite',
-    price: '150.00',
-    estimatedDuration: 30,
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-  },
-];
+const service: Service = {
+  id: 'srv-1',
+  code: 'SRV-001',
+  name: 'Cambio de aceite',
+  price: '150.00',
+  estimatedDuration: 30,
+  isActive: true,
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
+const mockResponse: ServiceListResponse = {
+  data: [service],
+  meta: { page: 1, limit: 10, total: 1 },
+};
 
 describe('ServiceListPage', () => {
   afterEach(() => {
@@ -59,7 +62,7 @@ describe('ServiceListPage', () => {
   it('shows services table when loaded', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => services,
+      json: async () => mockResponse,
     });
 
     renderPage();
@@ -90,7 +93,7 @@ describe('ServiceListPage', () => {
   it('shows "Nuevo servicio" button', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => services,
+      json: async () => mockResponse,
     });
 
     renderPage();
@@ -105,7 +108,7 @@ describe('ServiceListPage', () => {
   it('shows empty state when no services', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     renderPage();

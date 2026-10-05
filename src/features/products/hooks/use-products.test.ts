@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Product } from '../types';
+import type { Product, ProductListResponse } from '../types';
 import { useProducts } from './use-products';
 
 const product: Product = {
@@ -16,6 +16,11 @@ const product: Product = {
   category: { id: 'cat1', name: 'Categoría 1' },
   createdAt: '2024-01-01T00:00:00.000Z',
   updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
+const mockResponse: ProductListResponse = {
+  data: [product],
+  meta: { page: 1, limit: 10, total: 1 },
 };
 
 function createWrapper() {
@@ -46,7 +51,7 @@ describe('useProducts', () => {
   it('fetches products without filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [product],
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => useProducts({}), {
@@ -68,7 +73,7 @@ describe('useProducts', () => {
   it('builds the query string with filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [product],
+      json: async () => mockResponse,
     });
 
     const filters = { q: 'aceite', isActive: true };
@@ -103,7 +108,7 @@ describe('useProducts', () => {
   it('scopes the query key by filters', async () => {
     const firstFetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => [product],
+      json: async () => mockResponse,
     });
     globalThis.fetch = firstFetch;
 

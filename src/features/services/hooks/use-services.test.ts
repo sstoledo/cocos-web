@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Service } from '../types';
+import type { Service, ServiceListResponse } from '../types';
 import { useServices } from './use-services';
 
 const service: Service = {
@@ -13,6 +13,11 @@ const service: Service = {
   isActive: true,
   createdAt: '2024-01-01T00:00:00.000Z',
   updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
+const mockResponse: ServiceListResponse = {
+  data: [service],
+  meta: { page: 1, limit: 10, total: 1 },
 };
 
 function createWrapper() {
@@ -43,7 +48,7 @@ describe('useServices', () => {
   it('fetches services without filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [service],
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => useServices({}), {
@@ -65,7 +70,7 @@ describe('useServices', () => {
   it('builds the query string with filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [service],
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => useServices({ isActive: true }), {

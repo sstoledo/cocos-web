@@ -35,11 +35,6 @@
     "jsxRuntime": "reactClassic"
   },
   "files": {
-    "ignore": [
-      "node_modules",
-      "dist",
-      "coverage",
-      "*.d.ts"
-    ]
+    "ignore": ["node_modules", "dist", "coverage", "*.d.ts"]
   }
 }

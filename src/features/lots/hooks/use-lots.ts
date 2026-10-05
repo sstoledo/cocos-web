@@ -3,14 +3,14 @@ import { getLots } from '../api/get-lots';
 import type { LotListFilters } from '../types';
 
 export function useLots(filters: LotListFilters = {}) {
-  const {
-    data: lots = [],
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['lots', 'list', filters],
     queryFn: () => getLots(filters),
   });
 
-  return { lots, isLoading, error };
+  return {
+    lots: data?.data ?? [],
+    isLoading,
+    error,
+  };
 }

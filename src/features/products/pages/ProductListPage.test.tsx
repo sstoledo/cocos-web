@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Product, ProductListResponse } from '../types';
 import { ProductListPage } from './ProductListPage';
 
 function createWrapper(initialEntries?: string[]) {
@@ -22,7 +23,7 @@ function createWrapper(initialEntries?: string[]) {
   };
 }
 
-const product = {
+const product: Product = {
   id: 'p1',
   code: 'COD-001',
   name: 'Aceite 20W50',
@@ -33,6 +34,11 @@ const product = {
   category: { id: 'cat1', name: 'Lubricantes' },
   createdAt: '2024-01-01T00:00:00.000Z',
   updatedAt: '2024-01-01T00:00:00.000Z',
+};
+
+const mockResponse: ProductListResponse = {
+  data: [product],
+  meta: { page: 1, limit: 10, total: 1 },
 };
 
 describe('ProductListPage', () => {
@@ -47,7 +53,7 @@ describe('ProductListPage', () => {
   it('renders the header, new product link, and filters', () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     render(<ProductListPage />, { wrapper: createWrapper() });
@@ -66,7 +72,7 @@ describe('ProductListPage', () => {
   it('shows a loading state and then the table with products', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [product],
+      json: async () => mockResponse,
     });
 
     render(<ProductListPage />, { wrapper: createWrapper() });
@@ -108,7 +114,7 @@ describe('ProductListPage', () => {
     const user = userEvent.setup();
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     render(<ProductListPage />, { wrapper: createWrapper() });
@@ -134,7 +140,7 @@ describe('ProductListPage', () => {
   it('reads initial filters from the URL', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     render(<ProductListPage />, {

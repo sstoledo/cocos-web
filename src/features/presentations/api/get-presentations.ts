@@ -1,8 +1,11 @@
-import type { Presentation, PresentationListFilters } from '../types';
+import type {
+  PresentationListFilters,
+  PresentationListResponse,
+} from '../types';
 
 export async function getPresentations(
   filters: PresentationListFilters
-): Promise<Presentation[]> {
+): Promise<PresentationListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -20,5 +23,5 @@ export async function getPresentations(
     throw new Error(`Failed to fetch presentations: ${response.status}`);
   }
 
-  return (await response.json()) as Presentation[];
+  return (await response.json()) as PresentationListResponse;
 }

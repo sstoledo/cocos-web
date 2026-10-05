@@ -24,12 +24,15 @@ export function CategoryFormPage() {
   const isEditMode = Boolean(id);
 
   // Fetch all categories for the parent dropdown
-  const { data: allCategories = [], isLoading: isLoadingCategories } = useQuery(
+  const { data: categoriesResponse, isLoading: isLoadingCategories } = useQuery(
     {
       queryKey: ['categories', 'all'],
       queryFn: () => getCategories({}),
+      select: (data) => data.data,
     }
   );
+
+  const allCategories = categoriesResponse ?? [];
 
   const {
     data: category,

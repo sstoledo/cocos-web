@@ -2,12 +2,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { PresentationListResponse } from '../types';
 import { usePresentations } from './use-presentations';
 
-const mockPresentations: Presentation[] = [
+const mockPresentations = [
   { id: 'p1', name: 'Presentación 1', createdAt: '', updatedAt: '' },
   { id: 'p2', name: 'Presentación 2', createdAt: '', updatedAt: '' },
 ];
+
+const mockResponse: PresentationListResponse = {
+  data: mockPresentations,
+  meta: { page: 1, limit: 10, total: 2 },
+};
 
 function wrapper({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
@@ -30,7 +36,7 @@ describe('usePresentations', () => {
   it('fetches presentations', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => mockPresentations,
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => usePresentations({}), { wrapper });
@@ -55,10 +61,3 @@ describe('usePresentations', () => {
     expect(result.current.presentations).toEqual([]);
   });
 });
-
-interface Presentation {
-  id: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}

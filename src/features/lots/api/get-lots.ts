@@ -1,6 +1,8 @@
-import type { Lot, LotListFilters } from '../types';
+import type { LotListFilters, LotListResponse } from '../types';
 
-export async function getLots(filters: LotListFilters = {}): Promise<Lot[]> {
+export async function getLots(
+  filters: LotListFilters
+): Promise<LotListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -18,5 +20,5 @@ export async function getLots(filters: LotListFilters = {}): Promise<Lot[]> {
     throw new Error(`Failed to fetch lots: ${response.status}`);
   }
 
-  return (await response.json()) as Lot[];
+  return (await response.json()) as LotListResponse;
 }
