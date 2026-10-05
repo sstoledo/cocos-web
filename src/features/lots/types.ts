@@ -30,4 +30,15 @@ export interface LotListFilters {
   q?: string;
 }
 
+export interface LotListMeta {
+  page: number;
+  limit: number;
+  total: number;
+}
+
+export interface LotListResponse {
+  data: Lot[];
+  meta: LotListMeta;
+}
+
 export type { LotFormValues } from './schemas/lot-schema';

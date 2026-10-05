@@ -15,6 +15,17 @@ export interface SupplierListFilters {
   isActive?: boolean;
 }
 
+export interface SupplierListMeta {
+  page: number;
+  limit: number;
+  total: number;
+}
+
+export interface SupplierListResponse {
+  data: Supplier[];
+  meta: SupplierListMeta;
+}
+
 export type SupplierFormValues = {
   name: string;
   phone?: string;

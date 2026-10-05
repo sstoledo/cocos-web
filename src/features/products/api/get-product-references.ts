@@ -6,6 +6,14 @@ export type ProductReferences = {
   categories: ProductReference[];
 };
 
+async function unwrap<T>(response: Response): Promise<T[]> {
+  if (!response.ok) {
+    throw new Error(`Failed: ${response.status}`);
+  }
+  const data = await response.json();
+  return data.data ?? data; // handle both paginated and legacy
+}
+
 export async function getProductReferences(): Promise<ProductReferences> {
   const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -16,24 +24,10 @@ export async function getProductReferences(): Promise<ProductReferences> {
       fetch(`${baseUrl}/categories`, { credentials: 'include' }),
     ]);
 
-  if (!presentationsResponse.ok) {
-    throw new Error(
-      `Failed to fetch presentations: ${presentationsResponse.status}`
-    );
-  }
-
-  if (!brandsResponse.ok) {
-    throw new Error(`Failed to fetch brands: ${brandsResponse.status}`);
-  }
-
-  if (!categoriesResponse.ok) {
-    throw new Error(`Failed to fetch categories: ${categoriesResponse.status}`);
-  }
-
   const [presentations, brands, categories] = await Promise.all([
-    presentationsResponse.json() as Promise<ProductReference[]>,
-    brandsResponse.json() as Promise<ProductReference[]>,
-    categoriesResponse.json() as Promise<ProductReference[]>,
+    unwrap<ProductReference>(presentationsResponse),
+    unwrap<ProductReference>(brandsResponse),
+    unwrap<ProductReference>(categoriesResponse),
   ]);
 
   return { presentations, brands, categories };

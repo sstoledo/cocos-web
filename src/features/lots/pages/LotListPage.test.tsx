@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Lot, LotListResponse } from '../types';
 import { LotListPage } from './LotListPage';
 
 function createWrapper(initialEntries?: string[]) {
@@ -22,7 +23,7 @@ function createWrapper(initialEntries?: string[]) {
   };
 }
 
-const lot = {
+const lot: Lot = {
   id: 'lot-1',
   lotNumber: 'L-2026-001',
   supplier: { id: 's1', name: 'Proveedor A' },
@@ -48,6 +49,11 @@ const lot = {
   ],
 };
 
+const mockResponse: LotListResponse = {
+  data: [lot],
+  meta: { page: 1, limit: 10, total: 1 },
+};
+
 describe('LotListPage', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
@@ -60,7 +66,7 @@ describe('LotListPage', () => {
   it('renders the header, new lot link, and filters', () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     render(<LotListPage />, { wrapper: createWrapper() });
@@ -78,7 +84,7 @@ describe('LotListPage', () => {
   it('shows a loading state and then the table with lots', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [lot],
+      json: async () => mockResponse,
     });
 
     render(<LotListPage />, { wrapper: createWrapper() });
@@ -120,7 +126,7 @@ describe('LotListPage', () => {
     const user = userEvent.setup();
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     render(<LotListPage />, { wrapper: createWrapper() });
@@ -142,7 +148,7 @@ describe('LotListPage', () => {
   it('reads the initial filter from the URL', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => [],
+      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
     });
 
     render(<LotListPage />, {

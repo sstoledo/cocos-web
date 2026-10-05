@@ -2,12 +2,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { BrandListResponse } from '../types';
 import { useBrands } from './use-brands';
 
-const mockBrands: Brand[] = [
+const mockBrands = [
   { id: 'b1', name: 'Marca 1', createdAt: '', updatedAt: '' },
   { id: 'b2', name: 'Marca 2', createdAt: '', updatedAt: '' },
 ];
+
+const mockResponse: BrandListResponse = {
+  data: mockBrands,
+  meta: { page: 1, limit: 10, total: 2 },
+};
 
 function wrapper({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
@@ -30,7 +36,7 @@ describe('useBrands', () => {
   it('fetches brands', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => mockBrands,
+      json: async () => mockResponse,
     });
 
     const { result } = renderHook(() => useBrands({}), { wrapper });
@@ -55,10 +61,3 @@ describe('useBrands', () => {
     expect(result.current.brands).toEqual([]);
   });
 });
-
-interface Brand {
-  id: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}

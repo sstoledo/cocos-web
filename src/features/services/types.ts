@@ -15,4 +15,15 @@ export interface ServiceListFilters {
   isActive?: boolean;
 }
 
+export interface ServiceListMeta {
+  page: number;
+  limit: number;
+  total: number;
+}
+
+export interface ServiceListResponse {
+  data: Service[];
+  meta: ServiceListMeta;
+}
+
 export type { ServiceFormValues } from './schemas/service-schema';

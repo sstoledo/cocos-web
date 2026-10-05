@@ -3,14 +3,14 @@ import { getServices } from '../api/get-services';
 import type { ServiceListFilters } from '../types';
 
 export function useServices(filters: ServiceListFilters) {
-  const {
-    data: services = [],
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['services', 'list', filters],
     queryFn: () => getServices(filters),
   });
 
-  return { services, isLoading, error };
+  return {
+    services: data?.data ?? [],
+    isLoading,
+    error,
+  };
 }

@@ -1,8 +1,8 @@
-import type { Supplier, SupplierListFilters } from '../types';
+import type { SupplierListFilters, SupplierListResponse } from '../types';
 
 export async function getSuppliers(
   filters: SupplierListFilters
-): Promise<Supplier[]> {
+): Promise<SupplierListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -14,9 +14,7 @@ export async function getSuppliers(
   }
 
   const queryString = searchParams.toString();
-  const url = `${import.meta.env.VITE_API_URL}/suppliers${
-    queryString ? `?${queryString}` : ''
-  }`;
+  const url = `${import.meta.env.VITE_API_URL}/suppliers${queryString ? `?${queryString}` : ''}`;
 
   const response = await fetch(url, {
     credentials: 'include',
@@ -26,5 +24,5 @@ export async function getSuppliers(
     throw new Error(`Failed to fetch suppliers: ${response.status}`);
   }
 
-  return (await response.json()) as Supplier[];
+  return (await response.json()) as SupplierListResponse;
 }

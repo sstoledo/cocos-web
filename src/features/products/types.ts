@@ -34,3 +34,14 @@ export interface ProductListFilters {
   q?: string;
   isActive?: boolean;
 }
+
+export interface ProductListMeta {
+  page: number;
+  limit: number;
+  total: number;
+}
+
+export interface ProductListResponse {
+  data: Product[];
+  meta: ProductListMeta;
+}

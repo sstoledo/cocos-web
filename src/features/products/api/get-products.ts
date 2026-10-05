@@ -1,8 +1,8 @@
-import type { Product, ProductListFilters } from '../types';
+import type { ProductListFilters, ProductListResponse } from '../types';
 
 export async function getProducts(
   filters: ProductListFilters
-): Promise<Product[]> {
+): Promise<ProductListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -24,5 +24,5 @@ export async function getProducts(
     throw new Error(`Failed to fetch products: ${response.status}`);
   }
 
-  return (await response.json()) as Product[];
+  return (await response.json()) as ProductListResponse;
 }

@@ -78,19 +78,29 @@ const createdLot = {
   ],
 };
 
+const mockSuppliersResponse = {
+  data: suppliers,
+  meta: { page: 1, limit: 10, total: 1 },
+};
+
+const mockProductsResponse = {
+  data: products,
+  meta: { page: 1, limit: 10, total: 1 },
+};
+
 function mockFetch() {
   return vi.fn((url: string) => {
     if (url === 'http://localhost:3000/api/suppliers') {
       return Promise.resolve({
         ok: true,
-        json: async () => suppliers,
+        json: async () => mockSuppliersResponse,
       });
     }
 
     if (url === 'http://localhost:3000/api/products') {
       return Promise.resolve({
         ok: true,
-        json: async () => products,
+        json: async () => mockProductsResponse,
       });
     }
 

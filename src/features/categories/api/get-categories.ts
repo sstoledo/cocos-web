@@ -1,8 +1,8 @@
-import type { Category, CategoryListFilters } from '../types';
+import type { CategoryListFilters, CategoryListResponse } from '../types';
 
 export async function getCategories(
   filters: CategoryListFilters
-): Promise<Category[]> {
+): Promise<CategoryListResponse> {
   const searchParams = new URLSearchParams();
 
   if (filters.q) {
@@ -20,5 +20,5 @@ export async function getCategories(
     throw new Error(`Failed to fetch categories: ${response.status}`);
   }
 
-  return (await response.json()) as Category[];
+  return (await response.json()) as CategoryListResponse;
 }
