@@ -163,55 +163,57 @@ export function CloseCashClosingPage() {
         <PageTitle>Cierre de caja</PageTitle>
       </PageHeader>
       <PageContent>
-        <SectionCard title="Período abierto">
-          {previewQuery.isLoading ? (
-            <PreviewSkeleton />
-          ) : previewQuery.error || !preview ? (
-            <div
-              className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
-              role="alert"
-            >
-              No se pudo cargar la vista previa. Intentá de nuevo más tarde.
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    Efectivo esperado
-                  </dt>
-                  <dd className="text-foreground">{preview.expectedCash}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    Tarjeta esperada
-                  </dt>
-                  <dd className="text-foreground">{preview.expectedCard}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    Transferencia esperada
-                  </dt>
-                  <dd className="text-foreground">
-                    {preview.expectedTransfer}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">Ventas</dt>
-                  <dd className="text-foreground">{preview.salesCount}</dd>
-                </div>
-              </dl>
-              <p className="text-sm text-muted-foreground">
-                Desde:{' '}
-                <span className="text-foreground">
-                  {preview.periodStart
-                    ? formatDateTime(preview.periodStart)
-                    : 'Sin cierres previos'}
-                </span>
-              </p>
-            </div>
-          )}
-        </SectionCard>
+        {!closing && (
+          <SectionCard title="Período abierto">
+            {previewQuery.isLoading ? (
+              <PreviewSkeleton />
+            ) : previewQuery.error || !preview ? (
+              <div
+                className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
+                role="alert"
+              >
+                No se pudo cargar la vista previa. Intentá de nuevo más tarde.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div>
+                    <dt className="text-sm text-muted-foreground">
+                      Efectivo esperado
+                    </dt>
+                    <dd className="text-foreground">{preview.expectedCash}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm text-muted-foreground">
+                      Tarjeta esperada
+                    </dt>
+                    <dd className="text-foreground">{preview.expectedCard}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm text-muted-foreground">
+                      Transferencia esperada
+                    </dt>
+                    <dd className="text-foreground">
+                      {preview.expectedTransfer}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm text-muted-foreground">Ventas</dt>
+                    <dd className="text-foreground">{preview.salesCount}</dd>
+                  </div>
+                </dl>
+                <p className="text-sm text-muted-foreground">
+                  Desde:{' '}
+                  <span className="text-foreground">
+                    {preview.periodStart
+                      ? formatDateTime(preview.periodStart)
+                      : 'Sin cierres previos'}
+                  </span>
+                </p>
+              </div>
+            )}
+          </SectionCard>
+        )}
 
         <SectionCard title="Cerrar caja">
           {closing ? (

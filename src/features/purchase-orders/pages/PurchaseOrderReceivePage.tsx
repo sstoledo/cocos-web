@@ -239,7 +239,10 @@ export function PurchaseOrderReceivePage() {
     );
   }
 
-  if (!RECEIVABLE_STATUSES.includes(purchaseOrder.status)) {
+  if (
+    !RECEIVABLE_STATUSES.includes(purchaseOrder.status) &&
+    !receiveMutation.isSuccess
+  ) {
     return (
       <div className="p-6">
         <div className="rounded-md border border-border bg-muted/50 p-4 text-foreground">

@@ -21,15 +21,15 @@ export const Switch = React.forwardRef<HTMLElement, SwitchProps>(
           className={cn(
             'relative h-6 w-11 rounded-full bg-muted transition-colors',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-            'data-[checked=true]:bg-primary data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+            'data-checked:bg-primary data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
             className
           )}
           {...props}
         >
           <BaseSwitch.Thumb
             className={cn(
-              'block h-5 w-5 rounded-full bg-background shadow transition-transform',
-              'data-[checked=true]:translate-x-5 data-[checked=true]:bg-primary-foreground',
+              'block h-5 w-5 rounded-full bg-background shadow transition-transform duration-200 ease-out',
+              'data-checked:translate-x-5 data-checked:bg-primary-foreground',
               'data-[unchecked]:translate-x-0.5'
             )}
           />
