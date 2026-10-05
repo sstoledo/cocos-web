@@ -28,6 +28,8 @@ export interface Lot {
 
 export interface LotListFilters {
   q?: string;
+  page?: number;
+  limit?: number;
 }
 
 export interface LotListMeta {
