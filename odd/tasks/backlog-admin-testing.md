@@ -18,10 +18,10 @@
 
 | # | Módulo | Síntoma | Detalle |
 |---|---|---|---|
-| B-04 | **Marcas** | "Ver" → 404 | Falta ruta `/brands/:id` o `BrandDetailPage` no existe / no registrada |
-| B-05 | **Categorías** | "Ver" → 404 | Falta ruta `/categories/:id` o `CategoryDetailPage` |
-| B-06 | **Presentaciones** | "Ver" → 404 | Falta ruta `/presentations/:id` |
-| B-07 | **Proveedores** | "Ver" → 404 | Falta ruta `/suppliers/:id` |
+| B-04 | **Marcas** | "Ver" → 404 | ✅ FASE 2 (PR #104): `BrandDetailPage` + ruta `/brands/:id` |
+| B-05 | **Categorías** | "Ver" → 404 | ✅ FASE 2 (PR #104): `CategoryDetailPage` + ruta `/categories/:id` |
+| B-06 | **Presentaciones** | "Ver" → 404 | No aplica: queda list-only por decisión de usuario |
+| B-07 | **Proveedores** | "Ver" → 404 | ✅ FASE 2 (PR #104): `SupplierDetailPage` + ruta `/suppliers/:id` |
 | B-08 | **Categorías** | No crea (ni con ni sin padre) | Validación backend o frontend bloquea; revisar `CategorySchema` y `parentId` opcional |
 | B-09 | **Productos** | No crea + toggle activo no funciona | Form submit falla + checkbox no dispara `onChange` |
 | B-10 | **Usuarios** | Página "Próximamente" | No implementada `UsersPage` / CRUD usuarios |
