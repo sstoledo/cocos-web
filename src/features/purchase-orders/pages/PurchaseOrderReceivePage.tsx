@@ -11,6 +11,7 @@ import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router';
 import { z } from 'zod';
+import { useState } from 'react';
 import { usePurchaseOrder } from '../hooks/use-purchase-order';
 import { useReceivePurchaseOrder } from '../hooks/use-receive-purchase-order';
 import { getPurchaseOrderErrorMessage } from '../lib/purchase-order-error-messages';
@@ -88,12 +89,24 @@ function ReceiveForm({
     defaultValues: toDefaultValues(receivableLines),
   });
 
+  // Local submitting guard: set immediately on submit to prevent double-click
+  // before React Query's isPending becomes true.
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const fullyReceivedLines = purchaseOrder.lines.filter(
     (line) => remainingOf(line) <= 0
   );
 
+  function handleSubmitWithGuard(values: ReceivePurchaseOrderFormValues) {
+    setIsSubmitting(true);
+    onSubmit(values);
+    // mutate() is fire-and-forget (no Promise), so we reset after a brief delay
+    // to keep the button disabled briefly and prevent rapid double-clicks.
+    setTimeout(() => setIsSubmitting(false), 500);
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit(handleSubmitWithGuard)} className="space-y-6" noValidate>
       <div className="space-y-4">
         {receivableLines.map((line, index) => {
           const itemErrors = errors.lines?.[index];
@@ -196,8 +209,8 @@ function ReceiveForm({
       </div>
 
       <div className="flex items-center gap-4 pt-4">
-        <Button type="submit" disabled={isPending}>
-          {isPending ? 'Registrando…' : 'Registrar recepción'}
+        <Button type="submit" disabled={isPending || isSubmitting}>
+          {isPending || isSubmitting ? 'Registrando…' : 'Registrar recepción'}
         </Button>
         <Link
           to={`/purchase-orders/${purchaseOrder.id}`}

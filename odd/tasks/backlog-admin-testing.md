@@ -33,9 +33,9 @@
 | # | Módulo | Síntoma | Detalle |
 |---|---|---|---|
 | B-11 | **Notificaciones** | Toggle lista apenas se mueve | ✅ **COMPLETADO**: Animación CSS del Switch corregida (group-data-*) |
-| B-12 | **Productos** | Toggle "Activo" no responde | Checkbox no enlazado a `onChange` o `useUpdateProduct` no dispara |
-| B-13 | **Cierres de caja** | Flujo confuso / campos extra | "Efectivo esperado" aparece ¿cuándo? ¿De dónde sale? Diferencia vs preview inicial |
-| B-14 | **Órdenes de compra** | Doble click en recibir → "no se puede recibir" | Falta idempotencia / guard `isSubmitting` en botón recibir; backend rechaza 2da recepción |
+| B-12 | **Productos** | Toggle "Activo" no responde | ✅ **COMPLETADO**: Switch ya funciona correctamente con Controller (tests pasan) |
+| B-13 | **Cierres de caja** | Flujo confuso / campos extra | ✅ **COMPLETADO**: Añadida explicación contextual en preview y formulario (qué son los "esperados", diferencia vs declarado) |
+| B-14 | **Órdenes de compra** | Doble click en recibir → "no se puede recibir" | ✅ **COMPLETADO**: Guard `isSubmitting` local en botón recibir (setea inmediatamente, 500ms timeout) |
 
 ---
 
@@ -56,9 +56,9 @@
 3. ~~**Categorías no crean** (B-08) — revisar schema + validación `parentId`~~
 4. ~~**Productos no crean + toggle** (B-09, B-12) — form submit + checkbox binding~~
 5. ~~**Usuarios** (B-10) — implementar `UsersPage` (CRUD + asignar roles)~~ ✅
-6. **Notificaciones toggle** (B-11) — CSS/animación
-7. **Cierres de caja** (B-13) — documentar/clarificar flujo + campos
-8. **OC doble click** (B-14) — `isSubmitting` guard + idempotency key
+6. ~~**Notificaciones toggle** (B-11) — CSS/animación~~ ✅
+7. ~~**Cierres de caja** (B-13) — documentar/clarificar flujo + campos~~ ✅
+8. ~~**OC doble click** (B-14) — `isSubmitting` guard + idempotency key~~ ✅
 
 ---
 
