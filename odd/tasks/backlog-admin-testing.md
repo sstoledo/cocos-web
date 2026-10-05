@@ -24,7 +24,7 @@
 | B-07 | **Proveedores** | "Ver" → 404 | ✅ FASE 2 (PR #104): `SupplierDetailPage` + ruta `/suppliers/:id` |
 | B-08 | **Categorías** | No crea (ni con ni sin padre) | Validación backend o frontend bloquea; revisar `CategorySchema` y `parentId` opcional |
 | B-09 | **Productos** | No crea + toggle activo no funciona | Form submit falla + checkbox no dispara `onChange` |
-| B-10 | **Usuarios** | Página "Próximamente" | No implementada `UsersPage` / CRUD usuarios |
+| B-10 | **Usuarios** | Página "Próximamente" | ✅ **COMPLETADO**: CRUD completo (list, create, edit, detail, assign-role) backend + frontend |
 
 ---
 
@@ -32,7 +32,7 @@
 
 | # | Módulo | Síntoma | Detalle |
 |---|---|---|---|
-| B-11 | **Notificaciones** | Toggle lista apenas se mueve | Animación/transición CSS rota; estado sí cambia (leído/no leído persiste) |
+| B-11 | **Notificaciones** | Toggle lista apenas se mueve | ✅ **COMPLETADO**: Animación CSS del Switch corregida (group-data-*) |
 | B-12 | **Productos** | Toggle "Activo" no responde | Checkbox no enlazado a `onChange` o `useUpdateProduct` no dispara |
 | B-13 | **Cierres de caja** | Flujo confuso / campos extra | "Efectivo esperado" aparece ¿cuándo? ¿De dónde sale? Diferencia vs preview inicial |
 | B-14 | **Órdenes de compra** | Doble click en recibir → "no se puede recibir" | Falta idempotencia / guard `isSubmitting` en botón recibir; backend rechaza 2da recepción |
@@ -45,16 +45,17 @@
 - Vehículos: CRUD + asociación a cliente
 - Órdenes de compra: Crear → Order → Receive (salvo doble click)
 - Marcas: **Crear** funciona (solo "Ver" falla)
+- **Usuarios: CRUD completo (list, create, edit, detail, assign-role) — Admin only**
 
 ---
 
 ## 📋 PLAN DE ATAQUE sugerido (orden)
 
-1. **Fix patrón `map is not a function`** (B-01, B-02, B-03) — uno arregla los 3 (hook genérico o API response unwrap)
-2. **Rutas detail faltantes** (B-04 a B-07) — crear `XxxDetailPage` + registrar en router
-3. **Categorías no crean** (B-08) — revisar schema + validación `parentId`
-4. **Productos no crean + toggle** (B-09, B-12) — form submit + checkbox binding
-5. **Usuarios** (B-10) — implementar `UsersPage` (CRUD + asignar roles)
+1. ~~**Fix patrón `map is not a function`** (B-01, B-02, B-03) — uno arregla los 3 (hook genérico o API response unwrap)~~ ✅
+2. ~~**Rutas detail faltantes** (B-04 a B-07) — crear `XxxDetailPage` + registrar en router~~ ✅
+3. ~~**Categorías no crean** (B-08) — revisar schema + validación `parentId`~~
+4. ~~**Productos no crean + toggle** (B-09, B-12) — form submit + checkbox binding~~
+5. ~~**Usuarios** (B-10) — implementar `UsersPage` (CRUD + asignar roles)~~ ✅
 6. **Notificaciones toggle** (B-11) — CSS/animación
 7. **Cierres de caja** (B-13) — documentar/clarificar flujo + campos
 8. **OC doble click** (B-14) — `isSubmitting` guard + idempotency key
