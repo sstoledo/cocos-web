@@ -22,8 +22,8 @@
 | B-05 | **Categorías** | "Ver" → 404 | ✅ FASE 2 (PR #104): `CategoryDetailPage` + ruta `/categories/:id` |
 | B-06 | **Presentaciones** | "Ver" → 404 | No aplica: queda list-only por decisión de usuario |
 | B-07 | **Proveedores** | "Ver" → 404 | ✅ FASE 2 (PR #104): `SupplierDetailPage` + ruta `/suppliers/:id` |
-| B-08 | **Categorías** | No crea (ni con ni sin padre) | Validación backend o frontend bloquea; revisar `CategorySchema` y `parentId` opcional |
-| B-09 | **Productos** | No crea + toggle activo no funciona | Form submit falla + checkbox no dispara `onChange` |
+| B-08 | **Categorías** | No crea (ni con ni sin padre) | ✅ **COMPLETADO**: Create funciona (tests pasan: service + api + page) |
+| B-09 | **Productos** | No crea + toggle activo no funciona | ✅ **COMPLETADO**: Create + toggle funcionan (B-12 ✅) |
 | B-10 | **Usuarios** | Página "Próximamente" | ✅ **COMPLETADO**: CRUD completo (list, create, edit, detail, assign-role) backend + frontend |
 
 ---
@@ -53,8 +53,8 @@
 
 1. ~~**Fix patrón `map is not a function`** (B-01, B-02, B-03) — uno arregla los 3 (hook genérico o API response unwrap)~~ ✅
 2. ~~**Rutas detail faltantes** (B-04 a B-07) — crear `XxxDetailPage` + registrar en router~~ ✅
-3. ~~**Categorías no crean** (B-08) — revisar schema + validación `parentId`~~
-4. ~~**Productos no crean + toggle** (B-09, B-12) — form submit + checkbox binding~~
+3. ~~**Categorías no crean** (B-08) — ✅ COMPLETADO (tests pasan)
+4. ~~**Productos no crean + toggle** (B-09, B-12) — ✅ COMPLETADO (create + toggle OK)
 5. ~~**Usuarios** (B-10) — implementar `UsersPage` (CRUD + asignar roles)~~ ✅
 6. ~~**Notificaciones toggle** (B-11) — CSS/animación~~ ✅
 7. ~~**Cierres de caja** (B-13) — documentar/clarificar flujo + campos~~ ✅
