@@ -20,7 +20,10 @@ const multiPageResponse: PurchaseOrderListResponse = {
   meta: { page: 1, limit: 10, total: 25 },
 };
 
-const suppliersResponse = { data: [{ id: 'sup1', name: 'Repuestos SA' }], meta: { page: 1, limit: 100, total: 1 } };
+const suppliersResponse = {
+  data: [{ id: 'sup1', name: 'Repuestos SA' }],
+  meta: { page: 1, limit: 100, total: 1 },
+};
 
 function mockFetchWithPurchaseOrders(response: object) {
   return vi.fn().mockImplementation(async (url: string) => {

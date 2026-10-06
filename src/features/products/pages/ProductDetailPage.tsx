@@ -112,13 +112,17 @@ export function ProductDetailPage() {
             )}
             {product.barcode && (
               <div>
-                <dt className="text-sm text-muted-foreground">Código de barras</dt>
+                <dt className="text-sm text-muted-foreground">
+                  Código de barras
+                </dt>
                 <dd className="text-foreground font-mono">{product.barcode}</dd>
               </div>
             )}
             {product.taxRate && (
               <div>
-                <dt className="text-sm text-muted-foreground">Tasa de impuesto</dt>
+                <dt className="text-sm text-muted-foreground">
+                  Tasa de impuesto
+                </dt>
                 <dd className="text-foreground">{product.taxRate}%</dd>
               </div>
             )}
@@ -130,11 +134,15 @@ export function ProductDetailPage() {
             )}
             <div>
               <dt className="text-sm text-muted-foreground">Creada</dt>
-              <dd className="text-foreground">{formatDate(product.createdAt)}</dd>
+              <dd className="text-foreground">
+                {formatDate(product.createdAt)}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">Actualizada</dt>
-              <dd className="text-foreground">{formatDate(product.updatedAt)}</dd>
+              <dd className="text-foreground">
+                {formatDate(product.updatedAt)}
+              </dd>
             </div>
           </dl>
         </SectionCard>

@@ -290,7 +290,7 @@ describe('CloseCashClosingPage', () => {
     ).toBeInTheDocument();
   });
 
-it('shows the closing result after a successful close (does not refetch preview)', async () => {
+  it('shows the closing result after a successful close (does not refetch preview)', async () => {
     renderPage({ previewAfterClose: emptyPreview });
 
     await waitFor(() =>
@@ -303,7 +303,9 @@ it('shows the closing result after a successful close (does not refetch preview)
     // After successful close, the component shows the ClosingResult component
     // (not the preview), so verify the closing result is shown
     await waitFor(() =>
-      expect(screen.getByText('Cierre registrado correctamente.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Cierre registrado correctamente.')
+      ).toBeInTheDocument()
     );
     // The preview section is hidden after close (shows ClosingResult instead)
     expect(screen.queryByText('Sin cierres previos')).not.toBeInTheDocument();

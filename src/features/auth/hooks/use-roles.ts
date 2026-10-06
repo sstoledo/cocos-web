@@ -6,7 +6,7 @@ export function useRoles() {
   const { data, isLoading } = useQuery({
     queryKey: ['auth', 'roles'],
     queryFn: getRoles,
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
   });
 
   return {

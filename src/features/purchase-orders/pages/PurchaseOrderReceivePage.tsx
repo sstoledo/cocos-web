@@ -8,10 +8,10 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router';
 import { z } from 'zod';
-import { useState } from 'react';
 import { usePurchaseOrder } from '../hooks/use-purchase-order';
 import { useReceivePurchaseOrder } from '../hooks/use-receive-purchase-order';
 import { getPurchaseOrderErrorMessage } from '../lib/purchase-order-error-messages';
@@ -106,7 +106,11 @@ function ReceiveForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(handleSubmitWithGuard)} className="space-y-6" noValidate>
+    <form
+      onSubmit={handleSubmit(handleSubmitWithGuard)}
+      className="space-y-6"
+      noValidate
+    >
       <div className="space-y-4">
         {receivableLines.map((line, index) => {
           const itemErrors = errors.lines?.[index];

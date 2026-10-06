@@ -42,9 +42,21 @@ function mockCatalogFetch() {
       };
     }
     if (url.includes('/services')) {
-      return { ok: true, json: async () => ({ data: [buildService()], meta: { page: 1, limit: 100, total: 1 } }) };
+      return {
+        ok: true,
+        json: async () => ({
+          data: [buildService()],
+          meta: { page: 1, limit: 100, total: 1 },
+        }),
+      };
     }
-    return { ok: true, json: async () => ({ data: [buildProduct()], meta: { page: 1, limit: 100, total: 1 } }) };
+    return {
+      ok: true,
+      json: async () => ({
+        data: [buildProduct()],
+        meta: { page: 1, limit: 100, total: 1 },
+      }),
+    };
   });
 }
 
