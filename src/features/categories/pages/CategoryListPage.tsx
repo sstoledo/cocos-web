@@ -8,6 +8,7 @@ import { Link, useSearchParams } from 'react-router';
 import { CategoryFilters } from '../components/CategoryFilters';
 import { CategoryTable } from '../components/CategoryTable';
 import { useCategories } from '../hooks/use-categories';
+import { useDeleteCategory } from '../hooks/use-delete-category';
 import type { CategoryListFilters } from '../types';
 
 function filtersFromSearchParams(
@@ -22,6 +23,7 @@ export function CategoryListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
   const { categories, isLoading, error } = useCategories(filters);
+  const deleteCategory = useDeleteCategory();
   const { user } = useUser();
 
   const canEdit = user?.role?.name === 'Admin';
@@ -34,6 +36,21 @@ export function CategoryListPage() {
     }
 
     setSearchParams(nextSearchParams, { replace: true });
+  }
+
+  async function handleDelete(category: { id: string; name: string }) {
+    if (
+      !window.confirm(
+        `¿Eliminar la categoría "${category.name}"? Esta acción no se puede deshacer.`
+      )
+    ) {
+      return;
+    }
+    try {
+      await deleteCategory.mutateAsync(category.id);
+    } catch {
+      // Error handled by mutation
+    }
   }
 
   return (
@@ -69,7 +86,11 @@ export function CategoryListPage() {
                 tarde.
               </div>
             ) : (
-              <CategoryTable categories={categories} canEdit={canEdit} />
+              <CategoryTable
+                categories={categories}
+                canEdit={canEdit}
+                onDelete={handleDelete}
+              />
             )}
           </div>
         </SectionCard>

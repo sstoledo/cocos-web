@@ -12,5 +12,6 @@ export async function getSuppliers(): Promise<Supplier[]> {
     throw new Error(`Failed to fetch suppliers: ${response.status}`);
   }
 
-  return (await response.json()) as Supplier[];
+  const responseData = await response.json();
+  return responseData.data as Supplier[];
 }

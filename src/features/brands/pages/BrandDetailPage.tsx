@@ -109,7 +109,7 @@ export function BrandDetailPage() {
                       <td className="p-3 font-mono">{product.code}</td>
                       <td className="p-3">
                         <Link
-                          to={`/products/${product.id}/edit`}
+                          to={`/products/${product.id}`}
                           className="text-primary hover:underline"
                         >
                           {product.name}

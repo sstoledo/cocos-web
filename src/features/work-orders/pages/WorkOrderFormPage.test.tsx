@@ -89,8 +89,8 @@ function mockFetch(postResponse: PostResponse) {
           data: [buildVehicle()],
           meta: { page: 1, limit: 100, total: 1 },
         };
-      } else if (url.includes('/services')) {
-        body = [buildService()];
+} else if (url.includes('/services')) {
+        body = { data: [buildService()], meta: { page: 1, limit: 100, total: 1 } };
       }
 
       return { ok: true, json: async () => body } as Response;
@@ -217,7 +217,7 @@ describe('WorkOrderFormPage (edit)', () => {
             meta: { page: 1, limit: 100, total: 1 },
           };
         } else if (url.includes('/services')) {
-          body = [buildService()];
+          body = { data: [buildService()], meta: { page: 1, limit: 100, total: 1 } };
         }
 
         return { ok: true, json: async () => body } as Response;

@@ -17,6 +17,7 @@ import { LotListPage } from '@/features/lots/pages/LotListPage';
 import { NotificationListPage } from '@/features/notifications/pages/NotificationListPage';
 import { PresentationFormPage } from '@/features/presentations/pages/PresentationFormPage';
 import { PresentationListPage } from '@/features/presentations/pages/PresentationListPage';
+import { ProductDetailPage } from '@/features/products/pages/ProductDetailPage';
 import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
 import { PurchaseOrderDetailPage } from '@/features/purchase-orders/pages/PurchaseOrderDetailPage';
@@ -39,6 +40,8 @@ import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
 import { SupplierDetailPage } from '@/features/suppliers/pages/SupplierDetailPage';
 import { SupplierFormPage } from '@/features/suppliers/pages/SupplierFormPage';
 import { SupplierListPage } from '@/features/suppliers/pages/SupplierListPage';
+import { UserDetailPage } from '@/features/users/pages/UserDetailPage';
+import { UserFormPage } from '@/features/users/pages/UserFormPage';
 import { UserListPage } from '@/features/users/pages/UserListPage';
 import { VehicleFormPage } from '@/features/vehicles/pages/VehicleFormPage';
 import { VehicleListPage } from '@/features/vehicles/pages/VehicleListPage';
@@ -83,6 +86,7 @@ const routes: RouteObject[] = [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       guardedRoute('dashboard', <DashboardPage />),
       guardedRoute('products', <ProductListPage />),
+      guardedRoute('products/:id', <ProductDetailPage />),
       guardedRoute('products/new', <ProductFormPage />, 'Admin'),
       guardedRoute('products/:id/edit', <ProductFormPage />, 'Admin'),
       guardedRoute('products/:id/stock', <ProductStockPage />),
@@ -168,7 +172,10 @@ const routes: RouteObject[] = [
         ['Admin', 'Purchasing', 'Warehouse']
       ),
       guardedRoute('notifications', <NotificationListPage />),
-      guardedRoute('users', <UserListPage />),
+      guardedRoute('users', <UserListPage />, 'Admin'),
+      guardedRoute('users/:id', <UserDetailPage />, 'Admin'),
+      guardedRoute('users/new', <UserFormPage />, 'Admin'),
+      guardedRoute('users/:id/edit', <UserFormPage />, 'Admin'),
       guardedRoute('cash-closings', <CashClosingsListPage />, [
         'Admin',
         'Reception',

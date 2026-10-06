@@ -64,11 +64,11 @@ function mockFetch(behavior: MockBehavior = {}) {
 
   return vi.fn((url: string, init?: RequestInit) => {
     if (url === `${API}/suppliers`) {
-      return Promise.resolve({ ok: true, json: async () => suppliers });
+      return Promise.resolve({ ok: true, json: async () => ({ data: suppliers, meta: { page: 1, limit: 100, total: suppliers.length } }) });
     }
 
     if (url === `${API}/products`) {
-      return Promise.resolve({ ok: true, json: async () => products });
+      return Promise.resolve({ ok: true, json: async () => ({ data: products, meta: { page: 1, limit: 100, total: products.length } }) });
     }
 
     if (url === `${API}/purchase-orders` && init?.method === 'POST') {

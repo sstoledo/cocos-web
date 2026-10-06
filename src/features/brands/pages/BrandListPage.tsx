@@ -8,6 +8,7 @@ import { Link, useSearchParams } from 'react-router';
 import { BrandFilters } from '../components/BrandFilters';
 import { BrandTable } from '../components/BrandTable';
 import { useBrands } from '../hooks/use-brands';
+import { useDeleteBrand } from '../hooks/use-delete-brand';
 import type { BrandListFilters } from '../types';
 
 function filtersFromSearchParams(
@@ -22,6 +23,7 @@ export function BrandListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
   const { brands, isLoading, error } = useBrands(filters);
+  const deleteBrand = useDeleteBrand();
   const { user } = useUser();
 
   const canEdit = user?.role?.name === 'Admin';
@@ -34,6 +36,21 @@ export function BrandListPage() {
     }
 
     setSearchParams(nextSearchParams, { replace: true });
+  }
+
+  async function handleDelete(brand: { id: string; name: string }) {
+    if (
+      !window.confirm(
+        `¿Eliminar la marca "${brand.name}"? Esta acción no se puede deshacer.`
+      )
+    ) {
+      return;
+    }
+    try {
+      await deleteBrand.mutateAsync(brand.id);
+    } catch {
+      // Error handled by mutation
+    }
   }
 
   return (
@@ -68,7 +85,11 @@ export function BrandListPage() {
                 No se pudieron cargar las marcas. Intentá de nuevo más tarde.
               </div>
             ) : (
-              <BrandTable brands={brands} canEdit={canEdit} />
+              <BrandTable
+                brands={brands}
+                canEdit={canEdit}
+                onDelete={handleDelete}
+              />
             )}
           </div>
         </SectionCard>

@@ -58,7 +58,7 @@ describe('useSuppliers', () => {
   it('fetches suppliers with default filters', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => mockSuppliers,
+      json: async () => ({ data: mockSuppliers, meta: { page: 1, limit: 10, total: mockSuppliers.length } }),
     });
 
     const { result } = renderHook(() => useSuppliers({}), {
@@ -74,7 +74,7 @@ describe('useSuppliers', () => {
   it('fetches suppliers with query filter', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => mockSuppliers,
+      json: async () => ({ data: mockSuppliers, meta: { page: 1, limit: 10, total: mockSuppliers.length } }),
     });
 
     const filters: SupplierListFilters = { q: 'Proveedor' };

@@ -18,14 +18,6 @@ function formatPrice(price: string): string {
   }).format(num);
 }
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('es-AR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-}
-
 export function CategoryDetailPage() {
   const { id } = useParams<{ id: string }>();
   const {
@@ -93,18 +85,6 @@ export function CategoryDetailPage() {
                 )}
               </dd>
             </div>
-            <div className="sm:col-span-2">
-              <dt className="text-sm text-muted-foreground">Creada</dt>
-              <dd className="text-foreground">
-                {formatDate(category.createdAt)}
-              </dd>
-            </div>
-            <div className="sm:col-span-2">
-              <dt className="text-sm text-muted-foreground">Actualizada</dt>
-              <dd className="text-foreground">
-                {formatDate(category.updatedAt)}
-              </dd>
-            </div>
           </dl>
         </SectionCard>
 
@@ -167,7 +147,7 @@ export function CategoryDetailPage() {
                       <td className="p-3 font-mono">{product.code}</td>
                       <td className="p-3">
                         <Link
-                          to={`/products/${product.id}/edit`}
+                          to={`/products/${product.id}`}
                           className="text-primary hover:underline"
                         >
                           {product.name}

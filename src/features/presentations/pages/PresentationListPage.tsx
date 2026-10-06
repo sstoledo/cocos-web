@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router';
 import { PresentationFilters } from '../components/PresentationFilters';
 import { PresentationTable } from '../components/PresentationTable';
+import { useDeletePresentation } from '../hooks/use-delete-presentation';
 import { usePresentations } from '../hooks/use-presentations';
 import type { PresentationListFilters } from '../types';
 
@@ -22,6 +23,7 @@ export function PresentationListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
   const { presentations, isLoading, error } = usePresentations(filters);
+  const deletePresentation = useDeletePresentation();
   const { user } = useUser();
 
   const canEdit = user?.role?.name === 'Admin';
@@ -34,6 +36,21 @@ export function PresentationListPage() {
     }
 
     setSearchParams(nextSearchParams, { replace: true });
+  }
+
+  async function handleDelete(presentation: { id: string; name: string }) {
+    if (
+      !window.confirm(
+        `¿Eliminar la presentación "${presentation.name}"? Esta acción no se puede deshacer.`
+      )
+    ) {
+      return;
+    }
+    try {
+      await deletePresentation.mutateAsync(presentation.id);
+    } catch {
+      // Error handled by mutation
+    }
   }
 
   return (
@@ -75,6 +92,7 @@ export function PresentationListPage() {
               <PresentationTable
                 presentations={presentations}
                 canEdit={canEdit}
+                onDelete={handleDelete}
               />
             )}
           </div>

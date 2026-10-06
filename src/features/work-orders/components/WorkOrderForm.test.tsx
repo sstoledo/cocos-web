@@ -31,9 +31,9 @@ function mockCatalogs() {
         meta: { page: 1, limit: 100, total: 1 },
       };
     } else if (url.includes('/services')) {
-      body = services;
+      body = { data: services, meta: { page: 1, limit: 100, total: services.length } };
     } else if (url.includes('/products')) {
-      body = products;
+      body = { data: products, meta: { page: 1, limit: 100, total: products.length } };
     }
 
     return { ok: true, json: async () => body } as Response;

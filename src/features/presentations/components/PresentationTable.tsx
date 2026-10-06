@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import { IconEdit, IconEye, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { Presentation } from '../types';
 
@@ -39,16 +39,6 @@ export function PresentationTable({
               </td>
               <td className="p-4">
                 <div className="flex items-center gap-2">
-                  <Link
-                    to={`/presentations/${presentation.id}`}
-                    className={cn(
-                      'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-                      'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                    )}
-                  >
-                    <IconEye className="mr-1.5 h-3.5 w-3.5" />
-                    Ver
-                  </Link>
                   {canEdit && (
                     <>
                       <Link

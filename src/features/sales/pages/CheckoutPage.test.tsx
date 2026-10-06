@@ -77,9 +77,9 @@ function mockFetch(postResponse: PostResponse) {
         } as Response;
       }
       if (url.includes('/services')) {
-        return { ok: true, json: async () => [buildService()] } as Response;
+        return { ok: true, json: async () => ({ data: [buildService()], meta: { page: 1, limit: 100, total: 1 } }) } as Response;
       }
-      return { ok: true, json: async () => [buildProduct()] } as Response;
+      return { ok: true, json: async () => ({ data: [buildProduct()], meta: { page: 1, limit: 100, total: 1 } }) } as Response;
     }
   );
 
