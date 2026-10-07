@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Label } from '@/components/ui/Label';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -8,6 +9,7 @@ import { Select } from '@/components/ui/Select';
 import { useRoles } from '@/features/auth/hooks/use-roles';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useAssignRole } from '../hooks/use-assign-role';
@@ -32,6 +34,7 @@ export function UserDetailPage() {
   const deleteUser = useDeleteUser();
   const { roles } = useRoles();
   const navigate = useNavigate();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const assignRoleForm = useForm<AssignRoleValues>({
     resolver: zodResolver(assignRoleSchema),
@@ -47,15 +50,11 @@ export function UserDetailPage() {
     }
   };
 
-  const handleDelete = async () => {
-    if (!user) return;
-    if (
-      !window.confirm(
-        `¿Eliminar al usuario ${user.name}? Esta acción no se puede deshacer.`
-      )
-    ) {
-      return;
-    }
+  const handleDelete = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
       await deleteUser.mutateAsync(userId);
       navigate('/users');
@@ -206,6 +205,14 @@ export function UserDetailPage() {
           {deleteUser.isPending ? 'Eliminando...' : 'Eliminar usuario'}
         </Button>
       </PageContent>
+      <ConfirmDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        title="Eliminar usuario"
+        description={`¿Eliminar al usuario ${user.name}? Esta acción no se puede deshacer.`}
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }
