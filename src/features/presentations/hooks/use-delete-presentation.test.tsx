@@ -1,7 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDeletePresentation } from './use-delete-presentation';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function wrapper({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
@@ -19,6 +22,7 @@ describe('useDeletePresentation', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('deletes a presentation', async () => {
@@ -34,6 +38,10 @@ describe('useDeletePresentation', () => {
     await waitFor(() => expect(result.current.isPending).toBe(false));
 
     expect(result.current.isSuccess).toBe(true);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Presentación eliminada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('handles error', async () => {
@@ -50,5 +58,9 @@ describe('useDeletePresentation', () => {
 
     expect(result.current.isError).toBe(true);
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).toHaveBeenCalledWith(
+      'No se pudo eliminar la presentación'
+    );
+    expect(toast.success).not.toHaveBeenCalled();
   });
 });
