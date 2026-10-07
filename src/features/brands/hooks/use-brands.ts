@@ -10,6 +10,7 @@ export function useBrands(filters: BrandListFilters) {
 
   return {
     brands: data?.data ?? [],
+    meta: data?.meta,
     isLoading,
     error,
   };

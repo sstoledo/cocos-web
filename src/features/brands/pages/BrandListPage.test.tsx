@@ -12,16 +12,20 @@ const mockBrands = [
   { id: 'b2', name: 'Marca 2', createdAt: '', updatedAt: '' },
 ];
 
-function wrapper({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return (
-    <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={['/brands']}>{children}</MemoryRouter>
-    </QueryClientProvider>
-  );
+function createWrapper(initialEntries: string[] = ['/brands']) {
+  return function Wrapper({ children }: { children: React.ReactNode }) {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+    return (
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+      </QueryClientProvider>
+    );
+  };
 }
+
+const wrapper = createWrapper();
 
 describe('BrandListPage', () => {
   beforeEach(() => {
@@ -97,7 +101,95 @@ describe('BrandListPage', () => {
     await user.type(screen.getByLabelText('Buscar por nombre'), 'Marca 1');
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/brands?q=Marca+1',
+        'http://localhost:3000/api/brands?q=Marca+1&page=1&limit=10',
+        { credentials: 'include' }
+      )
+    );
+  });
+
+  it('renders pagination when there is more than one page', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockBrands,
+        meta: { page: 1, limit: 10, total: 25 },
+      }),
+    });
+
+    render(<BrandListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Página 1 de 3')).toBeInTheDocument()
+    );
+  });
+
+  it('hides pagination when the results fit one page', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockBrands,
+        meta: { page: 1, limit: 10, total: 10 },
+      }),
+    });
+
+    render(<BrandListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Marca 1')).toBeInTheDocument()
+    );
+    expect(screen.queryByText(/Página 1 de/)).not.toBeInTheDocument();
+  });
+
+  it('requests the next page when the next button is clicked', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockBrands,
+        meta: { page: 1, limit: 10, total: 25 },
+      }),
+    });
+
+    render(<BrandListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Página 1 de 3')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByRole('button', { name: /siguiente/i }));
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenLastCalledWith(
+        'http://localhost:3000/api/brands?page=2&limit=10',
+        { credentials: 'include' }
+      )
+    );
+  });
+
+  it('resets the page to 1 when the search filter changes', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockBrands,
+        meta: { page: 3, limit: 10, total: 25 },
+      }),
+    });
+
+    render(<BrandListPage />, { wrapper: createWrapper(['/brands?page=3']) });
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/brands?page=3&limit=10',
+        { credentials: 'include' }
+      )
+    );
+
+    await user.type(screen.getByLabelText('Buscar por nombre'), 'Marca');
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenLastCalledWith(
+        'http://localhost:3000/api/brands?q=Marca&page=1&limit=10',
         { credentials: 'include' }
       )
     );

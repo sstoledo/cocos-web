@@ -7,6 +7,8 @@ export interface Brand {
 
 export interface BrandListFilters {
   q?: string;
+  page?: number;
+  limit?: number;
 }
 
 export interface BrandListMeta {
