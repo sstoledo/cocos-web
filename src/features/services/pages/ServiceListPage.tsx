@@ -1,12 +1,16 @@
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
+import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router';
 import { ServiceTable } from '../components/ServiceTable';
 import { useServices } from '../hooks/use-services';
 import type { ServiceListFilters } from '../types';
+
+const DEFAULT_LIMIT = 10;
 
 function filtersFromSearchParams(
   searchParams: URLSearchParams
@@ -14,6 +18,8 @@ function filtersFromSearchParams(
   return {
     q: searchParams.get('q') || undefined,
     isActive: parseIsActive(searchParams.get('isActive')),
+    page: Number.parseInt(searchParams.get('page') ?? '1', 10) || 1,
+    limit: DEFAULT_LIMIT,
   };
 }
 
@@ -24,9 +30,25 @@ function parseIsActive(value: string | null): boolean | undefined {
 }
 
 export function ServiceListPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
-  const { services, isLoading, error } = useServices(filters);
+  const { services, meta, isLoading, error } = useServices(filters);
+  const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
+
+  function handlePageChange(page: number) {
+    const nextSearchParams = new URLSearchParams();
+
+    if (filters.q) {
+      nextSearchParams.set('q', filters.q);
+    }
+
+    if (filters.isActive !== undefined) {
+      nextSearchParams.set('isActive', filters.isActive.toString());
+    }
+
+    nextSearchParams.set('page', page.toString());
+    setSearchParams(nextSearchParams, { replace: true });
+  }
 
   return (
     <>
@@ -58,6 +80,12 @@ export function ServiceListPage() {
               </div>
             ) : (
               <ServiceTable services={services} />
+            )}
+            {paginationMeta && paginationMeta.totalPages > 1 && (
+              <Pagination
+                meta={paginationMeta}
+                onPageChange={handlePageChange}
+              />
             )}
           </div>
         </SectionCard>

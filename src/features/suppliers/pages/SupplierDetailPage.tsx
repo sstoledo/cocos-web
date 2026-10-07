@@ -15,6 +15,7 @@ import { useLots } from '@/features/lots/hooks/use-lots';
 import type { Lot } from '@/features/lots/types';
 import { usePurchaseOrders } from '@/features/purchase-orders/hooks/use-purchase-orders';
 import type { PurchaseOrderStatus } from '@/features/purchase-orders/types';
+import { toPaginationMeta } from '@/lib/pagination';
 import { useParams, useSearchParams } from 'react-router';
 import { useSupplier } from '../hooks/use-supplier';
 
@@ -83,6 +84,8 @@ export function SupplierDetailPage() {
     page: lotPage,
     limit: DEFAULT_LIMIT,
   });
+
+  const lotPaginationMeta = lotMeta ? toPaginationMeta(lotMeta) : undefined;
 
   function handlePOPageChange(page: number) {
     setSearchParams(
@@ -268,8 +271,11 @@ export function SupplierDetailPage() {
                   </tbody>
                 </table>
               </div>
-              {lotMeta && lotMeta.totalPages > 1 && (
-                <Pagination meta={lotMeta} onPageChange={handleLotPageChange} />
+              {lotPaginationMeta && lotPaginationMeta.totalPages > 1 && (
+                <Pagination
+                  meta={lotPaginationMeta}
+                  onPageChange={handleLotPageChange}
+                />
               )}
             </div>
           )}

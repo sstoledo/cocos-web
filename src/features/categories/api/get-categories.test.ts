@@ -66,6 +66,21 @@ describe('getCategories', () => {
     );
   });
 
+  it('fetches categories with pagination', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockCategories,
+    });
+
+    const filters: CategoryListFilters = { q: 'Categoría', page: 3, limit: 5 };
+    await getCategories(filters);
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/categories?q=Categor%C3%ADa&page=3&limit=5',
+      { credentials: 'include' }
+    );
+  });
+
   it('throws on error response', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,

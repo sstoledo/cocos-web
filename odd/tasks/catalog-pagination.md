@@ -59,24 +59,32 @@ Out of scope:
 
 ## Tasks
 
-- [ ] T1 Shared helper: `toPaginationMeta(meta)` → `{ page, total, totalPages }`
-      (+ unit test) so 7 pages do not repeat `Math.ceil(total / limit)`.
-- [ ] T2 brands: `get-brands` sends `page`/`limit`, `BrandListPage` renders
-      `<Pagination>` (+ API test update).
-- [ ] T3 categories: same as T2.
-- [ ] T4 presentations: same as T2.
-- [ ] T5 products: same as T2 (keep `isActive`).
-- [ ] T6 suppliers: same as T2 (keep `isActive`).
-- [ ] T7 services: same as T2 (keep `isActive`).
-- [ ] T8 lots: same as T2.
-- [ ] T9 Full verification: `pnpm test`, `pnpm check`, `pnpm build`.
+- [x] T1 Shared helper: `toPaginationMeta(meta)` → `{ page, total, totalPages }`
+      (+ unit test) so 7 pages do not repeat `Math.ceil`. (`ef254f0`)
+- [x] T2 brands: `get-brands` sends `page`/`limit`, `BrandListPage` renders
+      `<Pagination>` (+ API test update). (`bcb83ec`)
+- [x] T3 categories: same as T2. (`f4fb5a3`)
+- [x] T4 presentations: same as T2. (`97e07f3`)
+- [x] T5 products: same as T2 (keep `isActive`). (`ebdc54f`)
+- [x] T6 suppliers: same as T2 (keep `isActive`). (`40ceefe`)
+- [x] T7 services: same as T2 (keep `isActive`). (`d22da19`)
+- [x] T8 lots: same as T2. (`6252d94`, also adapts `SupplierDetailPage`
+      because `useLots` now exposes the raw backend meta)
+- [x] T9 Full verification: `pnpm test`, `pnpm check`, `pnpm build`.
 
 ## Delivery strategy
 
 - Forecast: ~350 authored changed lines (7 features × ~35 + helper + tests).
   Borderline with the 400-line advisory budget; keep one PR if it stays under,
   otherwise ask before splitting (`ask-on-risk`).
+- Actual: one PR, 9 work-unit commits (docs + helper + 7 features). See
+  Progress.
 
 ## Progress
 
-- Not started.
+- 2026-10-07: T1–T9 complete on `feat/catalog-pagination`.
+- Verification: `pnpm test` 239 files / 1188 tests passed; `pnpm check`
+  clean; `pnpm build` succeeded.
+- Commits: `9d23a03` (docs) → `ef254f0` (helper) → `bcb83ec` (brands) →
+  `f4fb5a3` (categories) → `97e07f3` (presentations) → `ebdc54f` (products)
+  → `d22da19` (services) → `40ceefe` (suppliers) → `6252d94` (lots).

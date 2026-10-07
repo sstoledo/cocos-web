@@ -13,6 +13,14 @@ export async function getSuppliers(
     searchParams.set('isActive', filters.isActive.toString());
   }
 
+  if (filters.page) {
+    searchParams.set('page', filters.page.toString());
+  }
+
+  if (filters.limit) {
+    searchParams.set('limit', filters.limit.toString());
+  }
+
   const queryString = searchParams.toString();
   const url = `${import.meta.env.VITE_API_URL}/suppliers${queryString ? `?${queryString}` : ''}`;
 

@@ -10,6 +10,7 @@ export function useProducts(filters: ProductListFilters) {
 
   return {
     products: data?.data ?? [],
+    meta: data?.meta,
     isLoading,
     error,
   };

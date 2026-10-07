@@ -50,6 +50,20 @@ describe('getServices', () => {
     );
   });
 
+  it('builds the query string with pagination', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => [service],
+    });
+
+    await getServices({ q: 'aceite', isActive: true, page: 4, limit: 50 });
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/services?q=aceite&isActive=true&page=4&limit=50',
+      { credentials: 'include' }
+    );
+  });
+
   it('throws when the request fails', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,

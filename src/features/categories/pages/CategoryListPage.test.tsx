@@ -111,9 +111,25 @@ describe('CategoryListPage', () => {
     await user.type(screen.getByLabelText('Buscar por nombre'), 'Categoría 1');
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/categories?q=Categor%C3%ADa+1',
+        'http://localhost:3000/api/categories?q=Categor%C3%ADa+1&page=1&limit=10',
         { credentials: 'include' }
       )
+    );
+  });
+
+  it('renders pagination when there is more than one page', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockCategories,
+        meta: { page: 2, limit: 10, total: 42 },
+      }),
+    });
+
+    render(<CategoryListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Página 2 de 5')).toBeInTheDocument()
     );
   });
 });

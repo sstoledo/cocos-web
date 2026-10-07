@@ -56,6 +56,25 @@ describe('getPresentations', () => {
     );
   });
 
+  it('fetches presentations with pagination', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockPresentations,
+    });
+
+    const filters: PresentationListFilters = {
+      q: 'Presentación',
+      page: 4,
+      limit: 50,
+    };
+    await getPresentations(filters);
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/presentations?q=Presentaci%C3%B3n&page=4&limit=50',
+      { credentials: 'include' }
+    );
+  });
+
   it('throws on error response', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,

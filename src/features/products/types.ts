@@ -33,6 +33,8 @@ export type { ProductFormValues } from './schemas/product-schema';
 export interface ProductListFilters {
   q?: string;
   isActive?: boolean;
+  page?: number;
+  limit?: number;
 }
 
 export interface ProductListMeta {
