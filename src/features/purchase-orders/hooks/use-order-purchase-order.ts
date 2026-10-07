@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { orderPurchaseOrder } from '../api/order-purchase-order';
 
 export function useOrderPurchaseOrder() {
@@ -12,6 +13,7 @@ export function useOrderPurchaseOrder() {
       // refresh (use-cancel-sale precedent).
       queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
       queryClient.invalidateQueries({ queryKey: ['purchase-order', id] });
+      toast.success('Orden enviada correctamente');
     },
   });
 }

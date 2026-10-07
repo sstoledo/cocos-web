@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildSale } from '../test/fixtures';
 import { useCancelSale } from './use-cancel-sale';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const sale = buildSale();
 
@@ -29,6 +32,7 @@ describe('useCancelSale', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('cancels the sale and invalidates the sales prefix and sale detail', async () => {
@@ -64,6 +68,8 @@ describe('useCancelSale', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['sale', 'sale1'],
     });
+    expect(toast.success).toHaveBeenCalledWith('Venta cancelada correctamente');
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('does not invalidate on failure', async () => {
@@ -98,5 +104,7 @@ describe('useCancelSale', () => {
     expect(invalidateQueriesSpy).not.toHaveBeenCalledWith({
       queryKey: ['sale', 'sale1'],
     });
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });

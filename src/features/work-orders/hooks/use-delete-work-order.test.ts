@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDeleteWorkOrder } from './use-delete-work-order';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper(queryClient?: QueryClient) {
   const client =
@@ -26,6 +29,7 @@ describe('useDeleteWorkOrder', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('deletes a work order', async () => {
@@ -43,6 +47,10 @@ describe('useDeleteWorkOrder', () => {
       'http://localhost:3000/api/work-orders/wo-1',
       { method: 'DELETE', credentials: 'include' }
     );
+    expect(toast.success).toHaveBeenCalledWith(
+      'Orden de trabajo eliminada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -61,6 +69,10 @@ describe('useDeleteWorkOrder', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).toHaveBeenCalledWith(
+      'No se pudo eliminar la orden de trabajo'
+    );
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('invalidates the work orders list on success', async () => {

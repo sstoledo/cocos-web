@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildSale } from '../test/fixtures';
 import { useCreateSale } from './use-create-sale';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const sale = buildSale();
 const payload = {
@@ -33,6 +36,7 @@ describe('useCreateSale', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates a sale', async () => {
@@ -54,6 +58,8 @@ describe('useCreateSale', () => {
       expect.objectContaining({ method: 'POST', credentials: 'include' })
     );
     expect(result.current.data).toEqual(sale);
+    expect(toast.success).toHaveBeenCalledWith('Venta creada correctamente');
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -72,6 +78,8 @@ describe('useCreateSale', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('invalidates the sales list on success', async () => {

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { updateWorkOrder } from '../api/update-work-order';
 import type { UpdateWorkOrderPayload } from '../types';
 
@@ -16,6 +17,7 @@ export function useUpdateWorkOrder() {
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: ['work-orders'] });
       queryClient.invalidateQueries({ queryKey: ['work-order', id] });
+      toast.success('Orden de trabajo actualizada correctamente');
     },
   });
 }

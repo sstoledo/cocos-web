@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { createPurchaseOrder } from '../api/create-purchase-order';
 import type { CreatePurchaseOrderPayload } from '../types';
 
@@ -10,6 +11,7 @@ export function useCreatePurchaseOrder() {
       createPurchaseOrder(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
+      toast.success('Orden de compra creada correctamente');
     },
   });
 }
