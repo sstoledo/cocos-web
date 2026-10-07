@@ -56,6 +56,21 @@ describe('getBrands', () => {
     );
   });
 
+  it('fetches brands with pagination', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockBrands,
+    });
+
+    const filters: BrandListFilters = { q: 'Marca', page: 2, limit: 25 };
+    await getBrands(filters);
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/brands?q=Marca&page=2&limit=25',
+      { credentials: 'include' }
+    );
+  });
+
   it('throws on error response', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,
