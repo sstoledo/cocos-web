@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Supplier, SupplierFormValues } from '../types';
 import { useCreateSupplier } from './use-create-supplier';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -44,6 +47,7 @@ describe('useCreateSupplier', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates a supplier and returns the result', async () => {
@@ -61,6 +65,10 @@ describe('useCreateSupplier', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(createdSupplier);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Proveedor creado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('invalidates the suppliers list query on success', async () => {

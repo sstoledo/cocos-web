@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Product } from '../types';
 import { useUpdateProduct } from './use-update-product';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const values = {
   code: 'COD-001',
@@ -35,6 +38,7 @@ describe('useUpdateProduct', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('updates a product without an image', async () => {
@@ -85,6 +89,10 @@ describe('useUpdateProduct', () => {
     expect(formData.get('categoryId')).toBe(values.categoryId);
     expect(formData.get('isActive')).toBe('true');
     expect(result.current.data).toEqual(updatedProduct);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Producto actualizado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('updates a product with an image', async () => {
@@ -127,6 +135,8 @@ describe('useUpdateProduct', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('invalidates the product list and detail queries on success', async () => {

@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { deleteService, useDeleteService } from './use-delete-service';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -28,6 +31,7 @@ describe('deleteService', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('deletes a service by id', async () => {
@@ -66,6 +70,7 @@ describe('useDeleteService', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('deletes a service and invalidates the list query', async () => {
@@ -102,6 +107,10 @@ describe('useDeleteService', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['services', 'list'],
     });
+    expect(toast.success).toHaveBeenCalledWith(
+      'Servicio eliminado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -119,5 +128,7 @@ describe('useDeleteService', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).toHaveBeenCalledWith('No se pudo eliminar el servicio');
+    expect(toast.success).not.toHaveBeenCalled();
   });
 });

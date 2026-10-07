@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Service } from '../types';
 import { useCreateService } from './use-create-service';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -48,6 +51,7 @@ describe('useCreateService', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates a service', async () => {
@@ -82,6 +86,8 @@ describe('useCreateService', () => {
     expect(body.estimatedDuration).toBe(formValues.estimatedDuration);
     expect(body.isActive).toBe(formValues.isActive);
     expect(result.current.data).toEqual(createdService);
+    expect(toast.success).toHaveBeenCalledWith('Servicio creado correctamente');
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -99,6 +105,8 @@ describe('useCreateService', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('invalidates the service list query on success', async () => {
