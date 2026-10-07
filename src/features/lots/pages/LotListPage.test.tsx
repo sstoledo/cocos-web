@@ -139,7 +139,7 @@ describe('LotListPage', () => {
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenLastCalledWith(
-        'http://localhost:3000/api/lots?q=L-2026',
+        'http://localhost:3000/api/lots?q=L-2026&page=1&limit=10',
         { credentials: 'include' }
       )
     );
@@ -159,9 +159,25 @@ describe('LotListPage', () => {
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/lots?q=L-2026',
+        'http://localhost:3000/api/lots?q=L-2026&page=1&limit=10',
         { credentials: 'include' }
       )
+    );
+  });
+
+  it('renders pagination when there is more than one page', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [lot],
+        meta: { page: 3, limit: 10, total: 55 },
+      }),
+    });
+
+    render(<LotListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(screen.getByText('Página 3 de 6')).toBeInTheDocument()
     );
   });
 });
