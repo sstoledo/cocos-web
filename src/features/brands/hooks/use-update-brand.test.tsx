@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Brand, BrandFormValues } from '../types';
 import { useUpdateBrand } from './use-update-brand';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const mockBrand: Brand = {
   id: 'b1',
@@ -31,6 +34,7 @@ describe('useUpdateBrand', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('updates a brand', async () => {
@@ -47,6 +51,10 @@ describe('useUpdateBrand', () => {
 
     expect(result.current.isSuccess).toBe(true);
     expect(result.current.data).toEqual(mockBrand);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Marca actualizada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('handles error', async () => {
@@ -63,5 +71,7 @@ describe('useUpdateBrand', () => {
 
     expect(result.current.isError).toBe(true);
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 });
