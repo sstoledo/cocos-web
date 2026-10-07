@@ -10,6 +10,7 @@ export function useSuppliers(filters: SupplierListFilters) {
 
   return {
     suppliers: data?.data ?? [],
+    meta: data?.meta,
     isLoading,
     error,
   };

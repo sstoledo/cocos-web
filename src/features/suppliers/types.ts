@@ -13,6 +13,8 @@ export interface Supplier {
 export interface SupplierListFilters {
   q?: string;
   isActive?: boolean;
+  page?: number;
+  limit?: number;
 }
 
 export interface SupplierListMeta {

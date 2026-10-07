@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SupplierListPage } from '../pages/SupplierListPage';
+import type { SupplierListMeta } from '../types';
 
 const mockSuppliers = [
   {
@@ -42,6 +43,7 @@ import { useSuppliers } from '../hooks/use-suppliers';
 function renderPage(
   overrides: {
     suppliers?: typeof mockSuppliers;
+    meta?: SupplierListMeta;
     isLoading?: boolean;
     error?: Error | null;
     userRole?: string;
@@ -49,6 +51,7 @@ function renderPage(
 ) {
   const {
     suppliers = mockSuppliers,
+    meta,
     isLoading = false,
     error = null,
     userRole = 'Admin',
@@ -56,6 +59,7 @@ function renderPage(
 
   (useSuppliers as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
     suppliers,
+    meta,
     isLoading,
     error,
   });
@@ -134,5 +138,11 @@ describe('SupplierListPage', () => {
         'No se pudieron cargar los proveedores. Intentá de nuevo más tarde.'
       )
     ).toBeInTheDocument();
+  });
+
+  it('renders pagination when there is more than one page', () => {
+    renderPage({ meta: { page: 1, limit: 10, total: 25 } });
+
+    expect(screen.getByText('Página 1 de 3')).toBeInTheDocument();
   });
 });

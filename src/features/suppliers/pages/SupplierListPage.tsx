@@ -1,14 +1,18 @@
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
+import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
+import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router';
 import { SupplierFilters } from '../components/SupplierFilters';
 import { SupplierTable } from '../components/SupplierTable';
 import { useSuppliers } from '../hooks/use-suppliers';
 import type { SupplierListFilters } from '../types';
+
+const DEFAULT_LIMIT = 10;
 
 function filtersFromSearchParams(
   searchParams: URLSearchParams
@@ -21,17 +25,20 @@ function filtersFromSearchParams(
         : searchParams.get('isActive') === 'false'
           ? false
           : undefined,
+    page: Number.parseInt(searchParams.get('page') ?? '1', 10) || 1,
+    limit: DEFAULT_LIMIT,
   };
 }
 
 export function SupplierListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
-  const { suppliers, isLoading, error } = useSuppliers(filters);
+  const { suppliers, meta, isLoading, error } = useSuppliers(filters);
   const { user } = useUser();
 
   const canEdit =
     user?.role?.name === 'Admin' || user?.role?.name === 'Purchasing';
+  const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
 
   function handleFiltersChange(nextFilters: SupplierListFilters) {
     const nextSearchParams = new URLSearchParams();
@@ -44,6 +51,22 @@ export function SupplierListPage() {
       nextSearchParams.set('isActive', nextFilters.isActive.toString());
     }
 
+    nextSearchParams.set('page', '1');
+    setSearchParams(nextSearchParams, { replace: true });
+  }
+
+  function handlePageChange(page: number) {
+    const nextSearchParams = new URLSearchParams();
+
+    if (filters.q) {
+      nextSearchParams.set('q', filters.q);
+    }
+
+    if (filters.isActive !== undefined) {
+      nextSearchParams.set('isActive', filters.isActive.toString());
+    }
+
+    nextSearchParams.set('page', page.toString());
     setSearchParams(nextSearchParams, { replace: true });
   }
 
@@ -81,6 +104,12 @@ export function SupplierListPage() {
               </div>
             ) : (
               <SupplierTable suppliers={suppliers} canEdit={canEdit} />
+            )}
+            {paginationMeta && paginationMeta.totalPages > 1 && (
+              <Pagination
+                meta={paginationMeta}
+                onPageChange={handlePageChange}
+              />
             )}
           </div>
         </SectionCard>

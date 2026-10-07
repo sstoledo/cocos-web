@@ -95,6 +95,26 @@ describe('getSuppliers', () => {
     );
   });
 
+  it('fetches suppliers with pagination', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockSuppliers,
+    });
+
+    const filters: SupplierListFilters = {
+      q: 'Proveedor',
+      isActive: true,
+      page: 2,
+      limit: 20,
+    };
+    await getSuppliers(filters);
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/suppliers?q=Proveedor&isActive=true&page=2&limit=20',
+      { credentials: 'include' }
+    );
+  });
+
   it('throws on error response', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,
