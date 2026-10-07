@@ -131,7 +131,7 @@ describe('ProductListPage', () => {
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenLastCalledWith(
-        'http://localhost:3000/api/products?q=aceite&isActive=true',
+        'http://localhost:3000/api/products?q=aceite&isActive=true&page=1&limit=10',
         { credentials: 'include' }
       )
     );
@@ -151,9 +151,25 @@ describe('ProductListPage', () => {
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/products?q=aceite&isActive=false',
+        'http://localhost:3000/api/products?q=aceite&isActive=false&page=1&limit=10',
         { credentials: 'include' }
       )
+    );
+  });
+
+  it('renders pagination when there is more than one page', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [product],
+        meta: { page: 2, limit: 10, total: 100 },
+      }),
+    });
+
+    render(<ProductListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(screen.getByText('Página 2 de 10')).toBeInTheDocument()
     );
   });
 });
