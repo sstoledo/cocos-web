@@ -117,6 +117,69 @@ describe('CategoryListPage', () => {
     );
   });
 
+  it('deletes a category after confirming in the dialog', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockCategories,
+        meta: { page: 1, limit: 10, total: 2 },
+      }),
+    });
+
+    render(<CategoryListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Categoría 1')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByLabelText('Eliminar Categoría 1'));
+
+    expect(screen.getByText('Eliminar categoría')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        '¿Eliminar la categoría "Categoría 1"? Esta acción no se puede deshacer.'
+      )
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Eliminar' }));
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/categories/c1',
+        { method: 'DELETE', credentials: 'include' }
+      )
+    );
+  });
+
+  it('does not delete a category when the dialog is cancelled', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockCategories,
+        meta: { page: 1, limit: 10, total: 2 },
+      }),
+    });
+
+    render(<CategoryListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Categoría 1')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByLabelText('Eliminar Categoría 1'));
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    await waitFor(() =>
+      expect(screen.queryByText('Eliminar categoría')).not.toBeInTheDocument()
+    );
+    expect(globalThis.fetch).not.toHaveBeenCalledWith(
+      'http://localhost:3000/api/categories/c1',
+      { method: 'DELETE', credentials: 'include' }
+    );
+  });
+
   it('renders pagination when there is more than one page', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,

@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -6,6 +7,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { BrandFilters } from '../components/BrandFilters';
 import { BrandTable } from '../components/BrandTable';
@@ -31,6 +33,10 @@ export function BrandListPage() {
   const { brands, meta, isLoading, error } = useBrands(filters);
   const deleteBrand = useDeleteBrand();
   const { user } = useUser();
+  const [brandToDelete, setBrandToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const canEdit = user?.role?.name === 'Admin';
   const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
@@ -57,16 +63,16 @@ export function BrandListPage() {
     setSearchParams(nextSearchParams, { replace: true });
   }
 
-  async function handleDelete(brand: { id: string; name: string }) {
-    if (
-      !window.confirm(
-        `¿Eliminar la marca "${brand.name}"? Esta acción no se puede deshacer.`
-      )
-    ) {
+  function handleDelete(brand: { id: string; name: string }) {
+    setBrandToDelete(brand);
+  }
+
+  async function handleConfirmDelete() {
+    if (!brandToDelete) {
       return;
     }
     try {
-      await deleteBrand.mutateAsync(brand.id);
+      await deleteBrand.mutateAsync(brandToDelete.id);
     } catch {
       // Error handled by mutation
     }
@@ -119,6 +125,22 @@ export function BrandListPage() {
           </div>
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={brandToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setBrandToDelete(null);
+          }
+        }}
+        title="Eliminar marca"
+        description={
+          brandToDelete
+            ? `¿Eliminar la marca "${brandToDelete.name}"? Esta acción no se puede deshacer.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }
