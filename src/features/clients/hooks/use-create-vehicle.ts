@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { createVehicle } from '../api/create-vehicle';
 import type { VehicleFormValues } from '../types';
 
@@ -14,6 +15,7 @@ export function useCreateVehicle() {
       queryClient.invalidateQueries({
         queryKey: ['client', variables.clientId],
       });
+      toast.success('Vehículo creado correctamente');
     },
   });
 }

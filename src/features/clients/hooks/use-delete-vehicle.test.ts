@@ -1,8 +1,28 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDeleteVehicle } from './use-delete-vehicle';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children
+    );
+  };
+}
 
 describe('useDeleteVehicle', () => {
   beforeEach(() => {
@@ -11,6 +31,7 @@ describe('useDeleteVehicle', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('deletes a vehicle and invalidates the client and vehicle queries', async () => {
@@ -48,5 +69,27 @@ describe('useDeleteVehicle', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['vehicles', 'c1'],
     });
+    expect(toast.success).toHaveBeenCalledWith(
+      'Vehículo eliminado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('handles error', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+
+    const { result } = renderHook(() => useDeleteVehicle(), {
+      wrapper: createWrapper(),
+    });
+
+    result.current.mutate({ id: 'v1', clientId: 'c1' });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(toast.error).toHaveBeenCalledWith('No se pudo eliminar el vehículo');
+    expect(toast.success).not.toHaveBeenCalled();
   });
 });
