@@ -102,9 +102,25 @@ describe('PresentationListPage', () => {
     );
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/presentations?q=Presentaci%C3%B3n+1',
+        'http://localhost:3000/api/presentations?q=Presentaci%C3%B3n+1&page=1&limit=10',
         { credentials: 'include' }
       )
+    );
+  });
+
+  it('renders pagination when there is more than one page', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockPresentations,
+        meta: { page: 1, limit: 10, total: 30 },
+      }),
+    });
+
+    render(<PresentationListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Página 1 de 3')).toBeInTheDocument()
     );
   });
 });

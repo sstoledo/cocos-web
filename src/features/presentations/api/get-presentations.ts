@@ -12,6 +12,14 @@ export async function getPresentations(
     searchParams.set('q', filters.q);
   }
 
+  if (filters.page) {
+    searchParams.set('page', filters.page.toString());
+  }
+
+  if (filters.limit) {
+    searchParams.set('limit', filters.limit.toString());
+  }
+
   const queryString = searchParams.toString();
   const url = `${import.meta.env.VITE_API_URL}/presentations${queryString ? `?${queryString}` : ''}`;
 

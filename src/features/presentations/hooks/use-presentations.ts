@@ -10,6 +10,7 @@ export function usePresentations(filters: PresentationListFilters) {
 
   return {
     presentations: data?.data ?? [],
+    meta: data?.meta,
     isLoading,
     error,
   };

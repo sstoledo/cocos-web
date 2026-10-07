@@ -7,6 +7,8 @@ export interface Presentation {
 
 export interface PresentationListFilters {
   q?: string;
+  page?: number;
+  limit?: number;
 }
 
 export interface PresentationListMeta {
