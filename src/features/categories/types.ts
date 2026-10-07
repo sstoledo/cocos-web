@@ -9,6 +9,8 @@ export interface Category {
 
 export interface CategoryListFilters {
   q?: string;
+  page?: number;
+  limit?: number;
 }
 
 export interface CategoryListMeta {

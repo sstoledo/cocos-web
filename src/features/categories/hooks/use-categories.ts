@@ -10,6 +10,7 @@ export function useCategories(filters: CategoryListFilters) {
 
   return {
     categories: data?.data ?? [],
+    meta: data?.meta,
     isLoading,
     error,
   };
