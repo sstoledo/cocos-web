@@ -10,6 +10,7 @@ export function useServices(filters: ServiceListFilters) {
 
   return {
     services: data?.data ?? [],
+    meta: data?.meta,
     isLoading,
     error,
   };

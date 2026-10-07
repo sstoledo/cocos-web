@@ -13,6 +13,8 @@ export interface Service {
 export interface ServiceListFilters {
   q?: string;
   isActive?: boolean;
+  page?: number;
+  limit?: number;
 }
 
 export interface ServiceListMeta {
