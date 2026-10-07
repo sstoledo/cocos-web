@@ -1,5 +1,6 @@
 import { ApiError } from '@/lib/api-error';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { cancelPurchaseOrder } from '../api/cancel-purchase-order';
 
 export function useCancelPurchaseOrder() {
@@ -13,6 +14,7 @@ export function useCancelPurchaseOrder() {
       // refresh (use-cancel-sale precedent).
       queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
       queryClient.invalidateQueries({ queryKey: ['purchase-order', id] });
+      toast.success('Orden cancelada correctamente');
     },
     onError: (error, id) => {
       // 409: someone else transitioned the order first — re-fetch so the

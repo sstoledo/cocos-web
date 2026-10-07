@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { updateService } from '../api/update-service';
 import type { ServiceFormValues } from '../types';
 
@@ -18,6 +19,7 @@ export function useUpdateService() {
       queryClient.invalidateQueries({
         queryKey: ['services', 'detail', variables.id],
       });
+      toast.success('Servicio actualizado correctamente');
     },
   });
 }

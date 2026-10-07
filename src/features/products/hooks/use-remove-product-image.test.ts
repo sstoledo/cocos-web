@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Product } from '../types';
 import { useRemoveProductImage } from './use-remove-product-image';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -42,6 +45,7 @@ describe('useRemoveProductImage', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('removes the product image', async () => {
@@ -66,6 +70,10 @@ describe('useRemoveProductImage', () => {
       })
     );
     expect(result.current.data).toEqual(product);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Imagen eliminada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -83,6 +91,8 @@ describe('useRemoveProductImage', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).toHaveBeenCalledWith('No se pudo eliminar la imagen');
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('invalidates the product list and detail queries on success', async () => {

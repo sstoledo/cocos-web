@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Client } from '../types';
 import { useCreateClient } from './use-create-client';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -46,6 +49,7 @@ describe('useCreateClient', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates a client and returns the result', async () => {
@@ -63,6 +67,26 @@ describe('useCreateClient', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(createdClient);
+    expect(toast.success).toHaveBeenCalledWith('Cliente creado correctamente');
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('handles error', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+
+    const { result } = renderHook(() => useCreateClient(), {
+      wrapper: createWrapper(),
+    });
+
+    result.current.mutate(values);
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('invalidates the clients list query on success', async () => {

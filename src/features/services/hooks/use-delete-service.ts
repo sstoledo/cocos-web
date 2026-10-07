@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export async function deleteService(id: string): Promise<void> {
   const response = await fetch(
@@ -21,6 +22,10 @@ export function useDeleteService() {
     mutationFn: (id: string) => deleteService(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['services', 'list'] });
+      toast.success('Servicio eliminado correctamente');
+    },
+    onError: () => {
+      toast.error('No se pudo eliminar el servicio');
     },
   });
 }

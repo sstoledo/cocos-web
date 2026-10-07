@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Presentation, PresentationFormValues } from '../types';
 import { useCreatePresentation } from './use-create-presentation';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const mockPresentation: Presentation = {
   id: 'p1',
@@ -31,6 +34,7 @@ describe('useCreatePresentation', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates a presentation', async () => {
@@ -47,6 +51,10 @@ describe('useCreatePresentation', () => {
 
     expect(result.current.isSuccess).toBe(true);
     expect(result.current.data).toEqual(mockPresentation);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Presentación creada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('handles error', async () => {
@@ -63,5 +71,7 @@ describe('useCreatePresentation', () => {
 
     expect(result.current.isError).toBe(true);
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 });

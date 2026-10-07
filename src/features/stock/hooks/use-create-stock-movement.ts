@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { createStockMovement } from '../api/create-stock-movement';
 import type { CreateStockMovementInput } from '../api/create-stock-movement';
 
@@ -15,6 +16,7 @@ export function useCreateStockMovement(productId: string) {
       queryClient.invalidateQueries({
         queryKey: ['stock', 'movements', productId],
       });
+      toast.success('Movimiento de stock registrado correctamente');
     },
   });
 }

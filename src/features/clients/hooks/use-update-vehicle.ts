@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { updateVehicle } from '../api/update-vehicle';
 import type { VehicleFormValues } from '../types';
 
@@ -20,6 +21,7 @@ export function useUpdateVehicle() {
       queryClient.invalidateQueries({
         queryKey: ['vehicles', variables.values.clientId],
       });
+      toast.success('Vehículo actualizado correctamente');
     },
   });
 }

@@ -2,21 +2,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Presentation, PresentationFormValues } from '../types';
-import { useUpdatePresentation } from './use-update-presentation';
+import { useCreateStockMovement } from './use-create-stock-movement';
 
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
-
-const mockPresentation: Presentation = {
-  id: 'p1',
-  name: 'Presentación Actualizada',
-  createdAt: '2024-01-01T00:00:00.000Z',
-  updatedAt: '2024-01-02T00:00:00.000Z',
-};
-
-const updateValues: Partial<PresentationFormValues> = {
-  name: 'Presentación Actualizada',
-};
 
 function wrapper({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
@@ -27,7 +15,7 @@ function wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-describe('useUpdatePresentation', () => {
+describe('useCreateStockMovement', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
   });
@@ -37,41 +25,43 @@ describe('useUpdatePresentation', () => {
     vi.clearAllMocks();
   });
 
-  it('updates a presentation', async () => {
+  it('creates a stock movement and shows a success toast', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => mockPresentation,
+      json: async () => ({}),
     });
 
-    const { result } = renderHook(() => useUpdatePresentation(), { wrapper });
+    const { result } = renderHook(() => useCreateStockMovement('p1'), {
+      wrapper,
+    });
 
-    result.current.mutate({ id: 'p1', values: updateValues });
+    result.current.mutate({ quantity: 5, reason: 'Conteo físico' });
 
     await waitFor(() => expect(result.current.isPending).toBe(false));
 
     expect(result.current.isSuccess).toBe(true);
-    expect(result.current.data).toEqual(mockPresentation);
     expect(toast.success).toHaveBeenCalledWith(
-      'Presentación actualizada correctamente'
+      'Movimiento de stock registrado correctamente'
     );
     expect(toast.error).not.toHaveBeenCalled();
   });
 
-  it('handles error', async () => {
+  it('does not show a success toast on failure', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,
-      status: 400,
+      status: 500,
     });
 
-    const { result } = renderHook(() => useUpdatePresentation(), { wrapper });
+    const { result } = renderHook(() => useCreateStockMovement('p1'), {
+      wrapper,
+    });
 
-    result.current.mutate({ id: 'p1', values: updateValues });
+    result.current.mutate({ quantity: 5 });
 
     await waitFor(() => expect(result.current.isPending).toBe(false));
 
     expect(result.current.isError).toBe(true);
-    expect(result.current.error).toBeInstanceOf(Error);
-    expect(toast.error).not.toHaveBeenCalled();
     expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { deleteVehicle } from '../api/delete-vehicle';
 
 export function useDeleteVehicle() {
@@ -13,6 +14,10 @@ export function useDeleteVehicle() {
       queryClient.invalidateQueries({
         queryKey: ['vehicles', variables.clientId],
       });
+      toast.success('Vehículo eliminado correctamente');
+    },
+    onError: () => {
+      toast.error('No se pudo eliminar el vehículo');
     },
   });
 }

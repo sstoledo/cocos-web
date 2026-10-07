@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { updateCategory } from '../api/update-category';
 import type { CategoryFormValues } from '../types';
 
@@ -16,6 +17,7 @@ export function useUpdateCategory() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['categories', 'list'] });
       queryClient.invalidateQueries({ queryKey: ['category', variables.id] });
+      toast.success('Categoría actualizada correctamente');
     },
   });
 }

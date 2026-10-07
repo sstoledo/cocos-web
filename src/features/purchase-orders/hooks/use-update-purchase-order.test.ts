@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildPurchaseOrder } from '../test/fixtures';
 import { useUpdatePurchaseOrder } from './use-update-purchase-order';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const purchaseOrder = buildPurchaseOrder();
 const payload = {
@@ -34,6 +37,7 @@ describe('useUpdatePurchaseOrder', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('updates the purchase order and invalidates list prefix and detail', async () => {
@@ -68,6 +72,10 @@ describe('useUpdatePurchaseOrder', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['purchase-order', 'po1'],
     });
+    expect(toast.success).toHaveBeenCalledWith(
+      'Orden de compra actualizada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('does not invalidate on failure', async () => {
@@ -102,5 +110,7 @@ describe('useUpdatePurchaseOrder', () => {
     expect(invalidateQueriesSpy).not.toHaveBeenCalledWith({
       queryKey: ['purchase-order', 'po1'],
     });
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });

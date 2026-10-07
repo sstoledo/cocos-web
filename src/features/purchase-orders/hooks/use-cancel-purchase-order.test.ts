@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildPurchaseOrder } from '../test/fixtures';
 import { useCancelPurchaseOrder } from './use-cancel-purchase-order';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const purchaseOrder = buildPurchaseOrder({ status: 'cancelled' });
 
@@ -29,6 +32,7 @@ describe('useCancelPurchaseOrder', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('cancels the order and invalidates list prefix and detail', async () => {
@@ -63,6 +67,8 @@ describe('useCancelPurchaseOrder', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['purchase-order', 'po1'],
     });
+    expect(toast.success).toHaveBeenCalledWith('Orden cancelada correctamente');
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('re-invalidates on 409 so the UI resyncs the true state', async () => {
@@ -97,6 +103,8 @@ describe('useCancelPurchaseOrder', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['purchase-order', 'po1'],
     });
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('does not invalidate on non-409 failures', async () => {
@@ -126,5 +134,7 @@ describe('useCancelPurchaseOrder', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(invalidateQueriesSpy).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });

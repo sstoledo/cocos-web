@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { updatePurchaseOrder } from '../api/update-purchase-order';
 import type { UpdatePurchaseOrderPayload } from '../types';
 
@@ -16,6 +17,7 @@ export function useUpdatePurchaseOrder() {
     onSuccess: (_purchaseOrder, { id }) => {
       queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
       queryClient.invalidateQueries({ queryKey: ['purchase-order', id] });
+      toast.success('Orden de compra actualizada correctamente');
     },
   });
 }

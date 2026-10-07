@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildPurchaseOrder } from '../test/fixtures';
 import { useReceivePurchaseOrder } from './use-receive-purchase-order';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const purchaseOrder = buildPurchaseOrder({ status: 'partially_received' });
 
@@ -40,6 +43,7 @@ describe('useReceivePurchaseOrder', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('receives stock and invalidates purchase orders, lots and products', async () => {
@@ -80,6 +84,10 @@ describe('useReceivePurchaseOrder', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['products', 'list'],
     });
+    expect(toast.success).toHaveBeenCalledWith(
+      'Recepción registrada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('does not invalidate on failure', async () => {
@@ -109,5 +117,7 @@ describe('useReceivePurchaseOrder', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(invalidateQueriesSpy).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });

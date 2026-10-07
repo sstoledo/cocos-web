@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Vehicle } from '../types';
 import { useUpdateVehicle } from './use-update-vehicle';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const id = 'v1';
 
@@ -43,6 +46,7 @@ describe('useUpdateVehicle', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('updates a vehicle and returns the result', async () => {
@@ -60,6 +64,28 @@ describe('useUpdateVehicle', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(updatedVehicle);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Vehículo actualizado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('handles error', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+
+    const { result } = renderHook(() => useUpdateVehicle(), {
+      wrapper: createWrapper(),
+    });
+
+    result.current.mutate({ id, values });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('invalidates the client and vehicle queries on success', async () => {

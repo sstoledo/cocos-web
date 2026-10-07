@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { receivePurchaseOrder } from '../api/receive-purchase-order';
 import type { ReceivePurchaseOrderPayload } from '../types';
 
@@ -20,6 +21,7 @@ export function useReceivePurchaseOrder() {
       // and products list go stale too.
       queryClient.invalidateQueries({ queryKey: ['lots'] });
       queryClient.invalidateQueries({ queryKey: ['products', 'list'] });
+      toast.success('Recepción registrada correctamente');
     },
   });
 }

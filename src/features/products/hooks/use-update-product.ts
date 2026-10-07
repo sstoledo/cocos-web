@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { updateProduct } from '../api/update-product';
 import type { ProductFormValues } from '../types';
 
@@ -20,6 +21,7 @@ export function useUpdateProduct() {
       queryClient.invalidateQueries({
         queryKey: ['products', 'detail', variables.id],
       });
+      toast.success('Producto actualizado correctamente');
     },
   });
 }

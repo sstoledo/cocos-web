@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCreateWorkOrder } from './use-create-work-order';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper(queryClient?: QueryClient) {
   const client =
@@ -32,6 +35,7 @@ describe('useCreateWorkOrder', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates a work order', async () => {
@@ -53,6 +57,10 @@ describe('useCreateWorkOrder', () => {
       expect.objectContaining({ method: 'POST', credentials: 'include' })
     );
     expect(result.current.data).toEqual({ id: 'wo-1' });
+    expect(toast.success).toHaveBeenCalledWith(
+      'Orden de trabajo creada correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -71,6 +79,8 @@ describe('useCreateWorkOrder', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
 
     expect(result.current.error).toBeInstanceOf(Error);
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('invalidates the work orders list on success', async () => {

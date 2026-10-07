@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CashClosing, CreateCashClosingInput } from '../types';
 import { useCreateCashClosing } from './use-create-cash-closing';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const cashClosing: CashClosing = {
   id: 'cc1',
@@ -47,6 +50,7 @@ describe('useCreateCashClosing', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('creates the cash closing and invalidates the cash-closings prefix', async () => {
@@ -86,6 +90,10 @@ describe('useCreateCashClosing', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['cash-closings'],
     });
+    expect(toast.success).toHaveBeenCalledWith(
+      'Cierre de caja registrado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('sends no notes key when omitted', async () => {
@@ -164,5 +172,7 @@ describe('useCreateCashClosing', () => {
     expect(invalidateQueriesSpy).not.toHaveBeenCalledWith({
       queryKey: ['cash-closings'],
     });
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });

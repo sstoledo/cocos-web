@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { cancelSale } from '../api/cancel-sale';
 
 export function useCancelSale() {
@@ -11,6 +12,7 @@ export function useCancelSale() {
       // ['sale', id] flips the detail badge without a refresh (SL-F14).
       queryClient.invalidateQueries({ queryKey: ['sales'] });
       queryClient.invalidateQueries({ queryKey: ['sale', id] });
+      toast.success('Venta cancelada correctamente');
     },
   });
 }

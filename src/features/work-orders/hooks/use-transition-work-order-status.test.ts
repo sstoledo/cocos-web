@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildWorkOrder } from '../test/fixtures';
 import { useTransitionWorkOrder } from './use-transition-work-order-status';
+
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 function createWrapper(queryClient?: QueryClient) {
   const client =
@@ -27,6 +30,7 @@ describe('useTransitionWorkOrder', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('transitions the work order status', async () => {
@@ -49,6 +53,10 @@ describe('useTransitionWorkOrder', () => {
       expect.objectContaining({ method: 'PATCH', credentials: 'include' })
     );
     expect(result.current.data).toEqual(workOrder);
+    expect(toast.success).toHaveBeenCalledWith(
+      'Estado actualizado correctamente'
+    );
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('exposes the error when the request fails', async () => {
@@ -73,6 +81,8 @@ describe('useTransitionWorkOrder', () => {
       status: 409,
       errorCode: 'INVALID_STATUS_TRANSITION',
     });
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('invalidates the list and the detail on success', async () => {
