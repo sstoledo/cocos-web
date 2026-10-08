@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
@@ -311,14 +311,16 @@ describe('WorkOrderDetailPage actions', () => {
 
   it('S7: deletes the order after confirm and navigates to the list', async () => {
     const deleteCalls = renderActionsPage(adminUser);
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const user = userEvent.setup();
 
     await user.click(await screen.findByRole('button', { name: 'Eliminar' }));
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Estás seguro de que querés eliminar esta orden de trabajo?'
     );
+    await user.click(within(dialog).getByRole('button', { name: 'Eliminar' }));
+
     await waitFor(() => expect(deleteCalls).toHaveLength(1));
     expect(deleteCalls[0]).toBe('http://localhost:3000/api/work-orders/wo1');
     await waitFor(() =>
@@ -328,12 +330,15 @@ describe('WorkOrderDetailPage actions', () => {
 
   it('S7: does not send the request when the confirm is cancelled', async () => {
     const deleteCalls = renderActionsPage(adminUser);
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const user = userEvent.setup();
 
     await user.click(await screen.findByRole('button', { name: 'Eliminar' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar',
+      })
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
     expect(deleteCalls).toHaveLength(0);
     expect(screen.queryByTestId('location')).not.toBeInTheDocument();
   });
@@ -483,7 +488,6 @@ describe('WorkOrderDetailPage status transitions', () => {
   });
 
   it('S5: clicking Iniciar trabajo fires the PATCH without confirm and refetches the detail', async () => {
-    const confirmSpy = vi.spyOn(window, 'confirm');
     const { patchCalls } = renderTransitionsPage(
       adminUser,
       buildWorkOrder({ status: 'pending' })
@@ -494,7 +498,7 @@ describe('WorkOrderDetailPage status transitions', () => {
       await screen.findByRole('button', { name: 'Iniciar trabajo' })
     );
 
-    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].url).toBe(
       'http://localhost:3000/api/work-orders/wo1/status'
@@ -503,7 +507,6 @@ describe('WorkOrderDetailPage status transitions', () => {
   });
 
   it('S7: cancel confirm dismissal fires no request', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const { patchCalls } = renderTransitionsPage(
       adminUser,
       buildWorkOrder({ status: 'pending' })
@@ -514,9 +517,12 @@ describe('WorkOrderDetailPage status transitions', () => {
       await screen.findByRole('button', { name: 'Cancelar orden' })
     );
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Cancelar esta orden? Esta acción es irreversible.'
     );
+    await user.click(within(dialog).getByRole('button', { name: 'Cancelar' }));
+
     expect(patchCalls).toHaveLength(0);
   });
 

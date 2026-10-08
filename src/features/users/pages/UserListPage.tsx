@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -24,17 +25,23 @@ export function UserListPage() {
     limit,
   });
   const deleteUser = useDeleteUser();
+  const [userToDelete, setUserToDelete] = useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     const target = users.find((user) => user.id === id);
     const label = target?.name ?? 'este usuario';
-    if (
-      !window.confirm(`¿Eliminar a ${label}? Esta acción no se puede deshacer.`)
-    ) {
+    setUserToDelete({ id, label });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) {
       return;
     }
     try {
-      await deleteUser.mutateAsync(id);
+      await deleteUser.mutateAsync(userToDelete.id);
     } catch {
       // Error surfaced by the table's disabled state / toast layer
     }
@@ -104,6 +111,22 @@ export function UserListPage() {
           )}
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={userToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setUserToDelete(null);
+          }
+        }}
+        title="Eliminar usuario"
+        description={
+          userToDelete
+            ? `¿Eliminar a ${userToDelete.label}? Esta acción no se puede deshacer.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }

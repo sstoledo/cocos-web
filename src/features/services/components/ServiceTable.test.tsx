@@ -47,10 +47,11 @@ const services: Service[] = [
 describe('ServiceTable', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.restoreAllMocks();
   });
 
   beforeEach(() => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
   });
 
   function renderTable(servicesToRender: Service[] = services) {
@@ -115,16 +116,38 @@ describe('ServiceTable', () => {
     expect(editLink).toHaveAttribute('href', '/services/srv-1/edit');
   });
 
-  it('calls delete mutation on delete button click', async () => {
+  it('calls delete mutation after confirming in the dialog', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => undefined,
+    });
     renderTable();
 
     fireEvent.click(screen.getByLabelText('Eliminar Cambio de aceite'));
 
+    expect(screen.getByText('Eliminar servicio')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
+
     await waitFor(() => {
-      expect(window.confirm).toHaveBeenCalledWith(
-        '¿Estás seguro de que querés eliminar este servicio?'
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/services/srv-1',
+        { method: 'DELETE', credentials: 'include' }
       );
     });
+  });
+
+  it('does not call delete mutation when the dialog is cancelled', async () => {
+    globalThis.fetch = vi.fn();
+    renderTable();
+
+    fireEvent.click(screen.getByLabelText('Eliminar Cambio de aceite'));
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Eliminar servicio')).not.toBeInTheDocument();
+    });
+    expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 
   it('shows empty state when no services', () => {

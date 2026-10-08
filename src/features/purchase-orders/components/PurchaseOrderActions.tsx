@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -20,6 +21,9 @@ export function PurchaseOrderActions({
   const order = useOrderPurchaseOrder();
   const cancel = useCancelPurchaseOrder();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<'order' | 'cancel' | null>(
+    null
+  );
 
   const roleName = user?.role?.name ?? '';
   const canWrite = WRITE_ROLES.includes(roleName);
@@ -37,95 +41,99 @@ export function PurchaseOrderActions({
     return null;
   }
 
-  function handleOrder() {
-    // window.confirm naming the order (SaleCancelAction precedent); a
-    // dismissed confirm MUST NOT fire the mutation.
-    if (
-      !window.confirm(
-        `¿Confirmar la orden ${purchaseOrder.purchaseOrderNumber}? Se notificará al proveedor.`
-      )
-    ) {
-      return;
-    }
-
+  function handleConfirm() {
+    // A dismissed dialog MUST NOT fire the mutation (pendingAction stays
+    // null and handleConfirm never runs).
     setErrorMessage(null);
-    order.mutate(purchaseOrder.id, {
-      onError: (error) => {
-        setErrorMessage(getPurchaseOrderErrorMessage(error));
-      },
-    });
-  }
-
-  function handleCancel() {
-    if (
-      !window.confirm(
-        `¿Cancelar la orden ${purchaseOrder.purchaseOrderNumber}? Esta acción no se puede deshacer.`
-      )
-    ) {
-      return;
+    if (pendingAction === 'order') {
+      order.mutate(purchaseOrder.id, {
+        onError: (error) => {
+          setErrorMessage(getPurchaseOrderErrorMessage(error));
+        },
+      });
+    } else if (pendingAction === 'cancel') {
+      cancel.mutate(purchaseOrder.id, {
+        onError: (error) => {
+          setErrorMessage(getPurchaseOrderErrorMessage(error));
+        },
+      });
     }
-
-    setErrorMessage(null);
-    cancel.mutate(purchaseOrder.id, {
-      onError: (error) => {
-        setErrorMessage(getPurchaseOrderErrorMessage(error));
-      },
-    });
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      {showEdit && (
-        <Link
-          to={`/purchase-orders/${purchaseOrder.id}/edit`}
-          className={cn(
-            'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-            'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-          )}
-        >
-          Editar
-        </Link>
-      )}
-      {showReceive && (
-        <Link
-          to={`/purchase-orders/${purchaseOrder.id}/receive`}
-          className={cn(
-            'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-            'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-          )}
-        >
-          Registrar recepción
-        </Link>
-      )}
-      {showOrder && (
-        <Button
-          type="button"
-          variant="outline"
-          disabled={order.isPending}
-          onClick={handleOrder}
-        >
-          Confirmar orden
-        </Button>
-      )}
-      {showCancel && (
-        <Button
-          type="button"
-          variant="outline"
-          disabled={cancel.isPending}
-          onClick={handleCancel}
-          className="border-destructive/50 text-destructive hover:bg-destructive/10"
-        >
-          Cancelar orden
-        </Button>
-      )}
-      {errorMessage && (
-        <div
-          className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-          role="alert"
-        >
-          {errorMessage}
-        </div>
-      )}
-    </div>
+    <>
+      <div className="flex flex-wrap items-center gap-2">
+        {showEdit && (
+          <Link
+            to={`/purchase-orders/${purchaseOrder.id}/edit`}
+            className={cn(
+              'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
+              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            Editar
+          </Link>
+        )}
+        {showReceive && (
+          <Link
+            to={`/purchase-orders/${purchaseOrder.id}/receive`}
+            className={cn(
+              'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
+              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            Registrar recepción
+          </Link>
+        )}
+        {showOrder && (
+          <Button
+            type="button"
+            variant="outline"
+            disabled={order.isPending}
+            onClick={() => setPendingAction('order')}
+          >
+            Confirmar orden
+          </Button>
+        )}
+        {showCancel && (
+          <Button
+            type="button"
+            variant="outline"
+            disabled={cancel.isPending}
+            onClick={() => setPendingAction('cancel')}
+            className="border-destructive/50 text-destructive hover:bg-destructive/10"
+          >
+            Cancelar orden
+          </Button>
+        )}
+        {errorMessage && (
+          <div
+            className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+            role="alert"
+          >
+            {errorMessage}
+          </div>
+        )}
+      </div>
+      <ConfirmDialog
+        open={pendingAction !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingAction(null);
+          }
+        }}
+        title={pendingAction === 'order' ? 'Confirmar orden' : 'Cancelar orden'}
+        description={
+          pendingAction === 'order'
+            ? `¿Confirmar la orden ${purchaseOrder.purchaseOrderNumber}? Se notificará al proveedor.`
+            : `¿Cancelar la orden ${purchaseOrder.purchaseOrderNumber}? Esta acción no se puede deshacer.`
+        }
+        confirmLabel={
+          pendingAction === 'order' ? 'Confirmar' : 'Cancelar orden'
+        }
+        onConfirm={handleConfirm}
+        variant="danger"
+      />
+    </>
   );
 }

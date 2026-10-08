@@ -54,6 +54,71 @@ describe('PresentationListPage', () => {
     expect(screen.getByText('Presentaciones')).toBeInTheDocument();
   });
 
+  it('deletes a presentation after confirming in the dialog', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockPresentations,
+        meta: { page: 1, limit: 10, total: 2 },
+      }),
+    });
+
+    render(<PresentationListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Presentación 1')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByLabelText('Eliminar Presentación 1'));
+
+    expect(screen.getByText('Eliminar presentación')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        '¿Eliminar la presentación "Presentación 1"? Esta acción no se puede deshacer.'
+      )
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Eliminar' }));
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/presentations/p1',
+        { method: 'DELETE', credentials: 'include' }
+      )
+    );
+  });
+
+  it('does not delete a presentation when the dialog is cancelled', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockPresentations,
+        meta: { page: 1, limit: 10, total: 2 },
+      }),
+    });
+
+    render(<PresentationListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Presentación 1')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByLabelText('Eliminar Presentación 1'));
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    await waitFor(() =>
+      expect(
+        screen.queryByText('Eliminar presentación')
+      ).not.toBeInTheDocument()
+    );
+    expect(globalThis.fetch).not.toHaveBeenCalledWith(
+      'http://localhost:3000/api/presentations/p1',
+      { method: 'DELETE', credentials: 'include' }
+    );
+  });
+
   it('shows new presentation button for Admin', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,

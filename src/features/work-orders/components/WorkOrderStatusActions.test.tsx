@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -137,7 +137,6 @@ describe('WorkOrderStatusActions', () => {
   });
 
   it('S5: fires the PATCH without a confirm dialog for pending → in_progress', async () => {
-    const confirmSpy = vi.spyOn(window, 'confirm');
     const { patchCalls } = renderActions({ status: 'pending' });
     const user = userEvent.setup();
 
@@ -145,7 +144,7 @@ describe('WorkOrderStatusActions', () => {
       await screen.findByRole('button', { name: 'Iniciar trabajo' })
     );
 
-    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].url).toBe(
       'http://localhost:3000/api/work-orders/wo1/status'
@@ -154,7 +153,6 @@ describe('WorkOrderStatusActions', () => {
   });
 
   it('S6: fires the PATCH only after accepting the confirm for done', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { patchCalls } = renderActions({ status: 'in_progress' });
     const user = userEvent.setup();
 
@@ -162,28 +160,35 @@ describe('WorkOrderStatusActions', () => {
       await screen.findByRole('button', { name: 'Marcar como terminada' })
     );
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Marcar la orden como terminada? Se descontará el stock de los productos.'
     );
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Marcar como terminada' })
+    );
+
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].body).toEqual({ status: 'done' });
   });
 
   it('S6: does not fire the PATCH when the done confirm is dismissed', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const { patchCalls } = renderActions({ status: 'in_progress' });
     const user = userEvent.setup();
 
     await user.click(
       await screen.findByRole('button', { name: 'Marcar como terminada' })
     );
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar',
+      })
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
     expect(patchCalls).toHaveLength(0);
   });
 
   it('S7: fires the PATCH only after accepting the confirm for cancelled', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { patchCalls } = renderActions({ status: 'pending' });
     const user = userEvent.setup();
 
@@ -191,23 +196,31 @@ describe('WorkOrderStatusActions', () => {
       await screen.findByRole('button', { name: 'Cancelar orden' })
     );
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Cancelar esta orden? Esta acción es irreversible.'
     );
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Cancelar orden' })
+    );
+
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].body).toEqual({ status: 'cancelled' });
   });
 
   it('S7: does not fire the PATCH when the cancel confirm is dismissed', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const { patchCalls } = renderActions({ status: 'pending' });
     const user = userEvent.setup();
 
     await user.click(
       await screen.findByRole('button', { name: 'Cancelar orden' })
     );
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar',
+      })
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
     expect(patchCalls).toHaveLength(0);
   });
 
@@ -292,11 +305,15 @@ describe('WorkOrderStatusActions', () => {
         },
       },
     });
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const user = userEvent.setup();
 
     await user.click(
       await screen.findByRole('button', { name: 'Marcar como terminada' })
+    );
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Marcar como terminada',
+      })
     );
 
     await waitFor(() =>

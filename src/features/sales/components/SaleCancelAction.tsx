@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { ApiError } from '@/lib/api-error';
 import { useQueryClient } from '@tanstack/react-query';
@@ -14,6 +15,7 @@ export function SaleCancelAction({ sale }: { sale: Sale }) {
   const queryClient = useQueryClient();
   const cancel = useCancelSale();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const canCancel =
     sale.status === 'completed' &&
@@ -23,17 +25,8 @@ export function SaleCancelAction({ sale }: { sale: Sale }) {
     return null;
   }
 
-  function handleCancel() {
-    // D10: plain window.confirm naming the sale (WorkOrderStatusActions
-    // precedent); dismiss MUST NOT fire the mutation (SL-F12).
-    if (
-      !window.confirm(
-        `¿Cancelar la venta ${sale.saleNumber}? Esta acción no se puede deshacer.`
-      )
-    ) {
-      return;
-    }
-
+  function handleConfirm() {
+    // Dialog dismiss MUST NOT fire the mutation (SL-F12).
     setErrorMessage(null);
     cancel.mutate(sale.id, {
       onError: (error) => {
@@ -57,7 +50,7 @@ export function SaleCancelAction({ sale }: { sale: Sale }) {
         type="button"
         variant="outline"
         disabled={cancel.isPending}
-        onClick={handleCancel}
+        onClick={() => setConfirmOpen(true)}
         className="border-destructive/50 text-destructive hover:bg-destructive/10"
       >
         Cancelar venta
@@ -70,6 +63,15 @@ export function SaleCancelAction({ sale }: { sale: Sale }) {
           {errorMessage}
         </div>
       )}
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Cancelar venta"
+        description={`¿Cancelar la venta ${sale.saleNumber}? Esta acción no se puede deshacer.`}
+        confirmLabel="Cancelar venta"
+        onConfirm={handleConfirm}
+        variant="danger"
+      />
     </div>
   );
 }

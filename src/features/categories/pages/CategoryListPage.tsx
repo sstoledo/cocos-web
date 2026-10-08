@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -6,6 +7,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { CategoryFilters } from '../components/CategoryFilters';
 import { CategoryTable } from '../components/CategoryTable';
@@ -31,6 +33,10 @@ export function CategoryListPage() {
   const { categories, meta, isLoading, error } = useCategories(filters);
   const deleteCategory = useDeleteCategory();
   const { user } = useUser();
+  const [categoryToDelete, setCategoryToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const canEdit = user?.role?.name === 'Admin';
   const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
@@ -57,16 +63,16 @@ export function CategoryListPage() {
     setSearchParams(nextSearchParams, { replace: true });
   }
 
-  async function handleDelete(category: { id: string; name: string }) {
-    if (
-      !window.confirm(
-        `¿Eliminar la categoría "${category.name}"? Esta acción no se puede deshacer.`
-      )
-    ) {
+  function handleDelete(category: { id: string; name: string }) {
+    setCategoryToDelete(category);
+  }
+
+  async function handleConfirmDelete() {
+    if (!categoryToDelete) {
       return;
     }
     try {
-      await deleteCategory.mutateAsync(category.id);
+      await deleteCategory.mutateAsync(categoryToDelete.id);
     } catch {
       // Error handled by mutation
     }
@@ -120,6 +126,22 @@ export function CategoryListPage() {
           </div>
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={categoryToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setCategoryToDelete(null);
+          }
+        }}
+        title="Eliminar categoría"
+        description={
+          categoryToDelete
+            ? `¿Eliminar la categoría "${categoryToDelete.name}"? Esta acción no se puede deshacer.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }

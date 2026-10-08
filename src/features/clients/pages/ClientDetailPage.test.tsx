@@ -377,9 +377,8 @@ describe('ClientDetailPage', () => {
     );
   });
 
-  it('deletes a vehicle after confirmation', async () => {
+  it('deletes a vehicle after confirming in the dialog', async () => {
     const user = userEvent.setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const fetchMock = createFetchMock();
 
     renderPage('/clients/c1', fetchMock);
@@ -391,6 +390,13 @@ describe('ClientDetailPage', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Eliminar ABC-123' }));
+
+    expect(screen.getByText('Eliminar vehículo')).toBeInTheDocument();
+    expect(
+      screen.getByText('¿Estás seguro de que querés eliminar este vehículo?')
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Eliminar' }));
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(
@@ -400,9 +406,8 @@ describe('ClientDetailPage', () => {
     );
   });
 
-  it('does not delete a vehicle when confirmation is cancelled', async () => {
+  it('does not delete a vehicle when the dialog is cancelled', async () => {
     const user = userEvent.setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const fetchMock = createFetchMock();
 
     renderPage('/clients/c1', fetchMock);
@@ -414,7 +419,11 @@ describe('ClientDetailPage', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Eliminar ABC-123' }));
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
+    await waitFor(() =>
+      expect(screen.queryByText('Eliminar vehículo')).not.toBeInTheDocument()
+    );
     expect(fetchMock).not.toHaveBeenCalledWith(
       'http://localhost:3000/api/vehicles/v1',
       expect.objectContaining({ method: 'DELETE' })

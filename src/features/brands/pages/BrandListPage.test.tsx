@@ -107,6 +107,69 @@ describe('BrandListPage', () => {
     );
   });
 
+  it('deletes a brand after confirming in the dialog', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockBrands,
+        meta: { page: 1, limit: 10, total: 2 },
+      }),
+    });
+
+    render(<BrandListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Marca 1')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByLabelText('Eliminar Marca 1'));
+
+    expect(screen.getByText('Eliminar marca')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        '¿Eliminar la marca "Marca 1"? Esta acción no se puede deshacer.'
+      )
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Eliminar' }));
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/brands/b1',
+        { method: 'DELETE', credentials: 'include' }
+      )
+    );
+  });
+
+  it('does not delete a brand when the dialog is cancelled', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: mockBrands,
+        meta: { page: 1, limit: 10, total: 2 },
+      }),
+    });
+
+    render(<BrandListPage />, { wrapper });
+
+    await waitFor(() =>
+      expect(screen.getByText('Marca 1')).toBeInTheDocument()
+    );
+
+    await user.click(screen.getByLabelText('Eliminar Marca 1'));
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+
+    await waitFor(() =>
+      expect(screen.queryByText('Eliminar marca')).not.toBeInTheDocument()
+    );
+    expect(globalThis.fetch).not.toHaveBeenCalledWith(
+      'http://localhost:3000/api/brands/b1',
+      { method: 'DELETE', credentials: 'include' }
+    );
+  });
+
   it('renders pagination when there is more than one page', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,

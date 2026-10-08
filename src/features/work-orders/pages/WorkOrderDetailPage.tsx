@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { WorkOrderStatusActions } from '../components/WorkOrderStatusActions';
 import { WorkOrderStatusBadge } from '../components/WorkOrderStatusBadge';
@@ -21,23 +23,18 @@ export function WorkOrderDetailPage() {
   const { data: workOrder, isLoading, error } = useWorkOrder(id ?? '');
   const { user } = useUser();
   const deleteWorkOrder = useDeleteWorkOrder();
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const canManage =
     user?.role?.name === 'Admin' || user?.role?.name === 'Reception';
 
-  function handleDelete() {
+  function handleConfirmDelete() {
     if (!id) {
       return;
     }
-    if (
-      window.confirm(
-        '¿Estás seguro de que querés eliminar esta orden de trabajo?'
-      )
-    ) {
-      deleteWorkOrder.mutate(id, {
-        onSuccess: () => navigate('/work-orders'),
-      });
-    }
+    deleteWorkOrder.mutate(id, {
+      onSuccess: () => navigate('/work-orders'),
+    });
   }
 
   if (isLoading) {
@@ -95,12 +92,20 @@ export function WorkOrderDetailPage() {
             <Button
               type="button"
               variant="outline"
-              onClick={handleDelete}
+              onClick={() => setConfirmOpen(true)}
               disabled={deleteWorkOrder.isPending}
               className="border-destructive/50 text-destructive hover:bg-destructive/10"
             >
               {deleteWorkOrder.isPending ? 'Eliminando…' : 'Eliminar'}
             </Button>
+            <ConfirmDialog
+              open={confirmOpen}
+              onOpenChange={setConfirmOpen}
+              title="Eliminar orden de trabajo"
+              description="¿Estás seguro de que querés eliminar esta orden de trabajo?"
+              onConfirm={handleConfirmDelete}
+              variant="danger"
+            />
           </div>
         )}
       </PageHeader>

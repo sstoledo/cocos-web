@@ -4,7 +4,7 @@ import * as React from 'react';
 
 export interface ButtonProps
   extends React.ComponentPropsWithoutRef<typeof BaseButton> {
-  variant?: 'default' | 'ghost' | 'outline';
+  variant?: 'default' | 'ghost' | 'outline' | 'danger';
   size?: 'sm' | 'md' | 'lg' | 'icon';
 }
 
@@ -20,6 +20,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               variant === 'default',
             'hover:bg-muted': variant === 'ghost',
             'border bg-card hover:bg-muted': variant === 'outline',
+            'bg-destructive text-white hover:bg-destructive/90':
+              variant === 'danger',
           },
           {
             'h-8 px-3 text-sm': size === 'sm',

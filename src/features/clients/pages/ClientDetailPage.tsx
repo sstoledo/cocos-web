@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -36,6 +37,7 @@ export function ClientDetailPage() {
   const page = Number.parseInt(searchParams.get('page') ?? '1', 10) || 1;
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+  const [vehicleToDelete, setVehicleToDelete] = useState<Vehicle | null>(null);
 
   const { user } = useUser();
   const createVehicle = useCreateVehicle();
@@ -92,9 +94,17 @@ export function ClientDetailPage() {
   }
 
   function handleDelete(vehicle: Vehicle) {
-    if (window.confirm('¿Estás seguro de que querés eliminar este vehículo?')) {
-      deleteVehicle.mutate({ id: vehicle.id, clientId: vehicle.clientId });
+    setVehicleToDelete(vehicle);
+  }
+
+  function handleConfirmDelete() {
+    if (!vehicleToDelete) {
+      return;
     }
+    deleteVehicle.mutate({
+      id: vehicleToDelete.id,
+      clientId: vehicleToDelete.clientId,
+    });
   }
 
   const isFormPending = createVehicle.isPending || updateVehicle.isPending;
@@ -193,6 +203,18 @@ export function ClientDetailPage() {
           )}
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={vehicleToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setVehicleToDelete(null);
+          }
+        }}
+        title="Eliminar vehículo"
+        description="¿Estás seguro de que querés eliminar este vehículo?"
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -6,6 +7,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { PresentationFilters } from '../components/PresentationFilters';
 import { PresentationTable } from '../components/PresentationTable';
@@ -31,6 +33,10 @@ export function PresentationListPage() {
   const { presentations, meta, isLoading, error } = usePresentations(filters);
   const deletePresentation = useDeletePresentation();
   const { user } = useUser();
+  const [presentationToDelete, setPresentationToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const canEdit = user?.role?.name === 'Admin';
   const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
@@ -57,16 +63,16 @@ export function PresentationListPage() {
     setSearchParams(nextSearchParams, { replace: true });
   }
 
-  async function handleDelete(presentation: { id: string; name: string }) {
-    if (
-      !window.confirm(
-        `¿Eliminar la presentación "${presentation.name}"? Esta acción no se puede deshacer.`
-      )
-    ) {
+  function handleDelete(presentation: { id: string; name: string }) {
+    setPresentationToDelete(presentation);
+  }
+
+  async function handleConfirmDelete() {
+    if (!presentationToDelete) {
       return;
     }
     try {
-      await deletePresentation.mutateAsync(presentation.id);
+      await deletePresentation.mutateAsync(presentationToDelete.id);
     } catch {
       // Error handled by mutation
     }
@@ -123,6 +129,22 @@ export function PresentationListPage() {
           </div>
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={presentationToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPresentationToDelete(null);
+          }
+        }}
+        title="Eliminar presentación"
+        description={
+          presentationToDelete
+            ? `¿Eliminar la presentación "${presentationToDelete.name}"? Esta acción no se puede deshacer.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }
