@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { ApiError } from '@/lib/api-error';
 import { useQueryClient } from '@tanstack/react-query';
@@ -31,6 +32,9 @@ export function WorkOrderStatusActions({
   const [activeTarget, setActiveTarget] = useState<WorkOrderStatus | null>(
     null
   );
+  const [pendingTarget, setPendingTarget] = useState<WorkOrderStatus | null>(
+    null
+  );
 
   const canTransition = TRANSITION_ROLES.includes(user?.role?.name ?? '');
   const targets = ALLOWED_TRANSITIONS[status];
@@ -45,10 +49,15 @@ export function WorkOrderStatusActions({
       return;
     }
 
-    if (meta.confirmMessage && !window.confirm(meta.confirmMessage)) {
+    if (meta.confirmMessage) {
+      setPendingTarget(target);
       return;
     }
 
+    runTransition(target);
+  }
+
+  function runTransition(target: WorkOrderStatus) {
     setErrorMessage(null);
     setActiveTarget(target);
     transition.mutate(
@@ -105,6 +114,31 @@ export function WorkOrderStatusActions({
           {errorMessage}
         </div>
       )}
+      <ConfirmDialog
+        open={pendingTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingTarget(null);
+          }
+        }}
+        title={
+          pendingTarget ? (TRANSITION_BUTTONS[pendingTarget]?.label ?? '') : ''
+        }
+        description={
+          pendingTarget
+            ? TRANSITION_BUTTONS[pendingTarget]?.confirmMessage
+            : undefined
+        }
+        confirmLabel={
+          pendingTarget ? TRANSITION_BUTTONS[pendingTarget]?.label : undefined
+        }
+        onConfirm={() => {
+          if (pendingTarget) {
+            runTransition(pendingTarget);
+          }
+        }}
+        variant="danger"
+      />
     </div>
   );
 }

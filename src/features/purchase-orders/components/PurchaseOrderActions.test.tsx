@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
@@ -223,7 +223,6 @@ describe('PurchaseOrderActions', () => {
   });
 
   it('fires a no-body PATCH to /order only after confirm accept', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { patchCalls } = renderActions({
       purchaseOrder: buildPurchaseOrder({ status: 'draft' }),
     });
@@ -231,9 +230,12 @@ describe('PurchaseOrderActions', () => {
 
     await user.click(screen.getByRole('button', { name: 'Confirmar orden' }));
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Confirmar la orden COM-2024-000001? Se notificará al proveedor.'
     );
+    await user.click(within(dialog).getByRole('button', { name: 'Confirmar' }));
+
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].url).toBe(
       'http://localhost:3000/api/purchase-orders/po1/order'
@@ -242,20 +244,22 @@ describe('PurchaseOrderActions', () => {
   });
 
   it('does not fire the order mutation when confirm is dismissed', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const { patchCalls } = renderActions({
       purchaseOrder: buildPurchaseOrder({ status: 'draft' }),
     });
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Confirmar orden' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar',
+      })
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
     expect(patchCalls).toHaveLength(0);
   });
 
   it('fires a no-body PATCH to /cancel only after confirm accept', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { patchCalls } = renderActions({
       purchaseOrder: buildPurchaseOrder({ status: 'draft' }),
     });
@@ -263,9 +267,14 @@ describe('PurchaseOrderActions', () => {
 
     await user.click(screen.getByRole('button', { name: 'Cancelar orden' }));
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Cancelar la orden COM-2024-000001? Esta acción no se puede deshacer.'
     );
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Cancelar orden' })
+    );
+
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].url).toBe(
       'http://localhost:3000/api/purchase-orders/po1/cancel'
@@ -274,20 +283,22 @@ describe('PurchaseOrderActions', () => {
   });
 
   it('does not fire the cancel mutation when confirm is dismissed', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const { patchCalls } = renderActions({
       purchaseOrder: buildPurchaseOrder({ status: 'draft' }),
     });
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar orden' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar',
+      })
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
     expect(patchCalls).toHaveLength(0);
   });
 
   it('shows the mapped error inline when cancel fails', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     renderActions({
       purchaseOrder: buildPurchaseOrder({ status: 'draft' }),
       patchResponse: {
@@ -299,6 +310,11 @@ describe('PurchaseOrderActions', () => {
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar orden' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar orden',
+      })
+    );
 
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent(

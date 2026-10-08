@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -113,15 +113,19 @@ describe('SaleCancelAction', () => {
   });
 
   it('S2: confirms naming the sale and fires a no-body PATCH on accept', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { patchCalls } = renderAction();
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar venta' }));
 
-    expect(window.confirm).toHaveBeenCalledWith(
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(
       '¿Cancelar la venta VTA-2026-000001? Esta acción no se puede deshacer.'
     );
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Cancelar venta' })
+    );
+
     await waitFor(() => expect(patchCalls).toHaveLength(1));
     expect(patchCalls[0].url).toBe(
       'http://localhost:3000/api/sales/sale1/cancel'
@@ -130,22 +134,29 @@ describe('SaleCancelAction', () => {
   });
 
   it('S2: does not fire the PATCH when the confirm is dismissed', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
     const { patchCalls } = renderAction();
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar venta' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar',
+      })
+    );
 
-    expect(window.confirm).toHaveBeenCalled();
     expect(patchCalls).toHaveLength(0);
   });
 
   it('S3: invalidates the sales prefix and the sale detail on success', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { invalidateQueriesSpy } = renderAction();
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar venta' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar venta',
+      })
+    );
 
     await waitFor(() =>
       expect(invalidateQueriesSpy).toHaveBeenCalledWith({
@@ -158,7 +169,6 @@ describe('SaleCancelAction', () => {
   });
 
   it('S4: shows the already-cancelled message and re-invalidates on 409', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const { invalidateQueriesSpy } = renderAction({
       patchResponse: {
         ok: false,
@@ -172,6 +182,11 @@ describe('SaleCancelAction', () => {
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar venta' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar venta',
+      })
+    );
 
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent(
@@ -200,13 +215,17 @@ describe('SaleCancelAction', () => {
   ])(
     'S5: shows the mapped message inline on %s failures',
     async ({ status, body, expected }) => {
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
       renderAction({
         patchResponse: { ok: false, status, body },
       });
       const user = userEvent.setup();
 
       await user.click(screen.getByRole('button', { name: 'Cancelar venta' }));
+      await user.click(
+        within(screen.getByRole('dialog')).getByRole('button', {
+          name: 'Cancelar venta',
+        })
+      );
 
       await waitFor(() =>
         expect(screen.getByRole('alert')).toHaveTextContent(expected)
@@ -215,7 +234,6 @@ describe('SaleCancelAction', () => {
   );
 
   it('S6: disables the button while the mutation is pending', async () => {
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
     renderAction();
     globalThis.fetch = vi.fn(
       async (_input: RequestInfo | URL, init?: RequestInit) => {
@@ -228,6 +246,11 @@ describe('SaleCancelAction', () => {
     const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: 'Cancelar venta' }));
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Cancelar venta',
+      })
+    );
 
     expect(
       await screen.findByRole('button', { name: 'Cancelar venta' })
