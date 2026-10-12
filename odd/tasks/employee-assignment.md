@@ -33,7 +33,7 @@ Decisión del usuario (opción B sobre A=parche SQL): hacer el fix real. Sin est
 - [x] T2 (back): users employeeId link/unlink + validaciones + tests
 - [x] T3 (front): employee select en WorkOrderForm + detail + tests
 - [x] T4 (front): employee select en UserForm + detail + tests
-- [ ] T5: verificación completa + docs + PRs
+- [x] T5: verificación completa + docs + PRs
 
 ## Reglas del usuario (MANDATORY en commits y PRs)
 - Commits: SOLO título conventional, sin body.
@@ -48,7 +48,12 @@ Decisión del usuario (opción B sobre A=parche SQL): hacer el fix real. Sin est
 | T1 | ✅ Done | 644b9e9 (back) | 576 unit + 4 e2e verdes; select {id,name,specialty,userId}, solo activos, orden por nombre |
 | T2 | ✅ Done | 23f4bc4 (back) | 589 unit verdes (+13); errores: EMPLOYEE_NOT_FOUND (404) / EMPLOYEE_ALREADY_LINKED (409); transaccional; unlink con null |
 | T3 | ✅ Done | 9dbfc4f (front) | 136 tests verdes; feature employees/ nuevo; form guardado a Admin/Reception ya existía; detail ya mostraba empleado (backend incluye employee) |
-| — | T4 en curso | — | — |
+| T4 | ✅ Done | 8b9e33d (front) | 60 tests verdes; opciones ya vinculadas anotadas "(ya vinculado)"; sin mapper de errores users (hallazgo) |
+| T5 | ✅ Done | — | Suite front 1256 verdes; PRs abiertos |
+
+## Hallazgos para el usuario
+- Empleados solo se crean por seed (sin CRUD UI) — evaluar si hace falta gestión de empleados.
+- Users feature no tiene mapper de mensajes de error (EMPLOYEE_ALREADY_LINKED sale con mensaje genérico del backend) — candidato a mejora futura.
 
 ## Siguiente paso
-T4 frontend (employee select en UserForm).
+FEATURE COMPLETO. Mergear PRs (back primero, front depende del endpoint) + vincular empleados a usuarios desde la UI de usuarios + re-test Mechanic.
