@@ -15,6 +15,10 @@ import { WorkOrderForm } from './WorkOrderForm';
 const clients = [buildClient(), buildClient({ id: 'c2', name: 'María López' })];
 const services = [buildService()];
 const products = [buildProduct()];
+const employees = [
+  { id: 'e1', name: 'Ana Gómez', specialty: 'Mecánica', userId: 'u1' },
+  { id: 'e2', name: 'Luis Pérez', specialty: null, userId: null },
+];
 
 function mockCatalogs() {
   globalThis.fetch = vi.fn(async (input: RequestInfo | URL) => {
@@ -35,6 +39,8 @@ function mockCatalogs() {
         data: services,
         meta: { page: 1, limit: 100, total: services.length },
       };
+    } else if (url.includes('/employees')) {
+      body = employees;
     } else if (url.includes('/products')) {
       body = {
         data: products,
@@ -180,6 +186,46 @@ describe('WorkOrderForm', () => {
 
     await waitFor(() =>
       expect(screen.getByText('Total: 20.29')).toBeInTheDocument()
+    );
+  });
+
+  it('assigns an employee via the mechanic selector and submits employeeId', async () => {
+    const { user, onSubmit } = renderForm();
+
+    await screen.findByRole('option', { name: 'Ana Gómez — Mecánica' });
+    expect(
+      screen.getByRole('option', { name: 'Luis Pérez' })
+    ).toBeInTheDocument();
+
+    await selectClientAndVehicle(user);
+    await user.selectOptions(screen.getByLabelText('Mecánico asignado'), 'e1');
+    await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
+    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+    await user.click(screen.getByRole('button', { name: 'Crear orden' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalled());
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        clientId: 'c1',
+        vehicleId: 'v1',
+        employeeId: 'e1',
+      }),
+      expect.anything()
+    );
+  });
+
+  it('submits employeeId as null when no mechanic is selected', async () => {
+    const { user, onSubmit } = renderForm();
+
+    await selectClientAndVehicle(user);
+    await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
+    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+    await user.click(screen.getByRole('button', { name: 'Crear orden' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalled());
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ employeeId: null }),
+      expect.anything()
     );
   });
 

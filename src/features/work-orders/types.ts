@@ -89,6 +89,7 @@ export interface CreateWorkOrderPayload {
   clientId: string;
   vehicleId: string;
   description?: string;
+  employeeId?: string | null;
   services?: WorkOrderServiceLineInput[];
   products?: WorkOrderProductLineInput[];
 }

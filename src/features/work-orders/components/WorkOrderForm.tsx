@@ -4,6 +4,7 @@ import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { useClients } from '@/features/clients/hooks/use-clients';
 import { useVehicles } from '@/features/clients/hooks/use-vehicles';
+import { useEmployees } from '@/features/employees/hooks/use-employees';
 import { useProducts } from '@/features/products/hooks/use-products';
 import { useServices } from '@/features/services/hooks/use-services';
 import { formatCents } from '@/lib/cents';
@@ -66,6 +67,7 @@ export function WorkOrderForm({
   });
   const { services, isLoading: isLoadingServices } = useServices({});
   const { products, isLoading: isLoadingProducts } = useProducts({});
+  const { employees, isLoading: isLoadingEmployees } = useEmployees();
 
   // Dependent selector: reset the vehicle whenever the client changes.
   const previousClientId = useRef(clientId);
@@ -108,7 +110,8 @@ export function WorkOrderForm({
     (isLoadingClients ||
       isLoadingVehicles ||
       isLoadingServices ||
-      isLoadingProducts)
+      isLoadingProducts ||
+      isLoadingEmployees)
   ) {
     return (
       <output className="block py-8 text-center text-muted-foreground">
@@ -148,6 +151,23 @@ export function WorkOrderForm({
             {...register('vehicleId')}
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="employeeId">Mecánico asignado</Label>
+        <Select
+          id="employeeId"
+          options={employees.map((employee) => ({
+            value: employee.id,
+            label: employee.specialty
+              ? `${employee.name} — ${employee.specialty}`
+              : employee.name,
+          }))}
+          placeholder="Sin asignar"
+          optional
+          error={errors.employeeId?.message}
+          {...register('employeeId')}
+        />
       </div>
 
       <div className="space-y-2">
