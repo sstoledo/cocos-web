@@ -32,7 +32,7 @@ export function LoginPage() {
 
   const onSubmit = (values: LoginFormValues) => {
     mutate(values, {
-      onSuccess: () => navigate('/dashboard'),
+      onSuccess: () => navigate('/'),
     });
   };
 
