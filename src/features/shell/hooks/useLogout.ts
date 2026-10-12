@@ -15,7 +15,7 @@ export function useLogout() {
       return response.data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['auth'] });
+      queryClient.clear();
       navigate('/login');
     },
   });

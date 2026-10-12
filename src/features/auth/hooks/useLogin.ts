@@ -18,6 +18,7 @@ export function useLogin() {
       return response.data;
     },
     onSuccess: async () => {
+      queryClient.removeQueries({ queryKey: ['auth', 'session', 'user'] });
       await queryClient.invalidateQueries({ queryKey: ['auth', 'session'] });
     },
   });

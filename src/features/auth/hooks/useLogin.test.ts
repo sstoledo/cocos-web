@@ -25,13 +25,15 @@ function createWrapper() {
     },
   });
 
-  return function Wrapper({ children }: { children: ReactNode }) {
+  function Wrapper({ children }: { children: ReactNode }) {
     return createElement(
       QueryClientProvider,
       { client: queryClient },
       children
     );
-  };
+  }
+
+  return { queryClient, Wrapper };
 }
 
 describe('useLogin', () => {
@@ -41,8 +43,9 @@ describe('useLogin', () => {
       error: null,
     });
 
+    const { Wrapper } = createWrapper();
     const { result } = renderHook(() => useLogin(), {
-      wrapper: createWrapper(),
+      wrapper: Wrapper,
     });
 
     result.current.mutate({ email: 'test@example.com', password: 'secret' });
@@ -56,12 +59,38 @@ describe('useLogin', () => {
     expect(result.current.error).toBeNull();
   });
 
+  it('removes the stale cached user before refetching the session', async () => {
+    vi.mocked(authClient.signIn.email).mockResolvedValueOnce({
+      data: { user: { id: '2' } },
+      error: null,
+    });
+
+    const { queryClient, Wrapper } = createWrapper();
+    queryClient.setQueryData(['auth', 'session', 'user'], {
+      id: 'previous-user',
+      role: { name: 'Mechanic' },
+    });
+
+    const { result } = renderHook(() => useLogin(), {
+      wrapper: Wrapper,
+    });
+
+    result.current.mutate({ email: 'admin@example.com', password: 'secret' });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(
+      queryClient.getQueryData(['auth', 'session', 'user'])
+    ).toBeUndefined();
+  });
+
   it('exposes the error when sign in fails', async () => {
     const error = new Error('Invalid credentials');
     vi.mocked(authClient.signIn.email).mockRejectedValueOnce(error);
 
+    const { Wrapper: failWrapper } = createWrapper();
     const { result } = renderHook(() => useLogin(), {
-      wrapper: createWrapper(),
+      wrapper: failWrapper,
     });
 
     result.current.mutate({ email: 'test@example.com', password: 'wrong' });

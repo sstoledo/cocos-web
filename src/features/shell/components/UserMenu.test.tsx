@@ -18,10 +18,10 @@ function renderWithQueryClient(ui: React.ReactNode) {
   );
 }
 
-const { signOutMock, navigateMock, invalidateQueriesMock } = vi.hoisted(() => ({
+const { signOutMock, navigateMock, clearMock } = vi.hoisted(() => ({
   signOutMock: vi.fn(),
   navigateMock: vi.fn(),
-  invalidateQueriesMock: vi.fn(),
+  clearMock: vi.fn(),
 }));
 
 vi.mock('@/lib/auth-client', () => ({
@@ -46,7 +46,7 @@ vi.mock('@tanstack/react-query', async () => {
   return {
     ...actual,
     useQueryClient: () => ({
-      invalidateQueries: invalidateQueriesMock,
+      clear: clearMock,
     }),
   };
 });
@@ -56,7 +56,7 @@ describe('UserMenu', () => {
     signOutMock.mockReset();
     signOutMock.mockResolvedValue({ data: null, error: null });
     navigateMock.mockReset();
-    invalidateQueriesMock.mockReset();
+    clearMock.mockReset();
   });
 
   it('renders user name and email', () => {
@@ -77,9 +77,7 @@ describe('UserMenu', () => {
     await user.click(screen.getByRole('button', { name: /cerrar sesión/i }));
 
     await waitFor(() => expect(signOutMock).toHaveBeenCalledTimes(1));
-    await waitFor(() =>
-      expect(invalidateQueriesMock).toHaveBeenCalledWith({ queryKey: ['auth'] })
-    );
+    await waitFor(() => expect(clearMock).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(navigateMock).toHaveBeenCalledWith('/login'));
   });
 
