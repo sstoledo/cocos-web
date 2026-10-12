@@ -5,6 +5,7 @@ export interface CreateUserPayload {
   name: string;
   password: string;
   roleId: string;
+  employeeId?: string | null;
 }
 
 export async function createUser(payload: CreateUserPayload): Promise<User> {

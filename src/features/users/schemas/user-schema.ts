@@ -5,6 +5,10 @@ export const userSchema = z.object({
   name: z.string().min(1, 'Nombre requerido').max(100),
   password: z.string().min(8, 'Mínimo 8 caracteres').max(100),
   roleId: z.string().min(1, 'Rol inválido'),
+  employeeId: z.preprocess(
+    (value) => (value === '' ? null : value),
+    z.string().nullish()
+  ),
 });
 
 export type UserFormValues = z.infer<typeof userSchema>;

@@ -63,6 +63,7 @@ export function UserFormPage() {
         email: user?.email ?? '',
         roleId: user?.role.id ?? '',
         isActive: user?.isActive ?? true,
+        employeeId: user?.employeeId ?? '',
       }
     : {};
 

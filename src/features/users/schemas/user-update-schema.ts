@@ -6,6 +6,10 @@ export const userUpdateSchema = z
     email: z.string().email('Email inválido').max(255).optional(),
     roleId: z.string().min(1, 'Rol inválido').optional(),
     isActive: z.boolean().optional(),
+    employeeId: z.preprocess(
+      (value) => (value === '' ? null : value),
+      z.string().nullish()
+    ),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Al menos un campo es requerido',

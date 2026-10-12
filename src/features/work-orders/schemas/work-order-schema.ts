@@ -31,6 +31,10 @@ export const workOrderSchema = z
     clientId: z.string().min(1, 'Seleccioná un cliente'),
     vehicleId: z.string().min(1, 'Seleccioná un vehículo'),
     description: z.string().max(2000, 'Máximo 2000 caracteres').optional(),
+    employeeId: z.preprocess(
+      (value) => (value === '' ? null : value),
+      z.string().nullish()
+    ),
     services: z.array(serviceLineSchema).default([]),
     products: z.array(productLineSchema).default([]),
   })

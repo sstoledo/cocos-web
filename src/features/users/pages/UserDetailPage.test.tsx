@@ -79,6 +79,41 @@ describe('UserDetailPage', () => {
     vi.restoreAllMocks();
   });
 
+  it('shows the linked employee name', async () => {
+    globalThis.fetch = vi.fn().mockImplementation((url: string) => {
+      if (url.includes('/users/roles/all')) {
+        return Promise.resolve({ ok: true, json: async () => [] });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          ...mockUser,
+          employeeId: 'emp-1',
+          employee: { id: 'emp-1', name: 'Juan Pérez' },
+        }),
+      });
+    });
+
+    render(<UserDetailPage />, { wrapper: createWrapper('/users/u1') });
+
+    await waitFor(() =>
+      expect(screen.getByText('Empleado vinculado')).toBeInTheDocument()
+    );
+    expect(screen.getByText('Juan Pérez')).toBeInTheDocument();
+  });
+
+  it('shows Sin vincular when the user has no employee', async () => {
+    const fetchMock = createFetchMock();
+    globalThis.fetch = fetchMock;
+
+    render(<UserDetailPage />, { wrapper: createWrapper('/users/u1') });
+
+    await waitFor(() =>
+      expect(screen.getByText('Empleado vinculado')).toBeInTheDocument()
+    );
+    expect(screen.getByText('Sin vincular')).toBeInTheDocument();
+  });
+
   it('deletes the user after confirming in the dialog', async () => {
     const user = userEvent.setup();
     const fetchMock = createFetchMock();

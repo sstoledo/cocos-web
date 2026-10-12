@@ -9,6 +9,9 @@ export async function updateWorkOrder(
     clientId: payload.clientId,
     vehicleId: payload.vehicleId,
     description: payload.description,
+    ...(payload.employeeId !== undefined
+      ? { employeeId: payload.employeeId }
+      : {}),
     // Backend rejects provided-but-empty arrays; omit empty line-type keys.
     ...(payload.services?.length ? { services: payload.services } : {}),
     ...(payload.products?.length ? { products: payload.products } : {}),

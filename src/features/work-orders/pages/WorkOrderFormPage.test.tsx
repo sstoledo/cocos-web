@@ -139,6 +139,7 @@ describe('WorkOrderFormPage (create)', () => {
     expect(postCalls[0].body).toEqual({
       clientId: 'c1',
       vehicleId: 'v1',
+      employeeId: null,
       services: [{ serviceId: 's1', quantity: 2, unitPrice: 150 }],
     });
 
@@ -268,6 +269,7 @@ describe('WorkOrderFormPage (edit)', () => {
     expect(patchCalls[0].body).toEqual({
       clientId: 'c1',
       vehicleId: 'v1',
+      employeeId: null,
       services: [{ serviceId: 's1', quantity: 3, unitPrice: 150 }],
     });
 
