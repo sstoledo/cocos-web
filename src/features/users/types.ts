@@ -15,6 +15,8 @@ export interface User {
     id: string;
     name: RoleName;
   };
+  employeeId?: string | null;
+  employee?: { id: string; name: string } | null;
   createdAt: string;
   updatedAt: string;
 }

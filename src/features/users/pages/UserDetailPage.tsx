@@ -130,7 +130,15 @@ export function UserDetailPage() {
               <dd className="text-foreground capitalize">{user.role.name}</dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Estado</dt>
+              <dt className="text-sm text-muted-foreground">
+                Empleado vinculado
+              </dt>
+              <dd className="text-foreground">
+                {user.employee?.name ?? 'Sin vincular'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">Estado</dt>{' '}
               <dd className="text-foreground">
                 {user.isActive ? 'Activo' : 'Inactivo'}
               </dd>

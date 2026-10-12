@@ -48,6 +48,25 @@ describe('createUser', () => {
     expect(result).toEqual(createdUser);
   });
 
+  it('sends employeeId when provided', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => createdUser,
+    });
+
+    await createUser({ ...payload, employeeId: 'emp-1' });
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/users',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, employeeId: 'emp-1' }),
+      }
+    );
+  });
+
   it('falls back to the status message when the body has no message', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,

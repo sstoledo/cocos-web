@@ -63,4 +63,31 @@ describe('userSchema', () => {
 
     expect(userSchema.safeParse(withoutPassword).success).toBe(false);
   });
+
+  it('accepts an employeeId', () => {
+    const result = userSchema.safeParse({
+      ...validValues,
+      employeeId: 'emp-1',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.data?.employeeId).toBe('emp-1');
+  });
+
+  it('preprocesses an empty employeeId to null', () => {
+    const result = userSchema.safeParse({
+      ...validValues,
+      employeeId: '',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.data?.employeeId).toBeNull();
+  });
+
+  it('accepts a payload without employeeId', () => {
+    const result = userSchema.safeParse(validValues);
+
+    expect(result.success).toBe(true);
+    expect(result.data?.employeeId).toBeUndefined();
+  });
 });

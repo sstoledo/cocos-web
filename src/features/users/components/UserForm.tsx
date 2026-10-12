@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { useRoles } from '@/features/auth/hooks/use-roles';
+import { useEmployees } from '@/features/employees/hooks/use-employees';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -27,6 +28,7 @@ export function UserForm({
   isEdit = false,
 }: UserFormProps) {
   const { roles, isLoading: isLoadingRoles } = useRoles();
+  const { employees, isLoading: isLoadingEmployees } = useEmployees();
 
   const schema = isEdit ? userUpdateSchema : userSchema;
 
@@ -42,6 +44,7 @@ export function UserForm({
           email: '',
           roleId: '',
           isActive: true,
+          employeeId: '',
           ...defaultValues,
         }
       : {
@@ -49,6 +52,7 @@ export function UserForm({
           name: '',
           password: '',
           roleId: '',
+          employeeId: '',
           ...defaultValues,
         },
   });
@@ -60,6 +64,15 @@ export function UserForm({
   const roleOptions = roles.map((role) => ({
     value: role.id,
     label: role.name,
+  }));
+
+  const linkedEmployeeId = defaultValues?.employeeId ?? null;
+  const employeeOptions = employees.map((employee) => ({
+    value: employee.id,
+    label:
+      employee.userId && employee.id !== linkedEmployeeId
+        ? `${employee.name} (ya vinculado)`
+        : employee.name,
   }));
 
   // The edit schema has no password field, so narrow the union before reading it.
@@ -140,6 +153,25 @@ export function UserForm({
         {errors.roleId && (
           <p className="text-sm text-destructive" role="alert">
             {errors.roleId.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="employeeId">Empleado vinculado</Label>
+        <Select
+          id="employeeId"
+          options={employeeOptions}
+          placeholder="Sin vincular"
+          optional
+          disabled={isLoadingEmployees}
+          aria-invalid={errors.employeeId ? 'true' : 'false'}
+          error={errors.employeeId?.message}
+          {...register('employeeId')}
+        />
+        {errors.employeeId && (
+          <p className="text-sm text-destructive" role="alert">
+            {errors.employeeId.message}
           </p>
         )}
       </div>

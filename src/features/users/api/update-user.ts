@@ -5,6 +5,7 @@ export interface UpdateUserPayload {
   email?: string;
   roleId?: string;
   isActive?: boolean;
+  employeeId?: string | null;
 }
 
 export async function updateUser(

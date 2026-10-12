@@ -48,4 +48,25 @@ describe('userUpdateSchema', () => {
 
     expect(result.success).toBe(false);
   });
+
+  it('accepts employeeId null on its own to unlink', () => {
+    const result = userUpdateSchema.safeParse({ employeeId: null });
+
+    expect(result.success).toBe(true);
+    expect(result.data?.employeeId).toBeNull();
+  });
+
+  it('preprocesses an empty employeeId to null', () => {
+    const result = userUpdateSchema.safeParse({ employeeId: '' });
+
+    expect(result.success).toBe(true);
+    expect(result.data?.employeeId).toBeNull();
+  });
+
+  it('accepts an employeeId', () => {
+    const result = userUpdateSchema.safeParse({ employeeId: 'emp-1' });
+
+    expect(result.success).toBe(true);
+    expect(result.data?.employeeId).toBe('emp-1');
+  });
 });
