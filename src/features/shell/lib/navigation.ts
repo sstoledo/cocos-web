@@ -29,7 +29,6 @@ export const navigationGroups: NavGroup[] = [
         allowedRoles: [
           'Admin',
           'Reception',
-          'Mechanic',
           'Warehouse',
           'Purchasing',
           'ReadOnly',

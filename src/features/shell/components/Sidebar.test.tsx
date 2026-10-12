@@ -84,8 +84,8 @@ describe('Sidebar', () => {
     renderSidebar('Mechanic');
 
     expect(
-      screen.getByRole('link', { name: /dashboard/i })
-    ).toBeInTheDocument();
+      screen.queryByRole('link', { name: /dashboard/i })
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: /órdenes de trabajo/i })
     ).toBeInTheDocument();

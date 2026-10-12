@@ -31,6 +31,7 @@ import { SalesListPage } from '@/features/sales/pages/SalesListPage';
 import { ServiceDetailPage } from '@/features/services/pages/ServiceDetailPage';
 import { ServiceFormPage } from '@/features/services/pages/ServiceFormPage';
 import { ServiceListPage } from '@/features/services/pages/ServiceListPage';
+import { RoleBasedIndex } from '@/features/shell/components/RoleBasedIndex';
 import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import { Layout } from '@/features/shell/pages/Layout';
 import { NotFoundPage } from '@/features/shell/pages/NotFoundPage';
@@ -50,7 +51,6 @@ import { WorkOrderFormPage } from '@/features/work-orders/pages/WorkOrderFormPag
 import { WorkOrderListPage } from '@/features/work-orders/pages/WorkOrderListPage';
 import * as React from 'react';
 import {
-  Navigate,
   type RouteObject,
   RouterProvider,
   createBrowserRouter,
@@ -83,7 +83,7 @@ const routes: RouteObject[] = [
     path: '/',
     element: <Layout />,
     children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
+      { index: true, element: <RoleBasedIndex /> },
       guardedRoute('dashboard', <DashboardPage />),
       guardedRoute('products', <ProductListPage />),
       guardedRoute('products/:id', <ProductDetailPage />),

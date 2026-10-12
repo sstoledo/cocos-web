@@ -97,7 +97,7 @@ describe('LoginPage', () => {
     expect(screen.getByText('Invalid credentials')).toBeInTheDocument();
   });
 
-  it('navigates to /dashboard on success', async () => {
+  it('navigates to the role-aware index route on success', async () => {
     const user = userEvent.setup();
     renderWithRouter();
 
@@ -105,8 +105,6 @@ describe('LoginPage', () => {
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
-    await waitFor(() =>
-      expect(navigateMock).toHaveBeenCalledWith('/dashboard')
-    );
+    await waitFor(() => expect(navigateMock).toHaveBeenCalledWith('/'));
   });
 });
