@@ -1,22 +1,11 @@
-import type {
-  CreateSalePayload,
-  Sale,
-  SaleProductLine,
-  SaleServiceLine,
-} from '../types';
+import type { CreateSalePayload, Sale, SaleProductLine } from '../types';
 
 // Checkout line inputs as sent to POST /api/sales: id + quantity only,
 // the backend owns pricing (SL-F4).
 export function buildProductLineInput(
   overrides: Partial<{ productId: string; quantity: number }> = {}
-): NonNullable<CreateSalePayload['productLines']>[number] {
+): CreateSalePayload['productLines'][number] {
   return { productId: 'p1', quantity: 1, ...overrides };
-}
-
-export function buildServiceLineInput(
-  overrides: Partial<{ serviceId: string; quantity: number }> = {}
-): NonNullable<CreateSalePayload['serviceLines']>[number] {
-  return { serviceId: 's1', quantity: 1, ...overrides };
 }
 
 // Self-contained sales fixtures (SL-NF3). Do NOT refactor the shared
@@ -43,28 +32,6 @@ export function buildSaleProductLine(
   };
 }
 
-export function buildSaleServiceLine(
-  overrides: Partial<SaleServiceLine> = {}
-): SaleServiceLine {
-  return {
-    id: 'ss1',
-    serviceId: 's1',
-    quantity: 2,
-    unitPriceSnapshot: '150.00',
-    subtotal: '300.00',
-    service: {
-      id: 's1',
-      code: 'SRV-001',
-      name: 'Cambio de aceite',
-      description: null,
-      price: '150.00',
-    },
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-    ...overrides,
-  };
-}
-
 export function buildSale(overrides: Partial<Sale> = {}): Sale {
   return {
     id: 'sale1',
@@ -74,13 +41,12 @@ export function buildSale(overrides: Partial<Sale> = {}): Sale {
     employeeId: 'e1',
     status: 'completed',
     paymentMethod: 'cash',
-    totalAmount: '380.50',
+    totalAmount: '80.50',
     isActive: true,
     client: { id: 'c1', name: 'Juan Pérez' },
     branch: { id: 'b1', name: 'Sucursal Centro' },
     employee: { id: 'e1', name: 'María Gómez' },
     products: [buildSaleProductLine()],
-    services: [buildSaleServiceLine()],
     createdAt: '2024-01-01T00:00:00.000Z',
     updatedAt: '2024-01-01T00:00:00.000Z',
     deletedAt: null,

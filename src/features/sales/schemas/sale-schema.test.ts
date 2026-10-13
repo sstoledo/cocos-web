@@ -5,7 +5,6 @@ const validValues = {
   clientId: 'c1',
   paymentMethod: 'cash',
   productLines: [{ productId: 'p1', quantity: 2 }],
-  serviceLines: [],
 };
 
 describe('saleSchema', () => {
@@ -13,32 +12,10 @@ describe('saleSchema', () => {
     expect(saleSchema.safeParse(validValues).success).toBe(true);
   });
 
-  it('accepts services-only lines', () => {
-    const result = saleSchema.safeParse({
-      ...validValues,
-      productLines: [],
-      serviceLines: [{ serviceId: 's1', quantity: 1 }],
-    });
-
-    expect(result.success).toBe(true);
-  });
-
-  it('accepts a mixed product + service sale', () => {
-    const result = saleSchema.safeParse({
-      clientId: 'c1',
-      paymentMethod: 'card',
-      productLines: [{ productId: 'p1', quantity: 1 }],
-      serviceLines: [{ serviceId: 's1', quantity: 2 }],
-    });
-
-    expect(result.success).toBe(true);
-  });
-
   it('accepts an omitted clientId (walk-in sale)', () => {
     const result = saleSchema.safeParse({
       paymentMethod: 'cash',
       productLines: [{ productId: 'p1', quantity: 1 }],
-      serviceLines: [],
     });
 
     expect(result.success).toBe(true);
@@ -53,14 +30,13 @@ describe('saleSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('defaults omitted line arrays to empty', () => {
+  it('defaults an omitted productLines array to empty', () => {
     const result = saleSchema.safeParse({
       clientId: 'c1',
       paymentMethod: 'cash',
-      productLines: [{ productId: 'p1', quantity: 1 }],
     });
 
-    expect(result.success).toBe(true);
+    expect(result.success).toBe(false);
   });
 
   it('rejects a missing payment method with the Spanish message', () => {
@@ -86,7 +62,7 @@ describe('saleSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects zero lines across both arrays', () => {
+  it('rejects a sale with zero product lines', () => {
     const result = saleSchema.safeParse({
       ...validValues,
       productLines: [],
@@ -95,7 +71,7 @@ describe('saleSchema', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues[0].message).toBe(
-        'Agregá al menos un producto o servicio'
+        'Agregá al menos un producto'
       );
     }
   });
@@ -147,31 +123,15 @@ describe('saleSchema', () => {
     }
   });
 
-  it('rejects duplicate service lines', () => {
+  it('strips an unknown serviceLines key instead of accepting it', () => {
     const result = saleSchema.safeParse({
       ...validValues,
-      productLines: [],
-      serviceLines: [
-        { serviceId: 's1', quantity: 1 },
-        { serviceId: 's1', quantity: 1 },
-      ],
-    });
-
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].message).toBe(
-        'No podés cargar el mismo servicio dos veces.'
-      );
-    }
-  });
-
-  it('allows the same id as both product and service line', () => {
-    const result = saleSchema.safeParse({
-      ...validValues,
-      productLines: [{ productId: 'x1', quantity: 1 }],
-      serviceLines: [{ serviceId: 'x1', quantity: 1 }],
+      serviceLines: [{ serviceId: 's1', quantity: 1 }],
     });
 
     expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).not.toHaveProperty('serviceLines');
+    }
   });
 });

@@ -2,17 +2,16 @@ import { parseApiError } from '@/lib/api-error';
 import type { CreateSalePayload, Sale } from '../types';
 
 export async function createSale(payload: CreateSalePayload): Promise<Sale> {
-  // Backend treats both arrays as optional-but-non-empty; the service layer
-  // coalesces empty arrays, so we always send them (D7 — B8 S5: only a sale
-  // with zero lines in BOTH arrays is a 400).
+  // Products-only (decision/sales-products-only): the backend rejects the
+  // sale with SALE_EMPTY_LINES when productLines is empty, so the key is
+  // always sent with at least one line validated by the zod schema.
   const body = {
     paymentMethod: payload.paymentMethod,
     // Walk-in sales omit clientId entirely; '' means no client selected.
     ...(payload.clientId ? { clientId: payload.clientId } : {}),
     ...(payload.branchId ? { branchId: payload.branchId } : {}),
     ...(payload.employeeId ? { employeeId: payload.employeeId } : {}),
-    productLines: payload.productLines ?? [],
-    serviceLines: payload.serviceLines ?? [],
+    productLines: payload.productLines,
   };
 
   const response = await fetch(`${import.meta.env.VITE_API_URL}/sales`, {

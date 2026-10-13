@@ -30,7 +30,6 @@ describe('createSale', () => {
       clientId: 'c1',
       paymentMethod: 'cash',
       productLines: [{ productId: 'p1', quantity: 2 }],
-      serviceLines: [{ serviceId: 's1', quantity: 1 }],
     });
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
@@ -44,7 +43,7 @@ describe('createSale', () => {
     expect(result).toEqual(sale);
   });
 
-  it('sends both line arrays verbatim', async () => {
+  it('sends productLines verbatim and never a serviceLines key', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => sale,
@@ -53,30 +52,12 @@ describe('createSale', () => {
     await createSale({
       paymentMethod: 'card',
       productLines: [{ productId: 'p1', quantity: 2 }],
-      serviceLines: [{ serviceId: 's1', quantity: 1 }],
     });
 
     expect(postedBody()).toEqual({
       paymentMethod: 'card',
       productLines: [{ productId: 'p1', quantity: 2 }],
-      serviceLines: [{ serviceId: 's1', quantity: 1 }],
     });
-  });
-
-  it('always sends both line arrays, even when empty (D7)', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => sale,
-    });
-
-    await createSale({
-      paymentMethod: 'cash',
-      serviceLines: [{ serviceId: 's1', quantity: 1 }],
-    });
-
-    const body = postedBody();
-    expect(body.productLines).toEqual([]);
-    expect(body.serviceLines).toEqual([{ serviceId: 's1', quantity: 1 }]);
   });
 
   it('omits clientId, branchId and employeeId when not provided', async () => {

@@ -122,7 +122,7 @@ describe('SaleDetailPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('S6: renders product and service lines with snapshot and subtotal verbatim plus the total', async () => {
+  it('S6: renders product lines with snapshot and subtotal verbatim plus the total', async () => {
     globalThis.fetch = mockFetchWithSale(sale);
 
     renderDetailPage();
@@ -136,14 +136,14 @@ describe('SaleDetailPage', () => {
     for (const column of ['Cantidad', 'Precio unitario', 'Subtotal']) {
       expect(
         screen.getAllByRole('columnheader', { name: column })
-      ).toHaveLength(2);
+      ).toHaveLength(1);
     }
     expect(
       screen.getByRole('columnheader', { name: 'Producto' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('columnheader', { name: 'Servicio' })
-    ).toBeInTheDocument();
+      screen.queryByRole('columnheader', { name: 'Servicio' })
+    ).not.toBeInTheDocument();
 
     // Backend money strings render verbatim (SL-NF2) — no recomputation.
     expect(
@@ -152,12 +152,8 @@ describe('SaleDetailPage', () => {
     expect(screen.getByRole('cell', { name: '1' })).toBeInTheDocument();
     // Product line: unitPriceSnapshot 80.50 and subtotal 80.50.
     expect(screen.getAllByRole('cell', { name: '80.50' })).toHaveLength(2);
-    expect(screen.getByRole('cell', { name: '300.00' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('cell', { name: 'Cambio de aceite' })
-    ).toBeInTheDocument();
 
-    expect(screen.getByText('Total: 380.50')).toBeInTheDocument();
+    expect(screen.getByText('Total: 80.50')).toBeInTheDocument();
   });
 
   it('S7: renders client, branch and employee names, payment label, badge, VTA and date', async () => {

@@ -12,11 +12,8 @@ const productLineSchema = z.object({
   quantity: lineQuantitySchema,
 });
 
-const serviceLineSchema = z.object({
-  serviceId: z.string().min(1, 'Seleccioná un servicio'),
-  quantity: lineQuantitySchema,
-});
-
+// Sales are products-only (decision/sales-products-only): services are
+// billed exclusively through work orders.
 export const saleSchema = z
   .object({
     // '' = walk-in sale; the payload omits clientId (SL-F5).
@@ -25,10 +22,9 @@ export const saleSchema = z
       message: 'Seleccioná un método de pago',
     }),
     productLines: z.array(productLineSchema).default([]),
-    serviceLines: z.array(serviceLineSchema).default([]),
   })
-  .refine((data) => data.productLines.length + data.serviceLines.length >= 1, {
-    message: 'Agregá al menos un producto o servicio',
+  .refine((data) => data.productLines.length >= 1, {
+    message: 'Agregá al menos un producto',
     path: ['productLines'],
   })
   .refine(
@@ -38,15 +34,6 @@ export const saleSchema = z
     {
       message: 'No podés cargar el mismo producto dos veces.',
       path: ['productLines'],
-    }
-  )
-  .refine(
-    (data) =>
-      new Set(data.serviceLines.map((line) => line.serviceId)).size ===
-      data.serviceLines.length,
-    {
-      message: 'No podés cargar el mismo servicio dos veces.',
-      path: ['serviceLines'],
     }
   );
 

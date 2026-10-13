@@ -3,7 +3,6 @@ import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { useClients } from '@/features/clients/hooks/use-clients';
 import { useProducts } from '@/features/products/hooks/use-products';
-import { useServices } from '@/features/services/hooks/use-services';
 import { formatCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,11 +10,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
 import { type SaleFormValues, saleSchema } from '../schemas/sale-schema';
 import { PAYMENT_METHOD_LABELS } from './PaymentMethodBadge';
-import {
-  ProductLinesFieldArray,
-  ServiceLinesFieldArray,
-  lineSubtotalCents,
-} from './SalesLineItems';
+import { ProductLinesFieldArray, lineSubtotalCents } from './SalesLineItems';
 
 export type CheckoutFormProps = {
   onSubmit: (values: SaleFormValues) => void;
@@ -43,42 +38,28 @@ export function CheckoutForm({
       clientId: '',
       paymentMethod: '' as SaleFormValues['paymentMethod'],
       productLines: [],
-      serviceLines: [],
     },
   });
 
   const productLines = useWatch({ control, name: 'productLines' });
-  const serviceLines = useWatch({ control, name: 'serviceLines' });
 
   const { clients, isLoading: isLoadingClients } = useClients({});
   const { products, isLoading: isLoadingProducts } = useProducts({});
-  const { services, isLoading: isLoadingServices } = useServices({});
 
-  const totalCents =
-    (productLines ?? []).reduce(
-      (sum, line) =>
-        sum +
-        (lineSubtotalCents(
-          line,
-          products.find((product) => product.id === line.productId)?.price
-        ) ?? 0),
-      0
-    ) +
-    (serviceLines ?? []).reduce(
-      (sum, line) =>
-        sum +
-        (lineSubtotalCents(
-          line,
-          services.find((service) => service.id === line.serviceId)?.price
-        ) ?? 0),
-      0
-    );
+  const totalCents = (productLines ?? []).reduce(
+    (sum, line) =>
+      sum +
+      (lineSubtotalCents(
+        line,
+        products.find((product) => product.id === line.productId)?.price
+      ) ?? 0),
+    0
+  );
 
-  // The ≥1-line refine reports on `productLines`; both refine paths surface
-  // here as array-level messages.
-  const linesError =
-    (errors.productLines as { message?: string } | undefined)?.message ??
-    (errors.serviceLines as { message?: string } | undefined)?.message;
+  // The ≥1-line and duplicate-product refines report on `productLines` as
+  // an array-level message.
+  const linesError = (errors.productLines as { message?: string } | undefined)
+    ?.message;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
@@ -113,13 +94,6 @@ export function CheckoutForm({
           </p>
         </div>
       </div>
-
-      <ServiceLinesFieldArray
-        services={services}
-        isLoading={isLoadingServices}
-        control={control}
-        register={register}
-      />
 
       <ProductLinesFieldArray
         products={products}

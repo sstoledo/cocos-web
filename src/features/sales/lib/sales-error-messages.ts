@@ -2,10 +2,9 @@ import type { Product } from '@/features/products/types';
 import { ApiError } from '@/lib/api-error';
 
 const SALE_ERROR_MESSAGES: Record<string, string> = {
-  SALE_EMPTY_LINES: 'Agregá al menos un producto o servicio.',
+  SALE_EMPTY_LINES: 'Agregá al menos un producto.',
   CLIENT_NOT_FOUND: 'El cliente seleccionado no existe o está inactivo.',
   PRODUCT_NOT_FOUND: 'Uno de los productos no existe o está inactivo.',
-  SERVICE_NOT_FOUND: 'Uno de los servicios no existe o está inactivo.',
   BRANCH_NOT_FOUND: 'La sucursal seleccionada no existe o está inactiva.',
   EMPLOYEE_NOT_FOUND: 'El empleado seleccionado no existe o está inactivo.',
   SALE_NOT_FOUND: 'La venta no existe o fue eliminada.',

@@ -15,12 +15,10 @@ export function toCreatePayload(values: SaleFormValues): CreateSalePayload {
     // Walk-in sales omit clientId entirely (SL-F5).
     ...(values.clientId ? { clientId: values.clientId } : {}),
     paymentMethod: values.paymentMethod,
-    productLines: (values.productLines ?? []).map((line) => ({
+    // Products-only: never send a serviceLines key (decision/
+    // sales-products-only — the backend rejects it as unknown).
+    productLines: values.productLines.map((line) => ({
       productId: line.productId,
-      quantity: line.quantity,
-    })),
-    serviceLines: (values.serviceLines ?? []).map((line) => ({
-      serviceId: line.serviceId,
       quantity: line.quantity,
     })),
   };
