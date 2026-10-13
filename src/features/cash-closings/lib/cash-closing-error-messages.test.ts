@@ -5,6 +5,10 @@ import { getCashClosingErrorMessage } from './cash-closing-error-messages';
 describe('getCashClosingErrorMessage', () => {
   it.each([
     ['CLOSING_CONFLICT', 'Ya existe un cierre para este período.'],
+    [
+      'CLOSING_NO_ACTIVITY',
+      'No hay ventas ni órdenes completadas en el período abierto.',
+    ],
     ['CASH_CLOSING_NOT_FOUND', 'El cierre de caja no existe o fue eliminado.'],
   ])('maps %s to its Spanish message', (errorCode, expected) => {
     const error = new ApiError('Failed: 409', 409, errorCode);
