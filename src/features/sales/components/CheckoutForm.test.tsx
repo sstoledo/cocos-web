@@ -1,7 +1,6 @@
 import {
   buildClient,
   buildProduct,
-  buildService,
 } from '@/features/work-orders/test/fixtures';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -37,15 +36,6 @@ function mockCatalogFetch() {
         ok: true,
         json: async () => ({
           data: [buildClient()],
-          meta: { page: 1, limit: 100, total: 1 },
-        }),
-      };
-    }
-    if (url.includes('/services')) {
-      return {
-        ok: true,
-        json: async () => ({
-          data: [buildService()],
           meta: { page: 1, limit: 100, total: 1 },
         }),
       };
@@ -98,27 +88,6 @@ describe('CheckoutForm', () => {
     expect(screen.queryByLabelText('Precio unitario')).not.toBeInTheDocument();
   });
 
-  it('S10: adds a service line and sums product + service totals', async () => {
-    const user = userEvent.setup();
-    renderForm();
-
-    await addProductLine(user, '1');
-    const serviceAddButton = screen.getByRole('button', {
-      name: 'Agregar servicio',
-    });
-    await waitFor(() => expect(serviceAddButton).toBeEnabled());
-    await user.click(serviceAddButton);
-    await screen.findByRole('option', { name: 'Cambio de aceite' });
-    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
-    // Service lines render above product lines in the DOM.
-    await user.clear(screen.getAllByLabelText('Cantidad')[0]);
-    await user.type(screen.getAllByLabelText('Cantidad')[0], '2');
-
-    expect(screen.getByText('Precio: 150.00')).toBeInTheDocument();
-    expect(screen.getByText('Subtotal: 300.00')).toBeInTheDocument();
-    expect(screen.getByText('Total: 380.50')).toBeInTheDocument();
-  });
-
   it('S11: removes a line and updates the totals', async () => {
     const user = userEvent.setup();
     renderForm();
@@ -142,7 +111,7 @@ describe('CheckoutForm', () => {
     await user.click(screen.getByRole('button', { name: 'Registrar venta' }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Agregá al menos un producto o servicio'
+      'Agregá al menos un producto'
     );
     expect(onSubmit).not.toHaveBeenCalled();
   });
@@ -188,7 +157,7 @@ describe('CheckoutForm', () => {
       clientId: '',
       paymentMethod: 'card',
       productLines: [{ productId: 'p1', quantity: 2 }],
-      serviceLines: [],
     });
+    expect(values).not.toHaveProperty('serviceLines');
   });
 });

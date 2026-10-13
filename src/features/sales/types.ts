@@ -1,5 +1,7 @@
-// Types transcribed verbatim from the frozen B8 backend contract
+// Types transcribed verbatim from the backend sale contract
 // (sale-response.dto.ts). Do NOT invent new shapes here.
+// Sales are products-only (decision/sales-products-only): the backend no
+// longer accepts serviceLines nor returns a services collection.
 export type SaleStatus = 'completed' | 'cancelled';
 
 export type PaymentMethod = 'cash' | 'card' | 'transfer';
@@ -11,23 +13,6 @@ export interface SaleProductLine {
   unitPriceSnapshot: string;
   subtotal: string;
   product: {
-    id: string;
-    code: string;
-    name: string;
-    description?: string | null;
-    price: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface SaleServiceLine {
-  id: string;
-  serviceId: string;
-  quantity: number;
-  unitPriceSnapshot: string;
-  subtotal: string;
-  service: {
     id: string;
     code: string;
     name: string;
@@ -52,7 +37,6 @@ export interface Sale {
   branch: { id: string; name: string } | null;
   employee: { id: string; name: string } | null;
   products: SaleProductLine[];
-  services: SaleServiceLine[];
   createdAt: string;
   updatedAt: string;
   deletedAt?: string | null;
@@ -84,6 +68,5 @@ export interface CreateSalePayload {
   branchId?: string;
   employeeId?: string;
   paymentMethod: PaymentMethod;
-  productLines?: { productId: string; quantity: number }[];
-  serviceLines?: { serviceId: string; quantity: number }[];
+  productLines: { productId: string; quantity: number }[];
 }

@@ -2,7 +2,6 @@ import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import {
   buildClient,
   buildProduct,
-  buildService,
 } from '@/features/work-orders/test/fixtures';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -72,15 +71,6 @@ function mockFetch(postResponse: PostResponse) {
           ok: true,
           json: async () => ({
             data: [buildClient()],
-            meta: { page: 1, limit: 100, total: 1 },
-          }),
-        } as Response;
-      }
-      if (url.includes('/services')) {
-        return {
-          ok: true,
-          json: async () => ({
-            data: [buildService()],
             meta: { page: 1, limit: 100, total: 1 },
           }),
         } as Response;
@@ -188,11 +178,11 @@ describe('CheckoutPage', () => {
 
     await waitFor(() => expect(postCalls).toHaveLength(1));
     expect(postCalls[0].url).toBe('http://localhost:3000/api/sales');
-    // Walk-in: clientId omitted; both line arrays always sent (D7).
+    // Walk-in: clientId omitted; productLines only, no serviceLines key
+    // (decision/sales-products-only).
     expect(postCalls[0].body).toEqual({
       paymentMethod: 'cash',
       productLines: [{ productId: 'p1', quantity: 2 }],
-      serviceLines: [],
     });
 
     await waitFor(() =>
@@ -245,7 +235,7 @@ describe('CheckoutPage', () => {
     await fillAndSubmit(user);
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Agregá al menos un producto o servicio.'
+      'Agregá al menos un producto.'
     );
     unmount();
     expect(first).toHaveLength(1);

@@ -8,14 +8,10 @@ import { PaymentMethodBadge } from '../components/PaymentMethodBadge';
 import { SaleCancelAction } from '../components/SaleCancelAction';
 import { SaleStatusBadge } from '../components/SaleStatusBadge';
 import { useSale } from '../hooks/use-sale';
-import type { SaleProductLine, SaleServiceLine } from '../types';
+import type { SaleProductLine } from '../types';
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString('es-AR');
-}
-
-function lineEntityName(line: SaleProductLine | SaleServiceLine): string {
-  return 'product' in line ? line.product.name : line.service.name;
 }
 
 function SaleLinesTable({
@@ -23,7 +19,7 @@ function SaleLinesTable({
   entityLabel,
   emptyMessage,
 }: {
-  lines: (SaleProductLine | SaleServiceLine)[];
+  lines: SaleProductLine[];
   entityLabel: string;
   emptyMessage: string;
 }) {
@@ -45,7 +41,7 @@ function SaleLinesTable({
         <tbody>
           {lines.map((line) => (
             <tr key={line.id} className="border-b border-border">
-              <td className="px-3 py-2">{lineEntityName(line)}</td>
+              <td className="px-3 py-2">{line.product.name}</td>
               <td className="px-3 py-2">{line.quantity}</td>
               <td className="px-3 py-2">{line.unitPriceSnapshot}</td>
               <td className="px-3 py-2">{line.subtotal}</td>
@@ -149,13 +145,6 @@ export function SaleDetailPage() {
             lines={sale.products}
             entityLabel="Producto"
             emptyMessage="No hay productos cargados."
-          />
-        </SectionCard>
-        <SectionCard title="Servicios">
-          <SaleLinesTable
-            lines={sale.services}
-            entityLabel="Servicio"
-            emptyMessage="No hay servicios cargados."
           />
         </SectionCard>
         <p className="text-right text-lg font-semibold">
