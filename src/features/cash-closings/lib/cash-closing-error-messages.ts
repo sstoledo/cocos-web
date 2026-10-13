@@ -3,6 +3,8 @@ import { ApiError } from '@/lib/api-error';
 // Codes transcribed from the B13 backend contract (obs #1292).
 const CASH_CLOSING_ERROR_MESSAGES: Record<string, string> = {
   CLOSING_CONFLICT: 'Ya existe un cierre para este período.',
+  CLOSING_NO_ACTIVITY:
+    'No hay ventas ni órdenes completadas en el período abierto.',
   CASH_CLOSING_NOT_FOUND: 'El cierre de caja no existe o fue eliminado.',
 };
 
