@@ -14,6 +14,10 @@ const preview: ClosingPreview = {
   expectedCash: '1250.00',
   expectedCard: '3400.50',
   expectedTransfer: '800.00',
+  workOrderPaymentsCash: '100.00',
+  workOrderPaymentsCard: '50.00',
+  workOrderPaymentsTransfer: '25.00',
+  workOrderPaymentsCount: 3,
   salesCount: 12,
 };
 
@@ -22,6 +26,10 @@ const emptyPreview: ClosingPreview = {
   expectedCash: '0.00',
   expectedCard: '0.00',
   expectedTransfer: '0.00',
+  workOrderPaymentsCash: '0.00',
+  workOrderPaymentsCard: '0.00',
+  workOrderPaymentsTransfer: '0.00',
+  workOrderPaymentsCount: 0,
   salesCount: 0,
 };
 
@@ -33,6 +41,10 @@ function buildClosing(overrides: Partial<CashClosing> = {}): CashClosing {
     expectedCash: '1250.00',
     expectedCard: '3400.50',
     expectedTransfer: '800.00',
+    workOrderPaymentsCash: '100.00',
+    workOrderPaymentsCard: '50.00',
+    workOrderPaymentsTransfer: '25.00',
+    workOrderPaymentsCount: 3,
     declaredCash: '1300.00',
     difference: '50.00',
     salesCount: 12,
@@ -152,6 +164,21 @@ describe('CloseCashClosingPage', () => {
     expect(screen.getByText('12')).toBeInTheDocument();
     // periodStart formatted as es-AR date-time, never raw ISO.
     expect(screen.queryByText(/2026-09-23T/)).not.toBeInTheDocument();
+  });
+
+  it('renders the work order payments breakdown in the preview', async () => {
+    renderPage();
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('Pagos de órdenes de trabajo')
+      ).toBeInTheDocument()
+    );
+
+    expect(screen.getByText('100.00')).toBeInTheDocument();
+    expect(screen.getByText('50.00')).toBeInTheDocument();
+    expect(screen.getByText('25.00')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
   });
 
   it('shows "Sin cierres previos" when periodStart is null', async () => {

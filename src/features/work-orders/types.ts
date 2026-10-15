@@ -1,4 +1,8 @@
+import type { PaymentMethod } from '@/features/sales/types';
+
 export type WorkOrderStatus = 'pending' | 'in_progress' | 'done' | 'cancelled';
+
+export type WorkOrderPaymentStatus = 'pending' | 'partial' | 'paid';
 
 export interface NamedSummary {
   id: string;
@@ -45,6 +49,8 @@ export interface WorkOrder {
   description?: string | null;
   status: WorkOrderStatus;
   totalAmount: string;
+  paidAmount: string;
+  paymentStatus: WorkOrderPaymentStatus;
   isActive: boolean;
   employee: NamedSummary | null;
   branch: NamedSummary | null;
@@ -72,6 +78,23 @@ export interface CreateWorkOrderPayload {
 }
 
 export type UpdateWorkOrderPayload = CreateWorkOrderPayload;
+
+export interface WorkOrderPayment {
+  id: string;
+  workOrderId: string;
+  amount: string;
+  paymentMethod: PaymentMethod;
+  note: string | null;
+  paidAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateWorkOrderPaymentPayload {
+  amount: string;
+  paymentMethod: PaymentMethod;
+  note?: string;
+}
 
 export interface WorkOrderListFilters {
   query?: string;

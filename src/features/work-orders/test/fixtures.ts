@@ -66,6 +66,8 @@ export function buildWorkOrder(overrides: Partial<WorkOrder> = {}): WorkOrder {
     description: null,
     status: 'pending',
     totalAmount: '300.00',
+    paidAmount: '0.00',
+    paymentStatus: 'pending',
     isActive: true,
     employee: null,
     branch: null,

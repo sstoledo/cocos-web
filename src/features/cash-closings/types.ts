@@ -8,6 +8,10 @@ export interface CashClosing {
   expectedCash: string;
   expectedCard: string;
   expectedTransfer: string;
+  workOrderPaymentsCash: string;
+  workOrderPaymentsCard: string;
+  workOrderPaymentsTransfer: string;
+  workOrderPaymentsCount: number;
   declaredCash: string;
   difference: string;
   salesCount: number;
@@ -26,6 +30,10 @@ export interface ClosingPreview {
   expectedCash: string;
   expectedCard: string;
   expectedTransfer: string;
+  workOrderPaymentsCash: string;
+  workOrderPaymentsCard: string;
+  workOrderPaymentsTransfer: string;
+  workOrderPaymentsCount: number;
   salesCount: number;
 }
 

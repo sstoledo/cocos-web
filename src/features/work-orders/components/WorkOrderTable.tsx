@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { WorkOrder } from '../types';
+import { WorkOrderPaymentStatusBadge } from './WorkOrderPaymentStatusBadge';
 import { WorkOrderStatusBadge } from './WorkOrderStatusBadge';
 
 export type WorkOrderTableProps = {
@@ -25,6 +26,9 @@ export function WorkOrderTable({ workOrders }: WorkOrderTableProps) {
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Estado
+            </th>
+            <th className="h-12 px-4 font-medium text-muted-foreground">
+              Cobro
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Total
@@ -54,6 +58,9 @@ export function WorkOrderTable({ workOrders }: WorkOrderTableProps) {
               </td>
               <td className="p-4">
                 <WorkOrderStatusBadge status={workOrder.status} />
+              </td>
+              <td className="p-4">
+                <WorkOrderPaymentStatusBadge status={workOrder.paymentStatus} />
               </td>
               <td className="p-4 text-muted-foreground">
                 {workOrder.totalAmount}

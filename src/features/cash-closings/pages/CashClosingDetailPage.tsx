@@ -161,6 +161,37 @@ export function CashClosingDetailPage() {
             </div>
           </dl>
         </SectionCard>
+        <SectionCard title="Pagos de órdenes de trabajo">
+          <dl className="grid gap-4 sm:grid-cols-4">
+            <div>
+              <dt className="text-sm text-muted-foreground">Efectivo</dt>
+              <dd className="text-foreground">
+                {closing.workOrderPaymentsCash}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">Tarjeta</dt>
+              <dd className="text-foreground">
+                {closing.workOrderPaymentsCard}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">Transferencia</dt>
+              <dd className="text-foreground">
+                {closing.workOrderPaymentsTransfer}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">Cantidad</dt>
+              <dd className="text-foreground">
+                {closing.workOrderPaymentsCount}
+              </dd>
+            </div>
+          </dl>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Los montos esperados ya incluyen estos pagos junto con las ventas.
+          </p>
+        </SectionCard>
       </PageContent>
     </>
   );

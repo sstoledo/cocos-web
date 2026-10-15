@@ -12,6 +12,8 @@ const workOrder: WorkOrder = {
   description: null,
   status: 'in_progress',
   totalAmount: '15000.00',
+  paidAmount: '0.00',
+  paymentStatus: 'pending',
   isActive: true,
   employee: { id: 'e1', name: 'Carlos Ruiz' },
   branch: { id: 'b1', name: 'Sucursal Centro' },
