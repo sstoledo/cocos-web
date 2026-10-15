@@ -1,13 +1,10 @@
-import {
-  buildClient,
-  buildProduct,
-} from '@/features/work-orders/test/fixtures';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { buildClient, buildProduct } from '../test/fixtures';
 import { CheckoutForm } from './CheckoutForm';
 
 function renderForm(onSubmit = vi.fn()) {

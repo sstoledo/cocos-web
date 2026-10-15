@@ -26,7 +26,6 @@ const payload = {
   clientId: 'c1',
   vehicleId: 'v1',
   services: [{ serviceId: 's1', quantity: 3 }],
-  products: [{ productId: 'p1', quantity: 1 }],
 };
 
 describe('useUpdateWorkOrder', () => {

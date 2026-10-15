@@ -35,23 +35,6 @@ export interface WorkOrderServiceLine {
   updatedAt: string;
 }
 
-export interface WorkOrderProductLine {
-  id: string;
-  productId: string;
-  quantity: number;
-  unitPriceSnapshot: string;
-  subtotal: string;
-  product: {
-    id: string;
-    code: string;
-    name: string;
-    description?: string | null;
-    price: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface WorkOrder {
   id: string;
   orderNumber: string;
@@ -66,7 +49,6 @@ export interface WorkOrder {
   employee: NamedSummary | null;
   branch: NamedSummary | null;
   services: WorkOrderServiceLine[];
-  products: WorkOrderProductLine[];
   createdAt: string;
   updatedAt: string;
   deletedAt?: string | null;
@@ -81,17 +63,12 @@ export interface WorkOrderServiceLineInput extends WorkOrderLineInput {
   serviceId: string;
 }
 
-export interface WorkOrderProductLineInput extends WorkOrderLineInput {
-  productId: string;
-}
-
 export interface CreateWorkOrderPayload {
   clientId: string;
   vehicleId: string;
   description?: string;
   employeeId?: string | null;
   services?: WorkOrderServiceLineInput[];
-  products?: WorkOrderProductLineInput[];
 }
 
 export type UpdateWorkOrderPayload = CreateWorkOrderPayload;

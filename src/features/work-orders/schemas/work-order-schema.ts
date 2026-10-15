@@ -20,12 +20,6 @@ const serviceLineSchema = z.object({
   unitPrice: lineUnitPriceSchema,
 });
 
-const productLineSchema = z.object({
-  productId: z.string().min(1, 'Seleccioná un ítem'),
-  quantity: lineQuantitySchema,
-  unitPrice: lineUnitPriceSchema,
-});
-
 export const workOrderSchema = z
   .object({
     clientId: z.string().min(1, 'Seleccioná un cliente'),
@@ -36,10 +30,9 @@ export const workOrderSchema = z
       z.string().nullish()
     ),
     services: z.array(serviceLineSchema).default([]),
-    products: z.array(productLineSchema).default([]),
   })
-  .refine((data) => data.services.length + data.products.length >= 1, {
-    message: 'Agregá al menos un servicio o producto',
+  .refine((data) => data.services.length >= 1, {
+    message: 'Agregá al menos un servicio',
     path: ['services'],
   });
 

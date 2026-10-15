@@ -29,8 +29,7 @@ export const TRANSITION_BUTTONS: Partial<
     label: 'Marcar como terminada',
     loadingLabel: 'Terminando…',
     variant: 'default',
-    confirmMessage:
-      '¿Marcar la orden como terminada? Se descontará el stock de los productos.',
+    confirmMessage: '¿Marcar la orden como terminada?',
   },
   cancelled: {
     label: 'Cancelar orden',
