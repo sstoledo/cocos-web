@@ -1,4 +1,33 @@
+import type { Client } from '@/features/clients/types';
+import type { Product } from '@/features/products/types';
 import type { CreateSalePayload, Sale, SaleProductLine } from '../types';
+
+export function buildClient(overrides: Partial<Client> = {}): Client {
+  return {
+    id: 'c1',
+    name: 'Juan Pérez',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-01T00:00:00.000Z',
+    ...overrides,
+  };
+}
+
+export function buildProduct(overrides: Partial<Product> = {}): Product {
+  return {
+    id: 'p1',
+    code: 'PRD-001',
+    name: 'Filtro de aceite',
+    price: '80.50',
+    isActive: true,
+    presentation: { id: 'pres1', name: 'Unidad' },
+    brand: { id: 'b1', name: 'Bosch' },
+    category: { id: 'cat1', name: 'Filtros' },
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-01T00:00:00.000Z',
+    ...overrides,
+  };
+}
 
 // Checkout line inputs as sent to POST /api/sales: id + quantity only,
 // the backend owns pricing (SL-F4).

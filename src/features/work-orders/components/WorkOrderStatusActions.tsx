@@ -10,20 +10,18 @@ import {
   ALLOWED_TRANSITIONS,
   TRANSITION_BUTTONS,
 } from '../lib/work-order-transitions';
-import type { WorkOrderProductLine, WorkOrderStatus } from '../types';
+import type { WorkOrderStatus } from '../types';
 
 const TRANSITION_ROLES = ['Admin', 'Reception', 'Mechanic'];
 
 interface WorkOrderStatusActionsProps {
   orderId: string;
   status: WorkOrderStatus;
-  products: WorkOrderProductLine[];
 }
 
 export function WorkOrderStatusActions({
   orderId,
   status,
-  products,
 }: WorkOrderStatusActionsProps) {
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -72,7 +70,7 @@ export function WorkOrderStatusActions({
               queryKey: ['work-order', orderId],
             });
           }
-          setErrorMessage(getWorkOrderErrorMessage(error, { products }));
+          setErrorMessage(getWorkOrderErrorMessage(error));
         },
         onSettled: () => setActiveTarget(null),
       }

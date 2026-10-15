@@ -11,7 +11,7 @@ import { WorkOrderStatusActions } from '../components/WorkOrderStatusActions';
 import { WorkOrderStatusBadge } from '../components/WorkOrderStatusBadge';
 import { useDeleteWorkOrder } from '../hooks/use-delete-work-order';
 import { useWorkOrder } from '../hooks/use-work-order';
-import type { WorkOrderProductLine, WorkOrderServiceLine } from '../types';
+import type { WorkOrderServiceLine } from '../types';
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString('es-AR');
@@ -79,7 +79,6 @@ export function WorkOrderDetailPage() {
         <WorkOrderStatusActions
           orderId={workOrder.id}
           status={workOrder.status}
-          products={workOrder.products}
         />
         {canManage && (
           <div className="flex items-center gap-2">
@@ -175,36 +174,6 @@ export function WorkOrderDetailPage() {
                   {workOrder.services.map((line: WorkOrderServiceLine) => (
                     <tr key={line.id} className="border-b border-border">
                       <td className="px-3 py-2">{line.service.name}</td>
-                      <td className="px-3 py-2">{line.quantity}</td>
-                      <td className="px-3 py-2">{line.unitPriceSnapshot}</td>
-                      <td className="px-3 py-2">{line.subtotal}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </SectionCard>
-        <SectionCard title="Productos">
-          {workOrder.products.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No hay productos cargados.
-            </p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border text-left text-muted-foreground">
-                    <th className="px-3 py-2 font-medium">Producto</th>
-                    <th className="px-3 py-2 font-medium">Cantidad</th>
-                    <th className="px-3 py-2 font-medium">Precio unitario</th>
-                    <th className="px-3 py-2 font-medium">Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {workOrder.products.map((line: WorkOrderProductLine) => (
-                    <tr key={line.id} className="border-b border-border">
-                      <td className="px-3 py-2">{line.product.name}</td>
                       <td className="px-3 py-2">{line.quantity}</td>
                       <td className="px-3 py-2">{line.unitPriceSnapshot}</td>
                       <td className="px-3 py-2">{line.subtotal}</td>

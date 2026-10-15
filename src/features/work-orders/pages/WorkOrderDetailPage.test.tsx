@@ -40,24 +40,6 @@ const workOrder = {
       updatedAt: '2024-01-15T00:00:00.000Z',
     },
   ],
-  products: [
-    {
-      id: 'p1',
-      productId: 'prod1',
-      quantity: 2,
-      unitPriceSnapshot: '20500.50',
-      subtotal: '41001.00',
-      product: {
-        id: 'prod1',
-        code: 'PRD-01',
-        name: 'Filtro de aceite',
-        description: null,
-        price: '20500.50',
-      },
-      createdAt: '2024-01-15T00:00:00.000Z',
-      updatedAt: '2024-01-15T00:00:00.000Z',
-    },
-  ],
   createdAt: '2024-01-15T00:00:00.000Z',
   updatedAt: '2024-01-20T00:00:00.000Z',
 };
@@ -134,7 +116,7 @@ describe('WorkOrderDetailPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders service and product line tables with string decimals verbatim', async () => {
+  it('renders the service line table with string decimals verbatim', async () => {
     mockFetch(workOrder);
 
     renderPage();
@@ -145,12 +127,8 @@ describe('WorkOrderDetailPage', () => {
       ).toBeInTheDocument()
     );
 
-    expect(
-      screen.getByRole('cell', { name: 'Filtro de aceite' })
-    ).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '5000.00' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '10000.00' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '20500.50' })).toBeInTheDocument();
     expect(screen.getByText('Total: 30500.50')).toBeInTheDocument();
   });
 
@@ -161,7 +139,6 @@ describe('WorkOrderDetailPage', () => {
       employee: null,
       branch: null,
       services: [],
-      products: [],
     });
 
     renderPage();
@@ -174,7 +151,6 @@ describe('WorkOrderDetailPage', () => {
 
     expect(screen.getAllByText('—')).toHaveLength(3);
     expect(screen.getByText('No hay servicios cargados.')).toBeInTheDocument();
-    expect(screen.getByText('No hay productos cargados.')).toBeInTheDocument();
   });
 
   it('shows a loading state while fetching', () => {

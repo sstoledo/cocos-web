@@ -13,7 +13,7 @@ describe('updateWorkOrder', () => {
     vi.unstubAllEnvs();
   });
 
-  it('patches /work-orders/:id with both line arrays', async () => {
+  it('patches /work-orders/:id with the service lines', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => workOrder,
@@ -24,7 +24,6 @@ describe('updateWorkOrder', () => {
       vehicleId: 'v1',
       description: 'Actualizado',
       services: [{ serviceId: 's1', quantity: 3 }],
-      products: [{ productId: 'p1', quantity: 1, unitPrice: 80.5 }],
     };
 
     const result = await updateWorkOrder('wo-1', payload);
@@ -54,13 +53,11 @@ describe('updateWorkOrder', () => {
       clientId: 'c1',
       vehicleId: 'v1',
       services: [],
-      products: [{ productId: 'p1', quantity: 2 }],
     });
 
     const requestInit = (globalThis.fetch as ReturnType<typeof vi.fn>).mock
       .calls[0][1] as RequestInit;
     const body = JSON.parse(requestInit.body as string);
-    expect(body.products).toHaveLength(1);
     expect(body).not.toHaveProperty('services');
   });
 

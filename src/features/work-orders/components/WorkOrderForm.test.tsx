@@ -4,17 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  buildClient,
-  buildProduct,
-  buildService,
-  buildVehicle,
-} from '../test/fixtures';
+import { buildClient, buildService, buildVehicle } from '../test/fixtures';
 import { WorkOrderForm } from './WorkOrderForm';
 
 const clients = [buildClient(), buildClient({ id: 'c2', name: 'María López' })];
 const services = [buildService()];
-const products = [buildProduct()];
 const employees = [
   { id: 'e1', name: 'Ana Gómez', specialty: 'Mecánica', userId: 'u1' },
   { id: 'e2', name: 'Luis Pérez', specialty: null, userId: null },
@@ -41,11 +35,6 @@ function mockCatalogs() {
       };
     } else if (url.includes('/employees')) {
       body = employees;
-    } else if (url.includes('/products')) {
-      body = {
-        data: products,
-        meta: { page: 1, limit: 100, total: products.length },
-      };
     }
 
     return { ok: true, json: async () => body } as Response;
@@ -96,7 +85,7 @@ describe('WorkOrderForm', () => {
     vi.unstubAllEnvs();
   });
 
-  it('S5: requires client, vehicle and at least one line', async () => {
+  it('S5: requires client, vehicle and at least one service line', async () => {
     const { user, onSubmit } = renderForm();
 
     await screen.findByRole('option', { name: 'Juan Pérez' });
@@ -107,7 +96,7 @@ describe('WorkOrderForm', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Seleccioná un vehículo')).toBeInTheDocument();
     expect(screen.getByRole('alert').textContent).toContain(
-      'Agregá al menos un servicio o producto'
+      'Agregá al menos un servicio'
     );
     expect(onSubmit).not.toHaveBeenCalled();
   });
@@ -134,7 +123,6 @@ describe('WorkOrderForm', () => {
         clientId: 'c1',
         vehicleId: 'v1',
         services: [{ serviceId: 's1', quantity: 2, unitPrice: 90.25 }],
-        products: [],
       }),
       expect.anything()
     );
@@ -175,17 +163,8 @@ describe('WorkOrderForm', () => {
     await user.clear(screen.getByLabelText('Cantidad'));
     await user.type(screen.getByLabelText('Cantidad'), '3');
 
-    await user.click(screen.getByRole('button', { name: 'Agregar producto' }));
-    await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
-    const productPrice = screen.getByLabelText('Precio unitario', {
-      selector: '#products-0-unitPrice',
-    });
-    await waitFor(() => expect(productPrice).toHaveValue(80.5));
-    await user.clear(productPrice);
-    await user.type(productPrice, '19.99');
-
     await waitFor(() =>
-      expect(screen.getByText('Total: 20.29')).toBeInTheDocument()
+      expect(screen.getByText('Total: 0.30')).toBeInTheDocument()
     );
   });
 

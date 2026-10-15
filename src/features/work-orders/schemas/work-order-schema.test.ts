@@ -6,7 +6,6 @@ const validValues = {
   vehicleId: 'v1',
   description: 'Cambio de aceite',
   services: [{ serviceId: 's1', quantity: 2, unitPrice: 150 }],
-  products: [],
 };
 
 describe('workOrderSchema', () => {
@@ -14,17 +13,7 @@ describe('workOrderSchema', () => {
     expect(workOrderSchema.safeParse(validValues).success).toBe(true);
   });
 
-  it('accepts products-only lines', () => {
-    const result = workOrderSchema.safeParse({
-      ...validValues,
-      services: [],
-      products: [{ productId: 'p1', quantity: 1 }],
-    });
-
-    expect(result.success).toBe(true);
-  });
-
-  it('accepts omitted line arrays by defaulting to empty plus one line', () => {
+  it('accepts omitted line array by defaulting to empty plus one line', () => {
     const result = workOrderSchema.safeParse({
       clientId: 'c1',
       vehicleId: 'v1',
@@ -46,18 +35,17 @@ describe('workOrderSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects zero lines across both arrays', () => {
+  it('rejects an empty services array', () => {
     const result = workOrderSchema.safeParse({
       clientId: 'c1',
       vehicleId: 'v1',
       services: [],
-      products: [],
     });
 
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues[0].message).toBe(
-        'Agregá al menos un servicio o producto'
+        'Agregá al menos un servicio'
       );
     }
   });

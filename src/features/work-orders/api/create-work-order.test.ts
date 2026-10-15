@@ -24,7 +24,6 @@ describe('createWorkOrder', () => {
       vehicleId: 'v1',
       description: 'Cambio de aceite',
       services: [{ serviceId: 's1', quantity: 2, unitPrice: 150 }],
-      products: [{ productId: 'p1', quantity: 1 }],
     };
 
     const result = await createWorkOrder(payload);
@@ -44,7 +43,7 @@ describe('createWorkOrder', () => {
     expect(result).toEqual(workOrder);
   });
 
-  it('omits empty line arrays from the body', async () => {
+  it('omits an empty services array from the body', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => workOrder,
@@ -53,15 +52,13 @@ describe('createWorkOrder', () => {
     await createWorkOrder({
       clientId: 'c1',
       vehicleId: 'v1',
-      services: [{ serviceId: 's1', quantity: 1 }],
-      products: [],
+      services: [],
     });
 
     const requestInit = (globalThis.fetch as ReturnType<typeof vi.fn>).mock
       .calls[0][1] as RequestInit;
     const body = JSON.parse(requestInit.body as string);
-    expect(body.services).toHaveLength(1);
-    expect(body).not.toHaveProperty('products');
+    expect(body).not.toHaveProperty('services');
   });
 
   it('throws an ApiError surfacing errorCode when the request fails', async () => {

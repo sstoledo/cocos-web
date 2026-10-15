@@ -3,8 +3,8 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildWorkOrder, buildWorkOrderProductLine } from '../test/fixtures';
-import type { WorkOrder, WorkOrderStatus } from '../types';
+import { buildWorkOrder } from '../test/fixtures';
+import type { WorkOrderStatus } from '../types';
 import { WorkOrderStatusActions } from './WorkOrderStatusActions';
 
 const adminUser = {
@@ -17,12 +17,10 @@ const adminUser = {
 function renderActions({
   user = adminUser,
   status = 'pending',
-  products = [] as WorkOrder['products'],
   patchResponse,
 }: {
   user?: unknown;
   status?: WorkOrderStatus;
-  products?: WorkOrder['products'];
   patchResponse?: { ok: boolean; status?: number; body: object };
 } = {}) {
   const queryClient = new QueryClient({
@@ -71,7 +69,6 @@ function renderActions({
     createElement(WorkOrderStatusActions, {
       orderId: 'wo1',
       status,
-      products,
     }),
     { wrapper: Wrapper }
   );
@@ -161,9 +158,7 @@ describe('WorkOrderStatusActions', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveTextContent(
-      '¿Marcar la orden como terminada? Se descontará el stock de los productos.'
-    );
+    expect(dialog).toHaveTextContent('¿Marcar la orden como terminada?');
     await user.click(
       within(dialog).getByRole('button', { name: 'Marcar como terminada' })
     );
@@ -279,48 +274,6 @@ describe('WorkOrderStatusActions', () => {
     expect(invalidateQueriesSpy).toHaveBeenCalledWith({
       queryKey: ['work-order', 'wo1'],
     });
-  });
-
-  it('S10: names the product from the loaded lines on INSUFFICIENT_STOCK', async () => {
-    const line = buildWorkOrderProductLine({
-      productId: 'prod1',
-      product: {
-        id: 'prod1',
-        code: 'PRD-01',
-        name: 'Filtro de aceite',
-        description: null,
-        price: '80.50',
-      },
-    });
-    renderActions({
-      status: 'in_progress',
-      products: [line],
-      patchResponse: {
-        ok: false,
-        status: 409,
-        body: {
-          message: 'Insufficient stock',
-          errorCode: 'INSUFFICIENT_STOCK',
-          details: [{ productId: 'prod1', requested: 3, available: 1 }],
-        },
-      },
-    });
-    const user = userEvent.setup();
-
-    await user.click(
-      await screen.findByRole('button', { name: 'Marcar como terminada' })
-    );
-    await user.click(
-      within(screen.getByRole('dialog')).getByRole('button', {
-        name: 'Marcar como terminada',
-      })
-    );
-
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(
-        'No hay stock suficiente de PRD-01 Filtro de aceite para completar la orden.'
-      )
-    );
   });
 
   it('S12: shows the generic fallback message on unknown errors', async () => {

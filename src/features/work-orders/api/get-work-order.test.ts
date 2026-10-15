@@ -16,7 +16,6 @@ const workOrder: WorkOrder = {
   employee: { id: 'e1', name: 'Carlos Ruiz' },
   branch: { id: 'b1', name: 'Sucursal Centro' },
   services: [],
-  products: [],
   createdAt: '2024-01-01T00:00:00.000Z',
   updatedAt: '2024-01-01T00:00:00.000Z',
 };

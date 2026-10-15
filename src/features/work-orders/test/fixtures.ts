@@ -1,11 +1,6 @@
 import type { Client, Vehicle } from '@/features/clients/types';
-import type { Product } from '@/features/products/types';
 import type { Service } from '@/features/services/types';
-import type {
-  WorkOrder,
-  WorkOrderProductLine,
-  WorkOrderServiceLine,
-} from '../types';
+import type { WorkOrder, WorkOrderServiceLine } from '../types';
 
 export function buildClient(overrides: Partial<Client> = {}): Client {
   return {
@@ -43,22 +38,6 @@ export function buildService(overrides: Partial<Service> = {}): Service {
   };
 }
 
-export function buildProduct(overrides: Partial<Product> = {}): Product {
-  return {
-    id: 'p1',
-    code: 'PRD-001',
-    name: 'Filtro de aceite',
-    price: '80.50',
-    isActive: true,
-    presentation: { id: 'pres1', name: 'Unidad' },
-    brand: { id: 'b1', name: 'Bosch' },
-    category: { id: 'cat1', name: 'Filtros' },
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-    ...overrides,
-  };
-}
-
 export function buildWorkOrderServiceLine(
   overrides: Partial<WorkOrderServiceLine> = {}
 ): WorkOrderServiceLine {
@@ -70,29 +49,6 @@ export function buildWorkOrderServiceLine(
     unitPriceSnapshot: service.price,
     subtotal: '300.00',
     service,
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-    ...overrides,
-  };
-}
-
-export function buildWorkOrderProductLine(
-  overrides: Partial<WorkOrderProductLine> = {}
-): WorkOrderProductLine {
-  const product = buildProduct();
-  return {
-    id: 'wop1',
-    productId: product.id,
-    quantity: 1,
-    unitPriceSnapshot: product.price,
-    subtotal: '80.50',
-    product: {
-      id: product.id,
-      code: product.code,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-    },
     createdAt: '2024-01-01T00:00:00.000Z',
     updatedAt: '2024-01-01T00:00:00.000Z',
     ...overrides,
@@ -114,7 +70,6 @@ export function buildWorkOrder(overrides: Partial<WorkOrder> = {}): WorkOrder {
     employee: null,
     branch: null,
     services: [buildWorkOrderServiceLine()],
-    products: [],
     createdAt: '2024-01-01T00:00:00.000Z',
     updatedAt: '2024-01-01T00:00:00.000Z',
     ...overrides,

@@ -20,7 +20,6 @@ export function toCreatePayload(
     description: values.description?.trim() ? values.description : undefined,
     employeeId: values.employeeId,
     services: values.services,
-    products: values.products,
   };
 }
 
@@ -34,11 +33,6 @@ export function workOrderToFormValues(
     employeeId: workOrder.employee?.id ?? null,
     services: workOrder.services.map((line) => ({
       serviceId: line.serviceId,
-      quantity: line.quantity,
-      unitPrice: Number(line.unitPriceSnapshot),
-    })),
-    products: workOrder.products.map((line) => ({
-      productId: line.productId,
       quantity: line.quantity,
       unitPrice: Number(line.unitPriceSnapshot),
     })),

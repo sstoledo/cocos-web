@@ -5,7 +5,6 @@ import { Textarea } from '@/components/ui/Textarea';
 import { useClients } from '@/features/clients/hooks/use-clients';
 import { useVehicles } from '@/features/clients/hooks/use-vehicles';
 import { useEmployees } from '@/features/employees/hooks/use-employees';
-import { useProducts } from '@/features/products/hooks/use-products';
 import { useServices } from '@/features/services/hooks/use-services';
 import { formatCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
@@ -18,7 +17,6 @@ import {
   workOrderSchema,
 } from '../schemas/work-order-schema';
 import {
-  ProductLinesFieldArray,
   ServiceLinesFieldArray,
   lineSubtotalCents,
 } from './WorkOrderLineItems';
@@ -50,13 +48,11 @@ export function WorkOrderForm({
       vehicleId: '',
       description: '',
       services: [],
-      products: [],
     },
   });
 
   const clientId = useWatch({ control, name: 'clientId' });
   const serviceLines = useWatch({ control, name: 'services' });
-  const productLines = useWatch({ control, name: 'products' });
 
   const { clients, isLoading: isLoadingClients } = useClients({
     limit: SELECTOR_LIMIT,
@@ -66,7 +62,6 @@ export function WorkOrderForm({
     limit: SELECTOR_LIMIT,
   });
   const { services, isLoading: isLoadingServices } = useServices({});
-  const { products, isLoading: isLoadingProducts } = useProducts({});
   const { employees, isLoading: isLoadingEmployees } = useEmployees();
 
   // Dependent selector: reset the vehicle whenever the client changes.
@@ -78,25 +73,15 @@ export function WorkOrderForm({
     }
   }, [clientId, setValue]);
 
-  const totalCents =
-    (serviceLines ?? []).reduce(
-      (sum, line) =>
-        sum +
-        (lineSubtotalCents(
-          line,
-          services.find((service) => service.id === line.serviceId)?.price
-        ) ?? 0),
-      0
-    ) +
-    (productLines ?? []).reduce(
-      (sum, line) =>
-        sum +
-        (lineSubtotalCents(
-          line,
-          products.find((product) => product.id === line.productId)?.price
-        ) ?? 0),
-      0
-    );
+  const totalCents = (serviceLines ?? []).reduce(
+    (sum, line) =>
+      sum +
+      (lineSubtotalCents(
+        line,
+        services.find((service) => service.id === line.serviceId)?.price
+      ) ?? 0),
+    0
+  );
 
   const linesError =
     errors.services?.root?.message ??
@@ -110,7 +95,6 @@ export function WorkOrderForm({
     (isLoadingClients ||
       isLoadingVehicles ||
       isLoadingServices ||
-      isLoadingProducts ||
       isLoadingEmployees)
   ) {
     return (
@@ -187,13 +171,6 @@ export function WorkOrderForm({
 
       <ServiceLinesFieldArray
         services={services}
-        control={control}
-        register={register}
-        setValue={setValue}
-      />
-
-      <ProductLinesFieldArray
-        products={products}
         control={control}
         register={register}
         setValue={setValue}

@@ -14,7 +14,6 @@ export async function updateWorkOrder(
       : {}),
     // Backend rejects provided-but-empty arrays; omit empty line-type keys.
     ...(payload.services?.length ? { services: payload.services } : {}),
-    ...(payload.products?.length ? { products: payload.products } : {}),
   };
 
   const response = await fetch(
