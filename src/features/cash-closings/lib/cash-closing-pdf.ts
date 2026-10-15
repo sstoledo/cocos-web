@@ -43,6 +43,10 @@ export function generateCashClosingPdf(closing: CashClosing): void {
   line('Efectivo declarado', closing.declaredCash);
   line('Diferencia', signedDifference(closing.difference));
   line('Ventas', String(closing.salesCount));
+  line('Pagos OT efectivo', closing.workOrderPaymentsCash);
+  line('Pagos OT tarjeta', closing.workOrderPaymentsCard);
+  line('Pagos OT transferencia', closing.workOrderPaymentsTransfer);
+  line('Pagos OT cantidad', String(closing.workOrderPaymentsCount));
   line('Cerrado por', closing.closedBy.name);
   if (closing.notes) {
     line('Notas', closing.notes);

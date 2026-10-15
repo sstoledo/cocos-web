@@ -12,6 +12,8 @@ const workOrder: WorkOrder = {
   description: null,
   status: 'pending',
   totalAmount: '15000.00',
+  paidAmount: '0.00',
+  paymentStatus: 'pending',
   isActive: true,
   employee: null,
   branch: null,

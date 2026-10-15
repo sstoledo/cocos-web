@@ -22,6 +22,10 @@ function buildClosing(overrides: Partial<CashClosing> = {}): CashClosing {
     expectedCash: '1250.00',
     expectedCard: '3400.50',
     expectedTransfer: '800.00',
+    workOrderPaymentsCash: '100.00',
+    workOrderPaymentsCard: '60.00',
+    workOrderPaymentsTransfer: '25.00',
+    workOrderPaymentsCount: 3,
     declaredCash: '1300.00',
     difference: '50.00',
     salesCount: 12,
@@ -119,6 +123,26 @@ describe('CashClosingDetailPage', () => {
     expect(screen.getByText('Cierre del turno')).toBeInTheDocument();
     // Dates render localized, never raw ISO.
     expect(screen.queryByText(/2026-09-23T/)).not.toBeInTheDocument();
+  });
+
+  it('renders the work order payments breakdown', async () => {
+    globalThis.fetch = mockFetchWith({});
+
+    renderPage();
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('Pagos de órdenes de trabajo')
+      ).toBeInTheDocument()
+    );
+
+    expect(screen.getByText('100.00')).toBeInTheDocument();
+    expect(screen.getByText('60.00')).toBeInTheDocument();
+    expect(screen.getByText('25.00')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Los montos esperados ya incluyen estos pagos/)
+    ).toBeInTheDocument();
   });
 
   it('highlights a positive difference in green', async () => {

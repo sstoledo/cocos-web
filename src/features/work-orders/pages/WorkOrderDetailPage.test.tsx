@@ -18,6 +18,8 @@ const workOrder = {
   description: 'Mantenimiento general',
   status: 'in_progress',
   totalAmount: '30500.50',
+  paidAmount: '0.00',
+  paymentStatus: 'pending',
   isActive: true,
   employee: { id: 'e1', name: 'Pedro Gómez' },
   branch: { id: 'b1', name: 'Sucursal Centro' },
@@ -317,6 +319,116 @@ describe('WorkOrderDetailPage actions', () => {
 
     expect(deleteCalls).toHaveLength(0);
     expect(screen.queryByTestId('location')).not.toBeInTheDocument();
+  });
+});
+
+describe('WorkOrderDetailPage payments section', () => {
+  const payment = {
+    id: 'p1',
+    workOrderId: 'wo1',
+    amount: '100.00',
+    paymentMethod: 'cash',
+    note: 'Seña',
+    paidAt: '2024-01-16T10:00:00.000Z',
+    createdAt: '2024-01-16T10:00:00.000Z',
+    updatedAt: '2024-01-16T10:00:00.000Z',
+  };
+
+  function renderPaymentsPage(user: unknown, order: WorkOrder) {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+
+    globalThis.fetch = vi.fn(
+      async (input: RequestInfo | URL, _init?: RequestInit) => {
+        const url = String(input);
+
+        if (url.includes('/users/me')) {
+          return { ok: true, json: async () => user } as Response;
+        }
+
+        if (url.endsWith('/payments')) {
+          return { ok: true, json: async () => [payment] } as Response;
+        }
+
+        return { ok: true, json: async () => order } as Response;
+      }
+    );
+
+    render(
+      createElement(
+        MemoryRouter,
+        { initialEntries: [`/work-orders/${order.id}`] },
+        createElement(
+          QueryClientProvider,
+          { client: queryClient },
+          createElement(
+            Routes,
+            null,
+            createElement(Route, {
+              path: '/work-orders/:id',
+              element: createElement(WorkOrderDetailPage),
+            })
+          )
+        )
+      )
+    );
+  }
+
+  beforeEach(() => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it('shows the collection status, totals and payment list', async () => {
+    renderPaymentsPage(
+      adminUser,
+      buildWorkOrder({ paidAmount: '100.00', paymentStatus: 'partial' })
+    );
+
+    expect(await screen.findByText('Parcial')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Pagado 100\.00 de 300\.00 · Saldo 200\.00/)
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole('cell', { name: 'Seña' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Registrar pago' })
+    ).toBeInTheDocument();
+  });
+
+  it('Mechanic sees the collection status but cannot register payments', async () => {
+    renderPaymentsPage(
+      { ...adminUser, role: { id: 'r3', name: 'Mechanic' } },
+      buildWorkOrder({ status: 'in_progress' })
+    );
+
+    expect(await screen.findByText('Pendiente')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('cell', { name: 'Seña' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Registrar pago' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not offer payments registration on a cancelled order', async () => {
+    renderPaymentsPage(adminUser, buildWorkOrder({ status: 'cancelled' }));
+
+    await screen.findByRole('heading', { name: 'Orden OT-0001' });
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('button', { name: 'Registrar pago' })
+      ).not.toBeInTheDocument()
+    );
   });
 });
 

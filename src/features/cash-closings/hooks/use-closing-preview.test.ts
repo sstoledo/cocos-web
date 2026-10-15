@@ -10,6 +10,10 @@ const preview: ClosingPreview = {
   expectedCash: '1250.00',
   expectedCard: '3400.50',
   expectedTransfer: '800.00',
+  workOrderPaymentsCash: '100.00',
+  workOrderPaymentsCard: '50.00',
+  workOrderPaymentsTransfer: '25.00',
+  workOrderPaymentsCount: 3,
   salesCount: 12,
 };
 
@@ -80,6 +84,10 @@ describe('useClosingPreview', () => {
       expectedCash: '0.00',
       expectedCard: '0.00',
       expectedTransfer: '0.00',
+      workOrderPaymentsCash: '0.00',
+      workOrderPaymentsCard: '0.00',
+      workOrderPaymentsTransfer: '0.00',
+      workOrderPaymentsCount: 0,
       salesCount: 0,
     };
     globalThis.fetch = vi.fn().mockResolvedValueOnce({

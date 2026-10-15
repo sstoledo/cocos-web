@@ -7,6 +7,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
+import { WorkOrderPaymentsSection } from '../components/WorkOrderPaymentsSection';
 import { WorkOrderStatusActions } from '../components/WorkOrderStatusActions';
 import { WorkOrderStatusBadge } from '../components/WorkOrderStatusBadge';
 import { useDeleteWorkOrder } from '../hooks/use-delete-work-order';
@@ -184,6 +185,7 @@ export function WorkOrderDetailPage() {
             </div>
           )}
         </SectionCard>
+        <WorkOrderPaymentsSection workOrder={workOrder} canManage={canManage} />
         <p className="text-right text-lg font-semibold">
           {`Total: ${workOrder.totalAmount}`}
         </p>

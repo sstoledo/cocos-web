@@ -14,6 +14,8 @@ const workOrder: WorkOrder = {
   description: 'Cambio de aceite',
   status: 'pending',
   totalAmount: '15000.00',
+  paidAmount: '0.00',
+  paymentStatus: 'pending',
   isActive: true,
   employee: null,
   branch: null,
@@ -41,7 +43,8 @@ describe('WorkOrderTable', () => {
     expect(
       screen.getByRole('cell', { name: 'ABC123 · Ford Fiesta' })
     ).toBeInTheDocument();
-    expect(screen.getByText('Pendiente')).toBeInTheDocument();
+    // Two 'Pendiente' badges: order status + payment status.
+    expect(screen.getAllByText('Pendiente')).toHaveLength(2);
     expect(screen.getByRole('cell', { name: '15000.00' })).toBeInTheDocument();
     expect(
       screen.getByRole('cell', {

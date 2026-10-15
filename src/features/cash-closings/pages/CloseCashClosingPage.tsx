@@ -210,6 +210,43 @@ export function CloseCashClosingPage() {
                       : 'Sin cierres previos'}
                   </span>
                 </p>
+                <div>
+                  <p className="text-sm font-medium text-foreground">
+                    Pagos de órdenes de trabajo
+                  </p>
+                  <dl className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <div>
+                      <dt className="text-sm text-muted-foreground">
+                        Efectivo
+                      </dt>
+                      <dd className="text-foreground">
+                        {preview.workOrderPaymentsCash}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">Tarjeta</dt>
+                      <dd className="text-foreground">
+                        {preview.workOrderPaymentsCard}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">
+                        Transferencia
+                      </dt>
+                      <dd className="text-foreground">
+                        {preview.workOrderPaymentsTransfer}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm text-muted-foreground">
+                        Cantidad
+                      </dt>
+                      <dd className="text-foreground">
+                        {preview.workOrderPaymentsCount}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
             )}
           </SectionCard>
