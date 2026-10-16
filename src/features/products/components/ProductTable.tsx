@@ -85,6 +85,15 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
               <td className="p-4">
                 <div className="flex items-center gap-2">
                   <Link
+                    to={`/products/${product.id}`}
+                    className={cn(
+                      'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
+                      'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                    )}
+                  >
+                    Ver
+                  </Link>
+                  <Link
                     to={`/products/${product.id}/stock`}
                     className={cn(
                       'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
