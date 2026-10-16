@@ -23,6 +23,7 @@ const initialValues = {
   barcode: '123456',
   taxRate: 21,
   notes: 'Notas iniciales',
+  consumptionType: 'partial' as const,
   isActive: true,
 };
 
@@ -75,6 +76,7 @@ describe('ProductForm', () => {
     expect(screen.getByLabelText('Categoría')).toBeInTheDocument();
     expect(screen.getByLabelText('Tasa de impuesto (%)')).toBeInTheDocument();
     expect(screen.getByLabelText('Notas')).toBeInTheDocument();
+    expect(screen.getByLabelText('Tipo de consumo')).toBeInTheDocument();
     expect(screen.getByRole('switch', { name: 'Activo' })).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Crear producto' })
@@ -128,6 +130,7 @@ describe('ProductForm', () => {
           presentationId: 'p1',
           brandId: 'b1',
           categoryId: 'c1',
+          consumptionType: 'direct',
           isActive: true,
         }),
         null
@@ -156,5 +159,6 @@ describe('ProductForm', () => {
     expect(screen.getByLabelText('Categoría')).toHaveValue(
       initialValues.categoryId
     );
+    expect(screen.getByLabelText('Tipo de consumo')).toHaveValue('partial');
   });
 });

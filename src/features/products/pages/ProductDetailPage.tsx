@@ -4,6 +4,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { Link, useParams } from 'react-router';
 import { useProduct } from '../hooks/use-product';
+import { PRODUCT_CONSUMPTION_TYPE_LABELS } from '../types';
 
 function formatPrice(price: string): string {
   const num = Number(price);
@@ -102,6 +103,16 @@ export function ProductDetailPage() {
               <dt className="text-sm text-muted-foreground">Precio</dt>
               <dd className="text-foreground tabular-nums">
                 {formatPrice(product.price)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">Tipo de consumo</dt>
+              <dd className="text-foreground">
+                {
+                  PRODUCT_CONSUMPTION_TYPE_LABELS[
+                    product.consumptionType ?? 'direct'
+                  ]
+                }
               </dd>
             </div>
             {product.minStock !== undefined && product.minStock !== null && (

@@ -10,8 +10,19 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { productSchema } from '../schemas/product-schema';
-import type { ProductFormValues, ProductReference } from '../types';
+import {
+  PRODUCT_CONSUMPTION_TYPE_LABELS,
+  type ProductConsumptionType,
+  type ProductFormValues,
+  type ProductReference,
+} from '../types';
 import { ProductImageUpload } from './ProductImageUpload';
+
+const CONSUMPTION_TYPE_OPTIONS = (
+  Object.entries(PRODUCT_CONSUMPTION_TYPE_LABELS) as Array<
+    [ProductConsumptionType, string]
+  >
+).map(([value, label]) => ({ value, label }));
 
 export type ProductFormProps = {
   onSubmit: (values: ProductFormValues, image: File | null) => void;
@@ -60,6 +71,7 @@ export function ProductForm({
       barcode: '',
       taxRate: undefined,
       notes: '',
+      consumptionType: 'direct',
       isActive: true,
     },
   });
@@ -124,7 +136,7 @@ export function ProductForm({
         onRemove={onRemoveImage}
       />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="price">Precio</Label>
           <Input
@@ -150,6 +162,16 @@ export function ProductForm({
             type="text"
             placeholder="Código de barras"
             {...register('barcode')}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="consumptionType">Tipo de consumo</Label>
+          <Select
+            id="consumptionType"
+            options={CONSUMPTION_TYPE_OPTIONS}
+            error={errors.consumptionType?.message}
+            {...register('consumptionType')}
           />
         </div>
       </div>

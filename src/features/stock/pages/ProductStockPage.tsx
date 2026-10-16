@@ -7,8 +7,16 @@ import { useParams } from 'react-router';
 import { StockAdjustmentForm } from '../components/StockAdjustmentForm';
 import { StockMovementList } from '../components/StockMovementList';
 import { useCreateStockMovement } from '../hooks/use-create-stock-movement';
+import { useOpenContainers } from '../hooks/use-open-containers';
 import { useProductMovements } from '../hooks/use-product-movements';
 import { useProductStock } from '../hooks/use-product-stock';
+
+function formatDateTime(value: string) {
+  return new Date(value).toLocaleString('es-AR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  });
+}
 
 export function ProductStockPage() {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +26,11 @@ export function ProductStockPage() {
   const { data: stock, isLoading: isLoadingStock } = useProductStock(productId);
   const { data: movements = [], isLoading: isLoadingMovements } =
     useProductMovements(productId);
+  const isPartialConsumption = product?.consumptionType === 'partial';
+  const { data: openContainers } = useOpenContainers(
+    productId,
+    isPartialConsumption
+  );
   const {
     mutate: createMovement,
     isPending: isCreating,
@@ -67,6 +80,26 @@ export function ProductStockPage() {
             <SectionCard title="Stock actual">
               <p className="text-h3 text-foreground">{stock?.stock ?? 0}</p>
             </SectionCard>
+
+            {isPartialConsumption && openContainers && (
+              <SectionCard title="Envases abiertos">
+                <p className="text-h3 text-foreground">
+                  {openContainers.openContainers}
+                </p>
+                {openContainers.lastOpened ? (
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Último envase abierto en la orden{' '}
+                    {openContainers.lastOpened.workOrderNumber} por{' '}
+                    {openContainers.lastOpened.registeredBy.name} el{' '}
+                    {formatDateTime(openContainers.lastOpened.createdAt)}.
+                  </p>
+                ) : (
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    No hay envases abiertos registrados.
+                  </p>
+                )}
+              </SectionCard>
+            )}
 
             <SectionCard title="Movimientos">
               <StockMovementList movements={movements} />

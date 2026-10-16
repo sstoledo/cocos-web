@@ -32,6 +32,7 @@ const values = {
   presentationId: 'p1',
   brandId: 'b1',
   categoryId: 'c1',
+  consumptionType: 'partial' as const,
   isActive: true,
 };
 
@@ -90,6 +91,7 @@ describe('useCreateProduct', () => {
     expect(formData.get('brandId')).toBe(values.brandId);
     expect(formData.get('categoryId')).toBe(values.categoryId);
     expect(formData.get('isActive')).toBe('true');
+    expect(formData.get('consumptionType')).toBe('partial');
     expect(result.current.data).toEqual(createdProduct);
     expect(toast.success).toHaveBeenCalledWith('Producto creado correctamente');
     expect(toast.error).not.toHaveBeenCalled();

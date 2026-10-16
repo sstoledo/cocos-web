@@ -104,6 +104,24 @@ function createFetchMock() {
       });
     }
 
+    if (
+      url === 'http://localhost:3000/api/stock/products/prod-1/open-containers'
+    ) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          productId: 'prod-1',
+          openContainers: 2,
+          lastOpened: {
+            workOrderId: 'wo1',
+            workOrderNumber: 'OT-0001',
+            registeredBy: { id: 'u1', name: 'Ana García' },
+            createdAt: '2026-07-13T11:00:00.000Z',
+          },
+        }),
+      });
+    }
+
     return Promise.resolve({
       ok: false,
       status: 404,
@@ -166,6 +184,52 @@ describe('ProductStockPage', () => {
         'No se pudieron cargar los datos'
       )
     );
+  });
+
+  it('shows open containers for partial consumption products', async () => {
+    const baseMock = createFetchMock();
+    globalThis.fetch = vi
+      .fn()
+      .mockImplementation((url: string, init?: RequestInit) => {
+        if (url === 'http://localhost:3000/api/products/prod-1') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ ...product, consumptionType: 'partial' }),
+          });
+        }
+        return baseMock(url, init);
+      });
+
+    render(<ProductStockPage />, {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() =>
+      expect(screen.getByText('Envases abiertos')).toBeInTheDocument()
+    );
+
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Último envase abierto en la orden OT-0001 por Ana García/
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('does not show open containers for direct consumption products', async () => {
+    globalThis.fetch = createFetchMock();
+
+    render(<ProductStockPage />, {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('heading', { name: 'Aceite 20W50' })
+      ).toBeInTheDocument()
+    );
+
+    expect(screen.queryByText('Envases abiertos')).not.toBeInTheDocument();
   });
 
   it('submits an adjustment and refreshes the data', async () => {

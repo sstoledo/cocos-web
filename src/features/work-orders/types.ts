@@ -96,6 +96,37 @@ export interface CreateWorkOrderPaymentPayload {
   note?: string;
 }
 
+export type ConsumptionEventType = 'used' | 'opened' | 'depleted';
+
+export interface ConsumptionEvent {
+  id: string;
+  workOrderId: string;
+  productId: string;
+  product: {
+    id: string;
+    code: string;
+    name: string;
+    consumptionType?: 'direct' | 'partial';
+  };
+  type: ConsumptionEventType;
+  quantity: number | null;
+  registeredById: string;
+  registeredBy: { id: string; name: string };
+  createdAt: string;
+}
+
+export interface CreateConsumptionPayload {
+  productId: string;
+  type: ConsumptionEventType;
+  quantity?: number;
+}
+
+export interface InsufficientStockDetail {
+  productId: string;
+  requested: number;
+  available: number;
+}
+
 export interface WorkOrderListFilters {
   query?: string;
   page?: number;
