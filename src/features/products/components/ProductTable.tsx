@@ -5,9 +5,10 @@ import type { Product } from '../types';
 
 export type ProductTableProps = {
   products: Product[];
+  canEdit: boolean;
 };
 
-export function ProductTable({ products }: ProductTableProps) {
+export function ProductTable({ products, canEdit }: ProductTableProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full caption-bottom text-body-sm">
@@ -35,7 +36,7 @@ export function ProductTable({ products }: ProductTableProps) {
               Estado
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
-              Stock
+              Acciones
             </th>
           </tr>
         </thead>
@@ -82,15 +83,28 @@ export function ProductTable({ products }: ProductTableProps) {
                 </span>
               </td>
               <td className="p-4">
-                <Link
-                  to={`/products/${product.id}/stock`}
-                  className={cn(
-                    'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-                    'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                <div className="flex items-center gap-2">
+                  <Link
+                    to={`/products/${product.id}/stock`}
+                    className={cn(
+                      'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
+                      'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                    )}
+                  >
+                    Stock
+                  </Link>
+                  {canEdit && (
+                    <Link
+                      to={`/products/${product.id}/edit`}
+                      className={cn(
+                        'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
+                        'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                      )}
+                    >
+                      Editar
+                    </Link>
                   )}
-                >
-                  Stock
-                </Link>
+                </div>
               </td>
             </tr>
           ))}

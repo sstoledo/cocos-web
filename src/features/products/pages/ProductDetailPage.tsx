@@ -2,6 +2,7 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { useUser } from '@/features/shell/hooks/useUser';
 import { Link, useParams } from 'react-router';
 import { useProduct } from '../hooks/use-product';
 import { PRODUCT_CONSUMPTION_TYPE_LABELS } from '../types';
@@ -26,6 +27,10 @@ function formatDate(dateString: string): string {
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: product, isLoading, error } = useProduct(id ?? '');
+  const { user } = useUser();
+
+  const canEdit =
+    user?.role?.name === 'Admin' || user?.role?.name === 'Warehouse';
 
   if (isLoading) {
     return (
@@ -158,14 +163,16 @@ export function ProductDetailPage() {
           </dl>
         </SectionCard>
 
-        <div className="mt-4 flex gap-2">
-          <Link
-            to={`/products/${product.id}/edit`}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-          >
-            Editar
-          </Link>
-        </div>
+        {canEdit && (
+          <div className="mt-4 flex gap-2">
+            <Link
+              to={`/products/${product.id}/edit`}
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              Editar
+            </Link>
+          </div>
+        )}
       </PageContent>
     </>
   );
