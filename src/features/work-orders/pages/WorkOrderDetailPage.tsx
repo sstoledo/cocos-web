@@ -7,6 +7,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
+import { WorkOrderConsumptionsSection } from '../components/WorkOrderConsumptionsSection';
 import { WorkOrderPaymentsSection } from '../components/WorkOrderPaymentsSection';
 import { WorkOrderStatusActions } from '../components/WorkOrderStatusActions';
 import { WorkOrderStatusBadge } from '../components/WorkOrderStatusBadge';
@@ -28,6 +29,14 @@ export function WorkOrderDetailPage() {
 
   const canManage =
     user?.role?.name === 'Admin' || user?.role?.name === 'Reception';
+
+  const role = user?.role?.name;
+  const canRegisterConsumption =
+    (workOrder?.status === 'pending' || workOrder?.status === 'in_progress') &&
+    (role === 'Admin' ||
+      role === 'Reception' ||
+      role === 'Warehouse' ||
+      (role === 'Mechanic' && workOrder?.employee?.id === user?.id));
 
   function handleConfirmDelete() {
     if (!id) {
@@ -186,6 +195,10 @@ export function WorkOrderDetailPage() {
           )}
         </SectionCard>
         <WorkOrderPaymentsSection workOrder={workOrder} canManage={canManage} />
+        <WorkOrderConsumptionsSection
+          workOrder={workOrder}
+          canRegister={canRegisterConsumption}
+        />
         <p className="text-right text-lg font-semibold">
           {`Total: ${workOrder.totalAmount}`}
         </p>

@@ -2,7 +2,9 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { useUser } from '@/features/shell/hooks/useUser';
 import { useParams } from 'react-router';
+import { ServiceProductsSection } from '../components/ServiceProductsSection';
 import { useService } from '../hooks/use-service';
 
 function formatPrice(price: string): string {
@@ -37,6 +39,10 @@ function formatDate(dateString: string): string {
 export function ServiceDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: service, isLoading, error } = useService(id ?? '');
+  const { user } = useUser();
+
+  const canManage =
+    user?.role?.name === 'Admin' || user?.role?.name === 'Reception';
 
   if (isLoading) {
     return (
@@ -111,6 +117,7 @@ export function ServiceDetailPage() {
             </div>
           </dl>
         </SectionCard>
+        <ServiceProductsSection serviceId={service.id} canManage={canManage} />
       </PageContent>
     </>
   );

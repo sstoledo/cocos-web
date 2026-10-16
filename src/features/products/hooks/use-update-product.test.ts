@@ -15,6 +15,7 @@ const values = {
   presentationId: 'p1',
   brandId: 'b1',
   categoryId: 'c1',
+  consumptionType: 'direct' as const,
   isActive: true,
 };
 

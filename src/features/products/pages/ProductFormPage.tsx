@@ -23,6 +23,7 @@ function productToFormValues(product: Product): ProductFormValues {
     barcode: product.barcode ?? '',
     taxRate: product.taxRate ? Number(product.taxRate) : undefined,
     notes: product.notes ?? '',
+    consumptionType: product.consumptionType ?? 'direct',
     isActive: product.isActive,
   };
 }

@@ -14,6 +14,7 @@ export async function updateProduct(
   formData.set('brandId', values.brandId);
   formData.set('categoryId', values.categoryId);
   formData.set('isActive', values.isActive.toString());
+  formData.set('consumptionType', values.consumptionType);
 
   if (values.description) {
     formData.set('description', values.description);

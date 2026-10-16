@@ -20,3 +20,14 @@ export interface StockAdjustmentFormValues {
   quantity: number;
   reason?: string;
 }
+
+export interface OpenContainersInfo {
+  productId: string;
+  openContainers: number;
+  lastOpened: {
+    workOrderId: string;
+    workOrderNumber: string;
+    registeredBy: { id: string; name: string };
+    createdAt: string;
+  } | null;
+}

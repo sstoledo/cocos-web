@@ -1,7 +1,18 @@
+export type ProductConsumptionType = 'direct' | 'partial';
+
+export const PRODUCT_CONSUMPTION_TYPE_LABELS: Record<
+  ProductConsumptionType,
+  string
+> = {
+  direct: 'Consumo directo',
+  partial: 'Consumo parcial (envase)',
+};
+
 export interface Product {
   id: string;
   code: string;
   name: string;
+  consumptionType?: ProductConsumptionType;
   description?: string;
   price: string;
   minStock?: number;

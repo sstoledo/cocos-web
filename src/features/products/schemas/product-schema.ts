@@ -16,6 +16,11 @@ export const productSchema = z.object({
     .min(0, 'La tasa de impuesto no puede ser negativa')
     .optional(),
   notes: z.string().optional(),
+  consumptionType: z
+    .enum(['direct', 'partial'], {
+      message: 'Seleccioná un tipo de consumo',
+    })
+    .default('direct'),
   isActive: z.boolean().default(true),
 });
 

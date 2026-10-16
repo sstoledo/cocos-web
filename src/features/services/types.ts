@@ -10,6 +10,26 @@ export interface Service {
   updatedAt: string;
 }
 
+export interface ServiceProduct {
+  id: string;
+  serviceId: string;
+  productId: string;
+  quantity: number;
+  product: {
+    id: string;
+    code: string;
+    name: string;
+    consumptionType?: 'direct' | 'partial';
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateServiceProductPayload {
+  productId: string;
+  quantity: number;
+}
+
 export interface ServiceListFilters {
   q?: string;
   isActive?: boolean;
