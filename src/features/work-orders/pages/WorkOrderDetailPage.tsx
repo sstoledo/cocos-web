@@ -36,7 +36,7 @@ export function WorkOrderDetailPage() {
     (role === 'Admin' ||
       role === 'Reception' ||
       role === 'Warehouse' ||
-      (role === 'Mechanic' && workOrder?.employee?.id === user?.id));
+      (role === 'Mechanic' && workOrder?.employee?.id === user?.employeeId));
 
   function handleConfirmDelete() {
     if (!id) {
