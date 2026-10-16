@@ -26,6 +26,15 @@ function renderTable(canEdit: boolean) {
 }
 
 describe('ProductTable', () => {
+  it('always shows the view action', () => {
+    renderTable(false);
+
+    expect(screen.getByRole('link', { name: 'Ver' })).toHaveAttribute(
+      'href',
+      '/products/p1'
+    );
+  });
+
   it('always shows the stock action', () => {
     renderTable(false);
 
