@@ -13,20 +13,19 @@ Implementar el diseño aprobado de Work Orders v2: modelo de cobro con pagos par
 ## Slices (PRs)
 - [x] **S1 — WO solo-servicios**: eliminar WorkOrderProduct. ✅ Mergeado: back PR #89 (`9a23b1a`), web PR #118 (`ebe7a29`). Suites verdes (back 594, web 1256). Nota: `StockMovement.workOrderId` queda en schema para S3; back dejó 1 stock_movement huérfano en dev (inofensivo); gotcha: `prisma migrate dev` no corre en shell no-interactivo (usar `printf 'y\n' | script -qec ...`).
 - [x] **S2 — Pagos de WO**: modelo WorkOrderPayment + endpoints + estado de cobro derivado + cierre de caja suma pagos WO (desglose persistido en snapshot) + UI pagos. ✅ Mergeado: back PR #90 (`7af929c`), web PR #119 (`fe22c8b`). Suites verdes (back 608, web 1296). Notas: pagos de WO luego cancelada SÍ entran al cierre (decisión pendiente si el negocio quiere excluirlos); paidAt no editable por API; el doc de este feature quedó commiteado en web.
-- [ ] **S3 — Consumibles**: receta por servicio (template) + bitácora WorkOrderConsumptionEvent + envases abiertos en inventario + aviso de reutilización + registro mecánico/logística. [back+web] ⏸️ PAUSADO por el usuario (writer backend cancelado antes de empezar, no hay cambios). El prompt de implementación del backend está listo en el historial de la sesión del 15/10; al retomar: rama `feat/work-order-consumables`, back primero (el front necesita contratos).
-
-## Decisiones extra tomadas durante la implementación
-- El desglose de pagos WO en cierre de caja se PERSISTE como columnas del snapshot (workOrderPaymentsCash/Card/Transfer/Count) — los cierres son audit-trail inmutable.
-- Pagos registrados antes de cancelar una WO SÍ entran al cierre (decisión pendiente si el negocio quiere excluirlos).
-- `paidAt` no es editable por API (siempre now()).
+- [x] **S3 — Consumibles**: receta ServiceProduct (CRUD Admin/Reception) + Product.consumptionType (direct/partial) + bitácora WorkOrderConsumptionEvent (used/opened/depleted, append-only) + envases abiertos (GET /stock/products/:id/open-containers) + alerta de reutilización + registro mecánico (su WO)/Admin/Reception/Warehouse. ✅ Mergeado: back PR #91 (`ea97f66`), web PR #120 (`ee7586f`). Suites verdes (back 635, web 1342). Notas: stock descontado NO se repone si la WO se cancela (MVP consciente); selector de productos carga limit 100 (pasar a búsqueda server-side si el catálogo crece).
 
 ## Progreso
 - S1 ✅ mergeado (back #89, web #118)
 - S2 ✅ mergeado (back #90, web #119)
-- S3 ⏸️ pendiente
+- S3 ✅ mergeado (back #91, web #120) — FEATURE COMPLETO
 
 ## Próximo paso
-Slice 3 backend: rama `feat/work-order-consumables` desde main, luego web con los contratos.
+Feature cerrado. Pendientes sueltos: decisiones de negocio (pagos de WO cancelada en cierre; paidAt editable); testing por rol Warehouse/Purchasing/ReadOnly; smoke test manual del flujo de consumibles.
+
+## Decisiones extra tomadas durante la implementación
+- El desglose de pagos WO en cierre de caja se PERSISTE como columnas del snapshot (workOrderPaymentsCash/Card/Transfer/Count) — los cierres son audit-trail inmutable.
+- FIFO de stock replicado entre SalesService y consumos de WO (keep-in-sync documentado; extracción a StockService compartido = follow-up).
 
 ## Constraints
 - Commits: solo título conventional (sin body). PR body: solo summary.
