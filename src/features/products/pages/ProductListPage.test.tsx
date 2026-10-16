@@ -23,6 +23,24 @@ function createWrapper(initialEntries?: string[]) {
   };
 }
 
+function userWithRole(role: string) {
+  return {
+    id: 'u1',
+    name: 'Ana',
+    email: 'ana@example.com',
+    role: { id: 'r1', name: role },
+  };
+}
+
+function mockFetch(response: object, role = 'Admin') {
+  globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+    if (url.includes('/users/me')) {
+      return { ok: true, json: async () => userWithRole(role) };
+    }
+    return { ok: true, json: async () => response };
+  });
+}
+
 const product: Product = {
   id: 'p1',
   code: 'COD-001',
@@ -50,30 +68,69 @@ describe('ProductListPage', () => {
     vi.unstubAllEnvs();
   });
 
-  it('renders the header, new product link, and filters', () => {
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
-    });
+  it('renders the header, new product link, and filters', async () => {
+    mockFetch({ data: [], meta: { page: 1, limit: 10, total: 0 } });
 
     render(<ProductListPage />, { wrapper: createWrapper() });
 
     expect(
       screen.getByRole('heading', { name: 'Productos' })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'Nuevo producto' })
-    ).toHaveAttribute('href', '/products/new');
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', { name: 'Nuevo producto' })
+      ).toHaveAttribute('href', '/products/new')
+    );
     expect(
       screen.getByRole('searchbox', { name: 'Buscar productos' })
     ).toBeInTheDocument();
   });
 
+  it.each(['Admin', 'Warehouse'])(
+    'shows the new product link and edit action for %s',
+    async (role) => {
+      mockFetch(mockResponse, role);
+
+      render(<ProductListPage />, { wrapper: createWrapper() });
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole('link', { name: 'Nuevo producto' })
+        ).toBeInTheDocument()
+      );
+      expect(screen.getByRole('cell', { name: 'COD-001' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Editar' })).toHaveAttribute(
+        'href',
+        '/products/p1/edit'
+      );
+    }
+  );
+
+  it.each(['Reception', 'Mechanic'])(
+    'hides the new product link and edit action for %s',
+    async (role) => {
+      mockFetch(mockResponse, role);
+
+      render(<ProductListPage />, { wrapper: createWrapper() });
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole('cell', { name: 'COD-001' })
+        ).toBeInTheDocument()
+      );
+      await waitFor(() =>
+        expect(
+          screen.queryByRole('link', { name: 'Nuevo producto' })
+        ).not.toBeInTheDocument()
+      );
+      expect(
+        screen.queryByRole('link', { name: 'Editar' })
+      ).not.toBeInTheDocument();
+    }
+  );
+
   it('shows a loading state and then the table with products', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
-    });
+    mockFetch(mockResponse);
 
     render(<ProductListPage />, { wrapper: createWrapper() });
 

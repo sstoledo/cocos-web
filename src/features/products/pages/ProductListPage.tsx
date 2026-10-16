@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { useUser } from '@/features/shell/hooks/useUser';
 import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router';
@@ -35,6 +36,10 @@ export function ProductListPage() {
   const filters = filtersFromSearchParams(searchParams);
   const { products, meta, isLoading, error } = useProducts(filters);
   const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
+  const { user } = useUser();
+
+  const canEdit =
+    user?.role?.name === 'Admin' || user?.role?.name === 'Warehouse';
 
   function handleFiltersChange(nextFilters: ProductListFilters) {
     const nextSearchParams = new URLSearchParams();
@@ -70,15 +75,17 @@ export function ProductListPage() {
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle>Productos</PageTitle>
-        <Link
-          to="/products/new"
-          className={cn(
-            'inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors',
-            'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-          )}
-        >
-          Nuevo producto
-        </Link>
+        {canEdit && (
+          <Link
+            to="/products/new"
+            className={cn(
+              'inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors',
+              'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            )}
+          >
+            Nuevo producto
+          </Link>
+        )}
       </PageHeader>
       <PageContent>
         <SectionCard title="Catálogo de productos">
@@ -96,7 +103,7 @@ export function ProductListPage() {
                 No se pudieron cargar los productos. Intentá de nuevo más tarde.
               </div>
             ) : (
-              <ProductTable products={products} />
+              <ProductTable products={products} canEdit={canEdit} />
             )}
             {paginationMeta && paginationMeta.totalPages > 1 && (
               <Pagination

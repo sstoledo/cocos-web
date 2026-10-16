@@ -87,8 +87,11 @@ const routes: RouteObject[] = [
       guardedRoute('dashboard', <DashboardPage />),
       guardedRoute('products', <ProductListPage />),
       guardedRoute('products/:id', <ProductDetailPage />),
-      guardedRoute('products/new', <ProductFormPage />, 'Admin'),
-      guardedRoute('products/:id/edit', <ProductFormPage />, 'Admin'),
+      guardedRoute('products/new', <ProductFormPage />, ['Admin', 'Warehouse']),
+      guardedRoute('products/:id/edit', <ProductFormPage />, [
+        'Admin',
+        'Warehouse',
+      ]),
       guardedRoute('products/:id/stock', <ProductStockPage />),
       guardedRoute('lots', <LotListPage />),
       guardedRoute('lots/new', <LotFormPage />),
