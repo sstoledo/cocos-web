@@ -643,3 +643,91 @@ describe('WorkOrderDetailPage status transitions', () => {
     });
   });
 });
+
+describe('WorkOrderDetailPage consumption registration gating', () => {
+  function renderConsumptionsPage(user: unknown, order: WorkOrder) {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+
+    globalThis.fetch = vi.fn(
+      async (input: RequestInfo | URL, _init?: RequestInit) => {
+        const url = String(input);
+
+        if (url.includes('/users/me')) {
+          return { ok: true, json: async () => user } as Response;
+        }
+
+        if (url.endsWith('/consumptions')) {
+          return { ok: true, json: async () => [] } as Response;
+        }
+
+        if (url.endsWith('/payments')) {
+          return { ok: true, json: async () => [] } as Response;
+        }
+
+        return { ok: true, json: async () => order } as Response;
+      }
+    );
+
+    render(
+      createElement(
+        MemoryRouter,
+        { initialEntries: [`/work-orders/${order.id}`] },
+        createElement(
+          QueryClientProvider,
+          { client: queryClient },
+          createElement(
+            Routes,
+            null,
+            createElement(Route, {
+              path: '/work-orders/:id',
+              element: createElement(WorkOrderDetailPage),
+            })
+          )
+        )
+      )
+    );
+  }
+
+  beforeEach(() => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it('assigned Mechanic can register consumption on their in-progress order', async () => {
+    renderConsumptionsPage(
+      { ...adminUser, employeeId: 'e1', role: { id: 'r3', name: 'Mechanic' } },
+      buildWorkOrder({
+        status: 'in_progress',
+        employee: { id: 'e1', name: 'Pedro Gómez' },
+      })
+    );
+
+    expect(
+      await screen.findByRole('button', { name: 'Registrar consumo' })
+    ).toBeInTheDocument();
+  });
+
+  it('unassigned Mechanic cannot register consumption', async () => {
+    renderConsumptionsPage(
+      { ...adminUser, employeeId: 'e9', role: { id: 'r3', name: 'Mechanic' } },
+      buildWorkOrder({
+        status: 'in_progress',
+        employee: { id: 'e1', name: 'Pedro Gómez' },
+      })
+    );
+
+    await screen.findByRole('heading', { name: 'Consumo de productos' });
+    expect(
+      screen.queryByRole('button', { name: 'Registrar consumo' })
+    ).not.toBeInTheDocument();
+  });
+});
