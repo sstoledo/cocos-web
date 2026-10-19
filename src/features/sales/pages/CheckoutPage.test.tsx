@@ -144,8 +144,11 @@ async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
   await waitFor(() => expect(addButton).toBeEnabled());
   await user.selectOptions(screen.getByLabelText('Método de pago'), 'cash');
   await user.click(addButton);
-  await screen.findByRole('option', { name: 'Filtro de aceite' });
-  await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+  const productInput = screen.getByLabelText('Producto');
+  await user.click(productInput);
+  await user.click(
+    await screen.findByRole('option', { name: 'Filtro de aceite' })
+  );
   await user.clear(screen.getByLabelText('Cantidad'));
   await user.type(screen.getByLabelText('Cantidad'), '2');
   await user.click(screen.getByRole('button', { name: 'Registrar venta' }));
@@ -192,8 +195,9 @@ describe('CheckoutPage', () => {
     const user = userEvent.setup();
     renderPage();
 
-    await screen.findByRole('option', { name: 'Juan Pérez' });
-    await user.selectOptions(screen.getByLabelText('Cliente'), 'c1');
+    const clientInput = screen.getByLabelText('Cliente');
+    await user.click(clientInput);
+    await user.click(await screen.findByRole('option', { name: 'Juan Pérez' }));
     await fillAndSubmit(user);
 
     await waitFor(() => expect(postCalls).toHaveLength(1));

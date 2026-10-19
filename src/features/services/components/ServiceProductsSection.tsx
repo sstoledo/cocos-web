@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { SectionCard } from '@/components/ui/SectionCard';
-import { Select } from '@/components/ui/Select';
-import { useProducts } from '@/features/products/hooks/use-products';
+import { ProductCombobox } from '@/features/products/components/ProductCombobox';
+import type { Product } from '@/features/products/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -28,24 +28,18 @@ function ServiceProductAddForm({
   existingProductIds,
   onError,
 }: ServiceProductAddFormProps) {
-  const { products, isLoading: isLoadingProducts } = useProducts({
-    isActive: true,
-    limit: 100,
-  });
   const addServiceProduct = useAddServiceProduct(serviceId);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ServiceProductFormValues>({
     resolver: zodResolver(serviceProductSchema),
     defaultValues: { productId: '', quantity: undefined },
   });
-
-  const availableProducts = products.filter(
-    (product) => !existingProductIds.has(product.id)
-  );
 
   function handleAdd(values: ServiceProductFormValues) {
     addServiceProduct.mutate(
@@ -53,6 +47,7 @@ function ServiceProductAddForm({
       {
         onSuccess: () => {
           reset({ productId: '', quantity: undefined });
+          setSelectedProduct(null);
           onError(null);
         },
         onError,
@@ -67,18 +62,20 @@ function ServiceProductAddForm({
       noValidate
     >
       <div className="min-w-56 flex-1">
-        <Select
+        <ProductCombobox
           id="service-product"
           label="Producto"
-          options={availableProducts.map((product) => ({
-            value: product.id,
-            label: `${product.code} — ${product.name}`,
-          }))}
-          placeholder={
-            isLoadingProducts ? 'Cargando productos…' : 'Seleccionar producto'
-          }
+          withCode
+          isActive
+          excludeIds={existingProductIds}
+          value={selectedProduct}
+          onChange={(product) => {
+            setSelectedProduct(product);
+            setValue('productId', product?.id ?? '', {
+              shouldValidate: true,
+            });
+          }}
           error={errors.productId?.message}
-          {...register('productId')}
         />
       </div>
       <div className="w-28 space-y-2">

@@ -125,6 +125,16 @@ function renderSection(
   return { postCalls };
 }
 
+async function pickProduct(
+  user: ReturnType<typeof userEvent.setup>,
+  dialog: HTMLElement,
+  optionName: string | RegExp
+) {
+  const input = await within(dialog).findByLabelText('Producto');
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
+}
+
 describe('WorkOrderConsumptionsSection', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
@@ -177,10 +187,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p1'
-    );
+    await pickProduct(user, dialog, /Filtro de aire/);
     await user.selectOptions(within(dialog).getByLabelText('Tipo de evento'), [
       'used',
     ]);
@@ -209,10 +216,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p1'
-    );
+    await pickProduct(user, dialog, /Filtro de aire/);
 
     const typeSelect = within(dialog).getByLabelText('Tipo de evento');
     const options = within(typeSelect).getAllByRole('option');
@@ -242,10 +246,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p2'
-    );
+    await pickProduct(user, dialog, /Aceite 20W50/);
 
     expect(
       await within(dialog).findByText(/Hay 2 envase\(s\) abierto\(s\)/)
@@ -261,10 +262,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p2'
-    );
+    await pickProduct(user, dialog, /Aceite 20W50/);
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
@@ -286,10 +284,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p2'
-    );
+    await pickProduct(user, dialog, /Aceite 20W50/);
     await user.selectOptions(within(dialog).getByLabelText('Tipo de evento'), [
       'opened',
     ]);
@@ -310,10 +305,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p1'
-    );
+    await pickProduct(user, dialog, /Filtro de aire/);
     await user.selectOptions(within(dialog).getByLabelText('Tipo de evento'), [
       'used',
     ]);
@@ -348,10 +340,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p1'
-    );
+    await pickProduct(user, dialog, /Filtro de aire/);
     await user.selectOptions(within(dialog).getByLabelText('Tipo de evento'), [
       'used',
     ]);
@@ -383,10 +372,7 @@ describe('WorkOrderConsumptionsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    await user.selectOptions(
-      await within(dialog).findByLabelText('Producto'),
-      'p2'
-    );
+    await pickProduct(user, dialog, /Aceite 20W50/);
     await user.selectOptions(within(dialog).getByLabelText('Tipo de evento'), [
       'depleted',
     ]);

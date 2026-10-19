@@ -2,15 +2,19 @@ import { Button } from '@/components/ui/Button';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
-import { useClients } from '@/features/clients/hooks/use-clients';
+import {
+  ClientCombobox,
+  type ClientComboboxValue,
+} from '@/features/clients/components/ClientCombobox';
 import { useVehicles } from '@/features/clients/hooks/use-vehicles';
 import { useEmployees } from '@/features/employees/hooks/use-employees';
-import { useServices } from '@/features/services/hooks/use-services';
+import type { ServiceComboboxValue } from '@/features/services/components/ServiceCombobox';
+import type { Service } from '@/features/services/types';
 import { formatCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useRef } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
 import {
   type WorkOrderFormValues,
@@ -27,12 +31,18 @@ export type WorkOrderFormProps = {
   onSubmit: (values: WorkOrderFormValues) => void;
   isPending?: boolean;
   initialValues?: WorkOrderFormValues;
+  // Edit mode: summaries of the currently selected entities so the async
+  // comboboxes render their labels without a search.
+  initialClient?: ClientComboboxValue;
+  initialServices?: ServiceComboboxValue[];
 };
 
 export function WorkOrderForm({
   onSubmit,
   isPending = false,
   initialValues,
+  initialClient,
+  initialServices,
 }: WorkOrderFormProps) {
   const isEditMode = Boolean(initialValues);
   const {
@@ -54,15 +64,41 @@ export function WorkOrderForm({
   const clientId = useWatch({ control, name: 'clientId' });
   const serviceLines = useWatch({ control, name: 'services' });
 
-  const { clients, isLoading: isLoadingClients } = useClients({
-    limit: SELECTOR_LIMIT,
-  });
   const { vehicles, isLoading: isLoadingVehicles } = useVehicles({
     clientId: clientId ?? '',
     limit: SELECTOR_LIMIT,
   });
-  const { services, isLoading: isLoadingServices } = useServices({});
   const { employees, isLoading: isLoadingEmployees } = useEmployees();
+
+  // Entities picked via async comboboxes: keyed maps so labels and catalog
+  // prices survive across searches.
+  const [selectedClient, setSelectedClient] =
+    useState<ClientComboboxValue | null>(initialClient ?? null);
+  const [selectedServices, setSelectedServices] = useState<
+    Record<string, ServiceComboboxValue>
+  >(() =>
+    Object.fromEntries(
+      (initialServices ?? []).map((service) => [service.id, service])
+    )
+  );
+
+  function resolveService(id: string): ServiceComboboxValue | undefined {
+    return selectedServices[id];
+  }
+
+  function handleServiceChange(index: number, service: Service | null) {
+    setSelectedServices((previous) => {
+      const next = { ...previous };
+      const line = serviceLines?.[index];
+      if (line?.serviceId && line.serviceId !== service?.id) {
+        delete next[line.serviceId];
+      }
+      if (service) {
+        next[service.id] = service;
+      }
+      return next;
+    });
+  }
 
   // Dependent selector: reset the vehicle whenever the client changes.
   const previousClientId = useRef(clientId);
@@ -76,10 +112,7 @@ export function WorkOrderForm({
   const totalCents = (serviceLines ?? []).reduce(
     (sum, line) =>
       sum +
-      (lineSubtotalCents(
-        line,
-        services.find((service) => service.id === line.serviceId)?.price
-      ) ?? 0),
+      (lineSubtotalCents(line, resolveService(line.serviceId)?.price) ?? 0),
     0
   );
 
@@ -88,15 +121,10 @@ export function WorkOrderForm({
     (errors.services as { message?: string } | undefined)?.message;
 
   // Edit mode renders uncontrolled selects pre-filled via defaultValues; the
-  // defaults are only applied on mount, so wait for the selector catalogs
-  // before mounting the form (ProductFormPage precedent).
-  if (
-    isEditMode &&
-    (isLoadingClients ||
-      isLoadingVehicles ||
-      isLoadingServices ||
-      isLoadingEmployees)
-  ) {
+  // defaults are only applied on mount, so wait for the bounded catalogs
+  // (vehicles, employees) before mounting the form. Clients and services
+  // use async comboboxes and render from `initialClient`/`initialServices`.
+  if (isEditMode && (isLoadingVehicles || isLoadingEmployees)) {
     return (
       <output className="block py-8 text-center text-muted-foreground">
         Cargando…
@@ -108,16 +136,22 @@ export function WorkOrderForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="clientId">Cliente</Label>
-          <Select
-            id="clientId"
-            options={clients.map((client) => ({
-              value: client.id,
-              label: client.name,
-            }))}
-            placeholder="Seleccionar cliente"
-            error={errors.clientId?.message}
-            {...register('clientId')}
+          <Controller
+            control={control}
+            name="clientId"
+            render={({ field }) => (
+              <ClientCombobox
+                id="clientId"
+                label="Cliente"
+                placeholder="Buscar cliente…"
+                value={selectedClient}
+                onChange={(client) => {
+                  setSelectedClient(client);
+                  field.onChange(client?.id ?? '');
+                }}
+                error={errors.clientId?.message}
+              />
+            )}
           />
         </div>
 
@@ -170,10 +204,11 @@ export function WorkOrderForm({
       </div>
 
       <ServiceLinesFieldArray
-        services={services}
         control={control}
         register={register}
         setValue={setValue}
+        resolveService={resolveService}
+        onServiceChange={handleServiceChange}
       />
 
       {linesError && (

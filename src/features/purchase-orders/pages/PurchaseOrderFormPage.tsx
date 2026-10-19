@@ -5,15 +5,26 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
-import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
-import { useSuppliers } from '@/features/lots/hooks/use-suppliers';
-import { useProducts } from '@/features/products/hooks/use-products';
+import {
+  ProductCombobox,
+  type ProductComboboxValue,
+} from '@/features/products/components/ProductCombobox';
 import type { Product } from '@/features/products/types';
+import {
+  SupplierCombobox,
+  type SupplierComboboxValue,
+} from '@/features/suppliers/components/SupplierCombobox';
 import { formatCents, toCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useState } from 'react';
+import {
+  type UseFormRegister,
+  useFieldArray,
+  useForm,
+  useWatch,
+} from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useCreatePurchaseOrder } from '../hooks/use-create-purchase-order';
 import { usePurchaseOrder } from '../hooks/use-purchase-order';
@@ -76,18 +87,122 @@ function toFormValues(purchaseOrder: PurchaseOrder): PurchaseOrderFormValues {
 type PurchaseOrderFormProps = {
   mode: 'create' | 'edit';
   defaultValues: PurchaseOrderFormValues;
-  suppliers: Array<{ id: string; name: string }>;
-  products: Product[];
+  // Edit mode: summaries of the currently selected entities so the async
+  // comboboxes render their labels without a search.
+  initialSupplier?: SupplierComboboxValue | null;
+  initialProducts?: ProductComboboxValue[];
   isPending: boolean;
   cancelTo: string;
   onSubmit: (values: PurchaseOrderFormValues) => void;
 };
 
+type LineRowProps = {
+  index: number;
+  line: PurchaseOrderFormValues['lines'][number] | undefined;
+  errors:
+    | {
+        productId?: { message?: string };
+        quantityOrdered?: { message?: string };
+        estimatedCostPrice?: { message?: string };
+      }
+    | undefined;
+  register: UseFormRegister<PurchaseOrderFormValues>;
+  resolveProduct: (id: string) => ProductComboboxValue | undefined;
+  onProductChange: (index: number, product: Product | null) => void;
+  onRemove: (index: number) => void;
+};
+
+function PurchaseOrderLineRow({
+  index,
+  line,
+  errors: itemErrors,
+  register,
+  resolveProduct,
+  onProductChange,
+  onRemove,
+}: LineRowProps) {
+  const subtotal = line ? lineSubtotalCents(line) : null;
+
+  return (
+    <div className="grid gap-4 rounded-lg border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="space-y-2">
+        <Label htmlFor={`lines-${index}-productId`}>Producto</Label>
+        <ProductCombobox
+          id={`lines-${index}-productId`}
+          value={
+            line?.productId ? (resolveProduct(line.productId) ?? null) : null
+          }
+          onChange={(product) => onProductChange(index, product)}
+          error={itemErrors?.productId?.message}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={`lines-${index}-quantityOrdered`}>Cantidad</Label>
+        <Input
+          id={`lines-${index}-quantityOrdered`}
+          type="number"
+          min="1"
+          step="1"
+          placeholder="0"
+          aria-invalid={itemErrors?.quantityOrdered ? 'true' : 'false'}
+          {...register(`lines.${index}.quantityOrdered`)}
+        />
+        {itemErrors?.quantityOrdered && (
+          <p className="text-sm text-destructive" role="alert">
+            {itemErrors.quantityOrdered.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={`lines-${index}-estimatedCostPrice`}>
+          Costo estimado
+        </Label>
+        {/* Text input (not type=number): the decimal string must
+            reach the backend verbatim — number inputs normalize
+            '50.00' to '50' and break on comma-decimal locales. */}
+        <Input
+          id={`lines-${index}-estimatedCostPrice`}
+          type="text"
+          inputMode="decimal"
+          placeholder="0.00"
+          aria-invalid={itemErrors?.estimatedCostPrice ? 'true' : 'false'}
+          {...register(`lines.${index}.estimatedCostPrice`)}
+        />
+        {itemErrors?.estimatedCostPrice && (
+          <p className="text-sm text-destructive" role="alert">
+            {itemErrors.estimatedCostPrice.message}
+          </p>
+        )}
+      </div>
+
+      <div className="flex items-end">
+        <p className="text-sm text-muted-foreground">
+          Subtotal: {subtotal === null ? '—' : formatCents(subtotal)}
+        </p>
+      </div>
+
+      <div className="flex items-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onRemove(index)}
+          className="w-full"
+        >
+          Eliminar
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function PurchaseOrderForm({
   mode,
   defaultValues,
-  suppliers,
-  products,
+  initialSupplier,
+  initialProducts,
   isPending,
   cancelTo,
   onSubmit,
@@ -96,6 +211,7 @@ function PurchaseOrderForm({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<PurchaseOrderFormValues>({
     resolver: zodResolver(purchaseOrderSchema),
@@ -112,6 +228,39 @@ function PurchaseOrderForm({
   // read-only in edit mode.
   const isEdit = mode === 'edit';
 
+  // Entities picked via async comboboxes: keyed maps so labels survive
+  // across searches (the dropdown only holds the top-20 of the term).
+  const [selectedSupplier, setSelectedSupplier] =
+    useState<SupplierComboboxValue | null>(initialSupplier ?? null);
+  const [selectedProducts, setSelectedProducts] = useState<
+    Record<string, ProductComboboxValue>
+  >(() =>
+    Object.fromEntries(
+      (initialProducts ?? []).map((product) => [product.id, product])
+    )
+  );
+
+  function resolveProduct(id: string): ProductComboboxValue | undefined {
+    return selectedProducts[id];
+  }
+
+  function handleProductChange(index: number, product: Product | null) {
+    setValue(`lines.${index}.productId`, product?.id ?? '', {
+      shouldValidate: true,
+    });
+    setSelectedProducts((previous) => {
+      const next = { ...previous };
+      const line = lines?.[index];
+      if (line?.productId && line.productId !== product?.id) {
+        delete next[line.productId];
+      }
+      if (product) {
+        next[product.id] = product;
+      }
+      return next;
+    });
+  }
+
   const totalCents = (lines ?? []).reduce<number | null>((total, line) => {
     const subtotal = lineSubtotalCents(line);
     if (total === null || subtotal === null) {
@@ -125,16 +274,18 @@ function PurchaseOrderForm({
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="supplierId">Proveedor</Label>
-          <Select
+          <SupplierCombobox
             id="supplierId"
-            options={suppliers.map((supplier) => ({
-              value: supplier.id,
-              label: supplier.name,
-            }))}
-            placeholder="Seleccionar proveedor"
+            value={selectedSupplier}
+            onChange={(supplier) => {
+              setSelectedSupplier(supplier);
+              setValue('supplierId', supplier?.id ?? '', {
+                shouldValidate: true,
+              });
+            }}
+            placeholder="Buscar proveedor…"
             disabled={isEdit}
             error={errors.supplierId?.message}
-            {...register('supplierId')}
           />
           {isEdit && (
             <p className="text-sm text-muted-foreground">
@@ -167,94 +318,18 @@ function PurchaseOrderForm({
           </Button>
         </div>
 
-        {fields.map((field, index) => {
-          const itemErrors = errors.lines?.[index];
-          const line = lines?.[index];
-          const subtotal = line ? lineSubtotalCents(line) : null;
-
-          return (
-            <div
-              key={field.id}
-              className="grid gap-4 rounded-lg border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5"
-            >
-              <div className="space-y-2">
-                <Label htmlFor={`lines-${index}-productId`}>Producto</Label>
-                <Select
-                  id={`lines-${index}-productId`}
-                  options={products.map((product) => ({
-                    value: product.id,
-                    label: product.name,
-                  }))}
-                  placeholder="Seleccionar producto"
-                  error={itemErrors?.productId?.message}
-                  {...register(`lines.${index}.productId`)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`lines-${index}-quantityOrdered`}>
-                  Cantidad
-                </Label>
-                <Input
-                  id={`lines-${index}-quantityOrdered`}
-                  type="number"
-                  min="1"
-                  step="1"
-                  placeholder="0"
-                  aria-invalid={itemErrors?.quantityOrdered ? 'true' : 'false'}
-                  {...register(`lines.${index}.quantityOrdered`)}
-                />
-                {itemErrors?.quantityOrdered && (
-                  <p className="text-sm text-destructive" role="alert">
-                    {itemErrors.quantityOrdered.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`lines-${index}-estimatedCostPrice`}>
-                  Costo estimado
-                </Label>
-                {/* Text input (not type=number): the decimal string must
-                    reach the backend verbatim — number inputs normalize
-                    '50.00' to '50' and break on comma-decimal locales. */}
-                <Input
-                  id={`lines-${index}-estimatedCostPrice`}
-                  type="text"
-                  inputMode="decimal"
-                  placeholder="0.00"
-                  aria-invalid={
-                    itemErrors?.estimatedCostPrice ? 'true' : 'false'
-                  }
-                  {...register(`lines.${index}.estimatedCostPrice`)}
-                />
-                {itemErrors?.estimatedCostPrice && (
-                  <p className="text-sm text-destructive" role="alert">
-                    {itemErrors.estimatedCostPrice.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex items-end">
-                <p className="text-sm text-muted-foreground">
-                  Subtotal: {subtotal === null ? '—' : formatCents(subtotal)}
-                </p>
-              </div>
-
-              <div className="flex items-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => remove(index)}
-                  className="w-full"
-                >
-                  Eliminar
-                </Button>
-              </div>
-            </div>
-          );
-        })}
+        {fields.map((field, index) => (
+          <PurchaseOrderLineRow
+            key={field.id}
+            index={index}
+            line={lines?.[index]}
+            errors={errors.lines?.[index]}
+            register={register}
+            resolveProduct={resolveProduct}
+            onProductChange={handleProductChange}
+            onRemove={remove}
+          />
+        ))}
 
         {/* Array-level errors land on root: empty lines (min 1) and the
             duplicate-product refine both surface here. */}
@@ -299,18 +374,6 @@ export function PurchaseOrderFormPage() {
   const navigate = useNavigate();
 
   const {
-    suppliers,
-    isLoading: isLoadingSuppliers,
-    error: suppliersError,
-  } = useSuppliers();
-
-  const {
-    products,
-    isLoading: isLoadingProducts,
-    error: productsError,
-  } = useProducts({});
-
-  const {
     data: purchaseOrder,
     isLoading: isLoadingPurchaseOrder,
     error: purchaseOrderError,
@@ -319,8 +382,6 @@ export function PurchaseOrderFormPage() {
   const createMutation = useCreatePurchaseOrder();
   const updateMutation = useUpdatePurchaseOrder();
 
-  const catalogsLoading = isLoadingSuppliers || isLoadingProducts;
-  const catalogsError = suppliersError || productsError;
   const mutation = isEdit ? updateMutation : createMutation;
 
   function handleCreate(values: PurchaseOrderFormValues) {
@@ -400,50 +461,38 @@ export function PurchaseOrderFormPage() {
       </PageHeader>
       <PageContent>
         <SectionCard title={isEdit ? 'Editar borrador' : 'Datos de la orden'}>
-          {catalogsLoading ? (
-            <output className="block py-8 text-center text-muted-foreground">
-              Cargando catálogos…
-            </output>
-          ) : catalogsError ? (
+          {mutation.error && (
             <div
-              className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
+              className="mb-6 rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
               role="alert"
             >
-              No se pudieron cargar los catálogos. Intentá de nuevo más tarde.
+              {getPurchaseOrderErrorMessage(mutation.error)}
             </div>
-          ) : (
-            <>
-              {mutation.error && (
-                <div
-                  className="mb-6 rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
-                  role="alert"
-                >
-                  {getPurchaseOrderErrorMessage(mutation.error)}
-                </div>
-              )}
-              <PurchaseOrderForm
-                mode={draftToEdit ? 'edit' : 'create'}
-                defaultValues={
-                  draftToEdit
-                    ? toFormValues(draftToEdit)
-                    : {
-                        supplierId: '',
-                        notes: '',
-                        lines: [emptyLine()],
-                      }
-                }
-                suppliers={suppliers}
-                products={products}
-                isPending={mutation.isPending}
-                cancelTo={
-                  draftToEdit
-                    ? `/purchase-orders/${draftToEdit.id}`
-                    : '/purchase-orders'
-                }
-                onSubmit={draftToEdit ? handleUpdate : handleCreate}
-              />
-            </>
           )}
+          <PurchaseOrderForm
+            mode={draftToEdit ? 'edit' : 'create'}
+            defaultValues={
+              draftToEdit
+                ? toFormValues(draftToEdit)
+                : {
+                    supplierId: '',
+                    notes: '',
+                    lines: [emptyLine()],
+                  }
+            }
+            initialSupplier={draftToEdit?.supplier}
+            initialProducts={draftToEdit?.lines.map((line) => ({
+              id: line.product.id,
+              name: line.product.name,
+            }))}
+            isPending={mutation.isPending}
+            cancelTo={
+              draftToEdit
+                ? `/purchase-orders/${draftToEdit.id}`
+                : '/purchase-orders'
+            }
+            onSubmit={draftToEdit ? handleUpdate : handleCreate}
+          />
         </SectionCard>
       </PageContent>
     </>

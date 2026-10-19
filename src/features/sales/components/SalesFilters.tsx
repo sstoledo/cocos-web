@@ -1,18 +1,20 @@
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
+import { ClientCombobox } from '@/features/clients/components/ClientCombobox';
+import { useClient } from '@/features/clients/hooks/use-client';
 import type { SaleListFilters } from '../types';
 
 export type SalesFiltersProps = {
   filters: SaleListFilters;
-  clients: { id: string; name: string }[];
   onChange: (filters: SaleListFilters) => void;
 };
 
-export function SalesFilters({
-  filters,
-  clients,
-  onChange,
-}: SalesFiltersProps) {
+export function SalesFilters({ filters, onChange }: SalesFiltersProps) {
+  // Resolve the label of the active filter: the client may not be in the
+  // top-20 of an empty search, so fetch it by id.
+  const selectedClientQuery = useClient(filters.clientId ?? '');
+  const selectedClient = selectedClientQuery.data ?? null;
+
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
       <div className="flex-1 sm:min-w-48">
@@ -50,19 +52,15 @@ export function SalesFilters({
         />
       </div>
       <div className="sm:min-w-44">
-        <Select
-          optional
-          aria-label="Cliente"
+        <ClientCombobox
+          clearable
+          ariaLabel="Cliente"
           placeholder="Todos los clientes"
-          options={clients.map((client) => ({
-            value: client.id,
-            label: client.name,
-          }))}
-          value={filters.clientId ?? ''}
-          onChange={(event) =>
+          value={selectedClient}
+          onChange={(client) =>
             onChange({
               ...filters,
-              clientId: event.target.value || undefined,
+              clientId: client?.id || undefined,
             })
           }
         />

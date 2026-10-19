@@ -1,11 +1,15 @@
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
-import type { Product } from '@/features/products/types';
+import {
+  SupplierCombobox,
+  type SupplierComboboxValue,
+} from '@/features/suppliers/components/SupplierCombobox';
+import type { Supplier } from '@/features/suppliers/types';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { lotSchema } from '../schemas/lot-schema';
@@ -14,17 +18,8 @@ import { LotItemForm } from './LotItemForm';
 
 export type LotFormProps = {
   onSubmit: (values: LotFormValues) => void;
-  suppliers: Array<{ id: string; name: string }>;
-  products: Product[];
   isPending?: boolean;
 };
-
-function toSelectOptions(references: Array<{ id: string; name: string }>) {
-  return references.map((reference) => ({
-    value: reference.id,
-    label: reference.name,
-  }));
-}
 
 function emptyItem(): LotFormValues['items'][number] {
   return {
@@ -35,16 +30,12 @@ function emptyItem(): LotFormValues['items'][number] {
   };
 }
 
-export function LotForm({
-  onSubmit,
-  suppliers,
-  products,
-  isPending = false,
-}: LotFormProps) {
+export function LotForm({ onSubmit, isPending = false }: LotFormProps) {
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<LotFormValues>({
     resolver: zodResolver(lotSchema),
@@ -56,6 +47,14 @@ export function LotForm({
       items: [emptyItem()],
     },
   });
+
+  const [selectedSupplier, setSelectedSupplier] =
+    useState<SupplierComboboxValue | null>(null);
+
+  function handleSupplierChange(supplier: Supplier | null) {
+    setSelectedSupplier(supplier);
+    setValue('supplierId', supplier?.id ?? '', { shouldValidate: true });
+  }
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -95,12 +94,11 @@ export function LotForm({
 
         <div className="space-y-2">
           <Label htmlFor="supplierId">Proveedor</Label>
-          <Select
+          <SupplierCombobox
             id="supplierId"
-            options={toSelectOptions(suppliers)}
-            placeholder="Seleccionar proveedor"
+            value={selectedSupplier}
+            onChange={handleSupplierChange}
             error={errors.supplierId?.message}
-            {...register('supplierId')}
           />
         </div>
       </div>
@@ -148,10 +146,10 @@ export function LotForm({
           <LotItemForm
             key={field.id}
             index={index}
-            products={products}
             onRemove={() => remove(index)}
             register={register}
             control={control}
+            setValue={setValue}
           />
         ))}
 

@@ -113,6 +113,12 @@ export function WorkOrderFormPage() {
                     ? workOrderToFormValues(workOrder)
                     : undefined
                 }
+                initialClient={workOrder?.client}
+                initialServices={workOrder?.services.map((line) => ({
+                  id: line.service.id,
+                  name: line.service.name,
+                  price: line.service.price,
+                }))}
               />
             </>
           )}

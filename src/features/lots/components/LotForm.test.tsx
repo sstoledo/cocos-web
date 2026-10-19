@@ -1,48 +1,86 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LotForm } from './LotForm';
 
-const suppliers = [{ id: 's1', name: 'Proveedor A' }];
+const supplier = { id: 's1', name: 'Proveedor A' };
 
-const products = [
-  {
-    id: 'p1',
-    code: 'COD-001',
-    name: 'Aceite 5W30',
-    price: '25.00',
-    isActive: true,
-    presentation: { id: 'pres1', name: 'Litro' },
-    brand: { id: 'b1', name: 'Castrol' },
-    category: { id: 'c1', name: 'Lubricantes' },
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-  },
-];
+const product = {
+  id: 'p1',
+  code: 'COD-001',
+  name: 'Aceite 5W30',
+  price: '25.00',
+  isActive: true,
+  presentation: { id: 'pres1', name: 'Litro' },
+  brand: { id: 'b1', name: 'Castrol' },
+  category: { id: 'c1', name: 'Lubricantes' },
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z',
+};
 
 const onSubmit = vi.fn();
 
+function mockCatalogFetch() {
+  globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+    if (url.includes('/suppliers')) {
+      return {
+        ok: true,
+        json: async () => ({
+          data: [supplier],
+          meta: { page: 1, limit: 20, total: 1 },
+        }),
+      };
+    }
+    return {
+      ok: true,
+      json: async () => ({
+        data: [product],
+        meta: { page: 1, limit: 20, total: 1 },
+      }),
+    };
+  });
+}
+
+function renderForm() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+
+  function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(
+      MemoryRouter,
+      null,
+      createElement(QueryClientProvider, { client: queryClient }, children)
+    );
+  }
+
+  return render(<LotForm onSubmit={onSubmit} />, { wrapper: Wrapper });
+}
+
+async function pickComboboxOption(
+  user: ReturnType<typeof userEvent.setup>,
+  label: string,
+  optionName: string | RegExp
+) {
+  const input = screen.getByLabelText(label);
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
+}
+
 describe('LotForm', () => {
   beforeEach(() => {
+    vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
     onSubmit.mockReset();
+    mockCatalogFetch();
   });
 
   afterEach(() => {
+    vi.unstubAllEnvs();
     vi.clearAllMocks();
   });
-
-  function renderForm() {
-    return render(
-      <MemoryRouter>
-        <LotForm
-          onSubmit={onSubmit}
-          suppliers={suppliers}
-          products={products}
-        />
-      </MemoryRouter>
-    );
-  }
 
   it('renders all required fields and submit button', () => {
     renderForm();
@@ -97,9 +135,9 @@ describe('LotForm', () => {
     renderForm();
 
     await user.type(screen.getByLabelText('Número de lote'), 'L-2026-001');
-    await user.selectOptions(screen.getByLabelText('Proveedor'), 's1');
+    await pickComboboxOption(user, 'Proveedor', 'Proveedor A');
     await user.type(screen.getByLabelText('Fecha de recepción'), '2026-07-13');
-    await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+    await pickComboboxOption(user, 'Producto', 'Aceite 5W30');
     await user.clear(screen.getByLabelText('Cantidad'));
     await user.type(screen.getByLabelText('Cantidad'), '24');
     await user.type(screen.getByLabelText('Precio de costo'), '12.50');
