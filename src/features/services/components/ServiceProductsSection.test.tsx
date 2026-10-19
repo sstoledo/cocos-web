@@ -145,7 +145,11 @@ describe('ServiceProductsSection', () => {
     const user = userEvent.setup();
 
     await screen.findByText('COD-1 — Aceite 20W50');
-    await user.selectOptions(await screen.findByLabelText('Producto'), 'p2');
+    const productInput = await screen.findByLabelText('Producto');
+    await user.click(productInput);
+    await user.click(
+      await screen.findByRole('option', { name: 'COD-2 — Filtro de aire' })
+    );
     await user.type(screen.getByLabelText('Cantidad'), '3');
     await user.click(screen.getByRole('button', { name: 'Agregar producto' }));
 
@@ -203,7 +207,11 @@ describe('ServiceProductsSection', () => {
     const user = userEvent.setup();
 
     await screen.findByText('COD-1 — Aceite 20W50');
-    await user.selectOptions(await screen.findByLabelText('Producto'), 'p2');
+    const productInput = await screen.findByLabelText('Producto');
+    await user.click(productInput);
+    await user.click(
+      await screen.findByRole('option', { name: 'COD-2 — Filtro de aire' })
+    );
     await user.type(screen.getByLabelText('Cantidad'), '3');
     await user.click(screen.getByRole('button', { name: 'Agregar producto' }));
 

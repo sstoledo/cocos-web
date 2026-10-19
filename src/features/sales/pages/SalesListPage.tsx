@@ -3,7 +3,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
-import { useClients } from '@/features/clients/hooks/use-clients';
 import { cn } from '@/lib/utils';
 import { IconPlus } from '@tabler/icons-react';
 import { Link, useSearchParams } from 'react-router';
@@ -66,7 +65,6 @@ export function SalesListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = filtersFromSearchParams(searchParams);
   const { sales, meta, isLoading, error } = useSales(filters);
-  const { clients } = useClients({});
 
   function handleFiltersChange(nextFilters: SaleListFilters) {
     // Any filter change resets pagination to the first page (SL-F1).
@@ -95,11 +93,7 @@ export function SalesListPage() {
       <PageContent>
         <SectionCard title="Listado de ventas">
           <div className="space-y-4">
-            <SalesFilters
-              filters={filters}
-              clients={clients}
-              onChange={handleFiltersChange}
-            />
+            <SalesFilters filters={filters} onChange={handleFiltersChange} />
             {isLoading ? (
               <output className="block py-8 text-center text-muted-foreground">
                 Cargando ventas…

@@ -31,7 +31,7 @@ export interface CreateServiceProductPayload {
 }
 
 export interface ServiceListFilters {
-  q?: string;
+  query?: string;
   isActive?: boolean;
   page?: number;
   limit?: number;

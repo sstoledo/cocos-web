@@ -42,10 +42,10 @@ describe('getServices', () => {
       json: async () => [service],
     });
 
-    await getServices({ q: 'aceite', isActive: true });
+    await getServices({ query: 'aceite', isActive: true });
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      'http://localhost:3000/api/services?q=aceite&isActive=true',
+      'http://localhost:3000/api/services?query=aceite&isActive=true',
       { credentials: 'include' }
     );
   });
@@ -56,10 +56,10 @@ describe('getServices', () => {
       json: async () => [service],
     });
 
-    await getServices({ q: 'aceite', isActive: true, page: 4, limit: 50 });
+    await getServices({ query: 'aceite', isActive: true, page: 4, limit: 50 });
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      'http://localhost:3000/api/services?q=aceite&isActive=true&page=4&limit=50',
+      'http://localhost:3000/api/services?query=aceite&isActive=true&page=4&limit=50',
       { credentials: 'include' }
     );
   });

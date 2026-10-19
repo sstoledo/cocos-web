@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { Select } from '@/components/ui/Select';
-import { useProducts } from '@/features/products/hooks/use-products';
+import { ProductCombobox } from '@/features/products/components/ProductCombobox';
 import type { Product } from '@/features/products/types';
 import { useOpenContainers } from '@/features/stock/hooks/use-open-containers';
 import { Dialog } from '@base-ui/react/dialog';
@@ -97,10 +97,6 @@ function ConsumptionForm({
   onSubmit,
   onCancel,
 }: ConsumptionFormProps) {
-  const { products, isLoading: isLoadingProducts } = useProducts({
-    isActive: true,
-    limit: 100,
-  });
   const {
     register,
     handleSubmit,
@@ -116,10 +112,9 @@ function ConsumptionForm({
     },
   });
 
-  const productId = watch('productId');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const type = watch('type');
-  const selectedProduct = products.find((product) => product.id === productId);
-  const allowedTypes = allowedTypesFor(selectedProduct);
+  const allowedTypes = allowedTypesFor(selectedProduct ?? undefined);
 
   // Switching products can invalidate the selected event type (a direct
   // product only accepts 'used'), so reset it to a valid default.
@@ -150,21 +145,20 @@ function ConsumptionForm({
         </div>
       )}
 
-      <Select
+      <ProductCombobox
         id="consumption-product"
         label="Producto"
-        options={products.map((product) => ({
-          value: product.id,
-          label: `${product.code} — ${product.name}`,
-        }))}
-        placeholder={
-          isLoadingProducts ? 'Cargando productos…' : 'Seleccionar producto'
-        }
+        withCode
+        isActive
+        value={selectedProduct}
+        onChange={(product) => {
+          setSelectedProduct(product);
+          setValue('productId', product?.id ?? '', { shouldValidate: true });
+        }}
         error={errors.productId?.message}
-        {...register('productId')}
       />
 
-      <OpenContainerWarning product={selectedProduct} />
+      <OpenContainerWarning product={selectedProduct ?? undefined} />
 
       <Select
         id="consumption-type"

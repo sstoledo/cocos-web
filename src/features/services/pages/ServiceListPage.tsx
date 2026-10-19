@@ -16,7 +16,7 @@ function filtersFromSearchParams(
   searchParams: URLSearchParams
 ): ServiceListFilters {
   return {
-    q: searchParams.get('q') || undefined,
+    query: searchParams.get('q') || undefined,
     isActive: parseIsActive(searchParams.get('isActive')),
     page: Number.parseInt(searchParams.get('page') ?? '1', 10) || 1,
     limit: DEFAULT_LIMIT,
@@ -38,8 +38,8 @@ export function ServiceListPage() {
   function handlePageChange(page: number) {
     const nextSearchParams = new URLSearchParams();
 
-    if (filters.q) {
-      nextSearchParams.set('q', filters.q);
+    if (filters.query) {
+      nextSearchParams.set('q', filters.query);
     }
 
     if (filters.isActive !== undefined) {

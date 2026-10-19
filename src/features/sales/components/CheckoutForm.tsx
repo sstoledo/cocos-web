@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/Button';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
-import { useClients } from '@/features/clients/hooks/use-clients';
-import { useProducts } from '@/features/products/hooks/use-products';
+import { ClientCombobox } from '@/features/clients/components/ClientCombobox';
+import type { Client } from '@/features/clients/types';
+import type { Product } from '@/features/products/types';
 import { formatCents } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useWatch } from 'react-hook-form';
+import { useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
 import { type SaleFormValues, saleSchema } from '../schemas/sale-schema';
 import { PAYMENT_METHOD_LABELS } from './PaymentMethodBadge';
@@ -31,6 +33,7 @@ export function CheckoutForm({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<SaleFormValues>({
     resolver: zodResolver(saleSchema),
@@ -43,16 +46,36 @@ export function CheckoutForm({
 
   const productLines = useWatch({ control, name: 'productLines' });
 
-  const { clients, isLoading: isLoadingClients } = useClients({});
-  const { products, isLoading: isLoadingProducts } = useProducts({});
+  // Entities selected through the async comboboxes live here so labels and
+  // catalog prices survive across searches (the dropdown only ever holds
+  // the top-20 of the current term).
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [selectedProducts, setSelectedProducts] = useState<
+    Record<string, Product>
+  >({});
+
+  function resolveProduct(id: string): Product | undefined {
+    return selectedProducts[id];
+  }
+
+  function handleProductChange(index: number, product: Product | null) {
+    setSelectedProducts((previous) => {
+      const next = { ...previous };
+      const line = productLines?.[index];
+      if (line?.productId && line.productId !== product?.id) {
+        delete next[line.productId];
+      }
+      if (product) {
+        next[product.id] = product;
+      }
+      return next;
+    });
+  }
 
   const totalCents = (productLines ?? []).reduce(
     (sum, line) =>
       sum +
-      (lineSubtotalCents(
-        line,
-        products.find((product) => product.id === line.productId)?.price
-      ) ?? 0),
+      (lineSubtotalCents(line, resolveProduct(line.productId)?.price) ?? 0),
     0
   );
 
@@ -76,18 +99,23 @@ export function CheckoutForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="clientId">Cliente</Label>
-          <Select
-            id="clientId"
-            optional
-            options={clients.map((client) => ({
-              value: client.id,
-              label: client.name,
-            }))}
-            placeholder={isLoadingClients ? 'Cargando…' : 'Cliente ocasional'}
-            disabled={isLoadingClients}
-            error={errors.clientId?.message}
-            {...register('clientId')}
+          <Controller
+            control={control}
+            name="clientId"
+            render={({ field }) => (
+              <ClientCombobox
+                id="clientId"
+                label="Cliente"
+                clearable
+                placeholder="Cliente ocasional"
+                value={selectedClient}
+                onChange={(client) => {
+                  setSelectedClient(client);
+                  field.onChange(client?.id ?? '');
+                }}
+                error={errors.clientId?.message}
+              />
+            )}
           />
           <p className="text-sm text-muted-foreground">
             Dejalo vacío para una venta de mostrador.
@@ -96,10 +124,11 @@ export function CheckoutForm({
       </div>
 
       <ProductLinesFieldArray
-        products={products}
-        isLoading={isLoadingProducts}
         control={control}
         register={register}
+        setValue={setValue}
+        resolveProduct={resolveProduct}
+        onProductChange={handleProductChange}
       />
 
       {linesError && (

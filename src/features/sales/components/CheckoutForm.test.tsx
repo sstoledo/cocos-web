@@ -33,7 +33,7 @@ function mockCatalogFetch() {
         ok: true,
         json: async () => ({
           data: [buildClient()],
-          meta: { page: 1, limit: 100, total: 1 },
+          meta: { page: 1, limit: 20, total: 1 },
         }),
       };
     }
@@ -41,10 +41,20 @@ function mockCatalogFetch() {
       ok: true,
       json: async () => ({
         data: [buildProduct()],
-        meta: { page: 1, limit: 100, total: 1 },
+        meta: { page: 1, limit: 20, total: 1 },
       }),
     };
   });
+}
+
+async function pickComboboxOption(
+  user: ReturnType<typeof userEvent.setup>,
+  label: string,
+  optionName: string | RegExp
+) {
+  const input = screen.getByLabelText(label);
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
 }
 
 async function addProductLine(
@@ -52,10 +62,8 @@ async function addProductLine(
   quantity = '1'
 ) {
   const addButton = screen.getByRole('button', { name: 'Agregar producto' });
-  await waitFor(() => expect(addButton).toBeEnabled());
   await user.click(addButton);
-  await screen.findByRole('option', { name: 'Filtro de aceite' });
-  await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+  await pickComboboxOption(user, 'Producto', 'Filtro de aceite');
   if (quantity !== '1') {
     await user.clear(screen.getByLabelText('Cantidad'));
     await user.type(screen.getByLabelText('Cantidad'), quantity);
@@ -85,6 +93,27 @@ describe('CheckoutForm', () => {
     expect(screen.queryByLabelText('Precio unitario')).not.toBeInTheDocument();
   });
 
+  it('searches products server-side through the combobox', async () => {
+    const user = userEvent.setup();
+    renderForm();
+
+    await user.click(screen.getByRole('button', { name: 'Agregar producto' }));
+    const input = screen.getByLabelText('Producto');
+    await user.click(input);
+    await user.type(input, 'filtro');
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/products?q=filtro&isActive=true&limit=20',
+        expect.anything()
+      )
+    );
+    await user.click(
+      await screen.findByRole('option', { name: 'Filtro de aceite' })
+    );
+    expect(input).toHaveValue('Filtro de aceite');
+  });
+
   it('S11: removes a line and updates the totals', async () => {
     const user = userEvent.setup();
     renderForm();
@@ -102,8 +131,6 @@ describe('CheckoutForm', () => {
     const user = userEvent.setup();
     const { onSubmit } = renderForm();
 
-    const addButton = screen.getByRole('button', { name: 'Agregar producto' });
-    await waitFor(() => expect(addButton).toBeEnabled());
     await user.selectOptions(screen.getByLabelText('Método de pago'), 'cash');
     await user.click(screen.getByRole('button', { name: 'Registrar venta' }));
 
@@ -156,5 +183,21 @@ describe('CheckoutForm', () => {
       productLines: [{ productId: 'p1', quantity: 2 }],
     });
     expect(values).not.toHaveProperty('serviceLines');
+  });
+
+  it('sends the clientId when a client is picked and clears it', async () => {
+    const user = userEvent.setup();
+    const { onSubmit } = renderForm();
+
+    await pickComboboxOption(user, 'Cliente', 'Juan Pérez');
+    await addProductLine(user);
+    await user.selectOptions(screen.getByLabelText('Método de pago'), 'cash');
+    await user.click(screen.getByRole('button', { name: 'Registrar venta' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    expect(onSubmit.mock.calls[0][0]).toMatchObject({ clientId: 'c1' });
+
+    await user.click(screen.getByRole('button', { name: 'Limpiar selección' }));
+    expect(screen.getByLabelText('Cliente')).toHaveValue('');
   });
 });

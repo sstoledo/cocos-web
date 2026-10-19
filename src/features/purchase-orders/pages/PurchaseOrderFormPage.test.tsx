@@ -63,7 +63,7 @@ function mockFetch(behavior: MockBehavior = {}) {
   const created = buildPurchaseOrder({ id: 'po-new' });
 
   return vi.fn((url: string, init?: RequestInit) => {
-    if (url === `${API}/suppliers`) {
+    if (url.includes(`${API}/suppliers`)) {
       return Promise.resolve({
         ok: true,
         json: async () => ({
@@ -73,7 +73,7 @@ function mockFetch(behavior: MockBehavior = {}) {
       });
     }
 
-    if (url === `${API}/products`) {
+    if (url.includes(`${API}/products`)) {
       return Promise.resolve({
         ok: true,
         json: async () => ({
@@ -164,9 +164,26 @@ function createWrapper(initialEntry: string) {
   };
 }
 
+async function pickComboboxOption(
+  user: ReturnType<typeof userEvent.setup>,
+  input: HTMLElement,
+  optionName: string | RegExp
+) {
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
+}
+
 async function fillValidCreateForm(user: ReturnType<typeof userEvent.setup>) {
-  await user.selectOptions(screen.getByLabelText('Proveedor'), 'sup1');
-  await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+  await pickComboboxOption(
+    user,
+    screen.getByLabelText('Proveedor'),
+    'Repuestos SA'
+  );
+  await pickComboboxOption(
+    user,
+    screen.getByLabelText('Producto'),
+    'Filtro de aceite'
+  );
   await user.clear(screen.getByLabelText('Cantidad'));
   await user.type(screen.getByLabelText('Cantidad'), '10');
   await user.type(screen.getByLabelText('Costo estimado'), '50.00');
@@ -197,16 +214,6 @@ describe('PurchaseOrderFormPage — create mode', () => {
     expect(screen.getByLabelText('Producto')).toBeInTheDocument();
     expect(screen.getByLabelText('Cantidad')).toBeInTheDocument();
     expect(screen.getByLabelText('Costo estimado')).toBeInTheDocument();
-  });
-
-  it('shows a loading state while catalogs load', () => {
-    globalThis.fetch = vi.fn().mockReturnValue(new Promise(() => {}));
-
-    render(<PurchaseOrderFormPage />, {
-      wrapper: createWrapper('/purchase-orders/new'),
-    });
-
-    expect(screen.getByText('Cargando catálogos…')).toBeInTheDocument();
   });
 
   it('adds and removes product lines', async () => {
@@ -240,7 +247,11 @@ describe('PurchaseOrderFormPage — create mode', () => {
       expect(screen.getByLabelText('Producto')).toBeInTheDocument()
     );
 
-    await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+    await pickComboboxOption(
+      user,
+      screen.getByLabelText('Producto'),
+      'Filtro de aceite'
+    );
     await user.clear(screen.getByLabelText('Cantidad'));
     await user.type(screen.getByLabelText('Cantidad'), '10');
     await user.type(screen.getByLabelText('Costo estimado'), '50.00');
@@ -290,8 +301,16 @@ describe('PurchaseOrderFormPage — create mode', () => {
       expect(screen.getByLabelText('Proveedor')).toBeInTheDocument()
     );
 
-    await user.selectOptions(screen.getByLabelText('Proveedor'), 'sup1');
-    await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+    await pickComboboxOption(
+      user,
+      screen.getByLabelText('Proveedor'),
+      'Repuestos SA'
+    );
+    await pickComboboxOption(
+      user,
+      screen.getByLabelText('Producto'),
+      'Filtro de aceite'
+    );
     await user.type(screen.getByLabelText('Costo estimado'), '10.999');
     await user.click(screen.getByRole('button', { name: 'Crear orden' }));
 
@@ -314,13 +333,21 @@ describe('PurchaseOrderFormPage — create mode', () => {
       expect(screen.getByLabelText('Proveedor')).toBeInTheDocument()
     );
 
-    await user.selectOptions(screen.getByLabelText('Proveedor'), 'sup1');
-    await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+    await pickComboboxOption(
+      user,
+      screen.getByLabelText('Proveedor'),
+      'Repuestos SA'
+    );
+    await pickComboboxOption(
+      user,
+      screen.getByLabelText('Producto'),
+      'Filtro de aceite'
+    );
     await user.type(screen.getByLabelText('Costo estimado'), '50.00');
 
     await user.click(screen.getByRole('button', { name: 'Agregar producto' }));
-    const productSelects = screen.getAllByLabelText('Producto');
-    await user.selectOptions(productSelects[1], 'p1');
+    const productInputs = screen.getAllByLabelText('Producto');
+    await pickComboboxOption(user, productInputs[1], 'Filtro de aceite');
     await user.type(screen.getAllByLabelText('Costo estimado')[1], '10.00');
 
     await user.click(screen.getByRole('button', { name: 'Crear orden' }));
@@ -345,7 +372,11 @@ describe('PurchaseOrderFormPage — create mode', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Eliminar' }));
-    await user.selectOptions(screen.getByLabelText('Proveedor'), 'sup1');
+    await pickComboboxOption(
+      user,
+      screen.getByLabelText('Proveedor'),
+      'Repuestos SA'
+    );
     await user.click(screen.getByRole('button', { name: 'Crear orden' }));
 
     await waitFor(() =>
@@ -454,9 +485,9 @@ describe('PurchaseOrderFormPage — edit mode', () => {
       ).toBeInTheDocument()
     );
 
-    expect(screen.getByLabelText('Proveedor')).toHaveValue('sup1');
+    expect(screen.getByLabelText('Proveedor')).toHaveValue('Repuestos SA');
     expect(screen.getByLabelText('Proveedor')).toBeDisabled();
-    expect(screen.getByLabelText('Producto')).toHaveValue('p1');
+    expect(screen.getByLabelText('Producto')).toHaveValue('Filtro de aceite');
     expect(screen.getByLabelText('Cantidad')).toHaveValue(10);
     expect(screen.getByLabelText('Costo estimado')).toHaveValue('50.00');
 
@@ -532,7 +563,7 @@ describe('PurchaseOrderFormPage — edit mode', () => {
     });
 
     await waitFor(() =>
-      expect(screen.getByLabelText('Producto')).toHaveValue('p1')
+      expect(screen.getByLabelText('Producto')).toHaveValue('Filtro de aceite')
     );
 
     await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));

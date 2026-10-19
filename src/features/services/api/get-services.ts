@@ -5,8 +5,8 @@ export async function getServices(
 ): Promise<ServiceListResponse> {
   const searchParams = new URLSearchParams();
 
-  if (filters.q) {
-    searchParams.set('q', filters.q);
+  if (filters.query) {
+    searchParams.set('query', filters.query);
   }
 
   if (filters.isActive !== undefined) {

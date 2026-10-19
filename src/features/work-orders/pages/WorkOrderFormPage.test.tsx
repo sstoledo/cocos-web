@@ -103,16 +103,25 @@ function mockFetch(postResponse: PostResponse) {
   return postCalls;
 }
 
+async function pickComboboxOption(
+  user: ReturnType<typeof userEvent.setup>,
+  label: string,
+  optionName: string | RegExp
+) {
+  const input = screen.getByLabelText(label);
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
+}
+
 async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByRole('option', { name: 'Juan Pérez' });
-  await user.selectOptions(screen.getByLabelText('Cliente'), 'c1');
+  await pickComboboxOption(user, 'Cliente', 'Juan Pérez');
   await waitFor(() =>
     expect(screen.getByLabelText('Vehículo')).not.toBeDisabled()
   );
   await screen.findByRole('option', { name: /ABC123/ });
   await user.selectOptions(screen.getByLabelText('Vehículo'), 'v1');
   await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
-  await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+  await pickComboboxOption(user, 'Servicio', 'Cambio de aceite');
   await user.clear(screen.getByLabelText('Cantidad'));
   await user.type(screen.getByLabelText('Cantidad'), '2');
   await user.click(screen.getByRole('button', { name: 'Crear orden' }));
@@ -238,13 +247,10 @@ describe('WorkOrderFormPage (edit)', () => {
     mockEditFetch({ ok: true, body: buildWorkOrder() });
     renderPage('/work-orders/wo1/edit');
 
-    expect(await screen.findByLabelText('Cliente')).toBeInTheDocument();
-    await screen.findByRole('option', { name: 'Juan Pérez' });
-    expect(screen.getByLabelText('Cliente')).toHaveValue('c1');
+    expect(await screen.findByLabelText('Cliente')).toHaveValue('Juan Pérez');
     await screen.findByRole('option', { name: /ABC123/ });
     expect(screen.getByLabelText('Vehículo')).toHaveValue('v1');
-    await screen.findByRole('option', { name: 'Cambio de aceite' });
-    expect(screen.getByLabelText('Servicio')).toHaveValue('s1');
+    expect(screen.getByLabelText('Servicio')).toHaveValue('Cambio de aceite');
     expect(screen.getByLabelText('Cantidad')).toHaveValue(2);
     expect(screen.getByLabelText('Precio unitario')).toHaveValue(150);
     expect(
@@ -257,9 +263,7 @@ describe('WorkOrderFormPage (edit)', () => {
     const user = userEvent.setup();
     renderPage('/work-orders/wo1/edit');
 
-    expect(await screen.findByLabelText('Cliente')).toBeInTheDocument();
-    await screen.findByRole('option', { name: 'Juan Pérez' });
-    expect(screen.getByLabelText('Cliente')).toHaveValue('c1');
+    expect(await screen.findByLabelText('Cliente')).toHaveValue('Juan Pérez');
     await user.clear(screen.getByLabelText('Cantidad'));
     await user.type(screen.getByLabelText('Cantidad'), '3');
     await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));

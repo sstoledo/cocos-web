@@ -43,22 +43,20 @@ function LocationDisplay() {
   return <span data-testid="location">{location.pathname}</span>;
 }
 
-const suppliers = [{ id: 's1', name: 'Proveedor A' }];
+const supplier = { id: 's1', name: 'Proveedor A' };
 
-const products = [
-  {
-    id: 'p1',
-    code: 'COD-001',
-    name: 'Aceite 5W30',
-    price: '25.00',
-    isActive: true,
-    presentation: { id: 'pres1', name: 'Litro' },
-    brand: { id: 'b1', name: 'Castrol' },
-    category: { id: 'c1', name: 'Lubricantes' },
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-  },
-];
+const product = {
+  id: 'p1',
+  code: 'COD-001',
+  name: 'Aceite 5W30',
+  price: '25.00',
+  isActive: true,
+  presentation: { id: 'pres1', name: 'Litro' },
+  brand: { id: 'b1', name: 'Castrol' },
+  category: { id: 'c1', name: 'Lubricantes' },
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z',
+};
 
 const createdLot = {
   id: 'lot-1',
@@ -78,29 +76,25 @@ const createdLot = {
   ],
 };
 
-const mockSuppliersResponse = {
-  data: suppliers,
-  meta: { page: 1, limit: 10, total: 1 },
-};
-
-const mockProductsResponse = {
-  data: products,
-  meta: { page: 1, limit: 10, total: 1 },
-};
-
 function mockFetch() {
   return vi.fn((url: string) => {
-    if (url === 'http://localhost:3000/api/suppliers') {
+    if (url.includes('/suppliers')) {
       return Promise.resolve({
         ok: true,
-        json: async () => mockSuppliersResponse,
+        json: async () => ({
+          data: [supplier],
+          meta: { page: 1, limit: 20, total: 1 },
+        }),
       });
     }
 
-    if (url === 'http://localhost:3000/api/products') {
+    if (url.includes('/products')) {
       return Promise.resolve({
         ok: true,
-        json: async () => mockProductsResponse,
+        json: async () => ({
+          data: [product],
+          meta: { page: 1, limit: 20, total: 1 },
+        }),
       });
     }
 
@@ -118,6 +112,16 @@ function mockFetch() {
   }) as unknown as typeof fetch;
 }
 
+async function pickComboboxOption(
+  user: ReturnType<typeof userEvent.setup>,
+  label: string,
+  optionName: string | RegExp
+) {
+  const input = screen.getByLabelText(label);
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
+}
+
 describe('LotFormPage', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'http://localhost:3000/api');
@@ -127,11 +131,8 @@ describe('LotFormPage', () => {
     vi.unstubAllEnvs();
   });
 
-  it('renders the page title and loading state', () => {
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => [],
-    });
+  it('renders the page title and the form', () => {
+    globalThis.fetch = mockFetch();
 
     render(<LotFormPage />, {
       wrapper: createWrapper(),
@@ -140,24 +141,7 @@ describe('LotFormPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Nuevo lote' })
     ).toBeInTheDocument();
-    expect(screen.getByText('Cargando catálogos…')).toBeInTheDocument();
-  });
-
-  it('shows an error when catalogs fail to load', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: false,
-      status: 500,
-    });
-
-    render(<LotFormPage />, {
-      wrapper: createWrapper(),
-    });
-
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(
-        'No se pudieron cargar los catálogos'
-      )
-    );
+    expect(screen.getByLabelText('Número de lote')).toBeInTheDocument();
   });
 
   it('submits the form and navigates to the lot list', async () => {
@@ -168,15 +152,11 @@ describe('LotFormPage', () => {
       wrapper: createWrapper(),
     });
 
-    await waitFor(() =>
-      expect(screen.getByLabelText('Número de lote')).toBeInTheDocument()
-    );
-
     await user.type(screen.getByLabelText('Número de lote'), 'L-2026-001');
-    await user.selectOptions(screen.getByLabelText('Proveedor'), 's1');
+    await pickComboboxOption(user, 'Proveedor', 'Proveedor A');
     await user.type(screen.getByLabelText('Fecha de recepción'), '2026-07-13');
 
-    await user.selectOptions(screen.getByLabelText('Producto'), 'p1');
+    await pickComboboxOption(user, 'Producto', 'Aceite 5W30');
     await user.clear(screen.getByLabelText('Cantidad'));
     await user.type(screen.getByLabelText('Cantidad'), '24');
     await user.type(screen.getByLabelText('Precio de costo'), '12.50');

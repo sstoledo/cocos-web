@@ -198,9 +198,9 @@ describe('SalesListPage', () => {
     fireEvent.change(screen.getByLabelText('Hasta'), {
       target: { value: '2024-01-31' },
     });
-    await testUser.selectOptions(
-      screen.getByRole('combobox', { name: 'Cliente' }),
-      'c1'
+    await testUser.click(screen.getByRole('combobox', { name: 'Cliente' }));
+    await testUser.click(
+      await screen.findByRole('option', { name: 'Juan Pérez' })
     );
     await testUser.selectOptions(
       screen.getByRole('combobox', { name: 'Estado' }),

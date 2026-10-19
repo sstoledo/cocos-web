@@ -20,7 +20,7 @@ function mockCatalogs() {
 
     let body: unknown = [];
     if (url.includes('/clients')) {
-      body = { data: clients, meta: { page: 1, limit: 100, total: 2 } };
+      body = { data: clients, meta: { page: 1, limit: 20, total: 2 } };
     } else if (url.includes('/vehicles')) {
       body = {
         data: url.includes('clientId=c2')
@@ -31,7 +31,7 @@ function mockCatalogs() {
     } else if (url.includes('/services')) {
       body = {
         data: services,
-        meta: { page: 1, limit: 100, total: services.length },
+        meta: { page: 1, limit: 20, total: services.length },
       };
     } else if (url.includes('/employees')) {
       body = employees;
@@ -63,11 +63,20 @@ function renderForm(props: Partial<Parameters<typeof WorkOrderForm>[0]> = {}) {
   return { user, onSubmit };
 }
 
+async function pickComboboxOption(
+  user: ReturnType<typeof userEvent.setup>,
+  label: string,
+  optionName: string | RegExp
+) {
+  const input = screen.getByLabelText(label);
+  await user.click(input);
+  await user.click(await screen.findByRole('option', { name: optionName }));
+}
+
 async function selectClientAndVehicle(
   user: ReturnType<typeof userEvent.setup>
 ) {
-  await screen.findByRole('option', { name: 'Juan Pérez' });
-  await user.selectOptions(screen.getByLabelText('Cliente'), 'c1');
+  await pickComboboxOption(user, 'Cliente', 'Juan Pérez');
   await waitFor(() =>
     expect(screen.getByLabelText('Vehículo')).not.toBeDisabled()
   );
@@ -88,7 +97,12 @@ describe('WorkOrderForm', () => {
   it('S5: requires client, vehicle and at least one service line', async () => {
     const { user, onSubmit } = renderForm();
 
-    await screen.findByRole('option', { name: 'Juan Pérez' });
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/clients'),
+        expect.anything()
+      )
+    );
     await user.click(screen.getByRole('button', { name: 'Crear orden' }));
 
     expect(
@@ -106,7 +120,7 @@ describe('WorkOrderForm', () => {
 
     await selectClientAndVehicle(user);
     await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
-    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+    await pickComboboxOption(user, 'Servicio', 'Cambio de aceite');
 
     const priceInput = screen.getByLabelText('Precio unitario');
     await waitFor(() => expect(priceInput).toHaveValue(150));
@@ -131,17 +145,22 @@ describe('WorkOrderForm', () => {
   it('S4: vehicle selector is disabled until a client is chosen and resets on change', async () => {
     const { user } = renderForm();
 
-    await screen.findByRole('option', { name: 'Juan Pérez' });
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/clients'),
+        expect.anything()
+      )
+    );
     expect(screen.getByLabelText('Vehículo')).toBeDisabled();
 
-    await user.selectOptions(screen.getByLabelText('Cliente'), 'c1');
+    await pickComboboxOption(user, 'Cliente', 'Juan Pérez');
     await waitFor(() =>
       expect(screen.getByLabelText('Vehículo')).not.toBeDisabled()
     );
     await user.selectOptions(screen.getByLabelText('Vehículo'), 'v1');
     expect(screen.getByLabelText('Vehículo')).toHaveValue('v1');
 
-    await user.selectOptions(screen.getByLabelText('Cliente'), 'c2');
+    await pickComboboxOption(user, 'Cliente', 'María López');
     expect(screen.getByLabelText('Vehículo')).toHaveValue('');
     await waitFor(() =>
       expect(screen.getByLabelText('Vehículo')).toContainElement(
@@ -153,10 +172,8 @@ describe('WorkOrderForm', () => {
   it('S10: live total uses integer-cents arithmetic without float drift', async () => {
     const { user } = renderForm();
 
-    await screen.findByRole('option', { name: 'Juan Pérez' });
-
     await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
-    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+    await pickComboboxOption(user, 'Servicio', 'Cambio de aceite');
     const priceInput = screen.getByLabelText('Precio unitario');
     await user.clear(priceInput);
     await user.type(priceInput, '0.10');
@@ -179,7 +196,7 @@ describe('WorkOrderForm', () => {
     await selectClientAndVehicle(user);
     await user.selectOptions(screen.getByLabelText('Mecánico asignado'), 'e1');
     await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
-    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+    await pickComboboxOption(user, 'Servicio', 'Cambio de aceite');
     await user.click(screen.getByRole('button', { name: 'Crear orden' }));
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalled());
@@ -198,7 +215,7 @@ describe('WorkOrderForm', () => {
 
     await selectClientAndVehicle(user);
     await user.click(screen.getByRole('button', { name: 'Agregar servicio' }));
-    await user.selectOptions(screen.getByLabelText('Servicio'), 's1');
+    await pickComboboxOption(user, 'Servicio', 'Cambio de aceite');
     await user.click(screen.getByRole('button', { name: 'Crear orden' }));
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalled());
@@ -206,6 +223,24 @@ describe('WorkOrderForm', () => {
       expect.objectContaining({ employeeId: null }),
       expect.anything()
     );
+  });
+
+  it('shows the initial client and service labels without searching', async () => {
+    renderForm({
+      initialValues: {
+        clientId: 'c9',
+        vehicleId: 'v1',
+        description: 'Trabajo previo',
+        services: [{ serviceId: 's9', quantity: 1, unitPrice: 100 }],
+      },
+      initialClient: { id: 'c9', name: 'Cliente histórico' },
+      initialServices: [{ id: 's9', name: 'Servicio histórico' }],
+    });
+
+    await waitFor(() =>
+      expect(screen.getByLabelText('Cliente')).toHaveValue('Cliente histórico')
+    );
+    expect(screen.getByLabelText('Servicio')).toHaveValue('Servicio histórico');
   });
 
   it('S9: disables the submit button while pending', async () => {

@@ -1,48 +1,54 @@
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Select } from '@/components/ui/Select';
-import type { Product } from '@/features/products/types';
-import type { Control, UseFormRegister } from 'react-hook-form';
-import { useFormState } from 'react-hook-form';
+import {
+  ProductCombobox,
+  type ProductComboboxValue,
+} from '@/features/products/components/ProductCombobox';
+import { useState } from 'react';
+import type {
+  Control,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
+import { useFormState, useWatch } from 'react-hook-form';
 import type { LotFormValues } from '../types';
 
 export type LotItemFormProps = {
   index: number;
-  products: Product[];
   onRemove: () => void;
   register: UseFormRegister<LotFormValues>;
   control: Control<LotFormValues>;
+  setValue: UseFormSetValue<LotFormValues>;
 };
-
-function toProductOptions(products: Product[]) {
-  return products.map((product) => ({
-    value: product.id,
-    label: product.name,
-  }));
-}
 
 export function LotItemForm({
   index,
-  products,
   onRemove,
   register,
   control,
+  setValue,
 }: LotItemFormProps) {
   const { errors } = useFormState({ control });
   const itemErrors = errors.items?.[index];
-  const productOptions = toProductOptions(products);
+  const productId = useWatch({ control, name: `items.${index}.productId` });
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductComboboxValue | null>(null);
 
   return (
     <div className="grid gap-4 rounded-lg border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5">
       <div className="space-y-2">
         <Label htmlFor={`items-${index}-productId`}>Producto</Label>
-        <Select
+        <ProductCombobox
           id={`items-${index}-productId`}
-          options={productOptions}
-          placeholder="Seleccionar producto"
+          value={productId ? selectedProduct : null}
+          onChange={(product) => {
+            setSelectedProduct(product);
+            setValue(`items.${index}.productId`, product?.id ?? '', {
+              shouldValidate: true,
+            });
+          }}
           error={itemErrors?.productId?.message}
-          {...register(`items.${index}.productId`)}
         />
       </div>
 
