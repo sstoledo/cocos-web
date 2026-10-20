@@ -1,12 +1,42 @@
 import { cn } from '@/lib/utils';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconPhoto, IconX } from '@tabler/icons-react';
 import { Link } from 'react-router';
-import type { Product } from '../types';
+import type { ProductListItem } from '../types';
 
 export type ProductTableProps = {
-  products: Product[];
+  products: ProductListItem[];
   canEdit: boolean;
 };
+
+function getThumbnailUrl(imageUrl: string): string {
+  return imageUrl.replace(
+    '/image/upload/',
+    '/image/upload/w_40,h_40,c_fill,f_auto/'
+  );
+}
+
+function ProductThumbnail({ product }: { product: ProductListItem }) {
+  if (!product.imageUrl) {
+    return (
+      <div
+        className="flex h-10 w-10 items-center justify-center rounded bg-muted text-muted-foreground"
+        role="img"
+        aria-label="Sin imagen"
+      >
+        <IconPhoto className="h-5 w-5" aria-hidden="true" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={getThumbnailUrl(product.imageUrl)}
+      alt={product.name}
+      loading="lazy"
+      className="h-10 w-10 rounded object-cover"
+    />
+  );
+}
 
 export function ProductTable({ products, canEdit }: ProductTableProps) {
   return (
@@ -16,6 +46,9 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
           <tr className="text-left">
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Código
+            </th>
+            <th className="h-12 px-4 font-medium text-muted-foreground">
+              <span className="sr-only">Imagen</span>
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Nombre
@@ -31,6 +64,9 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Precio
+            </th>
+            <th className="h-12 px-4 font-medium text-muted-foreground">
+              Stock
             </th>
             <th className="h-12 px-4 font-medium text-muted-foreground">
               Estado
@@ -49,6 +85,9 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
               <td className="p-4 font-medium text-foreground">
                 {product.code}
               </td>
+              <td className="p-4">
+                <ProductThumbnail product={product} />
+              </td>
               <td className="p-4 text-foreground">{product.name}</td>
               <td className="p-4 text-muted-foreground">
                 {product.brand.name}
@@ -60,6 +99,7 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
                 {product.presentation.name}
               </td>
               <td className="p-4 text-foreground">{product.price}</td>
+              <td className="p-4 text-foreground">{product.stock}</td>
               <td className="p-4">
                 <span
                   className={cn(

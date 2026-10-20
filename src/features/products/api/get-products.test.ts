@@ -9,6 +9,8 @@ const mockResponse: ProductListResponse = {
       code: 'COD-001',
       name: 'Aceite 20W50',
       price: '25.00',
+      stock: 7,
+      imageUrl: null,
       isActive: true,
       presentation: { id: 'pres1', name: 'Litro' },
       brand: { id: 'brand1', name: 'Castrol' },
@@ -82,6 +84,24 @@ describe('getProducts', () => {
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
       'http://localhost:3000/api/products?q=aceite&isActive=true&page=2&limit=25',
+      { credentials: 'include' }
+    );
+  });
+
+  it('fetches products with catalog filters', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockResponse,
+    });
+
+    await getProducts({
+      brandId: 'b1',
+      categoryId: 'c1',
+      presentationId: 'p1',
+    });
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/products?brandId=b1&categoryId=c1&presentationId=p1',
       { credentials: 'include' }
     );
   });

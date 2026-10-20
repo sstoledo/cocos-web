@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Product, ProductListResponse } from '../types';
+import type { ProductListItem, ProductListResponse } from '../types';
 import { ProductListPage } from './ProductListPage';
 
 function createWrapper(initialEntries?: string[]) {
@@ -32,20 +32,37 @@ function userWithRole(role: string) {
   };
 }
 
+const references = {
+  presentations: [{ id: 'pres1', name: 'Litro' }],
+  brands: [{ id: 'brand1', name: 'Castrol' }],
+  categories: [{ id: 'cat1', name: 'Lubricantes' }],
+};
+
 function mockFetch(response: object, role = 'Admin') {
   globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
     if (url.includes('/users/me')) {
       return { ok: true, json: async () => userWithRole(role) };
     }
+    if (url.includes('/presentations')) {
+      return { ok: true, json: async () => references.presentations };
+    }
+    if (url.includes('/brands')) {
+      return { ok: true, json: async () => references.brands };
+    }
+    if (url.includes('/categories')) {
+      return { ok: true, json: async () => references.categories };
+    }
     return { ok: true, json: async () => response };
   });
 }
 
-const product: Product = {
+const product: ProductListItem = {
   id: 'p1',
   code: 'COD-001',
   name: 'Aceite 20W50',
   price: '25.00',
+  stock: 7,
+  imageUrl: null,
   isActive: true,
   presentation: { id: 'pres1', name: 'Litro' },
   brand: { id: 'brand1', name: 'Castrol' },
@@ -149,13 +166,16 @@ describe('ProductListPage', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'Litro' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '25.00' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '7' })).toBeInTheDocument();
     expect(screen.getByText('Activo')).toBeInTheDocument();
   });
 
   it('shows an error message when the request fails', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: false,
-      status: 500,
+    globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+      if (url.includes('/products')) {
+        return { ok: false, status: 500 };
+      }
+      return { ok: true, json: async () => [] };
     });
 
     render(<ProductListPage />, { wrapper: createWrapper() });
@@ -169,10 +189,7 @@ describe('ProductListPage', () => {
 
   it('syncs search input and status filter to the URL', async () => {
     const user = userEvent.setup();
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
-    });
+    mockFetch({ data: [], meta: { page: 1, limit: 10, total: 0 } });
 
     render(<ProductListPage />, { wrapper: createWrapper() });
 
@@ -187,28 +204,87 @@ describe('ProductListPage', () => {
     );
 
     await waitFor(() =>
-      expect(globalThis.fetch).toHaveBeenLastCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         'http://localhost:3000/api/products?q=aceite&isActive=true&page=1&limit=10',
         { credentials: 'include' }
       )
     );
   });
 
-  it('reads initial filters from the URL', async () => {
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ data: [], meta: { page: 1, limit: 10, total: 0 } }),
+  it('syncs brand, category and presentation filters to the request', async () => {
+    const user = userEvent.setup();
+    mockFetch({ data: [], meta: { page: 1, limit: 10, total: 0 } });
+
+    render(<ProductListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('combobox', { name: 'Filtrar por marca' })
+      ).toBeInTheDocument()
+    );
+    await waitFor(() =>
+      expect(screen.queryByText('Cargando productos…')).not.toBeInTheDocument()
+    );
+
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Filtrar por marca' }),
+      'brand1'
+    );
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Filtrar por categoría' }),
+      'cat1'
+    );
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Filtrar por presentación' }),
+      'pres1'
+    );
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/products?brandId=brand1&categoryId=cat1&presentationId=pres1&page=1&limit=10',
+        { credentials: 'include' }
+      )
+    );
+  });
+
+  it('sends no isActive param when the status filter is Todos', async () => {
+    const user = userEvent.setup();
+    mockFetch({ data: [], meta: { page: 1, limit: 10, total: 0 } });
+
+    render(<ProductListPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(screen.queryByText('Cargando productos…')).not.toBeInTheDocument()
+    );
+
+    const statusSelect = screen.getByRole('combobox', {
+      name: 'Filtrar por estado',
     });
+    await user.selectOptions(statusSelect, 'true');
+    await user.selectOptions(statusSelect, '');
+
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        'http://localhost:3000/api/products?page=1&limit=10',
+        { credentials: 'include' }
+      )
+    );
+  });
+
+  it('reads initial filters from the URL', async () => {
+    mockFetch({ data: [], meta: { page: 1, limit: 10, total: 0 } });
 
     render(<ProductListPage />, {
-      wrapper: createWrapper(['/products?q=aceite&isActive=false']),
+      wrapper: createWrapper([
+        '/products?q=aceite&isActive=false&brandId=brand1',
+      ]),
     });
 
     expect(screen.getByRole('searchbox')).toHaveValue('aceite');
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/products?q=aceite&isActive=false&page=1&limit=10',
+        'http://localhost:3000/api/products?q=aceite&isActive=false&brandId=brand1&page=1&limit=10',
         { credentials: 'include' }
       )
     );
