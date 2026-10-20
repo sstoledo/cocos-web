@@ -13,6 +13,18 @@ export async function getProducts(
     searchParams.set('isActive', filters.isActive.toString());
   }
 
+  if (filters.brandId) {
+    searchParams.set('brandId', filters.brandId);
+  }
+
+  if (filters.categoryId) {
+    searchParams.set('categoryId', filters.categoryId);
+  }
+
+  if (filters.presentationId) {
+    searchParams.set('presentationId', filters.presentationId);
+  }
+
   if (filters.page) {
     searchParams.set('page', filters.page.toString());
   }

@@ -2,14 +2,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Product, ProductListResponse } from '../types';
+import type { ProductListItem, ProductListResponse } from '../types';
 import { useProducts } from './use-products';
 
-const product: Product = {
+const product: ProductListItem = {
   id: 'p1',
   code: 'COD-001',
   name: 'Producto 1',
   price: '10.00',
+  stock: 3,
+  imageUrl: null,
   isActive: true,
   presentation: { id: 'pres1', name: 'Unidad' },
   brand: { id: 'brand1', name: 'Marca 1' },

@@ -20,6 +20,9 @@ function filtersFromSearchParams(
   return {
     q: searchParams.get('q') || undefined,
     isActive: parseIsActive(searchParams.get('isActive')),
+    brandId: searchParams.get('brandId') || undefined,
+    categoryId: searchParams.get('categoryId') || undefined,
+    presentationId: searchParams.get('presentationId') || undefined,
     page: Number.parseInt(searchParams.get('page') ?? '1', 10) || 1,
     limit: DEFAULT_LIMIT,
   };
@@ -29,6 +32,36 @@ function parseIsActive(value: string | null): boolean | undefined {
   if (value === 'true') return true;
   if (value === 'false') return false;
   return undefined;
+}
+
+function filtersToSearchParams(
+  filters: ProductListFilters,
+  page: number
+): URLSearchParams {
+  const searchParams = new URLSearchParams();
+
+  if (filters.q) {
+    searchParams.set('q', filters.q);
+  }
+
+  if (filters.isActive !== undefined) {
+    searchParams.set('isActive', filters.isActive.toString());
+  }
+
+  if (filters.brandId) {
+    searchParams.set('brandId', filters.brandId);
+  }
+
+  if (filters.categoryId) {
+    searchParams.set('categoryId', filters.categoryId);
+  }
+
+  if (filters.presentationId) {
+    searchParams.set('presentationId', filters.presentationId);
+  }
+
+  searchParams.set('page', page.toString());
+  return searchParams;
 }
 
 export function ProductListPage() {
@@ -42,33 +75,13 @@ export function ProductListPage() {
     user?.role?.name === 'Admin' || user?.role?.name === 'Warehouse';
 
   function handleFiltersChange(nextFilters: ProductListFilters) {
-    const nextSearchParams = new URLSearchParams();
-
-    if (nextFilters.q) {
-      nextSearchParams.set('q', nextFilters.q);
-    }
-
-    if (nextFilters.isActive !== undefined) {
-      nextSearchParams.set('isActive', nextFilters.isActive.toString());
-    }
-
-    nextSearchParams.set('page', '1');
-    setSearchParams(nextSearchParams, { replace: true });
+    setSearchParams(filtersToSearchParams(nextFilters, 1), {
+      replace: true,
+    });
   }
 
   function handlePageChange(page: number) {
-    const nextSearchParams = new URLSearchParams();
-
-    if (filters.q) {
-      nextSearchParams.set('q', filters.q);
-    }
-
-    if (filters.isActive !== undefined) {
-      nextSearchParams.set('isActive', filters.isActive.toString());
-    }
-
-    nextSearchParams.set('page', page.toString());
-    setSearchParams(nextSearchParams, { replace: true });
+    setSearchParams(filtersToSearchParams(filters, page), { replace: true });
   }
 
   return (

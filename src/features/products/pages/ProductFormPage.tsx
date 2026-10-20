@@ -154,7 +154,7 @@ export function ProductFormPage() {
                     ? productToFormValues(product)
                     : undefined
                 }
-                imageUrl={product?.imageUrl}
+                imageUrl={product?.imageUrl ?? undefined}
                 onRemoveImage={isEditMode ? handleRemoveImage : undefined}
               />
             </>

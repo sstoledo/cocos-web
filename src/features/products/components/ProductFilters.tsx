@@ -1,5 +1,6 @@
 import { Input } from '@/components/ui/Input';
-import type { ProductListFilters } from '../types';
+import { useProductReferences } from '../hooks/use-product-references';
+import type { ProductListFilters, ProductReference } from '../types';
 
 export type ProductFiltersProps = {
   filters: ProductListFilters;
@@ -17,10 +18,45 @@ const statusOptions: StatusOption[] = [
   { label: 'Inactivos', value: 'false' },
 ];
 
-export function ProductFilters({ filters, onChange }: ProductFiltersProps) {
+const selectClassName =
+  'flex h-10 w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+
+type ReferenceSelectProps = {
+  label: string;
+  options: ProductReference[];
+  value: string | undefined;
+  onChange: (value: string | undefined) => void;
+};
+
+function ReferenceSelect({
+  label,
+  options,
+  value,
+  onChange,
+}: ReferenceSelectProps) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row">
-      <div className="flex-1">
+    <select
+      value={value ?? ''}
+      onChange={(event) => onChange(event.target.value || undefined)}
+      className={selectClassName}
+      aria-label={label}
+    >
+      <option value="">Todas</option>
+      {options.map((option) => (
+        <option key={option.id} value={option.id}>
+          {option.name}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+export function ProductFilters({ filters, onChange }: ProductFiltersProps) {
+  const { brands, categories, presentations } = useProductReferences();
+
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+      <div className="flex-1 sm:min-w-48">
         <Input
           type="search"
           placeholder="Buscar por nombre o código..."
@@ -31,7 +67,7 @@ export function ProductFilters({ filters, onChange }: ProductFiltersProps) {
           aria-label="Buscar productos"
         />
       </div>
-      <div className="sm:w-48">
+      <div className="sm:w-40">
         <select
           value={
             filters.isActive === undefined ? '' : filters.isActive.toString()
@@ -43,7 +79,7 @@ export function ProductFilters({ filters, onChange }: ProductFiltersProps) {
               isActive: value === '' ? undefined : value === 'true',
             });
           }}
-          className="flex h-10 w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className={selectClassName}
           aria-label="Filtrar por estado"
         >
           {statusOptions.map((option) => (
@@ -52,6 +88,32 @@ export function ProductFilters({ filters, onChange }: ProductFiltersProps) {
             </option>
           ))}
         </select>
+      </div>
+      <div className="sm:w-40">
+        <ReferenceSelect
+          label="Filtrar por marca"
+          options={brands}
+          value={filters.brandId}
+          onChange={(brandId) => onChange({ ...filters, brandId })}
+        />
+      </div>
+      <div className="sm:w-40">
+        <ReferenceSelect
+          label="Filtrar por categoría"
+          options={categories}
+          value={filters.categoryId}
+          onChange={(categoryId) => onChange({ ...filters, categoryId })}
+        />
+      </div>
+      <div className="sm:w-40">
+        <ReferenceSelect
+          label="Filtrar por presentación"
+          options={presentations}
+          value={filters.presentationId}
+          onChange={(presentationId) =>
+            onChange({ ...filters, presentationId })
+          }
+        />
       </div>
     </div>
   );

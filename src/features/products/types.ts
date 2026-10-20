@@ -19,7 +19,7 @@ export interface Product {
   barcode?: string;
   taxRate?: string;
   notes?: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   imagePublicId?: string;
   isActive: boolean;
   presentation: { id: string; name: string };
@@ -41,9 +41,17 @@ export interface ProductReference {
 
 export type { ProductFormValues } from './schemas/product-schema';
 
+export interface ProductListItem extends Product {
+  stock: number;
+  imageUrl: string | null;
+}
+
 export interface ProductListFilters {
   q?: string;
   isActive?: boolean;
+  brandId?: string;
+  categoryId?: string;
+  presentationId?: string;
   page?: number;
   limit?: number;
 }
@@ -55,6 +63,6 @@ export interface ProductListMeta {
 }
 
 export interface ProductListResponse {
-  data: Product[];
+  data: ProductListItem[];
   meta: ProductListMeta;
 }
