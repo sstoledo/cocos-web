@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "contract:generate": "openapi-typescript ../cocos-back/docs/openapi/cocos-back.yaml -o src/contract/api-types.ts",
+    "contract:check": "pnpm run contract:generate && git diff --exit-code -- src/contract/api-types.ts",
     "preinstall": "npx only-allow pnpm",
     "prepare": "git config core.hooksPath .githooks",
     "dev": "vite",
@@ -58,6 +60,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react-swc": "3.11.0",
     "jsdom": "25.0.1",
+    "openapi-typescript": "7.13.0",
     "tailwindcss": "4.3.1",
     "typescript": "5.9.3",
     "vite": "6.4.3",
