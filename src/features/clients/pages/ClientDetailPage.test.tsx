@@ -60,17 +60,17 @@ const inactiveVehicle = {
 
 const paginatedVehicles = {
   data: [activeVehicle, inactiveVehicle],
-  meta: { page: 1, total: 2, totalPages: 1 },
+  meta: { page: 1, limit: 10, total: 2 },
 };
 
 const multiPageVehicles = {
   data: [activeVehicle],
-  meta: { page: 1, total: 2, totalPages: 2 },
+  meta: { page: 1, limit: 1, total: 2 },
 };
 
 const secondPageVehicles = {
   data: [inactiveVehicle],
-  meta: { page: 2, total: 2, totalPages: 2 },
+  meta: { page: 2, limit: 1, total: 2 },
 };
 
 const createdVehicle = {

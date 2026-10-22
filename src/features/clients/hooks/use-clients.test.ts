@@ -15,7 +15,9 @@ const client: Client = {
 
 const paginatedResponse = {
   data: [client],
-  meta: { page: 1, total: 1, totalPages: 1 },
+  // Backend paginated meta: {page, limit, total}; the hook derives
+  // totalPages for the Pagination UI.
+  meta: { page: 1, limit: 20, total: 1 },
 };
 
 function createWrapper() {
@@ -54,7 +56,7 @@ describe('useClients', () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     expect(result.current.clients).toEqual([client]);
-    expect(result.current.meta).toEqual(paginatedResponse.meta);
+    expect(result.current.meta).toEqual({ page: 1, total: 1, totalPages: 1 });
     expect(result.current.error).toBeNull();
   });
 
