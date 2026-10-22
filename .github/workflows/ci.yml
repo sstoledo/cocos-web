@@ -43,6 +43,8 @@ jobs:
     name: Playwright e2e
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cocos?schema=public
     defaults:
       run:
         working-directory: . # webServer commands in e2e/playwright.config.ts
