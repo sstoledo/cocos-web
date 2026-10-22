@@ -91,6 +91,14 @@ jobs:
         run: cp .env.template .env
         working-directory: cocos-web
 
+      - name: Bootstrap database (migrate + seeds)
+        run: |
+          pnpm exec prisma migrate deploy
+          pnpm exec ts-node prisma/seed.ts
+          pnpm exec ts-node prisma/seed-demo.ts
+          pnpm exec ts-node prisma/seed-e2e.ts
+        working-directory: cocos-back
+
       - name: Start Postgres container expected by the e2e bootstrap
         run: >-
           docker run -d --name cocos-postgres
