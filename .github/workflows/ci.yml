@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome check
+        run: pnpm run check
+
+      - name: Typecheck
+        run: npx tsc -b
+
+      - name: Unit tests (Vitest)
+        run: pnpm test
+
+      - name: Build
+        run: pnpm run build
+
+  e2e:
+    name: Playwright e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: . # webServer commands in e2e/playwright.config.ts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: sstoledo/cocos-web
+          path: cocos-web
+
+      - uses: actions/checkout@v4
+        with:
+          repository: sstoledo/cocos-back
+          path: cocos-back
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            cocos-web/pnpm-lock.yaml
+            cocos-back/pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cocos-web
+
+      - name: Install backend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cocos-back
+
+      - name: Create backend .env
+        run: cp .env.template .env
+        working-directory: cocos-back
+
+      - name: Start Postgres container expected by the e2e bootstrap
+        run: >-
+          docker run -d --name cocos-postgres
+          -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres
+          -e POSTGRES_DB=cocos -p 5432:5432 postgres:16
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: cocos-web/e2e
+
+      - name: Run e2e tests
+        run: pnpm test
+        working-directory: cocos-web/e2e
+        env:
+          CI: true
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: cocos-web/e2e/playwright-report
+          retention-days: 7
