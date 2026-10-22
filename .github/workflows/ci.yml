@@ -100,12 +100,8 @@ jobs:
         working-directory: cocos-back
 
       - name: Start Postgres container expected by the e2e bootstrap
-        run: >-
-          docker run -d --name cocos-postgres
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 2s --health-timeout 5s --health-retries 15
-          -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres
-          -e POSTGRES_DB=cocos -p 5432:5432 postgres:16-alpine
+        run: docker compose up -d
+        working-directory: cocos-back
 
       - name: Wait for Postgres to accept connections
         run: |
