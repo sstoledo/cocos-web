@@ -1,0 +1,14 @@
+{
+  "name": "@cocos/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Playwright E2E specs for the cocos workshop ERP (front + back + real Postgres).",
+  "scripts": {
+    "test": "playwright test",
+    "headed": "playwright test --headed",
+    "show-report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.1"
+  }
+}

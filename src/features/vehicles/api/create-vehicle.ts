@@ -17,7 +17,6 @@ export async function createVehicle(
       color: values.color,
       notes: values.notes,
       clientId: values.clientId,
-      isActive: values.isActive,
     }),
   });
 
