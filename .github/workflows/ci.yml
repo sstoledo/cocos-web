@@ -53,9 +53,20 @@ jobs:
           repository: sstoledo/cocos-web
           path: cocos-web
 
+      - name: Resolve matching backend branch (same name, fallback main)
+        id: backref
+        run: |
+          BR="${{ github.head_ref || github.ref_name }}"
+          if git ls-remote --exit-code --heads https://github.com/sstoledo/cocos-back.git "$BR" > /dev/null 2>&1; then
+            echo "ref=$BR" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
         with:
           repository: sstoledo/cocos-back
+          ref: ${{ steps.backref.outputs.ref }}
           path: cocos-back
 
       - uses: pnpm/action-setup@v4
