@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Create frontend .env
+        run: cp .env.template .env
+
       - name: Biome check
         run: pnpm run check
 
@@ -84,11 +87,27 @@ jobs:
         run: cp .env.template .env
         working-directory: cocos-back
 
+      - name: Create frontend .env
+        run: cp .env.template .env
+        working-directory: cocos-web
+
       - name: Start Postgres container expected by the e2e bootstrap
         run: >-
           docker run -d --name cocos-postgres
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 2s --health-timeout 5s --health-retries 15
           -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres
-          -e POSTGRES_DB=cocos -p 5432:5432 postgres:16
+          -e POSTGRES_DB=cocos -p 5432:5432 postgres:16-alpine
+
+      - name: Wait for Postgres to accept connections
+        run: |
+          for i in $(seq 1 30); do
+            if docker exec cocos-postgres pg_isready -U postgres -d cocos | grep -q "accepting connections"; then
+              echo "Postgres ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres never became ready"; exit 1
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
