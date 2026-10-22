@@ -19,7 +19,7 @@ const vehicle: Vehicle = {
 
 const paginatedResponse = {
   data: [vehicle],
-  meta: { page: 1, total: 1, totalPages: 1 },
+  meta: { page: 1, limit: 20, total: 1 },
 };
 
 function createWrapper() {
@@ -58,7 +58,7 @@ describe('useVehicles', () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     expect(result.current.vehicles).toEqual([vehicle]);
-    expect(result.current.meta).toEqual(paginatedResponse.meta);
+    expect(result.current.meta).toEqual({ page: 1, total: 1, totalPages: 1 });
     expect(result.current.error).toBeNull();
   });
 
