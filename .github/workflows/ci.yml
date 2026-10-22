@@ -66,6 +66,7 @@ jobs:
           cache-dependency-path: |
             cocos-web/pnpm-lock.yaml
             cocos-back/pnpm-lock.yaml
+            cocos-web/e2e/pnpm-lock.yaml
 
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
@@ -74,6 +75,10 @@ jobs:
       - name: Install backend dependencies
         run: pnpm install --frozen-lockfile
         working-directory: cocos-back
+
+      - name: Install e2e dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cocos-web/e2e
 
       - name: Create backend .env
         run: cp .env.template .env
