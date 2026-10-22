@@ -20,6 +20,9 @@ import { PresentationListPage } from '@/features/presentations/pages/Presentatio
 import { ProductDetailPage } from '@/features/products/pages/ProductDetailPage';
 import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
 import { ProductListPage } from '@/features/products/pages/ProductListPage';
+import { ProformaDetailPage } from '@/features/proformas/pages/ProformaDetailPage';
+import { ProformaFormPage } from '@/features/proformas/pages/ProformaFormPage';
+import { ProformasListPage } from '@/features/proformas/pages/ProformasListPage';
 import { PurchaseOrderDetailPage } from '@/features/purchase-orders/pages/PurchaseOrderDetailPage';
 import { PurchaseOrderFormPage } from '@/features/purchase-orders/pages/PurchaseOrderFormPage';
 import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
@@ -150,6 +153,15 @@ const routes: RouteObject[] = [
       guardedRoute('sales', <SalesListPage />, ['Admin', 'Reception']),
       guardedRoute('sales/new', <CheckoutPage />, ['Admin', 'Reception']),
       guardedRoute('sales/:id', <SaleDetailPage />, ['Admin', 'Reception']),
+      guardedRoute('proformas', <ProformasListPage />, ['Admin', 'Reception']),
+      guardedRoute('proformas/new', <ProformaFormPage />, [
+        'Admin',
+        'Reception',
+      ]),
+      guardedRoute('proformas/:id', <ProformaDetailPage />, [
+        'Admin',
+        'Reception',
+      ]),
       guardedRoute('refunds', <RefundPage />),
       guardedRoute('purchase-orders', <PurchaseOrderListPage />, [
         'Admin',

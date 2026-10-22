@@ -2,6 +2,7 @@ import {
   IconBell,
   IconCashRegister,
   IconCategory2,
+  IconFileInvoice,
   IconLayoutDashboard,
   IconPackage,
   IconPackages,
@@ -109,6 +110,12 @@ export const navigationGroups: NavGroup[] = [
         label: 'Ventas',
         path: '/sales',
         icon: IconCashRegister,
+        allowedRoles: ['Admin', 'Reception'],
+      },
+      {
+        label: 'Proformas',
+        path: '/proformas',
+        icon: IconFileInvoice,
         allowedRoles: ['Admin', 'Reception'],
       },
       {
