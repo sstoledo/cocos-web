@@ -1,0 +1,146 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create frontend .env
+        run: cp .env.template .env
+
+      - name: Biome check
+        run: pnpm run check
+
+      - name: Typecheck
+        run: npx tsc -b
+
+      - name: Unit tests (Vitest)
+        run: pnpm test
+
+      - name: Build
+        run: pnpm run build
+
+  e2e:
+    name: Playwright e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cocos?schema=public
+    defaults:
+      run:
+        working-directory: . # webServer commands in e2e/playwright.config.ts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: sstoledo/cocos-web
+          path: cocos-web
+
+      - name: Resolve matching backend branch (same name, fallback main)
+        id: backref
+        run: |
+          BR="${{ github.head_ref || github.ref_name }}"
+          if git ls-remote --exit-code --heads https://github.com/sstoledo/cocos-back.git "$BR" > /dev/null 2>&1; then
+            echo "ref=$BR" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          repository: sstoledo/cocos-back
+          ref: ${{ steps.backref.outputs.ref }}
+          path: cocos-back
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            cocos-web/pnpm-lock.yaml
+            cocos-back/pnpm-lock.yaml
+            cocos-web/e2e/pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cocos-web
+
+      - name: Install backend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cocos-back
+
+      - name: Install e2e dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cocos-web/e2e
+
+      - name: Start Postgres container expected by the e2e bootstrap
+        run: docker compose up -d
+        working-directory: cocos-back
+
+      - name: Wait for Postgres to accept connections
+        run: |
+          for i in $(seq 1 30); do
+            if docker exec cocos-postgres pg_isready -U postgres -d cocos | grep -q "accepting connections"; then
+              echo "Postgres ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres never became ready"; exit 1
+
+      - name: Create backend .env
+        run: cp .env.template .env
+        working-directory: cocos-back
+
+      - name: Create frontend .env
+        run: cp .env.template .env
+        working-directory: cocos-web
+
+      - name: Bootstrap database (migrate + seeds)
+        run: |
+          set -x
+          pnpm exec prisma migrate deploy
+          pnpm exec ts-node prisma/seed.ts
+          pnpm exec ts-node prisma/seed-demo.ts
+          pnpm exec ts-node prisma/seed-e2e.ts
+        working-directory: cocos-back
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: cocos-web/e2e
+
+      - name: Run e2e tests
+        run: pnpm test
+        working-directory: cocos-web/e2e
+        env:
+          CI: true
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: cocos-web/e2e/playwright-report
+          retention-days: 7

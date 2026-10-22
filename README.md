@@ -1,5 +1,7 @@
 # Cocos Web
 
+[![CI](https://github.com/sstoledo/cocos-web/actions/workflows/ci.yml/badge.svg)](https://github.com/sstoledo/cocos-web/actions/workflows/ci.yml)
+
 React 19 + Vite 6 + Tailwind CSS v4 SPA for the Cocos workshop ERP.
 
 ## Stack
