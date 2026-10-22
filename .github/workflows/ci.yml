@@ -83,6 +83,20 @@ jobs:
         run: pnpm install --frozen-lockfile
         working-directory: cocos-web/e2e
 
+      - name: Start Postgres container expected by the e2e bootstrap
+        run: docker compose up -d
+        working-directory: cocos-back
+
+      - name: Wait for Postgres to accept connections
+        run: |
+          for i in $(seq 1 30); do
+            if docker exec cocos-postgres pg_isready -U postgres -d cocos | grep -q "accepting connections"; then
+              echo "Postgres ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres never became ready"; exit 1
+
       - name: Create backend .env
         run: cp .env.template .env
         working-directory: cocos-back
@@ -98,20 +112,6 @@ jobs:
           pnpm exec ts-node prisma/seed-demo.ts
           pnpm exec ts-node prisma/seed-e2e.ts
         working-directory: cocos-back
-
-      - name: Start Postgres container expected by the e2e bootstrap
-        run: docker compose up -d
-        working-directory: cocos-back
-
-      - name: Wait for Postgres to accept connections
-        run: |
-          for i in $(seq 1 30); do
-            if docker exec cocos-postgres pg_isready -U postgres -d cocos | grep -q "accepting connections"; then
-              echo "Postgres ready"; exit 0
-            fi
-            sleep 1
-          done
-          echo "Postgres never became ready"; exit 1
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
