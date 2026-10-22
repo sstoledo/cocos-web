@@ -107,6 +107,7 @@ jobs:
 
       - name: Bootstrap database (migrate + seeds)
         run: |
+          set -x
           pnpm exec prisma migrate deploy
           pnpm exec ts-node prisma/seed.ts
           pnpm exec ts-node prisma/seed-demo.ts
