@@ -51,6 +51,7 @@ export function ConvertProformaAction({ proforma }: { proforma: Proforma }) {
       <div className="flex items-center gap-2">
         <Label>Método de pago</Label>
         <Select
+          aria-label="Método de pago"
           value={paymentMethod}
           onChange={(event) =>
             setPaymentMethod(event.target.value as 'cash' | 'card' | 'transfer')
