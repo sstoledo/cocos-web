@@ -104,7 +104,7 @@ describe('CheckoutForm', () => {
 
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/products?q=filtro&isActive=true&limit=20',
+        'http://localhost:3000/api/products/search/semantic?q=filtro&limit=20&isActive=true',
         expect.anything()
       )
     );

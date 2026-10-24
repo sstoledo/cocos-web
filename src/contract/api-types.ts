@@ -415,6 +415,113 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/products/search/semantic": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search products semantically
+         * @description Returns products ranked by cosine similarity to a natural-language query.
+         */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Natural-language product search query */
+                    q: string;
+                    limit?: number;
+                    isActive?: boolean;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Semantically ranked products */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["ProductResponse"][];
+                        };
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                /** @description Embeddings are not configured (EMBEDDINGS_NOT_CONFIGURED) */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/products/reindex-embeddings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Backfill missing product embeddings
+         * @description Generates embeddings for every product whose embedding is NULL. Admin role required.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Embedding backfill summary */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReindexEmbeddingsResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                /** @description Embeddings are not configured (EMBEDDINGS_NOT_CONFIGURED) */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/products/{id}": {
         parameters: {
             query?: never;
@@ -2501,6 +2608,14 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        ReindexEmbeddingsResponse: {
+            /** @description Number of rows backfilled successfully */
+            updated: number;
+            /** @description Number of missing rows that could not be backfilled */
+            failed: number;
+            /** @description Total rows with a NULL embedding before reindexing */
+            totalMissing: number;
+        };
         Role: {
             /** @example role-1 */
             id?: string;
@@ -3095,7 +3210,7 @@ export interface components {
         /** @description Custom business error envelope raised by domain services. */
         BusinessErrorResponse: {
             message?: string;
-            /** @description Known values include CONTRACT-flagged INVALID_STATUS_TRANSITION (409), WORK_ORDER_OVERPAYMENT (400), WORK_ORDER_CANCELLED (409), WORK_ORDER_CLOSED (409), WORK_ORDER_NOT_FOUND (404), CLIENT_NOT_FOUND (404), VEHICLE_NOT_FOUND (404), VEHICLE_CLIENT_MISMATCH (400), SERVICE_NOT_FOUND (404), EMPLOYEE_NOT_FOUND (404), PRODUCT_NOT_FOUND (404), CONSUMPTION_TYPE_NOT_ALLOWED (400), CONSUMPTION_QUANTITY_REQUIRED (400), INSUFFICIENT_STOCK (400), NO_OPEN_CONTAINER (400), CLOSING_NO_ACTIVITY (400), CLOSING_CONFLICT (409). */
+            /** @description Known values include CONTRACT-flagged INVALID_STATUS_TRANSITION (409), WORK_ORDER_OVERPAYMENT (400), WORK_ORDER_CANCELLED (409), WORK_ORDER_CLOSED (409), WORK_ORDER_NOT_FOUND (404), CLIENT_NOT_FOUND (404), VEHICLE_NOT_FOUND (404), VEHICLE_CLIENT_MISMATCH (400), SERVICE_NOT_FOUND (404), EMPLOYEE_NOT_FOUND (404), PRODUCT_NOT_FOUND (404), CONSUMPTION_TYPE_NOT_ALLOWED (400), CONSUMPTION_QUANTITY_REQUIRED (400), INSUFFICIENT_STOCK (400), NO_OPEN_CONTAINER (400), CLOSING_NO_ACTIVITY (400), CLOSING_CONFLICT (409), EMBEDDINGS_NOT_CONFIGURED (503). */
             errorCode?: string;
         };
     };
