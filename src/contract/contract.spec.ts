@@ -2,6 +2,10 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { closeCashClosingSchema } from '@/features/cash-closings/schemas/cash-closing-schema';
 import { clientSchema } from '@/features/clients/schemas/client-schema';
+import {
+  convertProformaSchema,
+  proformaSchema,
+} from '@/features/proformas/schemas/proforma-schema';
 import { createWorkOrderPaymentSchema } from '@/features/work-orders/schemas/work-order-payment-schema';
 import { workOrderSchema } from '@/features/work-orders/schemas/work-order-schema';
 import { describe, expect, it } from 'vitest';
@@ -55,6 +59,35 @@ const _declaredCashIsString: Expect<
   Equal<Api['CreateCashClosing']['declaredCash'], string>
 > = true;
 
+// Proformas: money is only read (snapshots/totals are decimal strings);
+// requests never carry prices (SL-F4 — the backend owns pricing).
+const _proformaTotalIsString: Expect<
+  Equal<Api['ProformaResponse']['totalAmount'], string>
+> = true;
+const _proformaLineSnapshotIsString: Expect<
+  Equal<Api['ProformaProductLineResponse']['unitPriceSnapshot'], string>
+> = true;
+const _proformaLineRequestHasNoPrice: Expect<
+  'unitPriceSnapshot' extends keyof Api['CreateProforma'] ? never : true
+> = true;
+const _convertPaymentMethodParity: Expect<
+  Equal<Api['ConvertProforma']['paymentMethod'], 'cash' | 'card' | 'transfer'>
+> = true;
+// Walk-in proformas: the request carries lines only — the server owns
+// numbering, totals and price snapshots.
+const _createProformaRequiresProductLines: Expect<
+  'productLines' extends keyof Api['CreateProforma'] ? true : never
+> = true;
+const _createProformaHasNoServerNumber: Expect<
+  'proformaNumber' extends keyof Api['CreateProforma'] ? never : true
+> = true;
+const _proformaStatusParity: Expect<
+  Equal<
+    Api['ProformaStatus'],
+    'draft' | 'sent' | 'accepted' | 'rejected' | 'converted'
+  >
+> = true;
+
 // Enum parity between generated types and the frontend's own enum literals.
 const _workOrderStatusParity: Expect<
   Equal<
@@ -97,6 +130,13 @@ const contractAssertions = [
   _identificationTypeParity,
   _createWorkOrderRequiresClientAndVehicle,
   _createWorkOrderHasNoServerBankId,
+  _proformaTotalIsString,
+  _proformaLineSnapshotIsString,
+  _proformaLineRequestHasNoPrice,
+  _convertPaymentMethodParity,
+  _createProformaRequiresProductLines,
+  _createProformaHasNoServerNumber,
+  _proformaStatusParity,
 ];
 
 describe('openapi contract vs frontend zod schemas', () => {
@@ -163,6 +203,26 @@ describe('openapi contract vs frontend zod schemas', () => {
     expect(Number(parsed.services[0].unitPrice)).toBe(150);
   });
 
+  it('proforma form values are contract-valid CreateProforma input', () => {
+    // Walk-in proformas are valid without clientId (S2).
+    const walkIn = proformaSchema.safeParse({
+      productLines: [{ productId: 'p1', quantity: 2 }],
+    });
+    expect(walkIn.success).toBe(true);
+    const lined = proformaSchema.parse({
+      clientId: 'cl1',
+      productLines: [{ productId: 'p1', quantity: 2 }],
+    });
+    // Lines carry id + quantity only: the backend owns pricing (SL-F4).
+    expect(Number.isInteger(Number(lined.productLines[0].quantity))).toBe(true);
+    expect(convertProformaSchema.parse({ paymentMethod: 'cash' })).toEqual({
+      paymentMethod: 'cash',
+    });
+    expect(
+      convertProformaSchema.safeParse({ paymentMethod: 'bitcoin' as 'cash' })
+    ).toMatchObject({ success: false });
+  });
+
   it('generated types carry the documented schemas', () => {
     // Guards against a stale/emptied generated file silently passing.
     const generated = readFileSync(
@@ -180,6 +240,12 @@ describe('openapi contract vs frontend zod schemas', () => {
       'ClosingPreviewResponse',
       'PaginatedMeta',
       'BusinessErrorResponse',
+      'ProformaStatus',
+      'CreateProforma',
+      'UpdateProformaStatus',
+      'ConvertProforma',
+      'ProformaProductLineResponse',
+      'ProformaResponse',
     ]) {
       expect(
         generated.includes(`${name}:`),

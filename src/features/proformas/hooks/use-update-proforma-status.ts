@@ -9,8 +9,11 @@ export function useUpdateProformaStatus() {
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: ProformaStatus }) =>
       updateProformaStatus(id, status),
-    onSuccess: () => {
+    onSuccess: (_proforma, { id }) => {
+      // ['proformas'] covers every list variant; ['proforma', id] flips the
+      // detail badge without a refresh (sale hook parity SL-F14).
       queryClient.invalidateQueries({ queryKey: ['proformas'] });
+      queryClient.invalidateQueries({ queryKey: ['proforma', id] });
       toast.success('Estado de la proforma actualizado');
     },
   });

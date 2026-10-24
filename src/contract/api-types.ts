@@ -1942,6 +1942,298 @@ export interface paths {
         };
         trace?: never;
     };
+    "/api/proformas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List proformas
+         * @description Paginated proformas. Admin and Reception roles.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    from?: string;
+                    to?: string;
+                    clientId?: string;
+                    status?: components["schemas"]["ProformaStatus"];
+                    proformaNumber?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Paginated proformas */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["ProformaResponse"][];
+                            meta: components["schemas"]["PaginatedMeta"];
+                        };
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+            };
+        };
+        put?: never;
+        /**
+         * Create a proforma
+         * @description Creates a quotation with optional client (walk-ins allowed) and at least one product line; the catalog unit price is snapshotted server-side. Never touches stock.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateProforma"];
+                };
+            };
+            responses: {
+                /** @description Proforma created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProformaResponse"];
+                    };
+                };
+                /** @description Validation or domain error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/proformas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * Get a proforma by id
+         * @description Admin and Reception roles.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Proforma found */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProformaResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                404: components["responses"]["BusinessNotFound"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update a draft proforma
+         * @description Only draft proformas can be updated. Admin and Reception roles.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UpdateProforma"];
+                };
+            };
+            responses: {
+                /** @description Proforma updated */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProformaResponse"];
+                    };
+                };
+                /** @description PROFORMA_NOT_DRAFT or validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                404: components["responses"]["BusinessNotFound"];
+            };
+        };
+        trace?: never;
+    };
+    "/api/proformas/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change proforma status
+         * @description Explicit state machine: draft -> sent -> accepted|rejected. converted is reached exclusively through the convert-to-sale endpoint. Admin and Reception roles.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UpdateProformaStatus"];
+                };
+            };
+            responses: {
+                /** @description Status changed */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProformaResponse"];
+                    };
+                };
+                /** @description INVALID_STATUS_TRANSITION or validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                404: components["responses"]["BusinessNotFound"];
+            };
+        };
+        trace?: never;
+    };
+    "/api/proformas/{id}/convert-to-sale": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Convert an accepted proforma into a sale
+         * @description Atomic conversion: flips status accepted -> converted, reuses the sale creation core in one transaction (sequence number, FIFO stock walk) and links convertedSaleId. Rolls back on INSUFFICIENT_STOCK or guard races. Admin and Reception roles.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ConvertProforma"];
+                };
+            };
+            responses: {
+                /** @description Proforma converted (status converted, convertedSaleId set) */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProformaResponse"];
+                    };
+                };
+                /** @description PROFORMA_NOT_ACCEPTED or INSUFFICIENT_STOCK */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["BusinessNotFound"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/cash-closings": {
         parameters: {
             query?: never;
@@ -2666,6 +2958,87 @@ export interface components {
             updatedAt: string;
             /** Format: date-time */
             deletedAt?: string | null;
+        };
+        /** @enum {string} */
+        ProformaStatus: "draft" | "sent" | "accepted" | "rejected" | "converted";
+        CreateProforma: {
+            /** @description omitted for walk-in proformas */
+            clientId?: string | null;
+            branchId?: string | null;
+            employeeId?: string | null;
+            notes?: string;
+            productLines: {
+                productId: string;
+                quantity: number;
+            }[];
+        };
+        /** @description Only draft proformas may be updated. */
+        UpdateProforma: {
+            clientId?: string | null;
+            branchId?: string | null;
+            employeeId?: string | null;
+            notes?: string;
+            productLines?: {
+                productId: string;
+                quantity: number;
+            }[];
+        };
+        UpdateProformaStatus: {
+            status: components["schemas"]["ProformaStatus"];
+        };
+        ConvertProforma: {
+            paymentMethod: components["schemas"]["PaymentMethod"];
+        };
+        ProformaProductLineResponse: {
+            id: string;
+            productId: string;
+            quantity: number;
+            /** @description Catalog price copied at creation, decimal as string */
+            unitPriceSnapshot: string;
+            /** @description Decimal amount serialized as a string */
+            subtotal: string;
+            product: {
+                id: string;
+                code: string;
+                name: string;
+                description?: string | null;
+                /** @description Decimal amount serialized as a string */
+                price: string;
+            };
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ProformaResponse: {
+            /** @description cuid */
+            id: string;
+            /**
+             * @description Sequence PRO-YYYY-NNNNNN.
+             * @example PRO-2026-000001
+             */
+            proformaNumber: string;
+            clientId?: string | null;
+            branchId?: string | null;
+            employeeId?: string | null;
+            status: components["schemas"]["ProformaStatus"];
+            /**
+             * @description Decimal amount serialized as a string
+             * @example 120.00
+             */
+            totalAmount: string;
+            notes?: string | null;
+            /** @description Set when the proforma status is converted. */
+            convertedSaleId?: string | null;
+            isActive: boolean;
+            client?: components["schemas"]["NameRef"];
+            branch?: components["schemas"]["NameRef"];
+            employee?: components["schemas"]["NameRef"];
+            products: components["schemas"]["ProformaProductLineResponse"][];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         ClosingPreviewResponse: {
             /**
