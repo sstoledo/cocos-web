@@ -120,7 +120,7 @@ describe('RefundPage', () => {
       ).toBeInTheDocument();
     }
 
-    expect(screen.getByText('Cancelada')).toBeInTheDocument();
+    expect(screen.getAllByText('Cancelada').length).toBeGreaterThan(0);
     expect(lastSalesUrl(fetchMock).searchParams.get('status')).toBe(
       'cancelled'
     );
@@ -131,7 +131,7 @@ describe('RefundPage', () => {
 
     render(<RefundPage />, { wrapper: createWrapper(['/refunds']) });
 
-    expect(screen.getByText('Cargando ventas…')).toBeInTheDocument();
+    expect(screen.getByText('Cargando devoluciones…')).toBeInTheDocument();
 
     await waitFor(() =>
       expect(
@@ -151,6 +151,7 @@ describe('RefundPage', () => {
     await waitFor(() =>
       expect(screen.getByText('No se encontraron ventas.')).toBeInTheDocument()
     );
+    expect(screen.getByText('Sin resultados')).toBeInTheDocument();
   });
 
   it('S8: shows a Spanish error state when the request fails', async () => {
@@ -165,7 +166,7 @@ describe('RefundPage', () => {
 
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent(
-        'No se pudieron cargar las ventas'
+        'No se pudieron cargar las devoluciones'
       )
     );
   });
@@ -197,7 +198,7 @@ describe('RefundPage', () => {
     render(<RefundPage />, { wrapper: createWrapper(['/refunds']) });
 
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: /ver/i })).toHaveAttribute(
+      expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
         'href',
         '/sales/sale1'
       )

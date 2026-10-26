@@ -8,9 +8,21 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   transfer: 'Transferencia',
 };
 
-export function PaymentMethodBadge({ method }: { method: PaymentMethod }) {
+export function PaymentMethodBadge({
+  method,
+  variant = 'plain',
+}: {
+  method: PaymentMethod;
+  variant?: 'plain' | 'badge';
+}) {
   return (
-    <span className="text-muted-foreground">
+    <span
+      className={
+        variant === 'badge'
+          ? 'inline-flex rounded-full bg-muted px-2 py-1 text-caption text-foreground'
+          : 'text-muted-foreground'
+      }
+    >
       {PAYMENT_METHOD_LABELS[method]}
     </span>
   );

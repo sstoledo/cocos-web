@@ -30,24 +30,25 @@ export function RefundPage() {
   return (
     <>
       <PageHeader>
-        <PageTitle>{title}</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">{title}</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title={title}>
           <div className="space-y-4">
             {isLoading ? (
               <output className="block py-8 text-center text-muted-foreground">
-                Cargando ventas…
+                Cargando devoluciones…
               </output>
             ) : error ? (
               <div
                 className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
                 role="alert"
               >
-                No se pudieron cargar las ventas. Intentá de nuevo más tarde.
+                No se pudieron cargar las devoluciones. Intentá de nuevo más
+                tarde.
               </div>
             ) : (
-              <SalesTable sales={sales} />
+              <SalesTable sales={sales} mode="refunds" />
             )}
             {meta && meta.totalPages > 1 && (
               <Pagination meta={meta} onPageChange={handlePageChange} />
