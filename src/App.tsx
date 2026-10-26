@@ -27,6 +27,7 @@ import { PurchaseOrderDetailPage } from '@/features/purchase-orders/pages/Purcha
 import { PurchaseOrderFormPage } from '@/features/purchase-orders/pages/PurchaseOrderFormPage';
 import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
 import { PurchaseOrderReceivePage } from '@/features/purchase-orders/pages/PurchaseOrderReceivePage';
+import { receiptRoutes } from '@/features/receipts/routes';
 import { RefundPage } from '@/features/refunds/pages/RefundPage';
 import { CheckoutPage } from '@/features/sales/pages/CheckoutPage';
 import { SaleDetailPage } from '@/features/sales/pages/SaleDetailPage';
@@ -98,6 +99,7 @@ const routes: RouteObject[] = [
       guardedRoute('products/:id/stock', <ProductStockPage />),
       guardedRoute('lots', <LotListPage />),
       guardedRoute('lots/new', <LotFormPage />),
+      ...receiptRoutes,
       guardedRoute('clients', <ClientListPage />),
       guardedRoute('clients/:id', <ClientDetailPage />),
       guardedRoute('clients/new', <ClientFormPage />, ['Admin', 'Reception']),
