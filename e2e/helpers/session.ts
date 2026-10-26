@@ -1,4 +1,4 @@
-import { expect, type APIRequestContext, type Page } from '@playwright/test';
+import { type APIRequestContext, type Page, expect } from '@playwright/test';
 import { request } from 'playwright';
 
 export const E2E_PASSWORD = 'Passw0rd.e2e';
