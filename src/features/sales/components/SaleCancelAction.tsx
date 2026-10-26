@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { ApiError } from '@/lib/api-error';
+import { cn } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useCancelSale } from '../hooks/use-cancel-sale';
@@ -10,7 +11,13 @@ import type { Sale } from '../types';
 
 const CANCEL_ROLES = ['Admin', 'Reception'];
 
-export function SaleCancelAction({ sale }: { sale: Sale }) {
+export function SaleCancelAction({
+  sale,
+  className,
+}: {
+  sale: Sale;
+  className?: string;
+}) {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const cancel = useCancelSale();
@@ -45,13 +52,16 @@ export function SaleCancelAction({ sale }: { sale: Sale }) {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn('flex items-center gap-2', className)}>
       <Button
         type="button"
         variant="outline"
         disabled={cancel.isPending}
         onClick={() => setConfirmOpen(true)}
-        className="border-destructive/50 text-destructive hover:bg-destructive/10"
+        className={cn(
+          'border-destructive/50 text-destructive hover:bg-destructive/10',
+          className
+        )}
       >
         Cancelar venta
       </Button>
