@@ -1,37 +1,62 @@
-import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { type APIRequestContext, expect } from '@playwright/test';
-import { test } from '@playwright/test';
-import { ADMIN_EMAIL, apiSession, uiLogin } from '../helpers/session';
+import { expect, test } from '@playwright/test';
+import { hasConfiguredGeminiKey } from '../helpers/gemini';
+import { ADMIN_EMAIL, uiLogin } from '../helpers/session';
 
 // The live extraction+confirm path needs a real GEMINI_API_KEY in the
-// backend; CI has none, so that test is gated. The discard and stubbed
-// lot-confirmation flows run unconditionally. Presence-only inspection:
-// the key value itself is never read or printed.
-const backendEnvPath = path.resolve(__dirname, '../../../cocos-back/.env');
+// backend; CI has only the template placeholder, so that test is gated.
+// The discard and stubbed lot-confirmation flows run unconditionally.
 const fixturePath = path.resolve(
   __dirname,
   '../assets/receipt-fixture-single.png'
 );
-const hasGeminiKey =
-  fs.existsSync(backendEnvPath) &&
-  /^GEMINI_API_KEY=.+/m.test(fs.readFileSync(backendEnvPath, 'utf8'));
 
 test.describe
   .serial('Supplier receipt OCR flow', () => {
-    let adminApi: APIRequestContext;
-
-    test.beforeAll(async () => {
-      adminApi = await apiSession(ADMIN_EMAIL);
-    });
-
-    test.afterAll(async () => {
-      await adminApi?.dispose();
-    });
-
     test('discard a pending receipt without persisting inventory', async ({
       page,
     }) => {
+      const receipt = {
+        id: 'e2e-discard',
+        status: 'pending',
+        mimeType: 'image/png',
+        fileName: 'receipt-fixture-single.png',
+        filePublicId: 'receipts/e2e-discard',
+        fileUrl: 'https://example.test/receipt.png',
+        extracted: null,
+        ocrModel: null,
+        lotId: null,
+        lot: null,
+        purchaseOrderId: null,
+        purchaseOrder: null,
+        supplierId: null,
+        supplier: null,
+        confirmedAt: null,
+        createdAt: '2026-10-25T12:00:00.000Z',
+        updatedAt: '2026-10-25T12:00:00.000Z',
+      };
+      await page.route(
+        /\/api\/receipts(?:\/e2e-discard(?:\/discard)?)?$/,
+        async (route) => {
+          const request = route.request();
+          const pathname = new URL(request.url()).pathname;
+          if (pathname.endsWith('/discard')) {
+            await route.fulfill({
+              json: { ...receipt, status: 'discarded' },
+            });
+            return;
+          }
+          if (request.method() === 'GET' && pathname.endsWith('/receipts')) {
+            await route.fulfill({ json: [] });
+            return;
+          }
+          await route.fulfill({
+            status: request.method() === 'POST' ? 201 : 200,
+            json: receipt,
+          });
+        }
+      );
+
       await uiLogin(page, ADMIN_EMAIL);
       await page.goto('/receipts');
       await page.getByRole('button', { name: 'Cargar comprobante' }).click();
@@ -39,12 +64,7 @@ test.describe
       await page.locator('input[type="file"]').setInputFiles(fixturePath);
       await page.getByRole('button', { name: 'Cargar y procesar OCR' }).click();
 
-      // OCR runs synchronously inside the upload request; a slow provider
-      // can legitimately take up to the 60s backend OCR timeout.
-      await expect(page).toHaveURL(/\/receipts\/[A-Za-z0-9-]+$/, {
-        timeout: 90_000,
-      });
-
+      await expect(page).toHaveURL(/\/receipts\/e2e-discard$/);
       await page.getByRole('button', { name: 'Descartar comprobante' }).click();
       await page
         .getByRole('button', { name: 'Descartar', exact: true })
@@ -179,7 +199,10 @@ test.describe
     });
 
     test('extracts receipt data and confirms it as a lot', async ({ page }) => {
-      test.skip(!hasGeminiKey, 'GEMINI_API_KEY not configured in backend');
+      test.skip(
+        !hasConfiguredGeminiKey,
+        'GEMINI_API_KEY not configured in backend'
+      );
 
       await uiLogin(page, ADMIN_EMAIL);
       await page.goto('/receipts');
