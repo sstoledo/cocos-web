@@ -21,7 +21,7 @@ export function Drawer({
       <Dialog.Portal>
         <Dialog.Backdrop
           data-testid="drawer-backdrop"
-          className="fixed inset-0 z-40 bg-black/50"
+          className="fixed inset-0 z-40 bg-scrim"
         />
         <Dialog.Viewport className="fixed inset-0 z-40 flex">
           <Dialog.Popup
