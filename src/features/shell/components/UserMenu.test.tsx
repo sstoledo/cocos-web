@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
+import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UserMenu } from './UserMenu';
 
@@ -14,7 +15,9 @@ const testQueryClient = new QueryClient({
 
 function renderWithQueryClient(ui: React.ReactNode) {
   return render(
-    <QueryClientProvider client={testQueryClient}>{ui}</QueryClientProvider>
+    <QueryClientProvider client={testQueryClient}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </QueryClientProvider>
   );
 }
 
@@ -91,5 +94,45 @@ describe('UserMenu', () => {
     expect(
       screen.getByRole('button', { name: /cerrar sesión/i })
     ).toBeInTheDocument();
+  });
+
+  it('opens the profile dropdown with profile and logout actions', async () => {
+    const user = userEvent.setup();
+    renderWithQueryClient(
+      <UserMenu name="Juan Pérez" email="juan@example.com" dropdown />
+    );
+
+    expect(
+      screen.queryByRole('menuitem', { name: 'Perfil' })
+    ).not.toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole('button', { name: 'Abrir menú de perfil' })
+    );
+
+    expect(screen.getByText('Juan Pérez')).toBeInTheDocument();
+    expect(screen.getByText('juan@example.com')).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Perfil' })).toHaveAttribute(
+      'href',
+      '/profile'
+    );
+    expect(
+      screen.getByRole('menuitem', { name: 'Cerrar sesión' })
+    ).toBeInTheDocument();
+  });
+
+  it('logs out from the profile dropdown', async () => {
+    const user = userEvent.setup();
+    renderWithQueryClient(
+      <UserMenu name="Juan Pérez" email="juan@example.com" dropdown />
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: 'Abrir menú de perfil' })
+    );
+    await user.click(screen.getByRole('menuitem', { name: 'Cerrar sesión' }));
+
+    await waitFor(() => expect(signOutMock).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(navigateMock).toHaveBeenCalledWith('/login'));
   });
 });
