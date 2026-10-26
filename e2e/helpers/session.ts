@@ -1,10 +1,11 @@
-import { expect, type APIRequestContext, type Page } from '@playwright/test';
+import { type APIRequestContext, type Page, expect } from '@playwright/test';
 import { request } from 'playwright';
 
 export const E2E_PASSWORD = 'Passw0rd.e2e';
 
 export const RECEPTION_EMAIL = 'reception-e2e@example.com';
 export const MECHANIC_EMAIL = 'mechanic-e2e@example.com';
+export const ADMIN_EMAIL = 'admin-e2e@example.com';
 export const MECHANIC_EMPLOYEE_NAME = 'María González';
 
 const API_SERVER_BASE = 'http://localhost:4000';

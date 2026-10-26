@@ -2521,6 +2521,336 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/receipts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List supplier receipt documents
+         * @description Returns up to 50 newest receipts, optionally filtered by status.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    status?: "pending" | "confirmed" | "discarded";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Receipt documents */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"][];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+            };
+        };
+        put?: never;
+        /**
+         * Upload a supplier receipt for OCR
+         * @description Uploads a PDF or image and attempts non-fatal Gemini OCR extraction.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "multipart/form-data": {
+                        /**
+                         * Format: binary
+                         * @description PDF, JPEG, PNG or WEBP supplier receipt, max 10 MB
+                         */
+                        file: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Receipt stored; extraction may be null when OCR is unavailable */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                413: components["responses"]["PayloadTooLarge"];
+                415: components["responses"]["UnsupportedMediaType"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a supplier receipt document */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Receipt document */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["BusinessNotFound"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/confirm-lot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm a receipt as a standalone inventory lot
+         * @description Reuses the transactional lot creation flow and links the created lot.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ConfirmLotRequest"];
+                };
+            };
+            responses: {
+                /** @description Lot created and receipt confirmed */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            lot?: Record<string, never>;
+                            receipt?: components["schemas"]["ReceiptResponse"];
+                        };
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["BusinessNotFound"];
+                409: components["responses"]["Conflict"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/confirm-purchase-order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm a receipt against a purchase order
+         * @description Reuses purchase-order receiving and links the created lot.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ConfirmPurchaseOrderRequest"];
+                };
+            };
+            responses: {
+                /** @description Purchase order received and receipt confirmed */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            purchaseOrder?: Record<string, never>;
+                            receipt?: components["schemas"]["ReceiptResponse"];
+                        };
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["BusinessNotFound"];
+                409: components["responses"]["Conflict"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/ocr": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retry OCR for a pending receipt */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OCR extraction refreshed */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["BusinessNotFound"];
+                409: components["responses"]["Conflict"];
+                /** @description Stored file fetch or OCR extraction failed */
+                502: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+                /** @description OCR is not configured (OCR_NOT_CONFIGURED) */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BusinessErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Discard a pending receipt */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Receipt discarded */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReceiptResponse"];
+                    };
+                };
+                401: components["responses"]["Unauthorized"];
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["BusinessNotFound"];
+                409: components["responses"]["Conflict"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2607,6 +2937,79 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+        };
+        ReceiptResponse: {
+            id?: string;
+            /** @enum {string} */
+            status?: "pending" | "confirmed" | "discarded";
+            /** @enum {string} */
+            mimeType?: "application/pdf" | "image/jpeg" | "image/png" | "image/webp";
+            fileName?: string;
+            filePublicId?: string;
+            /** Format: uri */
+            fileUrl?: string;
+            extracted?: {
+                supplierName?: string | null;
+                documentNumber?: string | null;
+                /** Format: date */
+                issueDate?: string | null;
+                items?: {
+                    description?: string;
+                    code?: string | null;
+                    quantity?: number;
+                    unitPrice?: number;
+                }[];
+            } | null;
+            ocrModel?: string | null;
+            /** @description Raw Gemini response retained for audit and reprocessing */
+            ocrPayload?: Record<string, never> | null;
+            lotId?: string | null;
+            lot?: {
+                id?: string;
+                lotNumber?: string;
+            } | null;
+            purchaseOrderId?: string | null;
+            purchaseOrder?: {
+                id?: string;
+                purchaseOrderNumber?: string;
+            } | null;
+            supplierId?: string | null;
+            supplier?: {
+                id?: string;
+                name?: string;
+            } | null;
+            /** Format: date-time */
+            confirmedAt?: string | null;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        ConfirmLotRequest: {
+            /** @description Defaults to REC-{receiptId} when omitted */
+            lotNumber?: string;
+            supplierId: string;
+            notes?: string;
+            items: components["schemas"]["ConfirmLotItem"][];
+        };
+        ConfirmLotItem: {
+            productId: string;
+            quantity: number;
+            costPrice: number;
+            /** Format: date */
+            expirationDate: string;
+        };
+        ConfirmPurchaseOrderRequest: {
+            purchaseOrderId: string;
+            lines: components["schemas"]["ConfirmPurchaseOrderLine"][];
+        };
+        ConfirmPurchaseOrderLine: {
+            lineId: string;
+            receivedQty: number;
+            /** Format: date */
+            expirationDate: string;
+            /** @example 10.25 */
+            actualCostPrice: string;
         };
         ReindexEmbeddingsResponse: {
             /** @description Number of rows backfilled successfully */
@@ -3210,7 +3613,7 @@ export interface components {
         /** @description Custom business error envelope raised by domain services. */
         BusinessErrorResponse: {
             message?: string;
-            /** @description Known values include CONTRACT-flagged INVALID_STATUS_TRANSITION (409), WORK_ORDER_OVERPAYMENT (400), WORK_ORDER_CANCELLED (409), WORK_ORDER_CLOSED (409), WORK_ORDER_NOT_FOUND (404), CLIENT_NOT_FOUND (404), VEHICLE_NOT_FOUND (404), VEHICLE_CLIENT_MISMATCH (400), SERVICE_NOT_FOUND (404), EMPLOYEE_NOT_FOUND (404), PRODUCT_NOT_FOUND (404), CONSUMPTION_TYPE_NOT_ALLOWED (400), CONSUMPTION_QUANTITY_REQUIRED (400), INSUFFICIENT_STOCK (400), NO_OPEN_CONTAINER (400), CLOSING_NO_ACTIVITY (400), CLOSING_CONFLICT (409), EMBEDDINGS_NOT_CONFIGURED (503). */
+            /** @description Known values include CONTRACT-flagged INVALID_STATUS_TRANSITION (409), WORK_ORDER_OVERPAYMENT (400), WORK_ORDER_CANCELLED (409), WORK_ORDER_CLOSED (409), WORK_ORDER_NOT_FOUND (404), CLIENT_NOT_FOUND (404), VEHICLE_NOT_FOUND (404), VEHICLE_CLIENT_MISMATCH (400), SERVICE_NOT_FOUND (404), EMPLOYEE_NOT_FOUND (404), PRODUCT_NOT_FOUND (404), CONSUMPTION_TYPE_NOT_ALLOWED (400), CONSUMPTION_QUANTITY_REQUIRED (400), INSUFFICIENT_STOCK (400), NO_OPEN_CONTAINER (400), CLOSING_NO_ACTIVITY (400), CLOSING_CONFLICT (409), EMBEDDINGS_NOT_CONFIGURED (503), RECEIPT_NOT_FOUND (404), RECEIPT_NOT_PENDING (409), RECEIPT_ALREADY_CONFIRMED (409), RECEIPT_OCR_REQUIRED (409), RECEIPT_FILE_FETCH_FAILED (502), OCR_EXTRACTION_FAILED (502), OCR_NOT_CONFIGURED (503). */
             errorCode?: string;
         };
     };

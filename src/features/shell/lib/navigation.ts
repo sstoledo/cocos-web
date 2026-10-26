@@ -53,6 +53,12 @@ export const navigationGroups: NavGroup[] = [
         allowedRoles: ['Admin', 'Warehouse', 'Purchasing'],
       },
       {
+        label: 'Comprobantes OCR',
+        path: '/receipts',
+        icon: IconFileInvoice,
+        allowedRoles: ['Admin', 'Warehouse', 'Purchasing'],
+      },
+      {
         label: 'Marcas',
         path: '/brands',
         icon: IconTag,
