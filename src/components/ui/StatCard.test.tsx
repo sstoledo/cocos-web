@@ -38,6 +38,39 @@ describe('StatCard', () => {
     expect(screen.getByText('Nuevos este mes')).toBeInTheDocument();
   });
 
+  it('renders the approved icon, typography and navigation treatment', () => {
+    render(
+      <StatCard label="Ventas" value={123} icon={DollarIcon} showNavigation />
+    );
+
+    const icon = screen.getByTestId('stat-icon');
+    expect(icon).toHaveClass('text-primary');
+    expect(icon.parentElement).toHaveClass('h-9', 'w-9', 'bg-muted');
+    expect(screen.getByText('Ventas')).toHaveClass(
+      'text-body-sm',
+      'text-muted-foreground'
+    );
+    expect(screen.getByText('123')).toHaveClass(
+      'font-display',
+      'text-h1',
+      'font-semibold'
+    );
+    expect(screen.getByTestId('stat-card-navigation')).toBeInTheDocument();
+  });
+
+  it('uses the bordered elevated card treatment', () => {
+    const { container } = render(<StatCard label="Ventas" value={123} />);
+
+    expect(container.firstElementChild).toHaveClass(
+      'border',
+      'rounded-lg',
+      'shadow-stat'
+    );
+    expect(
+      screen.queryByTestId('stat-card-navigation')
+    ).not.toBeInTheDocument();
+  });
+
   it('applies a custom className', () => {
     const { container } = render(
       <StatCard label="Test" value={0} className="custom-stat-class" />

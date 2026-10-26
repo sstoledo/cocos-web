@@ -26,6 +26,7 @@ All color tokens are defined in **OKLCH** for perceptual uniformity. The `.op` d
 | `warning` | `oklch(0.666 0.157 58.32)` | `#D97706` |
 | `warning-foreground` | `oklch(1 0 0)` | `#FFFFFF` |
 | `scrim` | `oklch(0 0 0 / 50%)` | `#00000080` |
+| `shadow-color` | `oklch(0.11 0.006 265 / 8%)` | `#18181B14` |
 
 ### Dark Mode
 
@@ -47,6 +48,7 @@ All color tokens are defined in **OKLCH** for perceptual uniformity. The `.op` d
 | `warning` | `oklch(0.769 0.165 70.08)` |
 | `warning-foreground` | `oklch(0.279 0.074 45.64)` |
 | `scrim` | `oklch(0 0 0 / 60%)` |
+| `shadow-color` | `oklch(0 0 0 / 40%)` |
 
 ## Typography
 
@@ -107,6 +109,7 @@ All color tokens are defined in **OKLCH** for perceptual uniformity. The `.op` d
 | `shadow-md` | `0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)` |
 | `shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)` |
 | `shadow-card` | `0 4px 16px 0 rgba(0,0,0,0.08)` |
+| `shadow-stat` | `0 2px 8px var(--shadow-color)` |
 
 ## Notes
 

@@ -70,6 +70,26 @@ describe('DashboardPage', () => {
     expect(screen.getByText('7')).toBeInTheDocument();
   });
 
+  it('uses the approved responsive grid, card heights and title scale', () => {
+    useDashboardSummaryMock.mockReturnValue({
+      summary,
+      isLoading: false,
+      error: null,
+    });
+
+    renderPage();
+
+    const firstCard = screen.getByText('Ventas de hoy').closest('a');
+    const grid = firstCard?.parentElement;
+    expect(grid).toHaveClass('grid-cols-2', 'lg:grid-cols-3', 'lg:gap-4');
+    expect(firstCard).toHaveClass('h-40', 'xl:h-36');
+    expect(screen.getAllByTestId('stat-card-navigation')).toHaveLength(6);
+    expect(screen.getByRole('heading', { name: 'Dashboard' })).toHaveClass(
+      'text-h3',
+      'lg:text-h2'
+    );
+  });
+
   it('sums ordered and partially received for the OC por recibir card', () => {
     useDashboardSummaryMock.mockReturnValue({
       summary,

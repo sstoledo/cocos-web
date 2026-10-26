@@ -65,8 +65,7 @@ const statDefinitions: StatCardDefinition[] = [
   },
 ];
 
-const statsGridClassName =
-  'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3';
+const statsGridClassName = 'grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4';
 
 export function DashboardPage() {
   const { summary, isLoading, error } = useDashboardSummary();
@@ -74,13 +73,18 @@ export function DashboardPage() {
   const statsGrid = (
     <div className={statsGridClassName}>
       {statDefinitions.map(({ label, to, icon, getValue }) => (
-        <Link key={label} to={to} className="block">
+        <Link
+          key={label}
+          to={to}
+          className="block h-40 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring xl:h-36"
+        >
           <StatCard
             label={label}
             value={summary ? getValue(summary) : undefined}
             icon={icon}
+            showNavigation
             className={cn(
-              'h-full transition-colors hover:bg-muted/50',
+              'h-full w-full transition-colors hover:bg-muted/50',
               isLoading && 'animate-pulse'
             )}
           />
@@ -92,7 +96,7 @@ export function DashboardPage() {
   return (
     <PageContent>
       <PageHeader>
-        <PageTitle>Dashboard</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Dashboard</PageTitle>
       </PageHeader>
 
       {error != null ? (
