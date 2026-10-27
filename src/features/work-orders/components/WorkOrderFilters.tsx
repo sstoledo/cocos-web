@@ -12,7 +12,7 @@ export function WorkOrderFilters({ filters, onChange }: WorkOrderFiltersProps) {
       <div className="flex-1">
         <Input
           type="search"
-          placeholder="Buscar por número de orden..."
+          placeholder="Buscar por N° de orden, cliente o vehículo"
           value={filters.query ?? ''}
           onChange={(event) =>
             onChange({ ...filters, query: event.target.value || undefined })

@@ -93,7 +93,9 @@ describe('WorkOrderListPage', () => {
 
     render(<WorkOrderListPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText('Cargando órdenes…')).toBeInTheDocument();
+    expect(
+      screen.getByText('Cargando órdenes de trabajo…')
+    ).toBeInTheDocument();
 
     await waitFor(() =>
       expect(screen.getByRole('cell', { name: 'OT-0001' })).toBeInTheDocument()
@@ -159,6 +161,9 @@ describe('WorkOrderListPage', () => {
         screen.getByRole('link', { name: 'Nueva orden de trabajo' })
       ).toHaveAttribute('href', '/work-orders/new')
     );
+    expect(
+      screen.getByRole('link', { name: 'Nueva orden de trabajo' })
+    ).toHaveClass('w-full', 'sm:w-auto');
   });
 
   it('shows the create link for Reception users', async () => {
@@ -219,7 +224,9 @@ describe('WorkOrderListPage', () => {
     render(<WorkOrderListPage />, { wrapper: createWrapper() });
 
     await waitFor(() =>
-      expect(screen.queryByText('Cargando órdenes…')).not.toBeInTheDocument()
+      expect(
+        screen.queryByText('Cargando órdenes de trabajo…')
+      ).not.toBeInTheDocument()
     );
 
     await testUser.type(screen.getByRole('searchbox'), 'OT-0001');

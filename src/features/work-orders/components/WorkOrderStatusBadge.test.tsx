@@ -12,10 +12,10 @@ const cases: Array<{
   label: string;
   colorClass: string;
 }> = [
-  { status: 'pending', label: 'Pendiente', colorClass: 'bg-amber-100' },
-  { status: 'in_progress', label: 'En progreso', colorClass: 'bg-blue-100' },
-  { status: 'done', label: 'Finalizada', colorClass: 'bg-green-100' },
-  { status: 'cancelled', label: 'Cancelada', colorClass: 'bg-red-100' },
+  { status: 'pending', label: 'Pendiente', colorClass: 'bg-warning' },
+  { status: 'in_progress', label: 'En progreso', colorClass: 'bg-primary' },
+  { status: 'done', label: 'Finalizada', colorClass: 'bg-success' },
+  { status: 'cancelled', label: 'Cancelada', colorClass: 'bg-destructive' },
 ];
 
 describe('WorkOrderStatusBadge', () => {
