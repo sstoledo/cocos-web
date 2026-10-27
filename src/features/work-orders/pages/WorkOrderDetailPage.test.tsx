@@ -118,6 +118,39 @@ describe('WorkOrderDetailPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('uses the approved responsive detail anatomy and cancellation note', async () => {
+    mockFetch(workOrder);
+
+    renderPage();
+
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('work-order-service-mobile-card')
+      ).toBeInTheDocument()
+    );
+    expect(
+      screen.getByRole('link', { name: 'Volver a órdenes de trabajo' })
+    ).toHaveAttribute('href', '/work-orders');
+    expect(screen.getByText('Información de la orden')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('work-order-service-mobile-card')
+    ).toHaveTextContent('SRV-01');
+    expect(screen.getByTestId('work-order-total-value')).toHaveTextContent(
+      '30500.50'
+    );
+    expect(screen.getByTestId('work-order-remaining-value')).toHaveTextContent(
+      '30500.50'
+    );
+    expect(screen.getByTestId('work-order-secondary-sections')).toHaveClass(
+      'xl:grid-cols-2'
+    );
+    expect(
+      screen.getByText(
+        'Cancelar la orden requiere confirmación y no se puede deshacer.'
+      )
+    ).toBeInTheDocument();
+  });
+
   it('renders the service line table with string decimals verbatim', async () => {
     mockFetch(workOrder);
 
@@ -131,7 +164,12 @@ describe('WorkOrderDetailPage', () => {
 
     expect(screen.getByRole('cell', { name: '5000.00' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '10000.00' })).toBeInTheDocument();
-    expect(screen.getByText('Total: 30500.50')).toBeInTheDocument();
+    expect(screen.getByTestId('work-order-total-value')).toHaveTextContent(
+      '30500.50'
+    );
+    expect(
+      screen.getByTestId('work-order-total-value').parentElement
+    ).toHaveTextContent('Total: 30500.50');
   });
 
   it('shows placeholders when optional fields are null', async () => {
@@ -393,7 +431,7 @@ describe('WorkOrderDetailPage payments section', () => {
       buildWorkOrder({ paidAmount: '100.00', paymentStatus: 'partial' })
     );
 
-    expect(await screen.findByText('Parcial')).toBeInTheDocument();
+    expect((await screen.findAllByText('Parcial')).length).toBeGreaterThan(0);
     expect(
       screen.getByText(/Pagado 100\.00 de 300\.00 · Saldo 200\.00/)
     ).toBeInTheDocument();
@@ -411,7 +449,7 @@ describe('WorkOrderDetailPage payments section', () => {
       buildWorkOrder({ status: 'in_progress' })
     );
 
-    expect(await screen.findByText('Pendiente')).toBeInTheDocument();
+    expect((await screen.findAllByText('Pendiente')).length).toBeGreaterThan(0);
     expect(
       await screen.findByRole('cell', { name: 'Seña' })
     ).toBeInTheDocument();

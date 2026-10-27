@@ -216,7 +216,7 @@ export function WorkOrderPaymentsSection({
             </Button>
             <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
               <Dialog.Portal>
-                <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50" />
+                <Dialog.Backdrop className="fixed inset-0 z-50 bg-scrim" />
                 <Dialog.Viewport className="fixed inset-0 z-50 flex items-center justify-center p-4">
                   <Dialog.Popup className="w-full max-w-md rounded-lg bg-card p-6 shadow-lg outline-none">
                     <Dialog.Title className="text-lg font-semibold">
