@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import type { PurchaseOrderStatus } from '../types';
 
 export const PURCHASE_ORDER_STATUS_LABELS: Record<PurchaseOrderStatus, string> =
@@ -11,11 +10,11 @@ export const PURCHASE_ORDER_STATUS_LABELS: Record<PurchaseOrderStatus, string> =
   };
 
 const PURCHASE_ORDER_STATUS_STYLES: Record<PurchaseOrderStatus, string> = {
-  draft: 'bg-gray-100 text-gray-800 border-gray-200',
-  ordered: 'bg-blue-100 text-blue-800 border-blue-200',
-  partially_received: 'bg-amber-100 text-amber-800 border-amber-200',
-  received: 'bg-green-100 text-green-800 border-green-200',
-  cancelled: 'bg-red-100 text-red-800 border-red-200',
+  draft: 'bg-muted text-muted-foreground',
+  ordered: 'bg-primary text-primary-foreground',
+  partially_received: 'bg-warning text-warning-foreground',
+  received: 'bg-success text-success-foreground',
+  cancelled: 'bg-destructive text-destructive-foreground',
 };
 
 export function PurchaseOrderStatusBadge({
@@ -25,10 +24,7 @@ export function PurchaseOrderStatusBadge({
 }) {
   return (
     <span
-      className={cn(
-        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
-        PURCHASE_ORDER_STATUS_STYLES[status]
-      )}
+      className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${PURCHASE_ORDER_STATUS_STYLES[status]}`}
     >
       {PURCHASE_ORDER_STATUS_LABELS[status]}
     </span>

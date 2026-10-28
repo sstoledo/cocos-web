@@ -267,7 +267,7 @@ describe('PurchaseOrderListPage', () => {
     render(<PurchaseOrderListPage />, { wrapper: createWrapper() });
 
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: /ver/i })).toHaveAttribute(
+      expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
         'href',
         '/purchase-orders/po1'
       )
