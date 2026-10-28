@@ -41,8 +41,8 @@ function renderTable(
 describe('PresentationTable', () => {
   it('renders presentations in table', () => {
     renderTable({ presentations: mockPresentations });
-    expect(screen.getByText('Presentación 1')).toBeInTheDocument();
-    expect(screen.getByText('Presentación 2')).toBeInTheDocument();
+    expect(screen.getAllByText('Presentación 1').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Presentación 2').length).toBeGreaterThan(0);
   });
 
   it('shows empty state when no presentations', () => {
@@ -52,10 +52,18 @@ describe('PresentationTable', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders the approved mobile presentation card', () => {
+    renderTable({ presentations: [mockPresentations[0]], canEdit: true });
+
+    expect(screen.getByTestId('presentation-mobile-card')).toHaveTextContent(
+      'Presentación 1'
+    );
+  });
+
   it('shows edit and delete buttons when canEdit is true', () => {
     renderTable({ presentations: mockPresentations, canEdit: true });
-    expect(screen.getAllByRole('link', { name: /Editar/ })).toHaveLength(2);
-    expect(screen.getAllByRole('button', { name: /Eliminar/ })).toHaveLength(2);
+    expect(screen.getAllByRole('link', { name: /Editar/ })).toHaveLength(4);
+    expect(screen.getAllByRole('button', { name: /Eliminar/ })).toHaveLength(4);
   });
 
   it('hides edit and delete buttons when canEdit is false', () => {

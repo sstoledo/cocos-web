@@ -146,6 +146,9 @@ describe('CategoryDetailPage', () => {
         screen.getByRole('heading', { name: 'Filtros' })
       ).toBeInTheDocument()
     );
+    expect(
+      screen.getByRole('link', { name: 'Volver a categorías' })
+    ).toHaveAttribute('href', '/categories');
   });
 
   it('shows subcategories and their products', async () => {

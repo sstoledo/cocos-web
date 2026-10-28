@@ -6,6 +6,7 @@ import { useCategories } from '@/features/categories/hooks/use-categories';
 import type { Category } from '@/features/categories/types';
 import { useProducts } from '@/features/products/hooks/use-products';
 import type { Product } from '@/features/products/types';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { useCategory } from '../hooks/use-category';
 
@@ -60,8 +61,15 @@ export function CategoryDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>{category.name}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/categories"
+          aria-label="Volver a categorías"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">{category.name}</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Información de la categoría">

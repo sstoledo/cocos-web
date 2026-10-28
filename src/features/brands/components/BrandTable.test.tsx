@@ -37,8 +37,8 @@ function renderTable(
 describe('BrandTable', () => {
   it('renders brands in table', () => {
     renderTable({ brands: mockBrands });
-    expect(screen.getByText('Marca 1')).toBeInTheDocument();
-    expect(screen.getByText('Marca 2')).toBeInTheDocument();
+    expect(screen.getAllByText('Marca 1').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Marca 2').length).toBeGreaterThan(0);
   });
 
   it('shows empty state when no brands', () => {
@@ -46,10 +46,22 @@ describe('BrandTable', () => {
     expect(screen.getByText('No se encontraron marcas.')).toBeInTheDocument();
   });
 
+  it('renders the approved mobile brand card', () => {
+    renderTable({ brands: [mockBrands[0]], canEdit: true });
+
+    expect(screen.getByTestId('brand-mobile-card')).toHaveTextContent(
+      'Marca 1'
+    );
+    expect(screen.getAllByRole('link', { name: 'Ver' })[0]).toHaveAttribute(
+      'href',
+      '/brands/b1'
+    );
+  });
+
   it('shows edit and delete buttons when canEdit is true', () => {
     renderTable({ brands: mockBrands, canEdit: true });
-    expect(screen.getAllByRole('link', { name: /Editar/ })).toHaveLength(2);
-    expect(screen.getAllByRole('button', { name: /Eliminar/ })).toHaveLength(2);
+    expect(screen.getAllByRole('link', { name: /Editar/ })).toHaveLength(4);
+    expect(screen.getAllByRole('button', { name: /Eliminar/ })).toHaveLength(4);
   });
 
   it('hides edit and delete buttons when canEdit is false', () => {

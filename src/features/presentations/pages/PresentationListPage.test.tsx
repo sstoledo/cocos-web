@@ -67,10 +67,10 @@ describe('PresentationListPage', () => {
     render(<PresentationListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Presentación 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Presentación 1')[0]).toBeInTheDocument()
     );
 
-    await user.click(screen.getByLabelText('Eliminar Presentación 1'));
+    await user.click(screen.getAllByLabelText('Eliminar Presentación 1')[0]);
 
     expect(screen.getByText('Eliminar presentación')).toBeInTheDocument();
     expect(
@@ -102,10 +102,10 @@ describe('PresentationListPage', () => {
     render(<PresentationListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Presentación 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Presentación 1')[0]).toBeInTheDocument()
     );
 
-    await user.click(screen.getByLabelText('Eliminar Presentación 1'));
+    await user.click(screen.getAllByLabelText('Eliminar Presentación 1')[0]);
     await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     await waitFor(() =>
