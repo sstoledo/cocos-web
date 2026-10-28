@@ -21,6 +21,11 @@ All color tokens are defined in **OKLCH** for perceptual uniformity. The `.op` d
 | `input` | `oklch(0.875 0.006 75)` | `#E4E4E7` |
 | `placeholder` | `oklch(0.64 0.013 265)` | `#A1A1AA` |
 | `ring` | `oklch(0.55 0.22 258)` | `#2563EB` |
+| `success` | `oklch(0.627 0.17 149.21)` | `#16A34A` |
+| `success-foreground` | `oklch(1 0 0)` | `#FFFFFF` |
+| `warning` | `oklch(0.666 0.157 58.32)` | `#D97706` |
+| `warning-foreground` | `oklch(1 0 0)` | `#FFFFFF` |
+| `scrim` | `oklch(0 0 0 / 50%)` | `#00000080` |
 
 ### Dark Mode
 
@@ -37,6 +42,11 @@ All color tokens are defined in **OKLCH** for perceptual uniformity. The `.op` d
 | `input` | `oklch(1 0 0 / 10%)` |
 | `placeholder` | `oklch(0.64 0.014 265)` |
 | `ring` | `oklch(0.68 0.20 264)` |
+| `success` | `oklch(0.723 0.192 149.58)` |
+| `success-foreground` | `oklch(0.266 0.063 152.93)` |
+| `warning` | `oklch(0.769 0.165 70.08)` |
+| `warning-foreground` | `oklch(0.279 0.074 45.64)` |
+| `scrim` | `oklch(0 0 0 / 60%)` |
 
 ## Typography
 
