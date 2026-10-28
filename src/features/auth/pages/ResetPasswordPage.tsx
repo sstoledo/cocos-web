@@ -44,7 +44,7 @@ export function ResetPasswordPage() {
       <div className="space-y-4">
         <Logo />
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold">Reset password</h1>
+          <h1 className="text-h2">Reset password</h1>
           <p className="text-sm text-muted-foreground">
             Enter your email to receive a reset link
           </p>

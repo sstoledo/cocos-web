@@ -11,7 +11,7 @@ export function UnauthorizedPage() {
   return (
     <>
       <PageHeader>
-        <PageTitle>Acceso denegado</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Acceso denegado</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Acceso denegado">
@@ -19,7 +19,10 @@ export function UnauthorizedPage() {
             <p className="text-muted-foreground">
               No tenés permisos para ver esta sección.
             </p>
-            <Button onClick={() => navigate('/dashboard')}>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => navigate('/dashboard')}
+            >
               Volver al inicio
             </Button>
           </div>

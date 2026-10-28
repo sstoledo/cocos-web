@@ -7,7 +7,7 @@ export function NotFoundPage() {
   return (
     <>
       <PageHeader>
-        <PageTitle>404</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">404</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Página no encontrada">

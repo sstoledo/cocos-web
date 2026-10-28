@@ -94,10 +94,11 @@ export function NotificationListPage() {
   return (
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageTitle>Notificaciones</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Notificaciones</PageTitle>
         <Button
           type="button"
           variant="outline"
+          className="w-full sm:w-auto"
           onClick={handleMarkAllRead}
           disabled={unreadCount === 0 || markAllRead.isPending}
         >
@@ -123,8 +124,16 @@ export function NotificationListPage() {
               </div>
             )}
             {isLoading ? (
-              <output className="block py-8 text-center text-muted-foreground">
-                Cargando notificaciones…
+              <output className="block space-y-3" aria-busy="true">
+                <span className="block text-center text-muted-foreground">
+                  Cargando notificaciones…
+                </span>
+                {['first', 'second', 'third'].map((row) => (
+                  <span
+                    key={row}
+                    className="block h-11 animate-pulse rounded-md bg-muted"
+                  />
+                ))}
               </output>
             ) : error ? (
               <div
