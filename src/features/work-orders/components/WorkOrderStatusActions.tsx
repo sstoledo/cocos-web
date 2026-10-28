@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { ApiError } from '@/lib/api-error';
+import { cn } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTransitionWorkOrder } from '../hooks/use-transition-work-order-status';
@@ -17,11 +18,13 @@ const TRANSITION_ROLES = ['Admin', 'Reception', 'Mechanic'];
 interface WorkOrderStatusActionsProps {
   orderId: string;
   status: WorkOrderStatus;
+  className?: string;
 }
 
 export function WorkOrderStatusActions({
   orderId,
   status,
+  className,
 }: WorkOrderStatusActionsProps) {
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -78,7 +81,7 @@ export function WorkOrderStatusActions({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn('flex items-center gap-2', className)}>
       {targets.map((target) => {
         const meta = TRANSITION_BUTTONS[target];
         if (!meta) {
@@ -94,11 +97,11 @@ export function WorkOrderStatusActions({
             variant={meta.variant}
             disabled={transition.isPending}
             onClick={() => handleTransition(target)}
-            className={
-              target === 'cancelled'
-                ? 'border-destructive/50 text-destructive hover:bg-destructive/10'
-                : undefined
-            }
+            className={cn(
+              target === 'cancelled' &&
+                'border-destructive/50 text-destructive hover:bg-destructive/10',
+              className
+            )}
           >
             {isActive ? meta.loadingLabel : meta.label}
           </Button>
