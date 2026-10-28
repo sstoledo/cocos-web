@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { ApiError } from '@/lib/api-error';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { PurchaseOrderActions } from '../components/PurchaseOrderActions';
 import { PurchaseOrderStatusBadge } from '../components/PurchaseOrderStatusBadge';
@@ -100,10 +101,22 @@ export function PurchaseOrderDetailPage() {
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <PageTitle>Orden {purchaseOrder.purchaseOrderNumber}</PageTitle>
+          <Link
+            to="/purchase-orders"
+            aria-label="Volver a órdenes de compra"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <IconArrowLeft className="h-5 w-5" />
+          </Link>
+          <PageTitle className="text-h3 lg:text-h2">
+            Orden {purchaseOrder.purchaseOrderNumber}
+          </PageTitle>
           <PurchaseOrderStatusBadge status={purchaseOrder.status} />
         </div>
-        <PurchaseOrderActions purchaseOrder={purchaseOrder} />
+        <PurchaseOrderActions
+          purchaseOrder={purchaseOrder}
+          className="w-full flex-col sm:w-auto sm:flex-row"
+        />
       </PageHeader>
       <PageContent>
         <SectionCard title="Proveedor">
@@ -124,34 +137,90 @@ export function PurchaseOrderDetailPage() {
             </div>
           </dl>
         </SectionCard>
-        <SectionCard title="Líneas">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left text-muted-foreground">
-                  <th className="px-3 py-2 font-medium">Producto</th>
-                  <th className="px-3 py-2 font-medium">Cantidad pedida</th>
-                  <th className="px-3 py-2 font-medium">Cantidad recibida</th>
-                  <th className="px-3 py-2 font-medium">Costo estimado</th>
+        <SectionCard title="Líneas de la orden">
+          <div className="hidden overflow-x-auto md:block">
+            <table className="w-full text-caption">
+              <thead className="bg-muted">
+                <tr className="text-left font-semibold text-muted-foreground">
+                  <th className="px-3 py-2">Producto</th>
+                  <th className="px-3 py-2 text-right">Cantidad pedida</th>
+                  <th className="px-3 py-2 text-right">Cantidad recibida</th>
+                  <th className="px-3 py-2 text-right">Costo estimado</th>
                 </tr>
               </thead>
               <tbody>
                 {purchaseOrder.lines.map((line) => (
-                  <tr key={line.id} className="border-b border-border">
-                    <td className="px-3 py-2">{line.product.name}</td>
-                    <td className="px-3 py-2">{line.quantityOrdered}</td>
-                    <td className="px-3 py-2">{line.quantityReceived}</td>
+                  <tr
+                    key={line.id}
+                    className="h-12 border-b border-border last:border-0"
+                  >
+                    <td className="px-3">
+                      <p className="font-medium text-foreground">
+                        {line.product.name}
+                      </p>
+                      <p className="text-muted-foreground">
+                        {line.product.code}
+                      </p>
+                    </td>
+                    <td className="px-3 text-right font-mono">
+                      {line.quantityOrdered}
+                    </td>
+                    <td className="px-3 text-right font-mono">
+                      {line.quantityReceived}
+                    </td>
                     {/* Money renders verbatim as a decimal string (list
                         precedent) — no recomputation. */}
-                    <td className="px-3 py-2">{line.estimatedCostPrice}</td>
+                    <td className="px-3 text-right font-mono">
+                      {line.estimatedCostPrice}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-right text-lg font-semibold">
-            {`Total estimado: ${purchaseOrder.estimatedTotal}`}
-          </p>
+          <div className="space-y-3 md:hidden">
+            {purchaseOrder.lines.map((line) => (
+              <article
+                key={line.id}
+                data-testid="purchase-order-line-mobile-card"
+                className="space-y-2 rounded-lg border bg-card p-3 shadow-stat"
+              >
+                <div>
+                  <p className="font-medium text-foreground">
+                    {line.product.name}
+                  </p>
+                  <p className="text-caption text-muted-foreground">
+                    {line.product.code}
+                  </p>
+                </div>
+                <dl className="grid grid-cols-3 gap-2 text-caption">
+                  <div>
+                    <dt className="text-muted-foreground">Pedidas</dt>
+                    <dd className="font-mono">{line.quantityOrdered}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-muted-foreground">Recibidas</dt>
+                    <dd className="font-mono">{line.quantityReceived}</dd>
+                  </div>
+                  <div className="text-right">
+                    <dt className="text-muted-foreground">Costo estimado</dt>
+                    <dd className="font-mono">{line.estimatedCostPrice}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+          <div className="mt-4 flex items-center justify-between rounded-lg border bg-card p-3 shadow-stat">
+            <span className="text-body-sm font-semibold text-muted-foreground">
+              Total estimado:
+            </span>
+            <span
+              data-testid="purchase-order-total-value"
+              className="font-mono text-body font-semibold text-foreground"
+            >
+              {purchaseOrder.estimatedTotal}
+            </span>
+          </div>
         </SectionCard>
         <SectionCard title="Historial de recepciones">
           {/* Lot numbers render as text: no lot detail page exists to link

@@ -306,7 +306,7 @@ describe('PurchaseOrderReceivePage', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/COM-2024-000001-R1/)).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Volver a la orden' })
+      screen.getAllByRole('link', { name: 'Volver a la orden' })[0]
     ).toHaveAttribute('href', '/purchase-orders/po1');
   });
 
@@ -323,7 +323,7 @@ describe('PurchaseOrderReceivePage', () => {
         ).toBeInTheDocument()
       );
       expect(
-        screen.getByRole('link', { name: 'Volver a la orden' })
+        screen.getAllByRole('link', { name: 'Volver a la orden' })[0]
       ).toHaveAttribute('href', '/purchase-orders/po1');
       expect(
         screen.queryByRole('button', { name: 'Registrar recepción' })
