@@ -20,6 +20,17 @@ describe('PaymentMethodBadge', () => {
     expect(screen.getByText('Transferencia')).toBeInTheDocument();
   });
 
+  it('renders a neutral badge variant for the refunds list', () => {
+    render(<PaymentMethodBadge method="cash" variant="badge" />);
+
+    expect(screen.getByText('Efectivo')).toHaveClass(
+      'rounded-full',
+      'bg-muted',
+      'text-caption',
+      'text-foreground'
+    );
+  });
+
   it('exposes a label for every payment method', () => {
     expect(PAYMENT_METHOD_LABELS).toEqual({
       cash: 'Efectivo',

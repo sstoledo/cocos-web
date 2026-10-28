@@ -4,10 +4,13 @@ import { describe, expect, it } from 'vitest';
 import { buildSale } from '../test/fixtures';
 import { SalesTable } from './SalesTable';
 
-function renderTable(sales = [buildSale()]) {
+function renderTable(
+  sales = [buildSale()],
+  mode: 'sales' | 'refunds' = 'sales'
+) {
   return render(
     <MemoryRouter>
-      <SalesTable sales={sales} />
+      <SalesTable sales={sales} mode={mode} />
     </MemoryRouter>
   );
 }
@@ -43,13 +46,56 @@ describe('SalesTable', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'Efectivo' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '80.50' })).toBeInTheDocument();
-    expect(screen.getByText('Completada')).toBeInTheDocument();
+    expect(screen.getAllByText('Completada').length).toBeGreaterThan(0);
+  });
+
+  it('uses the sales column order and renders mobile sale cards', () => {
+    renderTable();
+
+    expect(
+      screen.getAllByRole('columnheader').map((header) => header.textContent)
+    ).toEqual([
+      'N° Venta',
+      'Fecha',
+      'Cliente',
+      'Método de pago',
+      'Estado',
+      'Total',
+      'Acciones',
+    ]);
+    expect(screen.getByTestId('sale-mobile-card')).toHaveTextContent(
+      'VTA-2026-000001'
+    );
+    expect(screen.getByTestId('sale-mobile-card')).toHaveTextContent('80.50');
+  });
+
+  it('uses refunds column order, neutral payment badges and mobile audit cards', () => {
+    renderTable([buildSale({ status: 'cancelled' })], 'refunds');
+
+    expect(
+      screen.getAllByRole('columnheader').map((header) => header.textContent)
+    ).toEqual([
+      'N° Venta',
+      'Fecha',
+      'Cliente',
+      'Método de pago',
+      'Total',
+      'Estado',
+      'Acciones',
+    ]);
+    expect(screen.getAllByText('Efectivo')[0]).toHaveClass('bg-muted');
+    expect(screen.getByTestId('refund-mobile-card')).toHaveTextContent(
+      'Cancelada'
+    );
+    expect(screen.getAllByRole('link', { name: 'Ver' }).length).toBeGreaterThan(
+      0
+    );
   });
 
   it('links each row to the sale detail', () => {
     renderTable();
 
-    const viewLink = screen.getByRole('link', { name: /ver/i });
+    const viewLink = screen.getAllByRole('link', { name: /ver/i })[0];
     expect(viewLink).toHaveAttribute('href', '/sales/sale1');
   });
 

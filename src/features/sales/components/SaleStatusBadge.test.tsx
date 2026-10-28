@@ -8,7 +8,9 @@ describe('SaleStatusBadge', () => {
 
     const badge = screen.getByText('Completada');
     expect(badge).toBeInTheDocument();
-    expect(badge.className).toContain('bg-green-100');
+    expect(badge.className).toContain('bg-success');
+    expect(badge.className).toContain('text-success-foreground');
+    expect(badge.className).toContain('text-caption');
   });
 
   it('renders Cancelada with a red style defensively', () => {
@@ -16,7 +18,8 @@ describe('SaleStatusBadge', () => {
 
     const badge = screen.getByText('Cancelada');
     expect(badge).toBeInTheDocument();
-    expect(badge.className).toContain('bg-red-100');
+    expect(badge.className).toContain('bg-destructive');
+    expect(badge.className).toContain('text-destructive-foreground');
   });
 
   it('exposes a label for every sale status', () => {
