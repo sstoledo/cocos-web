@@ -4,6 +4,7 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { ReceiptReviewForm } from '../components/ReceiptReviewForm';
@@ -53,13 +54,43 @@ export function ReceiptDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <div className="space-y-2">
-          <Link to="/receipts" className="text-sm text-primary hover:underline">
-            ← Volver a comprobantes
+      <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <Link
+            to="/receipts"
+            aria-label="Volver a comprobantes"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <IconArrowLeft className="h-5 w-5" />
           </Link>
-          <PageTitle>{receipt.fileName}</PageTitle>
+          <PageTitle className="text-h3 lg:text-h2">
+            {receipt.fileName}
+          </PageTitle>
         </div>
+        {receipt.status === 'pending' && (
+          <div
+            data-testid="receipt-detail-actions"
+            className="flex flex-col gap-2 sm:flex-row"
+          >
+            {!receipt.extracted && (
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={() => retryMutation.mutate(receipt.id)}
+                disabled={retryMutation.isPending}
+              >
+                {retryMutation.isPending ? 'Procesando OCR…' : 'Reintentar OCR'}
+              </Button>
+            )}
+            <Button
+              variant="danger"
+              className="w-full sm:w-auto"
+              onClick={() => setDiscardOpen(true)}
+            >
+              Descartar comprobante
+            </Button>
+          </div>
+        )}
       </PageHeader>
       <PageContent>
         <div className="space-y-6">
@@ -133,24 +164,6 @@ export function ReceiptDetailPage() {
             </div>
           </SectionCard>
 
-          {receipt.status === 'pending' && (
-            <div className="flex flex-wrap gap-3">
-              {!receipt.extracted && (
-                <Button
-                  variant="outline"
-                  onClick={() => retryMutation.mutate(receipt.id)}
-                  disabled={retryMutation.isPending}
-                >
-                  {retryMutation.isPending
-                    ? 'Procesando OCR…'
-                    : 'Reintentar OCR'}
-                </Button>
-              )}
-              <Button variant="danger" onClick={() => setDiscardOpen(true)}>
-                Descartar comprobante
-              </Button>
-            </div>
-          )}
           {actionError && (
             <div
               className="rounded-md border border-destructive/50 bg-destructive/10 p-4 text-destructive"
