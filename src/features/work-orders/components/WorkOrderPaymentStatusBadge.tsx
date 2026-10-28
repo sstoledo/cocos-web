@@ -1,16 +1,15 @@
-import { cn } from '@/lib/utils';
 import type { WorkOrderPaymentStatus } from '../types';
 
 export const PAYMENT_STATUS_STYLES: Record<WorkOrderPaymentStatus, string> = {
-  pending: 'bg-amber-100 text-amber-800 border-amber-200',
-  partial: 'bg-blue-100 text-blue-800 border-blue-200',
-  paid: 'bg-green-100 text-green-800 border-green-200',
+  pending: 'bg-muted text-muted-foreground',
+  partial: 'bg-warning text-warning-foreground',
+  paid: 'bg-success text-success-foreground',
 };
 
 export const PAYMENT_STATUS_LABELS: Record<WorkOrderPaymentStatus, string> = {
   pending: 'Pendiente',
   partial: 'Parcial',
-  paid: 'Pagado',
+  paid: 'Pagada',
 };
 
 export function WorkOrderPaymentStatusBadge({
@@ -20,10 +19,7 @@ export function WorkOrderPaymentStatusBadge({
 }) {
   return (
     <span
-      className={cn(
-        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
-        PAYMENT_STATUS_STYLES[status]
-      )}
+      className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${PAYMENT_STATUS_STYLES[status]}`}
     >
       {PAYMENT_STATUS_LABELS[status]}
     </span>

@@ -40,11 +40,10 @@ describe('WorkOrderTable', () => {
     expect(
       screen.getByRole('cell', { name: 'Juan Pérez' })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('cell', { name: 'ABC123 · Ford Fiesta' })
-    ).toBeInTheDocument();
-    // Two 'Pendiente' badges: order status + payment status.
-    expect(screen.getAllByText('Pendiente')).toHaveLength(2);
+    expect(screen.getAllByText('ABC123').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Ford Fiesta').length).toBeGreaterThan(0);
+    // Two desktop badges and two mobile-card badges.
+    expect(screen.getAllByText('Pendiente')).toHaveLength(4);
     expect(screen.getByRole('cell', { name: '15000.00' })).toBeInTheDocument();
     expect(
       screen.getByRole('cell', {
@@ -53,10 +52,25 @@ describe('WorkOrderTable', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders the approved mobile work-order card', () => {
+    renderTable();
+
+    const card = screen.getByTestId('work-order-mobile-card');
+    expect(card).toHaveTextContent('OT-0001');
+    expect(card).toHaveTextContent('Juan Pérez');
+    expect(card).toHaveTextContent('ABC123');
+    expect(card).toHaveTextContent('Ford Fiesta');
+    expect(card).toHaveTextContent('Cobro: Pendiente');
+    expect(card).toHaveTextContent('15000.00');
+    expect(
+      screen.getAllByRole('link', { name: /ver detalle/i })[0]
+    ).toHaveAttribute('href', '/work-orders/wo1');
+  });
+
   it('links each row to the work order detail', () => {
     renderTable();
 
-    expect(screen.getByRole('link', { name: /ver/i })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
       'href',
       '/work-orders/wo1'
     );
