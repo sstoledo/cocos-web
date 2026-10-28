@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { PurchaseOrder } from '../types';
@@ -8,78 +7,119 @@ export type PurchaseOrderTableProps = {
   purchaseOrders: PurchaseOrder[];
 };
 
+const HEADERS = [
+  'N° Orden',
+  'Fecha',
+  'Proveedor',
+  'Total estimado',
+  'Estado',
+  'Acciones',
+];
+
+function orderDate(purchaseOrder: PurchaseOrder): string {
+  return new Date(purchaseOrder.createdAt).toLocaleDateString('es-AR');
+}
+
 export function PurchaseOrderTable({
   purchaseOrders,
 }: PurchaseOrderTableProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full caption-bottom text-body-sm">
-        <thead className="border-b border-border">
-          <tr className="text-left">
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              N° Orden
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Fecha
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Proveedor
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Total estimado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Estado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Acciones
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {purchaseOrders.map((purchaseOrder) => (
-            <tr
-              key={purchaseOrder.id}
-              className="border-b border-border transition-colors hover:bg-muted/50"
-            >
-              <td className="p-4 font-medium text-foreground">
-                {purchaseOrder.purchaseOrderNumber}
-              </td>
-              <td className="p-4 text-muted-foreground">
-                {new Date(purchaseOrder.createdAt).toLocaleDateString('es-AR')}
-              </td>
-              <td className="p-4 text-muted-foreground">
-                {purchaseOrder.supplier.name}
-              </td>
-              {/* Money is a decimal string in major units; rendered verbatim
-                  like SalesTable does with totalAmount. */}
-              <td className="p-4 text-muted-foreground">
-                {purchaseOrder.estimatedTotal}
-              </td>
-              <td className="p-4">
-                <PurchaseOrderStatusBadge status={purchaseOrder.status} />
-              </td>
-              <td className="p-4">
-                <Link
-                  to={`/purchase-orders/${purchaseOrder.id}`}
-                  className={cn(
-                    'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-                    'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                  )}
+    <>
+      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
+        <table className="w-full caption-bottom text-body-sm">
+          <thead className="bg-muted">
+            <tr className="text-left">
+              {HEADERS.map((header) => (
+                <th
+                  key={header}
+                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
                 >
-                  <IconEye className="mr-1.5 h-3.5 w-3.5" />
-                  Ver
-                </Link>
-              </td>
+                  {header}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {purchaseOrders.map((purchaseOrder) => (
+              <tr
+                key={purchaseOrder.id}
+                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+              >
+                <td className="px-3 font-medium text-foreground">
+                  {purchaseOrder.purchaseOrderNumber}
+                </td>
+                <td className="px-3 text-muted-foreground">
+                  {orderDate(purchaseOrder)}
+                </td>
+                <td className="px-3 text-foreground">
+                  {purchaseOrder.supplier.name}
+                </td>
+                {/* Money is a decimal string in major units; rendered verbatim
+                    like SalesTable does with totalAmount. */}
+                <td className="px-3 text-right font-mono font-medium text-foreground">
+                  {purchaseOrder.estimatedTotal}
+                </td>
+                <td className="px-3">
+                  <PurchaseOrderStatusBadge status={purchaseOrder.status} />
+                </td>
+                <td className="px-3">
+                  <Link
+                    to={`/purchase-orders/${purchaseOrder.id}`}
+                    aria-label={`Ver orden ${purchaseOrder.purchaseOrderNumber}`}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <IconEye className="h-[18px] w-[18px]" />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {purchaseOrders.map((purchaseOrder) => (
+          <Link
+            key={purchaseOrder.id}
+            to={`/purchase-orders/${purchaseOrder.id}`}
+            aria-label={`Ver orden ${purchaseOrder.purchaseOrderNumber}`}
+            data-testid="purchase-order-mobile-card"
+            className="block space-y-2 rounded-lg border bg-card p-3 shadow-stat focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-caption font-semibold text-foreground">
+                {purchaseOrder.purchaseOrderNumber}
+              </span>
+              <div className="flex items-center gap-1">
+                <PurchaseOrderStatusBadge status={purchaseOrder.status} />
+                <IconEye className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-body-sm text-foreground">
+                {purchaseOrder.supplier.name}
+              </span>
+              <span className="text-caption text-muted-foreground">
+                {orderDate(purchaseOrder)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-caption text-muted-foreground">
+                Total estimado
+              </span>
+              <span className="font-mono text-body font-semibold text-foreground">
+                {purchaseOrder.estimatedTotal}
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+
       {purchaseOrders.length === 0 && (
         <p className="py-8 text-center text-muted-foreground">
           No se encontraron órdenes de compra.
         </p>
       )}
-    </div>
+    </>
   );
 }
