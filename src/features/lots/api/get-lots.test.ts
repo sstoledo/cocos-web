@@ -67,6 +67,20 @@ describe('getLots', () => {
     );
   });
 
+  it('fetches lots filtered by supplier', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockResponse,
+    });
+
+    await getLots({ supplierId: 'supplier-1', page: 2, limit: 5 });
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/lots?supplierId=supplier-1&page=2&limit=5',
+      { credentials: 'include' }
+    );
+  });
+
   it('throws on error response', async () => {
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,

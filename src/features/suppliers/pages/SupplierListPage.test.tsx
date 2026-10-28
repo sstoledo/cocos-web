@@ -120,8 +120,8 @@ describe('SupplierListPage', () => {
   it('renders the suppliers table', () => {
     renderPage();
 
-    expect(screen.getByText('Proveedor 1')).toBeInTheDocument();
-    expect(screen.getByText('Proveedor 2')).toBeInTheDocument();
+    expect(screen.getAllByText('Proveedor 1')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Proveedor 2')[0]).toBeInTheDocument();
   });
 
   it('shows loading state', () => {

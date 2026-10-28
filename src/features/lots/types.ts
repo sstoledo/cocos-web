@@ -28,6 +28,7 @@ export interface Lot {
 
 export interface LotListFilters {
   q?: string;
+  supplierId?: string;
   page?: number;
   limit?: number;
 }

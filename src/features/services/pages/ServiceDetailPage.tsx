@@ -3,7 +3,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
-import { useParams } from 'react-router';
+import { IconArrowLeft } from '@tabler/icons-react';
+import { Link, useParams } from 'react-router';
 import { ServiceProductsSection } from '../components/ServiceProductsSection';
 import { useService } from '../hooks/use-service';
 
@@ -67,8 +68,15 @@ export function ServiceDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>{service.name}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/services"
+          aria-label="Volver a servicios"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">{service.name}</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Información del servicio">
