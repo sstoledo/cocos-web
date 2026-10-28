@@ -31,7 +31,7 @@ export function NotificationList({
   }
 
   return (
-    <ul className="divide-y divide-border">
+    <ul className="space-y-3">
       {notifications.map((notification) => {
         const isUnread = notification.readAt === null;
 
@@ -39,9 +39,10 @@ export function NotificationList({
           <li key={notification.id}>
             <button
               type="button"
+              data-testid="notification-card"
               onClick={() => onNotificationClick(notification)}
               className={cn(
-                'flex w-full items-start gap-3 px-4 py-3 text-left transition-colors',
+                'flex w-full items-start gap-3 rounded-lg border bg-card p-3 text-left shadow-stat transition-colors',
                 'hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
               )}
             >
@@ -65,13 +66,13 @@ export function NotificationList({
                 </span>
                 <span
                   className={cn(
-                    'mt-1 block truncate text-sm text-foreground',
+                    'mt-1 block text-sm text-foreground',
                     isUnread ? 'font-semibold' : 'font-medium'
                   )}
                 >
                   {notification.title}
                 </span>
-                <span className="mt-0.5 block truncate text-sm text-muted-foreground">
+                <span className="mt-0.5 block text-sm text-muted-foreground">
                   {notification.body}
                 </span>
               </span>

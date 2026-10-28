@@ -47,7 +47,7 @@ export function LoginPage() {
       <div className="space-y-4">
         <Logo />
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold">Welcome back</h1>
+          <h1 className="text-h2">Welcome back</h1>
           <p className="text-sm text-muted-foreground">
             Sign in to your account
           </p>

@@ -48,7 +48,7 @@ export function RegisterPage() {
       <div className="space-y-4">
         <Logo />
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold">Create account</h1>
+          <h1 className="text-h2">Create account</h1>
           <p className="text-sm text-muted-foreground">
             Get started with Cocos
           </p>
