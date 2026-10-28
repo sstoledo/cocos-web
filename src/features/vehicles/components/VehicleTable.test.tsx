@@ -52,12 +52,28 @@ describe('VehicleTable', () => {
     );
   }
 
+  it('renders the approved mobile vehicle card with status and actions', () => {
+    renderTable();
+
+    const card = screen.getByTestId('vehicle-mobile-card');
+    expect(card).toHaveTextContent('ABC123');
+    expect(card).toHaveTextContent('Toyota');
+    expect(card).toHaveTextContent('Corolla');
+    expect(card).toHaveTextContent('2020');
+    expect(card).toHaveTextContent('Blanco');
+    expect(card).toHaveTextContent('Activo');
+    expect(screen.getAllByLabelText('Editar ABC123')[0]).toHaveAttribute(
+      'href',
+      '/vehicles/veh-1/edit'
+    );
+  });
+
   it('renders vehicle rows', () => {
     renderTable();
 
-    expect(screen.getByText('ABC123')).toBeInTheDocument();
-    expect(screen.getByText('Toyota')).toBeInTheDocument();
-    expect(screen.getByText('Corolla')).toBeInTheDocument();
+    expect(screen.getAllByText('ABC123')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Toyota')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Corolla')[0]).toBeInTheDocument();
   });
 
   it('calls delete mutation after confirming in the dialog', async () => {
@@ -67,7 +83,7 @@ describe('VehicleTable', () => {
     });
     renderTable();
 
-    fireEvent.click(screen.getByLabelText('Eliminar ABC123'));
+    fireEvent.click(screen.getAllByLabelText('Eliminar ABC123')[0]);
 
     expect(screen.getByText('Eliminar vehículo')).toBeInTheDocument();
 
@@ -85,7 +101,7 @@ describe('VehicleTable', () => {
     globalThis.fetch = vi.fn();
     renderTable();
 
-    fireEvent.click(screen.getByLabelText('Eliminar ABC123'));
+    fireEvent.click(screen.getAllByLabelText('Eliminar ABC123')[0]);
     fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     await waitFor(() => {
