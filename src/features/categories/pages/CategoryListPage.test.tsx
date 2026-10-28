@@ -130,10 +130,10 @@ describe('CategoryListPage', () => {
     render(<CategoryListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Categoría 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Categoría 1')[0]).toBeInTheDocument()
     );
 
-    await user.click(screen.getByLabelText('Eliminar Categoría 1'));
+    await user.click(screen.getAllByLabelText('Eliminar Categoría 1')[0]);
 
     expect(screen.getByText('Eliminar categoría')).toBeInTheDocument();
     expect(
@@ -165,10 +165,10 @@ describe('CategoryListPage', () => {
     render(<CategoryListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Categoría 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Categoría 1')[0]).toBeInTheDocument()
     );
 
-    await user.click(screen.getByLabelText('Eliminar Categoría 1'));
+    await user.click(screen.getAllByLabelText('Eliminar Categoría 1')[0]);
     await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     await waitFor(() =>

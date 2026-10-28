@@ -4,6 +4,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useProducts } from '@/features/products/hooks/use-products';
 import type { Product } from '@/features/products/types';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { useBrand } from '../hooks/use-brand';
 
@@ -54,8 +55,15 @@ export function BrandDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>{brand.name}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/brands"
+          aria-label="Volver a marcas"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">{brand.name}</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Información de la marca">

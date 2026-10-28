@@ -120,10 +120,10 @@ describe('BrandListPage', () => {
     render(<BrandListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Marca 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Marca 1')[0]).toBeInTheDocument()
     );
 
-    await user.click(screen.getByLabelText('Eliminar Marca 1'));
+    await user.click(screen.getAllByLabelText('Eliminar Marca 1')[0]);
 
     expect(screen.getByText('Eliminar marca')).toBeInTheDocument();
     expect(
@@ -155,10 +155,10 @@ describe('BrandListPage', () => {
     render(<BrandListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Marca 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Marca 1')[0]).toBeInTheDocument()
     );
 
-    await user.click(screen.getByLabelText('Eliminar Marca 1'));
+    await user.click(screen.getAllByLabelText('Eliminar Marca 1')[0]);
     await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     await waitFor(() =>
@@ -198,7 +198,7 @@ describe('BrandListPage', () => {
     render(<BrandListPage />, { wrapper });
 
     await waitFor(() =>
-      expect(screen.getByText('Marca 1')).toBeInTheDocument()
+      expect(screen.getAllByText('Marca 1')[0]).toBeInTheDocument()
     );
     expect(screen.queryByText(/Página 1 de/)).not.toBeInTheDocument();
   });

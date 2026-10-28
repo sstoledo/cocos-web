@@ -52,15 +52,15 @@ describe('CategoryTable', () => {
   it('renders categories in table', () => {
     renderTable({ categories: mockCategories });
     // Check for category names using getAllByText since "Categoría 1" appears twice
-    expect(screen.getAllByText('Categoría 1')).toHaveLength(2);
-    expect(screen.getByText('Subcategoría')).toBeInTheDocument();
+    expect(screen.getAllByText('Categoría 1')).toHaveLength(3);
+    expect(screen.getAllByText('Subcategoría').length).toBeGreaterThan(0);
   });
 
   it('shows parent category name for subcategory', () => {
     renderTable({ categories: mockCategories });
     // The second row (Subcategoría) has parent "Categoría 1"
-    expect(screen.getByText('Subcategoría')).toBeInTheDocument();
-    expect(screen.getAllByText('Categoría 1')).toHaveLength(2);
+    expect(screen.getAllByText('Subcategoría').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Categoría 1')).toHaveLength(3);
   });
 
   it('shows dash when no parent', () => {
@@ -76,10 +76,22 @@ describe('CategoryTable', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders the approved mobile category card with parent', () => {
+    renderTable({ categories: [mockCategories[1]], canEdit: true });
+
+    const card = screen.getByTestId('category-mobile-card');
+    expect(card).toHaveTextContent('Subcategoría');
+    expect(card).toHaveTextContent('Categoría 1');
+    expect(screen.getAllByRole('link', { name: 'Ver' })[0]).toHaveAttribute(
+      'href',
+      '/categories/c2'
+    );
+  });
+
   it('shows edit and delete buttons when canEdit is true', () => {
     renderTable({ categories: mockCategories, canEdit: true });
-    expect(screen.getAllByRole('link', { name: /Editar/ })).toHaveLength(2);
-    expect(screen.getAllByRole('button', { name: /Eliminar/ })).toHaveLength(2);
+    expect(screen.getAllByRole('link', { name: /Editar/ })).toHaveLength(4);
+    expect(screen.getAllByRole('button', { name: /Eliminar/ })).toHaveLength(4);
   });
 
   it('hides edit and delete buttons when canEdit is false', () => {

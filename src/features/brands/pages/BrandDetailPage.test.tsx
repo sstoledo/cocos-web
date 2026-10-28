@@ -114,6 +114,9 @@ describe('BrandDetailPage', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'Bosch' })).toBeInTheDocument()
     );
+    expect(
+      screen.getByRole('link', { name: 'Volver a marcas' })
+    ).toHaveAttribute('href', '/brands');
   });
 
   it('shows only products of this brand', async () => {
