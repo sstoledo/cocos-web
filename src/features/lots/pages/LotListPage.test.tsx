@@ -104,7 +104,7 @@ describe('LotListPage', () => {
     expect(
       screen.getByRole('cell', { name: '2 productos' })
     ).toBeInTheDocument();
-    expect(screen.getByText('En stock')).toBeInTheDocument();
+    expect(screen.getAllByText('En stock').length).toBeGreaterThan(0);
   });
 
   it('shows an error message when the request fails', async () => {

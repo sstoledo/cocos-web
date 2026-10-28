@@ -3,7 +3,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useProduct } from '@/features/products/hooks/use-product';
-import { useParams } from 'react-router';
+import { IconArrowLeft } from '@tabler/icons-react';
+import { Link, useParams } from 'react-router';
 import { StockAdjustmentForm } from '../components/StockAdjustmentForm';
 import { StockMovementList } from '../components/StockMovementList';
 import { useCreateStockMovement } from '../hooks/use-create-stock-movement';
@@ -60,8 +61,17 @@ export function ProductStockPage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>{product?.name ?? 'Stock del producto'}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to={`/products/${productId}`}
+          aria-label="Volver al producto"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">
+          {product?.name ?? 'Stock del producto'}
+        </PageTitle>
       </PageHeader>
       <PageContent>
         {isLoading ? (

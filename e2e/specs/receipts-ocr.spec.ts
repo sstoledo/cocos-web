@@ -184,7 +184,9 @@ test.describe
       await page.getByRole('button', { name: 'Confirmar comprobante' }).click();
 
       await expect(page).toHaveURL(/\/lots$/, { timeout: 30_000 });
-      await expect(page.getByText(lotNumber)).toBeVisible();
+      await expect(
+      page.getByRole('cell', { name: lotNumber, exact: true })
+    ).toBeVisible();
       expect(confirmPayload).toMatchObject({
         supplierId: expect.any(String),
         items: [

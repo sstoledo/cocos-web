@@ -67,7 +67,7 @@ export function StockAdjustmentForm({
         />
       </div>
 
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
         {isPending ? 'Guardando…' : 'Guardar ajuste'}
       </Button>
     </form>

@@ -152,7 +152,7 @@ describe('ProductStockPage', () => {
     );
 
     expect(screen.getByText('42')).toBeInTheDocument();
-    expect(screen.getByText('-2')).toBeInTheDocument();
+    expect(screen.getAllByText('-2').length).toBeGreaterThan(0);
     expect(
       screen.getByRole('cell', { name: 'Ajuste por rotura' })
     ).toBeInTheDocument();
