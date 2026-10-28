@@ -39,6 +39,7 @@ import { RoleBasedIndex } from '@/features/shell/components/RoleBasedIndex';
 import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import { Layout } from '@/features/shell/pages/Layout';
 import { NotFoundPage } from '@/features/shell/pages/NotFoundPage';
+import { ProfilePage } from '@/features/shell/pages/ProfilePage';
 import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
 import type { RoleName } from '@/features/shell/types';
 import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
@@ -189,6 +190,7 @@ const routes: RouteObject[] = [
         ['Admin', 'Purchasing', 'Warehouse']
       ),
       guardedRoute('notifications', <NotificationListPage />),
+      guardedRoute('profile', <ProfilePage />),
       guardedRoute('users', <UserListPage />, 'Admin'),
       guardedRoute('users/:id', <UserDetailPage />, 'Admin'),
       guardedRoute('users/new', <UserFormPage />, 'Admin'),

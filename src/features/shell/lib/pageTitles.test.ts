@@ -14,6 +14,7 @@ describe('getPageTitle', () => {
     expect(getPageTitle('/refunds')).toBe('Devoluciones');
     expect(getPageTitle('/purchase-orders')).toBe('Órdenes de compra');
     expect(getPageTitle('/notifications')).toBe('Notificaciones');
+    expect(getPageTitle('/profile')).toBe('Perfil');
     expect(getPageTitle('/users')).toBe('Usuarios');
     expect(getPageTitle('/cash-closings')).toBe('Cierres de caja');
     expect(getPageTitle('/cash-closings/close')).toBe('Cierre de caja');

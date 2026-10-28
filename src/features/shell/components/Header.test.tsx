@@ -31,13 +31,19 @@ describe('Header', () => {
     vi.unstubAllEnvs();
   });
 
-  it('renders the page title', () => {
-    renderHeader(<Header title="Productos" />);
-    expect(screen.getByText('Productos')).toBeInTheDocument();
+  it('keeps the page title accessible and shows the mobile brand', () => {
+    renderHeader(
+      <Header title="Productos" userName="Juan" userEmail="juan@example.com" />
+    );
+
+    expect(screen.getByText('Productos')).toHaveClass('sr-only');
+    expect(screen.getByText('Cocos')).toBeInTheDocument();
   });
 
   it('does not render the title as a heading', () => {
-    renderHeader(<Header title="Productos" />);
+    renderHeader(
+      <Header title="Productos" userName="Juan" userEmail="juan@example.com" />
+    );
 
     expect(
       screen.queryByRole('heading', { name: 'Productos' })
@@ -45,7 +51,9 @@ describe('Header', () => {
   });
 
   it('renders the notification bell', () => {
-    renderHeader(<Header title="Dashboard" />);
+    renderHeader(
+      <Header title="Dashboard" userName="Juan" userEmail="juan@example.com" />
+    );
 
     expect(
       screen.getByRole('button', { name: 'Notificaciones' })
@@ -53,18 +61,27 @@ describe('Header', () => {
   });
 
   it('shows the hamburger menu button when onMenuClick is provided', () => {
-    renderHeader(<Header title="Dashboard" onMenuClick={() => {}} />);
+    renderHeader(
+      <Header
+        title="Dashboard"
+        userName="Juan"
+        userEmail="juan@example.com"
+        onMenuClick={() => {}}
+      />
+    );
 
     expect(
-      screen.getByRole('button', { name: /abrir menú/i })
+      screen.getByRole('button', { name: 'Abrir menú' })
     ).toBeInTheDocument();
   });
 
   it('hides the hamburger menu button when onMenuClick is not provided', () => {
-    renderHeader(<Header title="Dashboard" />);
+    renderHeader(
+      <Header title="Dashboard" userName="Juan" userEmail="juan@example.com" />
+    );
 
     expect(
-      screen.queryByRole('button', { name: /abrir menú/i })
+      screen.queryByRole('button', { name: 'Abrir menú' })
     ).not.toBeInTheDocument();
   });
 
@@ -72,20 +89,32 @@ describe('Header', () => {
     const onMenuClick = vi.fn();
     const user = userEvent.setup();
 
-    renderHeader(<Header title="Dashboard" onMenuClick={onMenuClick} />);
+    renderHeader(
+      <Header
+        title="Dashboard"
+        userName="Juan"
+        userEmail="juan@example.com"
+        onMenuClick={onMenuClick}
+      />
+    );
 
-    await user.click(screen.getByRole('button', { name: /abrir menú/i }));
+    await user.click(screen.getByRole('button', { name: 'Abrir menú' }));
     expect(onMenuClick).toHaveBeenCalledTimes(1);
   });
 
-  it('does not render theme toggle or user menu controls', () => {
-    renderHeader(<Header title="Dashboard" />);
+  it('renders theme and profile controls with the menu closed', () => {
+    renderHeader(
+      <Header title="Dashboard" userName="Juan" userEmail="juan@example.com" />
+    );
 
     expect(
-      screen.queryByRole('button', { name: /toggle theme/i })
-    ).not.toBeInTheDocument();
+      screen.getByRole('button', { name: /toggle theme/i })
+    ).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /cerrar sesión/i })
+      screen.getByRole('button', { name: 'Abrir menú de perfil' })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('menuitem', { name: 'Cerrar sesión' })
     ).not.toBeInTheDocument();
   });
 });

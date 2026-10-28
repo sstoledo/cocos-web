@@ -41,7 +41,12 @@ export function Layout() {
         />
       </Drawer>
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Header title={title} onMenuClick={() => setDrawerOpen(true)} />
+        <Header
+          title={title}
+          userName={user.name}
+          userEmail={user.email}
+          onMenuClick={() => setDrawerOpen(true)}
+        />
         <main className="flex-1 overflow-auto p-4 lg:p-6">
           <Outlet />
         </main>

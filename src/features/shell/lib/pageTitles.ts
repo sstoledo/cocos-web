@@ -34,6 +34,7 @@ const titles: Record<string, string> = {
   '/purchase-orders/:id/edit': 'Editar orden de compra',
   '/purchase-orders/:id/receive': 'Recibir orden de compra',
   '/notifications': 'Notificaciones',
+  '/profile': 'Perfil',
   '/users': 'Usuarios',
   '/cash-closings': 'Cierres de caja',
   '/cash-closings/close': 'Cierre de caja',

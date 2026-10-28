@@ -1,14 +1,24 @@
 import { cn } from '@/lib/utils';
 import { IconMenu2 } from '@tabler/icons-react';
 import { NotificationBell } from './NotificationBell';
+import { ThemeToggle } from './ThemeToggle';
+import { UserMenu } from './UserMenu';
 
 export type HeaderProps = {
   title: string;
+  userName: string;
+  userEmail: string;
   onMenuClick?: () => void;
   className?: string;
 };
 
-export function Header({ title, onMenuClick, className }: HeaderProps) {
+export function Header({
+  title,
+  userName,
+  userEmail,
+  onMenuClick,
+  className,
+}: HeaderProps) {
   return (
     <header
       className={cn(
@@ -16,9 +26,7 @@ export function Header({ title, onMenuClick, className }: HeaderProps) {
         className
       )}
     >
-      <span className="text-h3 font-semibold text-foreground">{title}</span>
       <div className="flex items-center gap-2">
-        <NotificationBell />
         {onMenuClick && (
           <button
             type="button"
@@ -29,6 +37,15 @@ export function Header({ title, onMenuClick, className }: HeaderProps) {
             <IconMenu2 className="h-5 w-5" />
           </button>
         )}
+        <span className="font-display text-lg font-semibold text-foreground lg:hidden">
+          Cocos
+        </span>
+        <span className="sr-only">{title}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <NotificationBell />
+        <ThemeToggle />
+        <UserMenu name={userName} email={userEmail} dropdown />
       </div>
     </header>
   );
