@@ -26,6 +26,23 @@ function renderTable(props: { canEdit: boolean; onDelete?: () => void }) {
 }
 
 describe('ClientTable', () => {
+  it('renders the approved mobile client card with all actions', () => {
+    renderTable({ canEdit: true });
+
+    const card = screen.getByTestId('client-mobile-card');
+    expect(card).toHaveTextContent('Juan Pérez');
+    expect(card).toHaveTextContent('DNI 12345678');
+    expect(card).toHaveTextContent('juan@example.com');
+    expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
+      'href',
+      '/clients/c1'
+    );
+    expect(screen.getAllByRole('link', { name: /editar/i })[0]).toHaveAttribute(
+      'href',
+      '/clients/c1/edit'
+    );
+  });
+
   it('renders client data', () => {
     renderTable({ canEdit: false });
 
@@ -44,7 +61,7 @@ describe('ClientTable', () => {
   it('shows view action for all users', () => {
     renderTable({ canEdit: false });
 
-    expect(screen.getByRole('link', { name: /ver/i })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
       'href',
       '/clients/c1'
     );
@@ -53,12 +70,12 @@ describe('ClientTable', () => {
   it('shows edit and delete actions for editable roles', () => {
     renderTable({ canEdit: true });
 
-    expect(screen.getByRole('link', { name: /editar/i })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: /editar/i })[0]).toHaveAttribute(
       'href',
       '/clients/c1/edit'
     );
     expect(
-      screen.getByRole('button', { name: /eliminar/i })
+      screen.getAllByRole('button', { name: /eliminar/i })[0]
     ).toBeInTheDocument();
   });
 
@@ -79,7 +96,7 @@ describe('ClientTable', () => {
 
     renderTable({ canEdit: true, onDelete });
 
-    await user.click(screen.getByRole('button', { name: /eliminar/i }));
+    await user.click(screen.getAllByRole('button', { name: /eliminar/i })[0]);
 
     expect(onDelete).toHaveBeenCalledWith(client);
   });

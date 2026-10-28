@@ -6,8 +6,9 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { VehicleForm } from '../components/VehicleForm';
 import { VehicleList } from '../components/VehicleList';
 import { useClient } from '../hooks/use-client';
@@ -132,8 +133,15 @@ export function ClientDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>{client.name}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/clients"
+          aria-label="Volver a clientes"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">{client.name}</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Información del cliente">
@@ -171,6 +179,7 @@ export function ClientDetailPage() {
                 <div className="flex justify-end">
                   <Button
                     type="button"
+                    className="w-full sm:w-auto"
                     onClick={handleOpenCreate}
                     disabled={isFormOpen}
                   >
