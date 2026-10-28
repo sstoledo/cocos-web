@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { Link } from 'react-router';
 import type { Receipt, ReceiptStatus } from '../types';
 
@@ -6,6 +5,12 @@ const STATUS_LABELS: Record<ReceiptStatus, string> = {
   pending: 'Pendiente',
   confirmed: 'Confirmado',
   discarded: 'Descartado',
+};
+
+const STATUS_STYLES: Record<ReceiptStatus, string> = {
+  pending: 'bg-warning text-warning-foreground',
+  confirmed: 'bg-success text-success-foreground',
+  discarded: 'bg-destructive text-destructive-foreground',
 };
 
 function extractionSummary(receipt: Receipt): string {
@@ -18,76 +23,105 @@ function extractionSummary(receipt: Receipt): string {
     .join(' · ');
 }
 
+function uploadDate(receipt: Receipt): string {
+  return new Date(receipt.createdAt).toLocaleString('es-AR');
+}
+
+function statusBadge(receipt: Receipt) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${STATUS_STYLES[receipt.status]}`}
+    >
+      {STATUS_LABELS[receipt.status]}
+    </span>
+  );
+}
+
 export function ReceiptTable({ receipts }: { receipts: Receipt[] }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full caption-bottom text-body-sm">
-        <thead className="border-b border-border">
-          <tr className="text-left">
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Archivo
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Fecha de carga
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Estado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Datos extraídos
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Acciones
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {receipts.map((receipt) => (
-            <tr
-              key={receipt.id}
-              className="border-b border-border transition-colors hover:bg-muted/50"
-            >
-              <td className="p-4 font-medium text-foreground">
-                {receipt.fileName}
-              </td>
-              <td className="p-4 text-muted-foreground">
-                {new Date(receipt.createdAt).toLocaleString('es-AR')}
-              </td>
-              <td className="p-4">
-                <span
-                  className={cn(
-                    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                    receipt.status === 'confirmed' &&
-                      'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-                    receipt.status === 'discarded' &&
-                      'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-                    receipt.status === 'pending' &&
-                      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                  )}
+    <>
+      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
+        <table className="w-full caption-bottom text-body-sm">
+          <thead className="bg-muted">
+            <tr className="text-left">
+              {[
+                'Archivo',
+                'Fecha de carga',
+                'Estado',
+                'Datos extraídos',
+                'Acciones',
+              ].map((header) => (
+                <th
+                  key={header}
+                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
                 >
-                  {STATUS_LABELS[receipt.status]}
-                </span>
-              </td>
-              <td className="max-w-md p-4 text-muted-foreground">
-                {extractionSummary(receipt)}
-              </td>
-              <td className="p-4">
-                <Link
-                  to={`/receipts/${receipt.id}`}
-                  className="font-medium text-primary hover:underline"
-                >
-                  {receipt.status === 'pending' ? 'Revisar' : 'Ver detalle'}
-                </Link>
-              </td>
+                  {header}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {receipts.map((receipt) => (
+              <tr
+                key={receipt.id}
+                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+              >
+                <td className="px-3 font-medium text-foreground">
+                  {receipt.fileName}
+                </td>
+                <td className="px-3 text-muted-foreground">
+                  {uploadDate(receipt)}
+                </td>
+                <td className="px-3">{statusBadge(receipt)}</td>
+                <td className="max-w-md px-3 text-muted-foreground">
+                  {extractionSummary(receipt)}
+                </td>
+                <td className="px-3">
+                  <Link
+                    to={`/receipts/${receipt.id}`}
+                    className="font-medium text-primary hover:underline"
+                  >
+                    {receipt.status === 'pending' ? 'Revisar' : 'Ver detalle'}
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {receipts.map((receipt) => (
+          <Link
+            key={receipt.id}
+            to={`/receipts/${receipt.id}`}
+            data-testid="receipt-mobile-card"
+            className="block space-y-2 rounded-lg border bg-card p-3 shadow-stat focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-body-sm font-medium text-foreground">
+                {receipt.fileName}
+              </span>
+              {statusBadge(receipt)}
+            </div>
+            <p className="text-caption text-muted-foreground">
+              {uploadDate(receipt)}
+            </p>
+            <p className="text-caption text-muted-foreground">
+              {extractionSummary(receipt)}
+            </p>
+            <span className="text-body-sm font-medium text-primary">
+              {receipt.status === 'pending' ? 'Revisar' : 'Ver detalle'}
+            </span>
+          </Link>
+        ))}
+      </div>
+
       {receipts.length === 0 && (
         <p className="py-8 text-center text-muted-foreground">
           No se encontraron comprobantes.
         </p>
       )}
-    </div>
+    </>
   );
 }

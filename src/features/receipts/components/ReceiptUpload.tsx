@@ -37,7 +37,7 @@ export function ReceiptUpload({ onUploaded }: ReceiptUploadProps) {
 
   return (
     <form
-      className="space-y-4 rounded-lg border border-dashed border-border bg-muted/20 p-6"
+      className="space-y-4 rounded-lg border border-dashed border-border bg-muted/20 p-4 sm:p-6"
       onSubmit={(event) => {
         event.preventDefault();
         if (file) {
@@ -73,8 +73,12 @@ export function ReceiptUpload({ onUploaded }: ReceiptUploadProps) {
           {error}
         </p>
       )}
-      <Button type="submit" disabled={!file || mutation.isPending}>
-        {mutation.isPending ? 'Cargando…' : 'Cargar y procesar OCR'}
+      <Button
+        type="submit"
+        className="w-full sm:w-auto"
+        disabled={!file || mutation.isPending}
+      >
+        {mutation.isPending ? 'Procesando OCR…' : 'Cargar y procesar OCR'}
       </Button>
     </form>
   );
