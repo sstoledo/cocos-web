@@ -122,6 +122,28 @@ describe('SaleDetailPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('uses the approved back link, metadata grid, mobile product cards and total', async () => {
+    globalThis.fetch = mockFetchWithSale(sale);
+
+    renderDetailPage();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('sale-line-mobile-card')).toBeInTheDocument()
+    );
+    expect(
+      screen.getByRole('link', { name: 'Volver a ventas' })
+    ).toHaveAttribute('href', '/sales');
+    expect(screen.getByText('Información de la venta')).toBeInTheDocument();
+    expect(screen.getByTestId('sale-line-mobile-card')).toHaveTextContent(
+      'PRD-001'
+    );
+    expect(screen.getByTestId('sale-total-value')).toHaveTextContent('80.50');
+    expect(screen.getByRole('button', { name: 'Cancelar venta' })).toHaveClass(
+      'w-full',
+      'sm:w-auto'
+    );
+  });
+
   it('S6: renders product lines with snapshot and subtotal verbatim plus the total', async () => {
     globalThis.fetch = mockFetchWithSale(sale);
 
@@ -146,14 +168,13 @@ describe('SaleDetailPage', () => {
     ).not.toBeInTheDocument();
 
     // Backend money strings render verbatim (SL-NF2) — no recomputation.
-    expect(
-      screen.getByRole('cell', { name: 'Filtro de aceite' })
-    ).toBeInTheDocument();
+    expect(screen.getAllByText('Filtro de aceite').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('PRD-001').length).toBeGreaterThan(0);
     expect(screen.getByRole('cell', { name: '1' })).toBeInTheDocument();
     // Product line: unitPriceSnapshot 80.50 and subtotal 80.50.
     expect(screen.getAllByRole('cell', { name: '80.50' })).toHaveLength(2);
 
-    expect(screen.getByText('Total: 80.50')).toBeInTheDocument();
+    expect(screen.getByTestId('sale-total-value')).toHaveTextContent('80.50');
   });
 
   it('S7: renders client, branch and employee names, payment label, badge, VTA and date', async () => {
@@ -167,7 +188,7 @@ describe('SaleDetailPage', () => {
     expect(screen.getByText('Sucursal Centro')).toBeInTheDocument();
     expect(screen.getByText('María Gómez')).toBeInTheDocument();
     expect(screen.getByText('Efectivo')).toBeInTheDocument();
-    expect(screen.getByText('Completada')).toBeInTheDocument();
+    expect(screen.getAllByText('Completada').length).toBeGreaterThan(0);
     expect(
       screen.getByRole('heading', { name: 'Venta VTA-2026-000001' })
     ).toBeInTheDocument();
