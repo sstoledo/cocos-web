@@ -41,7 +41,7 @@ function CashClosingRow({ closing }: { closing: CashClosing }) {
       className="cursor-pointer border-b border-border transition-colors hover:bg-muted/50"
       onClick={() => navigate(`/cash-closings/${closing.id}`)}
     >
-      <td className="p-4 font-medium text-foreground">
+      <td className="px-3 font-medium text-foreground">
         {/* Real link for keyboard/AT users; the row onClick only serves
             pointer users. stopPropagation avoids a double navigation when
             the link itself is clicked. */}
@@ -53,21 +53,65 @@ function CashClosingRow({ closing }: { closing: CashClosing }) {
           {formatDate(closing.periodEnd)}
         </Link>
       </td>
-      <td className="p-4 text-muted-foreground">{closing.closedBy.name}</td>
-      <td className="p-4 text-muted-foreground">{closing.salesCount}</td>
+      <td className="px-3 text-muted-foreground">{closing.closedBy.name}</td>
+      <td className="px-3 text-muted-foreground">{closing.salesCount}</td>
       {/* Money renders verbatim as decimal strings — no recomputation
           (list precedent). */}
-      <td className="p-4 text-muted-foreground">{closing.expectedCash}</td>
-      <td className="p-4 text-muted-foreground">{closing.declaredCash}</td>
+      <td className="px-3 text-muted-foreground">{closing.expectedCash}</td>
+      <td className="px-3 text-muted-foreground">{closing.declaredCash}</td>
       <td
         className={cn(
-          'p-4 font-medium',
+          'px-3 font-medium',
           differenceClassName(closing.difference)
         )}
       >
         {closing.difference}
       </td>
     </tr>
+  );
+}
+
+function CashClosingCard({ closing }: { closing: CashClosing }) {
+  return (
+    <article
+      data-testid="closing-mobile-card"
+      className="space-y-2 rounded-lg border bg-card p-3 shadow-stat"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <Link
+          to={`/cash-closings/${closing.id}`}
+          className="text-body-sm font-medium text-primary hover:underline"
+        >
+          {formatDate(closing.periodEnd)}
+        </Link>
+        <span
+          className={cn(
+            'text-caption font-semibold',
+            differenceClassName(closing.difference)
+          )}
+        >
+          {closing.difference}
+        </span>
+      </div>
+      <p className="text-caption text-muted-foreground">
+        {closing.closedBy.name}
+      </p>
+      {/* Money renders verbatim as decimal strings — no recomputation. */}
+      <dl className="grid grid-cols-3 gap-2 text-caption text-muted-foreground">
+        <div>
+          <dt>Ventas</dt>
+          <dd>{closing.salesCount}</dd>
+        </div>
+        <div>
+          <dt>Esperado</dt>
+          <dd>{closing.expectedCash}</dd>
+        </div>
+        <div>
+          <dt>Declarado</dt>
+          <dd>{closing.declaredCash}</dd>
+        </div>
+      </dl>
+    </article>
   );
 }
 
@@ -81,37 +125,42 @@ function CashClosingsTable({ cashClosings }: { cashClosings: CashClosing[] }) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full caption-bottom text-body-sm">
-        <thead className="border-b border-border">
-          <tr className="text-left">
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Fecha de cierre
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Cerrado por
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Ventas
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Efectivo esperado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Efectivo declarado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Diferencia
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {cashClosings.map((closing) => (
-            <CashClosingRow key={closing.id} closing={closing} />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
+        <table className="w-full caption-bottom text-body-sm">
+          <thead className="bg-muted">
+            <tr className="text-left">
+              {[
+                'Fecha de cierre',
+                'Cerrado por',
+                'Ventas',
+                'Efectivo esperado',
+                'Efectivo declarado',
+                'Diferencia',
+              ].map((header) => (
+                <th
+                  key={header}
+                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {cashClosings.map((closing) => (
+              <CashClosingRow key={closing.id} closing={closing} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {cashClosings.map((closing) => (
+          <CashClosingCard key={closing.id} closing={closing} />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -130,12 +179,12 @@ export function CashClosingsListPage() {
   return (
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageTitle>Cierres de caja</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Cierres de caja</PageTitle>
         <Link
           to="/cash-closings/close"
           className={cn(
-            'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-            'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            'inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors sm:h-8 sm:w-auto sm:bg-primary',
+            'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           )}
         >
           <IconCashRegister className="mr-1.5 h-3.5 w-3.5" />

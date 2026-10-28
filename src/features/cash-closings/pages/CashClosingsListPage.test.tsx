@@ -76,6 +76,21 @@ describe('CashClosingsListPage', () => {
     vi.unstubAllEnvs();
   });
 
+  it('renders the approved mobile closing card with verbatim money', async () => {
+    globalThis.fetch = mockFetchWith(singlePageResponse);
+
+    render(<CashClosingsListPage />, { wrapper: createWrapper() });
+
+    const card = await screen.findByTestId('closing-mobile-card');
+    expect(card).toHaveTextContent('Ana García');
+    expect(card).toHaveTextContent('Ventas');
+    expect(card).toHaveTextContent('12');
+    expect(card).toHaveTextContent('1250.00');
+    expect(card).toHaveTextContent('1300.00');
+    expect(card).toHaveTextContent('50.00');
+    expect(screen.queryByText(/2026-09-23T/)).not.toBeInTheDocument();
+  });
+
   it('renders rows with es-AR dates and decimal strings verbatim', async () => {
     globalThis.fetch = mockFetchWith(singlePageResponse);
 
