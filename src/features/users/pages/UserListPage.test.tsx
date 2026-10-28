@@ -89,7 +89,7 @@ describe('UserListPage', () => {
     render(<UserListPage />, { wrapper: createWrapper() });
 
     await waitFor(() =>
-      expect(screen.getByText('Ana García')).toBeInTheDocument()
+      expect(screen.getAllByText('Ana García')[0]).toBeInTheDocument()
     );
 
     const deleteButtons = screen.getAllByRole('button', { name: 'Eliminar' });
@@ -124,7 +124,7 @@ describe('UserListPage', () => {
     render(<UserListPage />, { wrapper: createWrapper() });
 
     await waitFor(() =>
-      expect(screen.getByText('Ana García')).toBeInTheDocument()
+      expect(screen.getAllByText('Ana García')[0]).toBeInTheDocument()
     );
 
     const deleteButtons = screen.getAllByRole('button', { name: 'Eliminar' });

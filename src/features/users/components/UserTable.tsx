@@ -62,81 +62,141 @@ function Trash2({ className }: { className?: string }) {
 
 export function UserTable({ users, onDelete, onAssignRole }: UserTableProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full caption-bottom text-body-sm">
-        <thead className="border-b border-border">
-          <tr className="text-left">
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Nombre
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Email
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">Rol</th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Estado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Creado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Acciones
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr
-              key={user.id}
-              className="border-b border-border transition-colors hover:bg-muted/50"
-            >
-              <td className="p-4 font-medium text-foreground">
+    <>
+      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
+        <table className="w-full caption-bottom text-body-sm">
+          <thead className="bg-muted">
+            <tr className="text-left">
+              {['Nombre', 'Email', 'Rol', 'Estado', 'Creado', 'Acciones'].map(
+                (header) => (
+                  <th
+                    key={header}
+                    className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+                  >
+                    {header}
+                  </th>
+                )
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr
+                key={user.id}
+                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+              >
+                <td className="px-3 font-medium text-foreground">
+                  <Link
+                    to={`/users/${user.id}`}
+                    className="text-primary hover:underline"
+                  >
+                    {user.name}
+                  </Link>
+                </td>
+                <td className="px-3">{user.email}</td>
+                <td className="px-3 capitalize">{user.role.name}</td>
+                <td className="px-3">
+                  <span
+                    className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${
+                      user.isActive
+                        ? 'bg-success text-success-foreground'
+                        : 'bg-destructive text-destructive-foreground'
+                    }`}
+                  >
+                    {user.isActive ? 'Activo' : 'Inactivo'}
+                  </span>
+                </td>
+                <td className="px-3">{formatDate(user.createdAt)}</td>
+                <td className="px-3">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onAssignRole(user.id)}
+                      className="h-8 w-8"
+                      title="Asignar rol"
+                    >
+                      <UserCog className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onDelete(user.id)}
+                      className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      title="Eliminar"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {users.map((user) => (
+          <article
+            key={user.id}
+            data-testid="user-mobile-card"
+            className="space-y-3 rounded-lg border bg-card p-3 shadow-stat"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
                 <Link
                   to={`/users/${user.id}`}
-                  className="text-primary hover:underline"
+                  className="text-body-sm font-medium text-primary hover:underline"
                 >
                   {user.name}
                 </Link>
-              </td>
-              <td className="p-4">{user.email}</td>
-              <td className="p-4 capitalize">{user.role.name}</td>
-              <td className="p-4">
-                <span className="text-sm font-medium">
-                  {user.isActive ? 'Activo' : 'Inactivo'}
-                </span>
-              </td>
-              <td className="p-4">{formatDate(user.createdAt)}</td>
-              <td className="p-4">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onAssignRole(user.id)}
-                    className="h-8 w-8"
-                    title="Asignar rol"
-                  >
-                    <UserCog className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onDelete(user.id)}
-                    className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                    title="Eliminar"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <p className="text-caption text-muted-foreground">
+                  {user.email}
+                </p>
+              </div>
+              <span
+                className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${
+                  user.isActive
+                    ? 'bg-success text-success-foreground'
+                    : 'bg-destructive text-destructive-foreground'
+                }`}
+              >
+                {user.isActive ? 'Activo' : 'Inactivo'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 text-caption text-muted-foreground">
+              <span className="capitalize">{user.role.name}</span>
+              <span>Creado {formatDate(user.createdAt)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onAssignRole(user.id)}
+                className="h-8 w-8"
+                title="Asignar rol"
+              >
+                <UserCog className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onDelete(user.id)}
+                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                title="Eliminar"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </article>
+        ))}
+      </div>
+
       {users.length === 0 && (
         <p className="py-8 text-center text-muted-foreground">
           No hay usuarios registrados.
         </p>
       )}
-    </div>
+    </>
   );
 }

@@ -55,9 +55,9 @@ export function UserListPage() {
     <>
       <PageHeader>
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <PageTitle>Usuarios</PageTitle>
-          <Link to="/users/new">
-            <Button>Nuevo usuario</Button>
+          <PageTitle className="text-h3 lg:text-h2">Usuarios</PageTitle>
+          <Link to="/users/new" className="w-full sm:w-auto">
+            <Button className="w-full sm:w-auto">Nuevo usuario</Button>
           </Link>
         </div>
       </PageHeader>
@@ -74,8 +74,16 @@ export function UserListPage() {
 
         <SectionCard title={`Usuarios (${meta?.total ?? 0})`}>
           {isLoading ? (
-            <output className="block py-8 text-center text-muted-foreground">
-              Cargando…
+            <output className="block space-y-3" aria-busy="true">
+              <span className="block text-center text-muted-foreground">
+                Cargando usuarios…
+              </span>
+              {['first', 'second', 'third'].map((row) => (
+                <span
+                  key={row}
+                  className="block h-11 animate-pulse rounded-md bg-muted"
+                />
+              ))}
             </output>
           ) : error ? (
             <div className="p-6">

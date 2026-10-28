@@ -9,6 +9,7 @@ import { Select } from '@/components/ui/Select';
 import { useRoles } from '@/features/auth/hooks/use-roles';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router';
@@ -99,17 +100,26 @@ export function UserDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/users"
+          aria-label="Volver a usuarios"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <div className="flex flex-1 items-center justify-between gap-4 flex-wrap">
           <div>
-            <PageTitle>{user.name}</PageTitle>
+            <PageTitle className="text-h3 lg:text-h2">{user.name}</PageTitle>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-medium">
               {user.isActive ? 'Activo' : 'Inactivo'}
             </span>
             <Link to={`/users/${user.id}/edit`}>
-              <Button variant="outline">Editar</Button>
+              <Button variant="outline" className="w-full sm:w-auto">
+                Editar
+              </Button>
             </Link>
           </div>
         </div>
