@@ -31,8 +31,13 @@ export function ReceiptsPage() {
   return (
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageTitle>Comprobantes de proveedores</PageTitle>
-        <Button onClick={() => setUploadOpen((open) => !open)}>
+        <PageTitle className="text-h3 lg:text-h2">
+          Comprobantes de proveedores
+        </PageTitle>
+        <Button
+          className="w-full sm:w-auto"
+          onClick={() => setUploadOpen((open) => !open)}
+        >
           {uploadOpen ? 'Cerrar carga' : 'Cargar comprobante'}
         </Button>
       </PageHeader>
@@ -77,8 +82,16 @@ export function ReceiptsPage() {
                 ))}
               </div>
               {isLoading ? (
-                <output className="block py-8 text-center text-muted-foreground">
-                  Cargando comprobantes…
+                <output className="block space-y-3" aria-busy="true">
+                  <span className="block text-center text-muted-foreground">
+                    Cargando comprobantes…
+                  </span>
+                  {['first', 'second', 'third'].map((row) => (
+                    <span
+                      key={row}
+                      className="block h-11 animate-pulse rounded-md bg-muted"
+                    />
+                  ))}
                 </output>
               ) : error ? (
                 <div
