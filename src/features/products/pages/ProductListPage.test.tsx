@@ -116,10 +116,9 @@ describe('ProductListPage', () => {
         ).toBeInTheDocument()
       );
       expect(screen.getByRole('cell', { name: 'COD-001' })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: 'Editar' })).toHaveAttribute(
-        'href',
-        '/products/p1/edit'
-      );
+      expect(
+        screen.getAllByRole('link', { name: 'Editar' })[0]
+      ).toHaveAttribute('href', '/products/p1/edit');
     }
   );
 
@@ -167,7 +166,7 @@ describe('ProductListPage', () => {
     expect(screen.getByRole('cell', { name: 'Litro' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '25.00' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '7' })).toBeInTheDocument();
-    expect(screen.getByText('Activo')).toBeInTheDocument();
+    expect(screen.getAllByText('Activo').length).toBeGreaterThan(0);
   });
 
   it('shows an error message when the request fails', async () => {

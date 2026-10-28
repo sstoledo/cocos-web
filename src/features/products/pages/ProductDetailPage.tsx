@@ -3,6 +3,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
+import { cn } from '@/lib/utils';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { useProduct } from '../hooks/use-product';
 import { PRODUCT_CONSUMPTION_TYPE_LABELS } from '../types';
@@ -55,13 +57,25 @@ export function ProductDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <div className="flex items-center justify-between">
-          <PageTitle>{product.name}</PageTitle>
-          <span className="text-sm font-medium">
-            {product.isActive ? 'Activo' : 'Inactivo'}
-          </span>
-        </div>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/products"
+          aria-label="Volver a productos"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">{product.name}</PageTitle>
+        <span
+          className={cn(
+            'inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold',
+            product.isActive
+              ? 'bg-success text-success-foreground'
+              : 'bg-destructive text-destructive-foreground'
+          )}
+        >
+          {product.isActive ? 'Activo' : 'Inactivo'}
+        </span>
       </PageHeader>
       <PageContent>
         <SectionCard title="Información del producto">
@@ -164,10 +178,10 @@ export function ProductDetailPage() {
         </SectionCard>
 
         {canEdit && (
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 flex">
             <Link
               to={`/products/${product.id}/edit`}
-              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 sm:w-auto"
             >
               Editar
             </Link>
