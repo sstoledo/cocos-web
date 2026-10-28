@@ -121,15 +121,41 @@ describe('PurchaseOrderDetailPage', () => {
     expect(screen.getByText('Pedido mensual de filtros')).toBeInTheDocument();
   });
 
+  it('renders responsive line cards, back link and full-width actions', async () => {
+    globalThis.fetch = mockFetchWithPurchaseOrder({
+      ...purchaseOrder,
+      status: 'ordered',
+    });
+
+    renderDetailPage();
+
+    await waitFor(() =>
+      expect(
+        screen.getAllByTestId('purchase-order-line-mobile-card')
+      ).toHaveLength(2)
+    );
+    expect(
+      screen.getByRole('link', { name: 'Volver a órdenes de compra' })
+    ).toHaveAttribute('href', '/purchase-orders');
+    expect(screen.getByTestId('purchase-order-total-value')).toHaveTextContent(
+      '500.00'
+    );
+    expect(screen.getByTestId('purchase-order-actions')).toHaveClass(
+      'flex-col',
+      'sm:flex-row'
+    );
+    expect(
+      screen.getByRole('link', { name: 'Registrar recepción' })
+    ).toHaveClass('w-full', 'sm:w-auto');
+  });
+
   it('renders lines with ordered/received quantities and verbatim money', async () => {
     globalThis.fetch = mockFetchWithPurchaseOrder(purchaseOrder);
 
     renderDetailPage();
 
     await waitFor(() =>
-      expect(
-        screen.getByRole('cell', { name: 'Filtro de aceite' })
-      ).toBeInTheDocument()
+      expect(screen.getAllByText('Filtro de aceite').length).toBeGreaterThan(0)
     );
 
     for (const column of [
@@ -143,15 +169,15 @@ describe('PurchaseOrderDetailPage', () => {
       ).toBeInTheDocument();
     }
 
-    expect(
-      screen.getByRole('cell', { name: 'Filtro de aire' })
-    ).toBeInTheDocument();
+    expect(screen.getAllByText('Filtro de aire').length).toBeGreaterThan(0);
     // Decimal money strings render verbatim — no recomputation.
     expect(screen.getByRole('cell', { name: '50.00' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '120.75' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '10' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '4' })).toBeInTheDocument();
-    expect(screen.getByText('Total estimado: 500.00')).toBeInTheDocument();
+    expect(screen.getByTestId('purchase-order-total-value')).toHaveTextContent(
+      '500.00'
+    );
   });
 
   it('renders receipt history with lot numbers as text and actual costs', async () => {

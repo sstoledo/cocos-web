@@ -14,8 +14,10 @@ const RECEIVE_ROLES = ['Admin', 'Purchasing', 'Warehouse'];
 
 export function PurchaseOrderActions({
   purchaseOrder,
+  className,
 }: {
   purchaseOrder: PurchaseOrder;
+  className?: string;
 }) {
   const { user } = useUser();
   const order = useOrderPurchaseOrder();
@@ -62,13 +64,17 @@ export function PurchaseOrderActions({
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2">
+      <div
+        data-testid="purchase-order-actions"
+        className={cn('flex flex-wrap items-center gap-2', className)}
+      >
         {showEdit && (
           <Link
             to={`/purchase-orders/${purchaseOrder.id}/edit`}
             className={cn(
               'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              className
             )}
           >
             Editar
@@ -79,7 +85,8 @@ export function PurchaseOrderActions({
             to={`/purchase-orders/${purchaseOrder.id}/receive`}
             className={cn(
               'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+              'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              className
             )}
           >
             Registrar recepción
@@ -91,6 +98,7 @@ export function PurchaseOrderActions({
             variant="outline"
             disabled={order.isPending}
             onClick={() => setPendingAction('order')}
+            className={className}
           >
             Confirmar orden
           </Button>
@@ -101,7 +109,10 @@ export function PurchaseOrderActions({
             variant="outline"
             disabled={cancel.isPending}
             onClick={() => setPendingAction('cancel')}
-            className="border-destructive/50 text-destructive hover:bg-destructive/10"
+            className={cn(
+              'border-destructive/50 text-destructive hover:bg-destructive/10',
+              className
+            )}
           >
             Cancelar orden
           </Button>

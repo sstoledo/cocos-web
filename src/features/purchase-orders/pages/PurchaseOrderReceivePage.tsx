@@ -7,6 +7,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -212,14 +213,18 @@ function ReceiveForm({
         ))}
       </div>
 
-      <div className="flex items-center gap-4 pt-4">
-        <Button type="submit" disabled={isPending || isSubmitting}>
+      <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:gap-4">
+        <Button
+          type="submit"
+          className="w-full sm:w-auto"
+          disabled={isPending || isSubmitting}
+        >
           {isPending || isSubmitting ? 'Registrando…' : 'Registrar recepción'}
         </Button>
         <Link
           to={`/purchase-orders/${purchaseOrder.id}`}
           className={cn(
-            'inline-flex h-10 items-center justify-center rounded-md px-4 font-medium text-foreground transition-colors',
+            'inline-flex h-10 w-full items-center justify-center rounded-md px-4 font-medium text-foreground transition-colors sm:w-auto',
             'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           )}
         >
@@ -292,8 +297,17 @@ export function PurchaseOrderReceivePage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>Recibir orden {purchaseOrder.purchaseOrderNumber}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to={`/purchase-orders/${purchaseOrder.id}`}
+          aria-label="Volver a la orden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">
+          Recibir orden {purchaseOrder.purchaseOrderNumber}
+        </PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Recepción de mercadería">
