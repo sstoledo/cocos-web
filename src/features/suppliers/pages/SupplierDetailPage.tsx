@@ -16,7 +16,8 @@ import type { Lot } from '@/features/lots/types';
 import { usePurchaseOrders } from '@/features/purchase-orders/hooks/use-purchase-orders';
 import type { PurchaseOrderStatus } from '@/features/purchase-orders/types';
 import { toPaginationMeta } from '@/lib/pagination';
-import { useParams, useSearchParams } from 'react-router';
+import { IconArrowLeft } from '@tabler/icons-react';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { useSupplier } from '../hooks/use-supplier';
 
 const DEFAULT_LIMIT = 10;
@@ -81,6 +82,7 @@ export function SupplierDetailPage() {
     meta: lotMeta,
     isLoading: isLoadingLots,
   } = useLots({
+    supplierId: id ?? '',
     page: lotPage,
     limit: DEFAULT_LIMIT,
   });
@@ -124,8 +126,15 @@ export function SupplierDetailPage() {
 
   return (
     <>
-      <PageHeader>
-        <PageTitle>{supplier.name}</PageTitle>
+      <PageHeader className="flex items-center gap-3">
+        <Link
+          to="/suppliers"
+          aria-label="Volver a proveedores"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <IconArrowLeft className="h-5 w-5" />
+        </Link>
+        <PageTitle className="text-h3 lg:text-h2">{supplier.name}</PageTitle>
       </PageHeader>
       <PageContent>
         <SectionCard title="Información del proveedor">

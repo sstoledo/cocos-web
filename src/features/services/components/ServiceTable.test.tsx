@@ -63,6 +63,16 @@ describe('ServiceTable', () => {
     );
   }
 
+  it('renders the approved mobile service card', () => {
+    renderTable([services[0]]);
+
+    const card = screen.getByTestId('service-mobile-card');
+    expect(card).toHaveTextContent('SRV-001');
+    expect(card).toHaveTextContent('Cambio de aceite');
+    expect(card).toHaveTextContent('Activo');
+    expect(card).toHaveTextContent('30 min');
+  });
+
   it('renders table with services', () => {
     renderTable();
 
@@ -73,46 +83,46 @@ describe('ServiceTable', () => {
     expect(screen.getByText('Estado')).toBeInTheDocument();
     expect(screen.getByText('Acciones')).toBeInTheDocument();
 
-    expect(screen.getByText('SRV-001')).toBeInTheDocument();
-    expect(screen.getByText('Cambio de aceite')).toBeInTheDocument();
-    expect(screen.getByText('SRV-002')).toBeInTheDocument();
-    expect(screen.getByText('Lavado')).toBeInTheDocument();
+    expect(screen.getAllByText('SRV-001')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Cambio de aceite')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('SRV-002')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Lavado')[0]).toBeInTheDocument();
   });
 
   it('formats price as currency', () => {
     renderTable();
 
-    expect(screen.getByText(/\$[\s\u00A0]150,00/)).toBeInTheDocument();
-    expect(screen.getByText(/\$[\s\u00A0]50,00/)).toBeInTheDocument();
+    expect(screen.getAllByText(/\$[\s\u00A0]150,00/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/\$[\s\u00A0]50,00/)[0]).toBeInTheDocument();
   });
 
   it('shows N/A for null estimatedDuration', () => {
     renderTable();
 
-    expect(screen.getByText('30 min')).toBeInTheDocument();
-    expect(screen.getByText('N/A')).toBeInTheDocument();
+    expect(screen.getAllByText('30 min')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('N/A')[0]).toBeInTheDocument();
   });
 
   it('shows active badge for active service', () => {
     renderTable();
 
-    const activeBadge = screen.getByText('Activo');
+    const activeBadge = screen.getAllByText('Activo')[0];
     expect(activeBadge).toBeInTheDocument();
-    expect(activeBadge.closest('span')).toHaveClass('bg-green-100');
+    expect(activeBadge.closest('span')).toHaveClass('bg-success');
   });
 
   it('shows inactive badge for inactive service', () => {
     renderTable();
 
-    const inactiveBadge = screen.getByText('Inactivo');
+    const inactiveBadge = screen.getAllByText('Inactivo')[0];
     expect(inactiveBadge).toBeInTheDocument();
-    expect(inactiveBadge.closest('span')).toHaveClass('bg-red-100');
+    expect(inactiveBadge.closest('span')).toHaveClass('bg-destructive');
   });
 
   it('renders edit link', () => {
     renderTable();
 
-    const editLink = screen.getByLabelText('Editar Cambio de aceite');
+    const editLink = screen.getAllByLabelText('Editar Cambio de aceite')[0];
     expect(editLink).toHaveAttribute('href', '/services/srv-1/edit');
   });
 
@@ -123,7 +133,7 @@ describe('ServiceTable', () => {
     });
     renderTable();
 
-    fireEvent.click(screen.getByLabelText('Eliminar Cambio de aceite'));
+    fireEvent.click(screen.getAllByLabelText('Eliminar Cambio de aceite')[0]);
 
     expect(screen.getByText('Eliminar servicio')).toBeInTheDocument();
 
@@ -141,7 +151,7 @@ describe('ServiceTable', () => {
     globalThis.fetch = vi.fn();
     renderTable();
 
-    fireEvent.click(screen.getByLabelText('Eliminar Cambio de aceite'));
+    fireEvent.click(screen.getAllByLabelText('Eliminar Cambio de aceite')[0]);
     fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     await waitFor(() => {

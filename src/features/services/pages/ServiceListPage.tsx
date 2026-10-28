@@ -6,6 +6,7 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router';
+import { ServiceFilters } from '../components/ServiceFilters';
 import { ServiceTable } from '../components/ServiceTable';
 import { useServices } from '../hooks/use-services';
 import type { ServiceListFilters } from '../types';
@@ -35,6 +36,21 @@ export function ServiceListPage() {
   const { services, meta, isLoading, error } = useServices(filters);
   const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
 
+  function handleFiltersChange(nextFilters: ServiceListFilters) {
+    const nextSearchParams = new URLSearchParams();
+
+    if (nextFilters.query) {
+      nextSearchParams.set('q', nextFilters.query);
+    }
+
+    if (nextFilters.isActive !== undefined) {
+      nextSearchParams.set('isActive', nextFilters.isActive.toString());
+    }
+
+    nextSearchParams.set('page', '1');
+    setSearchParams(nextSearchParams, { replace: true });
+  }
+
   function handlePageChange(page: number) {
     const nextSearchParams = new URLSearchParams();
 
@@ -53,11 +69,11 @@ export function ServiceListPage() {
   return (
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageTitle>Servicios</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Servicios</PageTitle>
         <Link
           to="/services/new"
           className={cn(
-            'inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors',
+            'inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors sm:w-auto',
             'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           )}
         >
@@ -67,9 +83,18 @@ export function ServiceListPage() {
       <PageContent>
         <SectionCard title="Catálogo de servicios">
           <div className="space-y-4">
+            <ServiceFilters filters={filters} onChange={handleFiltersChange} />
             {isLoading ? (
-              <output className="block py-8 text-center text-muted-foreground">
-                Cargando servicios…
+              <output className="block space-y-3" aria-busy="true">
+                <span className="block text-center text-muted-foreground">
+                  Cargando servicios…
+                </span>
+                {['first', 'second', 'third'].map((row) => (
+                  <span
+                    key={row}
+                    className="block h-11 animate-pulse rounded-md bg-muted"
+                  />
+                ))}
               </output>
             ) : error ? (
               <div

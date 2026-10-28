@@ -44,6 +44,16 @@ function renderTable(props: {
 }
 
 describe('SupplierTable', () => {
+  it('renders the approved mobile supplier card', () => {
+    renderTable({ canEdit: true, suppliers: [supplier] });
+
+    const card = screen.getByTestId('supplier-mobile-card');
+    expect(card).toHaveTextContent('Proveedor 1');
+    expect(card).toHaveTextContent('999111222');
+    expect(card).toHaveTextContent('p1@example.com');
+    expect(card).toHaveTextContent('Activo');
+  });
+
   it('renders supplier data', () => {
     renderTable({ canEdit: false });
 
@@ -68,20 +78,20 @@ describe('SupplierTable', () => {
   it('shows active badge for active supplier', () => {
     renderTable({ canEdit: false });
 
-    expect(screen.getByText('Activo')).toBeInTheDocument();
+    expect(screen.getAllByText('Activo')[0]).toBeInTheDocument();
   });
 
   it('shows inactive badge for inactive supplier', () => {
     renderTable({ canEdit: false });
 
-    expect(screen.getByText('Inactivo')).toBeInTheDocument();
+    expect(screen.getAllByText('Inactivo')[0]).toBeInTheDocument();
   });
 
   it('shows view action for all users', () => {
     renderTable({ canEdit: false });
 
     const viewLinks = screen.getAllByRole('link', { name: /ver/i });
-    expect(viewLinks).toHaveLength(2);
+    expect(viewLinks).toHaveLength(4);
     expect(viewLinks[0]).toHaveAttribute('href', '/suppliers/s1');
     expect(viewLinks[1]).toHaveAttribute('href', '/suppliers/s2');
   });
@@ -90,12 +100,12 @@ describe('SupplierTable', () => {
     renderTable({ canEdit: true });
 
     const editLinks = screen.getAllByRole('link', { name: /editar/i });
-    expect(editLinks).toHaveLength(2);
+    expect(editLinks).toHaveLength(4);
     expect(editLinks[0]).toHaveAttribute('href', '/suppliers/s1/edit');
     expect(editLinks[1]).toHaveAttribute('href', '/suppliers/s2/edit');
 
     const deleteButtons = screen.getAllByRole('button', { name: /eliminar/i });
-    expect(deleteButtons).toHaveLength(2);
+    expect(deleteButtons).toHaveLength(4);
   });
 
   it('hides edit and delete actions for read-only roles', () => {
@@ -115,7 +125,7 @@ describe('SupplierTable', () => {
 
     renderTable({ canEdit: true, onDelete, suppliers: [supplier] });
 
-    await user.click(screen.getByRole('button', { name: /eliminar/i }));
+    await user.click(screen.getAllByRole('button', { name: /eliminar/i })[0]);
 
     expect(onDelete).toHaveBeenCalledWith(supplier);
   });

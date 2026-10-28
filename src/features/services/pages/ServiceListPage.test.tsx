@@ -68,8 +68,8 @@ describe('ServiceListPage', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByText('SRV-001')).toBeInTheDocument();
-      expect(screen.getByText('Cambio de aceite')).toBeInTheDocument();
+      expect(screen.getAllByText('SRV-001')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('Cambio de aceite')[0]).toBeInTheDocument();
     });
   });
 

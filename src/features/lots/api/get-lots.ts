@@ -9,6 +9,10 @@ export async function getLots(
     searchParams.set('q', filters.q);
   }
 
+  if (filters.supplierId) {
+    searchParams.set('supplierId', filters.supplierId);
+  }
+
   if (filters.page) {
     searchParams.set('page', filters.page.toString());
   }

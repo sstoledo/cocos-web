@@ -6,12 +6,12 @@ describe('SupplierStatusBadge', () => {
   it('renders active badge', () => {
     render(<SupplierStatusBadge isActive={true} />);
     expect(screen.getByText('Activo')).toBeInTheDocument();
-    expect(screen.getByText('Activo')).toHaveClass('bg-green-100');
+    expect(screen.getByText('Activo')).toHaveClass('bg-success');
   });
 
   it('renders inactive badge', () => {
     render(<SupplierStatusBadge isActive={false} />);
     expect(screen.getByText('Inactivo')).toBeInTheDocument();
-    expect(screen.getByText('Inactivo')).toHaveClass('bg-gray-100');
+    expect(screen.getByText('Inactivo')).toHaveClass('bg-destructive');
   });
 });
