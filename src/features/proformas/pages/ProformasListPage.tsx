@@ -92,15 +92,15 @@ export function ProformasListPage() {
   return (
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageTitle>Proformas</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Proformas</PageTitle>
         <Link
           to="/proformas/new"
           className={cn(
-            'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-            'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            'inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors sm:w-auto',
+            'hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           )}
         >
-          <IconPlus className="mr-1.5 h-3.5 w-3.5" />
+          <IconPlus className="mr-1.5 h-4 w-4" />
           Nueva proforma
         </Link>
       </PageHeader>
@@ -109,8 +109,16 @@ export function ProformasListPage() {
           <div className="space-y-4">
             <ProformaFilters filters={filters} onChange={handleFiltersChange} />
             {isLoading ? (
-              <output className="block py-8 text-center text-muted-foreground">
-                Cargando proformas…
+              <output className="block space-y-3" aria-busy="true">
+                <span className="block text-center text-muted-foreground">
+                  Cargando proformas…
+                </span>
+                {['first', 'second', 'third'].map((row) => (
+                  <span
+                    key={row}
+                    className="block h-11 animate-pulse rounded-md bg-muted"
+                  />
+                ))}
               </output>
             ) : error ? (
               <div
