@@ -88,6 +88,22 @@ describe('ProductDetailPage', () => {
     }
   );
 
+  it('shows back navigation and a full-width mobile edit action', async () => {
+    mockFetch('Admin');
+
+    render(<ProductDetailPage />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', { name: 'Volver a productos' })
+      ).toHaveAttribute('href', '/products')
+    );
+    expect(screen.getByRole('link', { name: 'Editar' })).toHaveClass(
+      'w-full',
+      'sm:w-auto'
+    );
+  });
+
   it.each(['Reception', 'Mechanic'])(
     'hides the edit link for %s',
     async (role) => {

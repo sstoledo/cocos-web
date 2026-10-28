@@ -38,132 +38,187 @@ function ProductThumbnail({ product }: { product: ProductListItem }) {
   );
 }
 
+function StatusBadge({ product }: { product: ProductListItem }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1 rounded-full px-2 py-1 text-caption font-semibold',
+        product.isActive
+          ? 'bg-success text-success-foreground'
+          : 'bg-destructive text-destructive-foreground'
+      )}
+    >
+      {product.isActive ? (
+        <>
+          <IconCheck className="h-3.5 w-3.5" aria-hidden="true" />
+          Activo
+        </>
+      ) : (
+        <>
+          <IconX className="h-3.5 w-3.5" aria-hidden="true" />
+          Inactivo
+        </>
+      )}
+    </span>
+  );
+}
+
+const HEADERS = [
+  'Código',
+  'Imagen',
+  'Nombre',
+  'Marca',
+  'Categoría',
+  'Presentación',
+  'Precio',
+  'Stock',
+  'Estado',
+  'Acciones',
+];
+
 export function ProductTable({ products, canEdit }: ProductTableProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full caption-bottom text-body-sm">
-        <thead className="border-b border-border">
-          <tr className="text-left">
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Código
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              <span className="sr-only">Imagen</span>
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Nombre
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Marca
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Categoría
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Presentación
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Precio
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Stock
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Estado
-            </th>
-            <th className="h-12 px-4 font-medium text-muted-foreground">
-              Acciones
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr
-              key={product.id}
-              className="border-b border-border transition-colors hover:bg-muted/50"
-            >
-              <td className="p-4 font-medium text-foreground">
-                {product.code}
-              </td>
-              <td className="p-4">
-                <ProductThumbnail product={product} />
-              </td>
-              <td className="p-4 text-foreground">{product.name}</td>
-              <td className="p-4 text-muted-foreground">
-                {product.brand.name}
-              </td>
-              <td className="p-4 text-muted-foreground">
-                {product.category.name}
-              </td>
-              <td className="p-4 text-muted-foreground">
-                {product.presentation.name}
-              </td>
-              <td className="p-4 text-foreground">{product.price}</td>
-              <td className="p-4 text-foreground">{product.stock}</td>
-              <td className="p-4">
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium',
-                    product.isActive
-                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                      : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                  )}
+    <>
+      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
+        <table className="w-full caption-bottom text-body-sm">
+          <thead className="bg-muted">
+            <tr className="text-left">
+              {HEADERS.map((header) => (
+                <th
+                  key={header}
+                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
                 >
-                  {product.isActive ? (
-                    <>
-                      <IconCheck className="h-3.5 w-3.5" aria-hidden="true" />
-                      Activo
-                    </>
+                  {header === 'Imagen' ? (
+                    <span className="sr-only">Imagen</span>
                   ) : (
-                    <>
-                      <IconX className="h-3.5 w-3.5" aria-hidden="true" />
-                      Inactivo
-                    </>
+                    header
                   )}
-                </span>
-              </td>
-              <td className="p-4">
-                <div className="flex items-center gap-2">
-                  <Link
-                    to={`/products/${product.id}`}
-                    className={cn(
-                      'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-                      'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                    )}
-                  >
-                    Ver
-                  </Link>
-                  <Link
-                    to={`/products/${product.id}/stock`}
-                    className={cn(
-                      'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-                      'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                    )}
-                  >
-                    Stock
-                  </Link>
-                  {canEdit && (
-                    <Link
-                      to={`/products/${product.id}/edit`}
-                      className={cn(
-                        'inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors',
-                        'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                      )}
-                    >
-                      Editar
-                    </Link>
-                  )}
-                </div>
-              </td>
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr
+                key={product.id}
+                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+              >
+                <td className="px-3 font-medium text-foreground">
+                  {product.code}
+                </td>
+                <td className="px-3">
+                  <ProductThumbnail product={product} />
+                </td>
+                <td className="px-3 text-foreground">{product.name}</td>
+                <td className="px-3 text-muted-foreground">
+                  {product.brand.name}
+                </td>
+                <td className="px-3 text-muted-foreground">
+                  {product.category.name}
+                </td>
+                <td className="px-3 text-muted-foreground">
+                  {product.presentation.name}
+                </td>
+                <td className="px-3 text-right font-mono text-foreground">
+                  {product.price}
+                </td>
+                <td className="px-3 text-right font-mono text-foreground">
+                  {product.stock}
+                </td>
+                <td className="px-3">
+                  <StatusBadge product={product} />
+                </td>
+                <td className="px-3">
+                  <div className="flex items-center gap-2">
+                    <Link
+                      to={`/products/${product.id}`}
+                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      Ver
+                    </Link>
+                    <Link
+                      to={`/products/${product.id}/stock`}
+                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      Stock
+                    </Link>
+                    {canEdit && (
+                      <Link
+                        to={`/products/${product.id}/edit`}
+                        className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        Editar
+                      </Link>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {products.map((product) => (
+          <article
+            key={product.id}
+            data-testid="product-mobile-card"
+            className="space-y-3 rounded-lg border bg-card p-3 shadow-stat"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <ProductThumbnail product={product} />
+                <div>
+                  <p className="text-caption text-muted-foreground">
+                    {product.code}
+                  </p>
+                  <p className="text-body-sm font-medium text-foreground">
+                    {product.name}
+                  </p>
+                </div>
+              </div>
+              <StatusBadge product={product} />
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-caption text-muted-foreground">
+              <span>{product.brand.name}</span>
+              <span>{product.category.name}</span>
+              <span>{product.presentation.name}</span>
+              <span>Stock: {product.stock}</span>
+            </div>
+            <p className="text-right font-mono text-body font-semibold text-foreground">
+              {product.price}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to={`/products/${product.id}`}
+                className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Ver
+              </Link>
+              <Link
+                to={`/products/${product.id}/stock`}
+                className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Stock
+              </Link>
+              {canEdit && (
+                <Link
+                  to={`/products/${product.id}/edit`}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  Editar
+                </Link>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
       {products.length === 0 && (
         <p className="py-8 text-center text-muted-foreground">
           No se encontraron productos.
         </p>
       )}
-    </div>
+    </>
   );
 }

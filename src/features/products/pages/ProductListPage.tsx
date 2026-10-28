@@ -87,12 +87,12 @@ export function ProductListPage() {
   return (
     <>
       <PageHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <PageTitle>Productos</PageTitle>
+        <PageTitle className="text-h3 lg:text-h2">Productos</PageTitle>
         {canEdit && (
           <Link
             to="/products/new"
             className={cn(
-              'inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors',
+              'inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground transition-colors sm:w-auto',
               'hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
             )}
           >
@@ -105,8 +105,16 @@ export function ProductListPage() {
           <div className="space-y-4">
             <ProductFilters filters={filters} onChange={handleFiltersChange} />
             {isLoading ? (
-              <output className="block py-8 text-center text-muted-foreground">
-                Cargando productos…
+              <output className="block space-y-3" aria-busy="true">
+                <span className="block text-center text-muted-foreground">
+                  Cargando productos…
+                </span>
+                {['first', 'second', 'third'].map((row) => (
+                  <span
+                    key={row}
+                    className="block h-11 animate-pulse rounded-md bg-muted"
+                  />
+                ))}
               </output>
             ) : error ? (
               <div

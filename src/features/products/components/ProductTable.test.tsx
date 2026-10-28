@@ -31,10 +31,33 @@ function renderTable(
 }
 
 describe('ProductTable', () => {
+  it('renders the approved mobile product card with all actions', () => {
+    renderTable(true);
+
+    const card = screen.getByTestId('product-mobile-card');
+    expect(card).toHaveTextContent('COD-001');
+    expect(card).toHaveTextContent('Aceite 20W50');
+    expect(card).toHaveTextContent('Castrol');
+    expect(card).toHaveTextContent('25.00');
+    expect(card).toHaveTextContent('Activo');
+    expect(screen.getAllByRole('link', { name: 'Ver' })[0]).toHaveAttribute(
+      'href',
+      '/products/p1'
+    );
+    expect(screen.getAllByRole('link', { name: 'Stock' })[0]).toHaveAttribute(
+      'href',
+      '/products/p1/stock'
+    );
+    expect(screen.getAllByRole('link', { name: 'Editar' })[0]).toHaveAttribute(
+      'href',
+      '/products/p1/edit'
+    );
+  });
+
   it('always shows the view action', () => {
     renderTable(false);
 
-    expect(screen.getByRole('link', { name: 'Ver' })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: 'Ver' })[0]).toHaveAttribute(
       'href',
       '/products/p1'
     );
@@ -43,7 +66,7 @@ describe('ProductTable', () => {
   it('always shows the stock action', () => {
     renderTable(false);
 
-    expect(screen.getByRole('link', { name: 'Stock' })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: 'Stock' })[0]).toHaveAttribute(
       'href',
       '/products/p1/stock'
     );
@@ -52,7 +75,7 @@ describe('ProductTable', () => {
   it('shows the edit action when canEdit is true', () => {
     renderTable(true);
 
-    expect(screen.getByRole('link', { name: 'Editar' })).toHaveAttribute(
+    expect(screen.getAllByRole('link', { name: 'Editar' })[0]).toHaveAttribute(
       'href',
       '/products/p1/edit'
     );
@@ -66,6 +89,22 @@ describe('ProductTable', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('uses token status badges', () => {
+    const { rerender } = renderTable(false);
+
+    expect(screen.getAllByText('Activo')[0]).toHaveClass('bg-success');
+
+    rerender(
+      <MemoryRouter>
+        <ProductTable
+          products={[{ ...product, isActive: false }]}
+          canEdit={false}
+        />
+      </MemoryRouter>
+    );
+    expect(screen.getAllByText('Inactivo')[0]).toHaveClass('bg-destructive');
+  });
+
   it('shows the product stock', () => {
     renderTable(false);
 
@@ -75,7 +114,9 @@ describe('ProductTable', () => {
   it('shows a placeholder when the product has no image', () => {
     renderTable(false);
 
-    expect(screen.getByRole('img', { name: 'Sin imagen' })).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('img', { name: 'Sin imagen' })[0]
+    ).toBeInTheDocument();
   });
 
   it('shows a resized thumbnail when the product has an image', () => {
@@ -86,7 +127,7 @@ describe('ProductTable', () => {
 
     renderTable(false, [withImage]);
 
-    const image = screen.getByRole('img', { name: 'Aceite 20W50' });
+    const image = screen.getAllByRole('img', { name: 'Aceite 20W50' })[0];
     expect(image).toHaveAttribute(
       'src',
       'https://res.cloudinary.com/demo/image/upload/w_40,h_40,c_fill,f_auto/abc123'
