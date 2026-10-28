@@ -42,6 +42,18 @@ function renderVehicleList(
 }
 
 describe('VehicleList', () => {
+  it('renders the approved mobile vehicle card', () => {
+    renderVehicleList([activeVehicle], { canEdit: true });
+
+    const card = screen.getByTestId('vehicle-list-mobile-card');
+    expect(card).toHaveTextContent('ABC-123');
+    expect(card).toHaveTextContent('Toyota');
+    expect(card).toHaveTextContent('Corolla');
+    expect(card).toHaveTextContent('2020');
+    expect(card).toHaveTextContent('Rojo');
+    expect(card).toHaveTextContent('Mantenimiento al día');
+  });
+
   it('renders active vehicle data', () => {
     renderVehicleList([activeVehicle]);
 
@@ -103,10 +115,10 @@ describe('VehicleList', () => {
     renderVehicleList([activeVehicle], { canEdit: true });
 
     expect(
-      screen.getByRole('button', { name: 'Editar ABC-123' })
+      screen.getAllByRole('button', { name: 'Editar ABC-123' })[0]
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Eliminar ABC-123' })
+      screen.getAllByRole('button', { name: 'Eliminar ABC-123' })[0]
     ).toBeInTheDocument();
   });
 
@@ -121,10 +133,14 @@ describe('VehicleList', () => {
       onDelete,
     });
 
-    await user.click(screen.getByRole('button', { name: 'Editar ABC-123' }));
+    await user.click(
+      screen.getAllByRole('button', { name: 'Editar ABC-123' })[0]
+    );
     expect(onEdit).toHaveBeenCalledWith(activeVehicle);
 
-    await user.click(screen.getByRole('button', { name: 'Eliminar ABC-123' }));
+    await user.click(
+      screen.getAllByRole('button', { name: 'Eliminar ABC-123' })[0]
+    );
     expect(onDelete).toHaveBeenCalledWith(activeVehicle);
   });
 });

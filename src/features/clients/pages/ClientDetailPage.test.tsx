@@ -334,11 +334,13 @@ describe('ClientDetailPage', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('button', { name: 'Editar ABC-123' })
+        screen.getAllByRole('button', { name: 'Editar ABC-123' })[0]
       ).toBeInTheDocument()
     );
 
-    await user.click(screen.getByRole('button', { name: 'Editar ABC-123' }));
+    await user.click(
+      screen.getAllByRole('button', { name: 'Editar ABC-123' })[0]
+    );
 
     expect(screen.getByDisplayValue('ABC-123')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Toyota')).toBeInTheDocument();
@@ -355,11 +357,13 @@ describe('ClientDetailPage', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('button', { name: 'Editar ABC-123' })
+        screen.getAllByRole('button', { name: 'Editar ABC-123' })[0]
       ).toBeInTheDocument()
     );
 
-    await user.click(screen.getByRole('button', { name: 'Editar ABC-123' }));
+    await user.click(
+      screen.getAllByRole('button', { name: 'Editar ABC-123' })[0]
+    );
 
     await user.clear(screen.getByLabelText('Marca'));
     await user.type(screen.getByLabelText('Marca'), 'Honda');
@@ -385,11 +389,13 @@ describe('ClientDetailPage', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('button', { name: 'Eliminar ABC-123' })
+        screen.getAllByRole('button', { name: 'Eliminar ABC-123' })[0]
       ).toBeInTheDocument()
     );
 
-    await user.click(screen.getByRole('button', { name: 'Eliminar ABC-123' }));
+    await user.click(
+      screen.getAllByRole('button', { name: 'Eliminar ABC-123' })[0]
+    );
 
     expect(screen.getByText('Eliminar vehículo')).toBeInTheDocument();
     expect(
@@ -414,11 +420,13 @@ describe('ClientDetailPage', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('button', { name: 'Eliminar ABC-123' })
+        screen.getAllByRole('button', { name: 'Eliminar ABC-123' })[0]
       ).toBeInTheDocument()
     );
 
-    await user.click(screen.getByRole('button', { name: 'Eliminar ABC-123' }));
+    await user.click(
+      screen.getAllByRole('button', { name: 'Eliminar ABC-123' })[0]
+    );
     await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     await waitFor(() =>
