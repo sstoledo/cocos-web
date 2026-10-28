@@ -250,7 +250,11 @@ export function ReceiptReviewForm({ receipt }: ReceiptReviewFormProps) {
       <p className="text-sm text-muted-foreground">
         No se registrará inventario hasta que confirmes esta revisión.
       </p>
-      <Button type="submit" disabled={!canSubmit || isPending}>
+      <Button
+        type="submit"
+        className="w-full sm:w-auto"
+        disabled={!canSubmit || isPending}
+      >
         {isPending ? 'Confirmando…' : 'Confirmar comprobante'}
       </Button>
     </form>
