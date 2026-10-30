@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -6,11 +7,13 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { toPaginationMeta } from '@/lib/pagination';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { SupplierFilters } from '../components/SupplierFilters';
 import { SupplierTable } from '../components/SupplierTable';
+import { useDeleteSupplier } from '../hooks/use-delete-supplier';
 import { useSuppliers } from '../hooks/use-suppliers';
-import type { SupplierListFilters } from '../types';
+import type { Supplier, SupplierListFilters } from '../types';
 
 const DEFAULT_LIMIT = 10;
 
@@ -35,10 +38,21 @@ export function SupplierListPage() {
   const filters = filtersFromSearchParams(searchParams);
   const { suppliers, meta, isLoading, error } = useSuppliers(filters);
   const { user } = useUser();
+  const deleteSupplier = useDeleteSupplier();
+  const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(
+    null
+  );
 
   const canEdit =
     user?.role?.name === 'Admin' || user?.role?.name === 'Purchasing';
   const paginationMeta = meta ? toPaginationMeta(meta) : undefined;
+
+  function handleConfirmDelete() {
+    if (!supplierToDelete) {
+      return;
+    }
+    deleteSupplier.mutate(supplierToDelete.id);
+  }
 
   function handleFiltersChange(nextFilters: SupplierListFilters) {
     const nextSearchParams = new URLSearchParams();
@@ -111,7 +125,11 @@ export function SupplierListPage() {
                 tarde.
               </div>
             ) : (
-              <SupplierTable suppliers={suppliers} canEdit={canEdit} />
+              <SupplierTable
+                suppliers={suppliers}
+                canEdit={canEdit}
+                onDelete={setSupplierToDelete}
+              />
             )}
             {paginationMeta && paginationMeta.totalPages > 1 && (
               <Pagination
@@ -122,6 +140,22 @@ export function SupplierListPage() {
           </div>
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={supplierToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSupplierToDelete(null);
+          }
+        }}
+        title="Eliminar proveedor"
+        description={
+          supplierToDelete
+            ? `¿Eliminar a ${supplierToDelete.name}? Esta acción no se puede deshacer.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }
