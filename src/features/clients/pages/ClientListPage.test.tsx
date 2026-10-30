@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type ReactNode, createElement } from 'react';
 import { MemoryRouter } from 'react-router';
@@ -218,6 +218,50 @@ describe('ClientListPage', () => {
         'http://localhost:3000/api/clients?query=juan&page=2&limit=10',
         { credentials: 'include' }
       )
+    );
+  });
+
+  it('deletes a client after confirming in the dialog', async () => {
+    mockFetch(paginatedResponse);
+    const user = userEvent.setup();
+
+    render(<ClientListPage />, { wrapper: createWrapper() });
+
+    await screen.findAllByText('Juan Pérez');
+    await user.click(screen.getAllByRole('button', { name: /eliminar/i })[0]);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: /eliminar/i,
+      })
+    );
+    await waitFor(() =>
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/clients/c1'),
+        expect.objectContaining({ method: 'DELETE' })
+      )
+    );
+  });
+
+  it('does not delete on cancel', async () => {
+    mockFetch(paginatedResponse);
+    const user = userEvent.setup();
+
+    render(<ClientListPage />, { wrapper: createWrapper() });
+
+    await screen.findAllByText('Juan Pérez');
+    await user.click(screen.getAllByRole('button', { name: /eliminar/i })[0]);
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: /cancelar/i,
+      })
+    );
+
+    expect(screen.getAllByText('Juan Pérez')[0]).toBeInTheDocument();
+    expect(globalThis.fetch).not.toHaveBeenCalledWith(
+      expect.stringContaining('/clients/c1'),
+      expect.objectContaining({ method: 'DELETE' })
     );
   });
 });

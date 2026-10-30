@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SupplierListPage } from '../pages/SupplierListPage';
@@ -85,6 +86,48 @@ describe('SupplierListPage', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.clearAllMocks();
+  });
+
+  it('deletes a supplier after confirming in the dialog', async () => {
+    const deleteMock = vi.fn().mockResolvedValue({ ok: true });
+    globalThis.fetch = deleteMock;
+    const user = userEvent.setup();
+
+    renderPage();
+
+    await user.click(screen.getAllByRole('button', { name: /eliminar/i })[0]);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: /eliminar/i,
+      })
+    );
+    await waitFor(() =>
+      expect(deleteMock).toHaveBeenCalledWith(
+        expect.stringContaining('/suppliers/s1'),
+        expect.objectContaining({ method: 'DELETE' })
+      )
+    );
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    );
+  });
+
+  it('cancels deletion when the dialog is dismissed', async () => {
+    globalThis.fetch = vi.fn();
+    const user = userEvent.setup();
+
+    renderPage();
+
+    await user.click(screen.getAllByRole('button', { name: /eliminar/i })[0]);
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: /cancelar/i,
+      })
+    );
+
+    expect(screen.getAllByText('Proveedor 1')[0]).toBeInTheDocument();
   });
 
   it('renders the page title', () => {

@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -5,11 +6,13 @@ import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { ClientFilters } from '../components/ClientFilters';
 import { ClientTable } from '../components/ClientTable';
 import { useClients } from '../hooks/use-clients';
-import type { ClientListFilters } from '../types';
+import { useDeleteClient } from '../hooks/use-delete-client';
+import type { Client, ClientListFilters } from '../types';
 
 const DEFAULT_LIMIT = 10;
 
@@ -28,9 +31,18 @@ export function ClientListPage() {
   const filters = filtersFromSearchParams(searchParams);
   const { clients, meta, isLoading, error } = useClients(filters);
   const { user } = useUser();
+  const deleteClient = useDeleteClient();
+  const [clientToDelete, setClientToDelete] = useState<Client | null>(null);
 
   const canEdit =
     user?.role?.name === 'Admin' || user?.role?.name === 'Reception';
+
+  function handleConfirmDelete() {
+    if (!clientToDelete) {
+      return;
+    }
+    deleteClient.mutate(clientToDelete.id);
+  }
 
   function handleFiltersChange(nextFilters: ClientListFilters) {
     const nextSearchParams = new URLSearchParams();
@@ -94,7 +106,11 @@ export function ClientListPage() {
                 No se pudieron cargar los clientes. Intentá de nuevo más tarde.
               </div>
             ) : (
-              <ClientTable clients={clients} canEdit={canEdit} />
+              <ClientTable
+                clients={clients}
+                canEdit={canEdit}
+                onDelete={setClientToDelete}
+              />
             )}
             {meta && meta.totalPages > 1 && (
               <Pagination meta={meta} onPageChange={handlePageChange} />
@@ -102,6 +118,22 @@ export function ClientListPage() {
           </div>
         </SectionCard>
       </PageContent>
+      <ConfirmDialog
+        open={clientToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setClientToDelete(null);
+          }
+        }}
+        title="Eliminar cliente"
+        description={
+          clientToDelete
+            ? `¿Eliminar a ${clientToDelete.name}? Esta acción no se puede deshacer.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+        variant="danger"
+      />
     </>
   );
 }
