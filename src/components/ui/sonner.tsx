@@ -1,26 +1,32 @@
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
+import { useAppTheme } from '@/lib/use-app-theme';
+
 const Toaster = ({ ...props }: ToasterProps) => {
+  const theme = useAppTheme();
+
   return (
     <Sonner
-      theme="system"
+      theme={theme}
       className="toaster group"
       style={
         {
-          '--normal-bg': 'var(--popover)',
-          '--normal-text': 'var(--popover-foreground)',
+          /* Toast surface follows the approved Pen tokens: card is the
+             popover-equivalent surface; --popover never existed here. */
+          '--normal-bg': 'var(--card)',
+          '--normal-text': 'var(--card-foreground)',
           '--normal-border': 'var(--border)',
-          '--success-bg': 'var(--popover)',
-          '--success-text': 'var(--popover-foreground)',
+          '--success-bg': 'var(--card)',
+          '--success-text': 'var(--card-foreground)',
           '--success-border': 'var(--border)',
-          '--warning-bg': 'var(--popover)',
-          '--warning-text': 'var(--popover-foreground)',
+          '--warning-bg': 'var(--card)',
+          '--warning-text': 'var(--card-foreground)',
           '--warning-border': 'var(--border)',
-          '--error-bg': 'var(--popover)',
-          '--error-text': 'var(--popover-foreground)',
+          '--error-bg': 'var(--card)',
+          '--error-text': 'var(--card-foreground)',
           '--error-border': 'var(--border)',
-          '--info-bg': 'var(--popover)',
-          '--info-text': 'var(--popover-foreground)',
+          '--info-bg': 'var(--card)',
+          '--info-text': 'var(--card-foreground)',
           '--info-border': 'var(--border)',
           '--border-radius': 'var(--radius)',
         } as React.CSSProperties
