@@ -2,6 +2,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Pen's $border governs every border in the design, so restore the
+   Tailwind v3-style default border color instead of currentColor. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border);
+  }
+}
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -108,8 +120,9 @@
   --primary-foreground: oklch(0.99 0 0);
   --muted: oklch(0.94 0.004 75);
   --muted-foreground: oklch(0.52 0.013 265);
-  --border: oklch(0.875 0.006 75);
-  --input: oklch(0.875 0.006 75);
+  /* Pen $border light: zinc-200 */
+  --border: #e4e4e7;
+  --input: #e4e4e7;
   --placeholder: oklch(0.64 0.013 265);
   --destructive: oklch(0.6 0.2 25);
   --success: oklch(0.627 0.17 149.21);
@@ -158,8 +171,9 @@
   --primary-foreground: oklch(0.1 0.006 265);
   --muted: oklch(0.18 0.006 265);
   --muted-foreground: oklch(0.64 0.014 265);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 10%);
+  /* Pen $border dark: zinc-800 solid */
+  --border: #27272a;
+  --input: #27272a;
   --placeholder: oklch(0.64 0.014 265);
   --destructive: oklch(0.65 0.2 25);
   --success: oklch(0.723 0.192 149.58);
