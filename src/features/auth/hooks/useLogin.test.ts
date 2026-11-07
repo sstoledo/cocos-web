@@ -2,6 +2,7 @@ import { authClient } from '@/lib/auth-client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode, createElement } from 'react';
+import { toast } from 'sonner';
 import { describe, expect, it, vi } from 'vitest';
 import { useLogin } from './useLogin';
 
@@ -10,6 +11,13 @@ vi.mock('@/lib/auth-client', () => ({
     signIn: {
       email: vi.fn(),
     },
+  },
+}));
+
+vi.mock('sonner', () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -37,7 +45,25 @@ function createWrapper() {
 }
 
 describe('useLogin', () => {
-  it('signs in with email and password', async () => {
+  it('does not toast when sign in fails; the inline form error is the single source', async () => {
+    const error = Object.assign(new Error('Invalid credentials'), {
+      status: 401,
+    });
+    vi.mocked(authClient.signIn.email).mockRejectedValueOnce(error);
+
+    const { Wrapper: failWrapper } = createWrapper();
+    const { result } = renderHook(() => useLogin(), {
+      wrapper: failWrapper,
+    });
+
+    result.current.mutate({ email: 'test@example.com', password: 'wrong' });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('does not toast on success', async () => {
     vi.mocked(authClient.signIn.email).mockResolvedValueOnce({
       data: { user: { id: '1' } },
       error: null,
@@ -52,11 +78,7 @@ describe('useLogin', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(authClient.signIn.email).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      password: 'secret',
-    });
-    expect(result.current.error).toBeNull();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('removes the stale cached user before refetching the session', async () => {
