@@ -1,65 +1,283 @@
 import { authRoutes } from '@/features/auth/routes';
-import { BrandDetailPage } from '@/features/brands/pages/BrandDetailPage';
-import { BrandFormPage } from '@/features/brands/pages/BrandFormPage';
-import { BrandListPage } from '@/features/brands/pages/BrandListPage';
-import { CashClosingDetailPage } from '@/features/cash-closings/pages/CashClosingDetailPage';
-import { CashClosingsListPage } from '@/features/cash-closings/pages/CashClosingsListPage';
-import { CloseCashClosingPage } from '@/features/cash-closings/pages/CloseCashClosingPage';
-import { CategoryDetailPage } from '@/features/categories/pages/CategoryDetailPage';
-import { CategoryFormPage } from '@/features/categories/pages/CategoryFormPage';
-import { CategoryListPage } from '@/features/categories/pages/CategoryListPage';
-import { ClientDetailPage } from '@/features/clients/pages/ClientDetailPage';
-import { ClientFormPage } from '@/features/clients/pages/ClientFormPage';
-import { ClientListPage } from '@/features/clients/pages/ClientListPage';
-import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
-import { LotFormPage } from '@/features/lots/pages/LotFormPage';
-import { LotListPage } from '@/features/lots/pages/LotListPage';
-import { NotificationListPage } from '@/features/notifications/pages/NotificationListPage';
-import { PresentationFormPage } from '@/features/presentations/pages/PresentationFormPage';
-import { PresentationListPage } from '@/features/presentations/pages/PresentationListPage';
-import { ProductDetailPage } from '@/features/products/pages/ProductDetailPage';
-import { ProductFormPage } from '@/features/products/pages/ProductFormPage';
-import { ProductListPage } from '@/features/products/pages/ProductListPage';
-import { ProformaDetailPage } from '@/features/proformas/pages/ProformaDetailPage';
-import { ProformaFormPage } from '@/features/proformas/pages/ProformaFormPage';
-import { ProformasListPage } from '@/features/proformas/pages/ProformasListPage';
-import { PurchaseOrderDetailPage } from '@/features/purchase-orders/pages/PurchaseOrderDetailPage';
-import { PurchaseOrderFormPage } from '@/features/purchase-orders/pages/PurchaseOrderFormPage';
-import { PurchaseOrderListPage } from '@/features/purchase-orders/pages/PurchaseOrderListPage';
-import { PurchaseOrderReceivePage } from '@/features/purchase-orders/pages/PurchaseOrderReceivePage';
 import { receiptRoutes } from '@/features/receipts/routes';
-import { RefundPage } from '@/features/refunds/pages/RefundPage';
-import { CheckoutPage } from '@/features/sales/pages/CheckoutPage';
-import { SaleDetailPage } from '@/features/sales/pages/SaleDetailPage';
-import { SalesListPage } from '@/features/sales/pages/SalesListPage';
-import { ServiceDetailPage } from '@/features/services/pages/ServiceDetailPage';
-import { ServiceFormPage } from '@/features/services/pages/ServiceFormPage';
-import { ServiceListPage } from '@/features/services/pages/ServiceListPage';
 import { RoleBasedIndex } from '@/features/shell/components/RoleBasedIndex';
 import { RouteGuard } from '@/features/shell/components/RouteGuard';
 import { Layout } from '@/features/shell/pages/Layout';
 import { NotFoundPage } from '@/features/shell/pages/NotFoundPage';
-import { ProfilePage } from '@/features/shell/pages/ProfilePage';
 import { UnauthorizedPage } from '@/features/shell/pages/UnauthorizedPage';
 import type { RoleName } from '@/features/shell/types';
-import { ProductStockPage } from '@/features/stock/pages/ProductStockPage';
-import { SupplierDetailPage } from '@/features/suppliers/pages/SupplierDetailPage';
-import { SupplierFormPage } from '@/features/suppliers/pages/SupplierFormPage';
-import { SupplierListPage } from '@/features/suppliers/pages/SupplierListPage';
-import { UserDetailPage } from '@/features/users/pages/UserDetailPage';
-import { UserFormPage } from '@/features/users/pages/UserFormPage';
-import { UserListPage } from '@/features/users/pages/UserListPage';
-import { VehicleFormPage } from '@/features/vehicles/pages/VehicleFormPage';
-import { VehicleListPage } from '@/features/vehicles/pages/VehicleListPage';
-import { WorkOrderDetailPage } from '@/features/work-orders/pages/WorkOrderDetailPage';
-import { WorkOrderFormPage } from '@/features/work-orders/pages/WorkOrderFormPage';
-import { WorkOrderListPage } from '@/features/work-orders/pages/WorkOrderListPage';
+import { IconLoader2 } from '@tabler/icons-react';
 import * as React from 'react';
 import {
   type RouteObject,
   RouterProvider,
   createBrowserRouter,
 } from 'react-router';
+
+/* Lazy feature pages keep the initial bundle small: each route loads its
+   page on first navigation. React.lazy requires a default export, so each
+   import adapts the eager named export without touching feature files. */
+const BrandDetailPage = React.lazy(() =>
+  import('@/features/brands/pages/BrandDetailPage').then((m) => ({
+    default: m.BrandDetailPage,
+  }))
+);
+const BrandFormPage = React.lazy(() =>
+  import('@/features/brands/pages/BrandFormPage').then((m) => ({
+    default: m.BrandFormPage,
+  }))
+);
+const BrandListPage = React.lazy(() =>
+  import('@/features/brands/pages/BrandListPage').then((m) => ({
+    default: m.BrandListPage,
+  }))
+);
+const CashClosingDetailPage = React.lazy(() =>
+  import('@/features/cash-closings/pages/CashClosingDetailPage').then((m) => ({
+    default: m.CashClosingDetailPage,
+  }))
+);
+const CashClosingsListPage = React.lazy(() =>
+  import('@/features/cash-closings/pages/CashClosingsListPage').then((m) => ({
+    default: m.CashClosingsListPage,
+  }))
+);
+const CloseCashClosingPage = React.lazy(() =>
+  import('@/features/cash-closings/pages/CloseCashClosingPage').then((m) => ({
+    default: m.CloseCashClosingPage,
+  }))
+);
+const CategoryDetailPage = React.lazy(() =>
+  import('@/features/categories/pages/CategoryDetailPage').then((m) => ({
+    default: m.CategoryDetailPage,
+  }))
+);
+const CategoryFormPage = React.lazy(() =>
+  import('@/features/categories/pages/CategoryFormPage').then((m) => ({
+    default: m.CategoryFormPage,
+  }))
+);
+const CategoryListPage = React.lazy(() =>
+  import('@/features/categories/pages/CategoryListPage').then((m) => ({
+    default: m.CategoryListPage,
+  }))
+);
+const ClientDetailPage = React.lazy(() =>
+  import('@/features/clients/pages/ClientDetailPage').then((m) => ({
+    default: m.ClientDetailPage,
+  }))
+);
+const ClientFormPage = React.lazy(() =>
+  import('@/features/clients/pages/ClientFormPage').then((m) => ({
+    default: m.ClientFormPage,
+  }))
+);
+const ClientListPage = React.lazy(() =>
+  import('@/features/clients/pages/ClientListPage').then((m) => ({
+    default: m.ClientListPage,
+  }))
+);
+const DashboardPage = React.lazy(() =>
+  import('@/features/dashboard/pages/DashboardPage').then((m) => ({
+    default: m.DashboardPage,
+  }))
+);
+const LotFormPage = React.lazy(() =>
+  import('@/features/lots/pages/LotFormPage').then((m) => ({
+    default: m.LotFormPage,
+  }))
+);
+const LotListPage = React.lazy(() =>
+  import('@/features/lots/pages/LotListPage').then((m) => ({
+    default: m.LotListPage,
+  }))
+);
+const NotificationListPage = React.lazy(() =>
+  import('@/features/notifications/pages/NotificationListPage').then((m) => ({
+    default: m.NotificationListPage,
+  }))
+);
+const PresentationFormPage = React.lazy(() =>
+  import('@/features/presentations/pages/PresentationFormPage').then((m) => ({
+    default: m.PresentationFormPage,
+  }))
+);
+const PresentationListPage = React.lazy(() =>
+  import('@/features/presentations/pages/PresentationListPage').then((m) => ({
+    default: m.PresentationListPage,
+  }))
+);
+const ProductDetailPage = React.lazy(() =>
+  import('@/features/products/pages/ProductDetailPage').then((m) => ({
+    default: m.ProductDetailPage,
+  }))
+);
+const ProductFormPage = React.lazy(() =>
+  import('@/features/products/pages/ProductFormPage').then((m) => ({
+    default: m.ProductFormPage,
+  }))
+);
+const ProductListPage = React.lazy(() =>
+  import('@/features/products/pages/ProductListPage').then((m) => ({
+    default: m.ProductListPage,
+  }))
+);
+const ProformaDetailPage = React.lazy(() =>
+  import('@/features/proformas/pages/ProformaDetailPage').then((m) => ({
+    default: m.ProformaDetailPage,
+  }))
+);
+const ProformaFormPage = React.lazy(() =>
+  import('@/features/proformas/pages/ProformaFormPage').then((m) => ({
+    default: m.ProformaFormPage,
+  }))
+);
+const ProformasListPage = React.lazy(() =>
+  import('@/features/proformas/pages/ProformasListPage').then((m) => ({
+    default: m.ProformasListPage,
+  }))
+);
+const PurchaseOrderDetailPage = React.lazy(() =>
+  import('@/features/purchase-orders/pages/PurchaseOrderDetailPage').then(
+    (m) => ({
+      default: m.PurchaseOrderDetailPage,
+    })
+  )
+);
+const PurchaseOrderFormPage = React.lazy(() =>
+  import('@/features/purchase-orders/pages/PurchaseOrderFormPage').then(
+    (m) => ({
+      default: m.PurchaseOrderFormPage,
+    })
+  )
+);
+const PurchaseOrderListPage = React.lazy(() =>
+  import('@/features/purchase-orders/pages/PurchaseOrderListPage').then(
+    (m) => ({
+      default: m.PurchaseOrderListPage,
+    })
+  )
+);
+const PurchaseOrderReceivePage = React.lazy(() =>
+  import('@/features/purchase-orders/pages/PurchaseOrderReceivePage').then(
+    (m) => ({
+      default: m.PurchaseOrderReceivePage,
+    })
+  )
+);
+const RefundPage = React.lazy(() =>
+  import('@/features/refunds/pages/RefundPage').then((m) => ({
+    default: m.RefundPage,
+  }))
+);
+const CheckoutPage = React.lazy(() =>
+  import('@/features/sales/pages/CheckoutPage').then((m) => ({
+    default: m.CheckoutPage,
+  }))
+);
+const SaleDetailPage = React.lazy(() =>
+  import('@/features/sales/pages/SaleDetailPage').then((m) => ({
+    default: m.SaleDetailPage,
+  }))
+);
+const SalesListPage = React.lazy(() =>
+  import('@/features/sales/pages/SalesListPage').then((m) => ({
+    default: m.SalesListPage,
+  }))
+);
+const ServiceDetailPage = React.lazy(() =>
+  import('@/features/services/pages/ServiceDetailPage').then((m) => ({
+    default: m.ServiceDetailPage,
+  }))
+);
+const ServiceFormPage = React.lazy(() =>
+  import('@/features/services/pages/ServiceFormPage').then((m) => ({
+    default: m.ServiceFormPage,
+  }))
+);
+const ServiceListPage = React.lazy(() =>
+  import('@/features/services/pages/ServiceListPage').then((m) => ({
+    default: m.ServiceListPage,
+  }))
+);
+const ProfilePage = React.lazy(() =>
+  import('@/features/shell/pages/ProfilePage').then((m) => ({
+    default: m.ProfilePage,
+  }))
+);
+const ProductStockPage = React.lazy(() =>
+  import('@/features/stock/pages/ProductStockPage').then((m) => ({
+    default: m.ProductStockPage,
+  }))
+);
+const SupplierDetailPage = React.lazy(() =>
+  import('@/features/suppliers/pages/SupplierDetailPage').then((m) => ({
+    default: m.SupplierDetailPage,
+  }))
+);
+const SupplierFormPage = React.lazy(() =>
+  import('@/features/suppliers/pages/SupplierFormPage').then((m) => ({
+    default: m.SupplierFormPage,
+  }))
+);
+const SupplierListPage = React.lazy(() =>
+  import('@/features/suppliers/pages/SupplierListPage').then((m) => ({
+    default: m.SupplierListPage,
+  }))
+);
+const UserDetailPage = React.lazy(() =>
+  import('@/features/users/pages/UserDetailPage').then((m) => ({
+    default: m.UserDetailPage,
+  }))
+);
+const UserFormPage = React.lazy(() =>
+  import('@/features/users/pages/UserFormPage').then((m) => ({
+    default: m.UserFormPage,
+  }))
+);
+const UserListPage = React.lazy(() =>
+  import('@/features/users/pages/UserListPage').then((m) => ({
+    default: m.UserListPage,
+  }))
+);
+const VehicleFormPage = React.lazy(() =>
+  import('@/features/vehicles/pages/VehicleFormPage').then((m) => ({
+    default: m.VehicleFormPage,
+  }))
+);
+const VehicleListPage = React.lazy(() =>
+  import('@/features/vehicles/pages/VehicleListPage').then((m) => ({
+    default: m.VehicleListPage,
+  }))
+);
+const WorkOrderDetailPage = React.lazy(() =>
+  import('@/features/work-orders/pages/WorkOrderDetailPage').then((m) => ({
+    default: m.WorkOrderDetailPage,
+  }))
+);
+const WorkOrderFormPage = React.lazy(() =>
+  import('@/features/work-orders/pages/WorkOrderFormPage').then((m) => ({
+    default: m.WorkOrderFormPage,
+  }))
+);
+const WorkOrderListPage = React.lazy(() =>
+  import('@/features/work-orders/pages/WorkOrderListPage').then((m) => ({
+    default: m.WorkOrderListPage,
+  }))
+);
+
+function PageLoader() {
+  return (
+    <output
+      aria-busy="true"
+      aria-label="Cargando página"
+      className="flex items-center justify-center gap-2 py-16 text-muted-foreground"
+    >
+      <IconLoader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+      Cargando…
+    </output>
+  );
+}
 
 function guardedRoute(
   path: string,
@@ -75,9 +293,11 @@ function guardedRoute(
   return {
     path,
     element: (
-      <RouteGuard routePath={path} requiredRoles={roles}>
-        {element}
-      </RouteGuard>
+      <React.Suspense fallback={<PageLoader />}>
+        <RouteGuard routePath={path} requiredRoles={roles}>
+          {element}
+        </RouteGuard>
+      </React.Suspense>
     ),
   };
 }
@@ -127,7 +347,6 @@ const routes: RouteObject[] = [
         'Purchasing',
       ]),
       guardedRoute('suppliers/:id', <SupplierDetailPage />),
-
       guardedRoute('suppliers/:id/edit', <SupplierFormPage />, [
         'Admin',
         'Purchasing',
