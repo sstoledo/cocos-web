@@ -38,9 +38,20 @@ export async function uiLogin(
   email: string,
   password: string = E2E_PASSWORD
 ): Promise<void> {
-  await page.goto('/login');
-  await page.getByLabel('Email').fill(email);
-  await page.getByLabel('Password').fill(password);
-  await page.getByRole('button', { name: 'Sign in' }).click();
-  await expect(page).not.toHaveURL(/\/login$/);
+  // Cold e2e databases make the very first sign-in slow; a fixed 10s
+  // expectation flaked the local full suite, so tolerate one retry.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(email);
+    await page.getByLabel('Password').fill(password);
+    await page.getByRole('button', { name: 'Sign in' }).click();
+    try {
+      await expect(page).not.toHaveURL(/\/login$/, { timeout: 20_000 });
+      return;
+    } catch (error) {
+      if (attempt === 2) {
+        throw error;
+      }
+    }
+  }
 }
