@@ -89,6 +89,22 @@ describe('ServiceTable', () => {
     expect(screen.getAllByText('Lavado')[0]).toBeInTheDocument();
   });
 
+  it('aligns price values with the rest of the table, not tabbed right', () => {
+    renderTable();
+
+    const priceCell = screen
+      .getByRole('table')
+      .querySelector('tbody tr:first-child td:nth-child(3)');
+    expect(priceCell).not.toHaveClass('text-right');
+    expect(priceCell).toHaveTextContent('150');
+
+    // And the header is not a right-aligned outlier
+    const priceHeader = screen
+      .getByRole('columnheader', { name: 'Precio' })
+      .closest('th');
+    expect(priceHeader).not.toHaveClass('text-right');
+  });
+
   it('formats price as currency', () => {
     renderTable();
 
