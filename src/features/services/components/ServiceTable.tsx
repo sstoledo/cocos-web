@@ -113,7 +113,7 @@ export function ServiceTable({ services }: ServiceTableProps) {
                   {service.code}
                 </td>
                 <td className="px-3 text-foreground">{service.name}</td>
-                <td className="px-3 text-right font-mono text-foreground">
+                <td className="px-3 font-mono text-foreground">
                   {formatPrice(service.price)}
                 </td>
                 <td className="px-3 text-muted-foreground">
