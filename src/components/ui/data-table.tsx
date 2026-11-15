@@ -1,10 +1,12 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
+export type DataTableVariant = 'card' | 'page' | 'section' | 'detail';
+
 export type DataTableHeader = {
   /** Column label; unique within the table (also used as React key). */
   label: string;
-  /** Extra classes for this column's th (e.g. a width hint). */
+  /** Extra classes for this column's th (e.g. a width or alignment hint). */
   className?: string;
 };
 
@@ -14,40 +16,91 @@ export type DataTableProps = {
   children: ReactNode;
   /** Table text size; matches the two skeletons that exist today. */
   size?: 'body' | 'caption';
+  /** Shell skeleton. card = bordered list card (list pages), page =
+   * line-item table on a detail page, section/detail = tables inside
+   * SectionCards. Defaults to card, matching all list tables. */
+  variant?: DataTableVariant;
 };
 
-const CONTAINER_CLASSES =
-  'hidden overflow-x-auto rounded-lg border bg-card md:block';
+const CONTAINER_CLASSES: Record<DataTableVariant, string> = {
+  card: 'hidden overflow-x-auto rounded-lg border bg-card md:block',
+  page: 'hidden overflow-x-auto md:block',
+  section: 'overflow-x-auto',
+  detail: 'overflow-x-auto',
+};
 
 const TABLE_CLASSES = 'w-full caption-bottom';
 
-const TH_CLASSES = 'h-11 px-3 font-semibold text-muted-foreground';
+const THEAD_CLASSES: Record<DataTableVariant, string> = {
+  card: 'bg-muted',
+  page: 'bg-muted',
+  section: '',
+  detail: '',
+};
+
+const HEADER_TR_CLASSES: Record<DataTableVariant, string> = {
+  card: 'text-left',
+  // The caption-size page tables keep their th row at the plain size,
+  // so the font-size utility derives from `size` like the card variant.
+  page: 'text-left font-semibold text-muted-foreground',
+  section: 'border-b border-border text-left text-muted-foreground',
+  detail: 'border-b border-border',
+};
+
+const TH_CLASSES: Record<DataTableVariant, string> = {
+  card: 'h-11 px-3 font-semibold text-muted-foreground',
+  page: 'px-3 py-2',
+  section: 'px-3 py-2 font-medium',
+  detail: 'text-left p-3 font-medium text-muted-foreground',
+};
 
 /** WorkOrderTable (the only caption-size list table today) keeps th
  * without text-caption, so the header font size derives from `size`. */
-const TH_CLASSES_BODY = `${TH_CLASSES} text-caption`;
+const TH_CLASSES_BODY = `${TH_CLASSES.card} text-caption`;
+
+const ROW_CLASSES: Record<DataTableVariant, string> = {
+  card: 'h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50',
+  page: 'h-12 border-b border-border last:border-0',
+  section: 'border-b border-border',
+  detail: 'border-b border-border',
+};
+
+function headerRowClasses(variant: DataTableVariant, size: 'body' | 'caption') {
+  const base = HEADER_TR_CLASSES[variant];
+  if (variant === 'page' && size === 'body') {
+    return `${base} text-caption`;
+  }
+  if (variant === 'card' && size === 'body') {
+    return `${base} text-caption`;
+  }
+  return base;
+}
 
 /**
- * Shared list-table shell. Every feature table used to hand-copy this
- * wrapper; the primitive keeps class churn for a visual-pattern change
- * at one site.
+ * Shared table shell. Every feature table used to hand-copy one of
+ * these skeletons; the primitive keeps class churn for a visual-pattern
+ * change at one site.
  */
 export function DataTable({
   headers,
   children,
   size = 'body',
+  variant = 'card',
 }: DataTableProps) {
-  const thClasses = size === 'body' ? TH_CLASSES_BODY : TH_CLASSES;
+  const thClasses =
+    variant === 'card' && size === 'body'
+      ? TH_CLASSES_BODY
+      : TH_CLASSES[variant];
   return (
-    <div className={CONTAINER_CLASSES}>
+    <div className={CONTAINER_CLASSES[variant]}>
       <table
         className={cn(
           TABLE_CLASSES,
           size === 'body' ? 'text-body-sm' : 'text-caption'
         )}
       >
-        <thead className="bg-muted">
-          <tr className="text-left">
+        <thead className={THEAD_CLASSES[variant]}>
+          <tr className={headerRowClasses(variant, size)}>
             {headers.map((header) => (
               // The static shell classes are built by interpolation, not
               // cn(): tailwind-merge treats text-caption (a font-size
@@ -72,16 +125,15 @@ export function DataTable({
   );
 }
 
-const ROW_CLASSES =
-  'h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50';
-
-/** Shared body-row wrapper matching every list table in the app. */
+/** Shared body-row wrapper matching every table skeleton in the app. */
 export function DataTableRow({
   children,
   className,
+  variant = 'card',
 }: {
   children: ReactNode;
   className?: string;
+  variant?: DataTableVariant;
 }) {
-  return <tr className={cn(ROW_CLASSES, className)}>{children}</tr>;
+  return <tr className={cn(ROW_CLASSES[variant], className)}>{children}</tr>;
 }
