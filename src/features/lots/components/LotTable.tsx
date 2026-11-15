@@ -1,3 +1,4 @@
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import type { Lot } from '../types';
 
 export type LotTableProps = {
@@ -28,58 +29,41 @@ function getLotStatus(lot: Lot): LotStatus {
 export function LotTable({ lots }: LotTableProps) {
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {[
-                'Número de lote',
-                'Proveedor',
-                'Fecha de recepción',
-                'Cantidad de ítems',
-                'Estado / acciones',
-              ].map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {lots.map((lot) => {
-              const status = getLotStatus(lot);
+      <DataTable
+        headers={[
+          { label: 'Número de lote' },
+          { label: 'Proveedor' },
+          { label: 'Fecha de recepción' },
+          { label: 'Cantidad de ítems' },
+          { label: 'Estado / acciones' },
+        ]}
+      >
+        {lots.map((lot) => {
+          const status = getLotStatus(lot);
 
-              return (
-                <tr
-                  key={lot.id}
-                  className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+          return (
+            <DataTableRow key={lot.id}>
+              <td className="px-3 font-medium text-foreground">
+                {lot.lotNumber}
+              </td>
+              <td className="px-3 text-foreground">{lot.supplier.name}</td>
+              <td className="px-3 text-muted-foreground">
+                {formatDate(lot.receivedAt)}
+              </td>
+              <td className="px-3 text-muted-foreground">
+                {formatItemCount(lot.items.length)}
+              </td>
+              <td className="px-3">
+                <span
+                  className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${status.style}`}
                 >
-                  <td className="px-3 font-medium text-foreground">
-                    {lot.lotNumber}
-                  </td>
-                  <td className="px-3 text-foreground">{lot.supplier.name}</td>
-                  <td className="px-3 text-muted-foreground">
-                    {formatDate(lot.receivedAt)}
-                  </td>
-                  <td className="px-3 text-muted-foreground">
-                    {formatItemCount(lot.items.length)}
-                  </td>
-                  <td className="px-3">
-                    <span
-                      className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${status.style}`}
-                    >
-                      {status.label}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                  {status.label}
+                </span>
+              </td>
+            </DataTableRow>
+          );
+        })}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {lots.map((lot) => {

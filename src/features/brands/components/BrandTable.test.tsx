@@ -41,6 +41,30 @@ describe('BrandTable', () => {
     expect(screen.getAllByText('Marca 2').length).toBeGreaterThan(0);
   });
 
+  it('renders through the shared DataTable shell', () => {
+    renderTable({ brands: mockBrands });
+
+    const table = screen.getByRole('table');
+    expect(table).toHaveClass('w-full', 'caption-bottom', 'text-body-sm');
+    expect(table.closest('div')).toHaveClass(
+      'overflow-x-auto',
+      'rounded-lg',
+      'border',
+      'bg-card'
+    );
+    expect(table.querySelector('thead')).toHaveClass('bg-muted');
+
+    const firstBodyRow = table.querySelector('tbody tr');
+    expect(firstBodyRow).toHaveClass(
+      'h-14',
+      'border-b',
+      'border-border',
+      'transition-colors',
+      'last:border-0',
+      'hover:bg-muted/50'
+    );
+  });
+
   it('shows empty state when no brands', () => {
     renderTable({ brands: [] });
     expect(screen.getByText('No se encontraron marcas.')).toBeInTheDocument();

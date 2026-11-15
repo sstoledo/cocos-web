@@ -1,3 +1,4 @@
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import type { StockMovement } from '../types';
 
 export type StockMovementListProps = {
@@ -11,44 +12,33 @@ function formatDate(dateString: string): string {
 export function StockMovementList({ movements }: StockMovementListProps) {
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {['Fecha', 'Tipo', 'Cantidad', 'Motivo', 'Lote'].map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {movements.map((movement) => (
-              <tr
-                key={movement.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-              >
-                <td className="px-3 text-foreground">
-                  {formatDate(movement.createdAt)}
-                </td>
-                <td className="px-3 text-foreground">{movement.type}</td>
-                <td className="px-3 text-right font-mono text-foreground">
-                  {movement.quantity}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {movement.reason ?? '—'}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {movement.lotItem?.lot.lotNumber ?? '—'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        headers={[
+          { label: 'Fecha' },
+          { label: 'Tipo' },
+          { label: 'Cantidad' },
+          { label: 'Motivo' },
+          { label: 'Lote' },
+        ]}
+      >
+        {movements.map((movement) => (
+          <DataTableRow key={movement.id}>
+            <td className="px-3 text-foreground">
+              {formatDate(movement.createdAt)}
+            </td>
+            <td className="px-3 text-foreground">{movement.type}</td>
+            <td className="px-3 text-right font-mono text-foreground">
+              {movement.quantity}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {movement.reason ?? '—'}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {movement.lotItem?.lot.lotNumber ?? '—'}
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {movements.map((movement) => (
