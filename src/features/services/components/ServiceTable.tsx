@@ -1,4 +1,5 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { cn } from '@/lib/utils';
 import {
   IconCheck,
@@ -82,78 +83,59 @@ export function ServiceTable({ services }: ServiceTableProps) {
 
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {[
-                'Código',
-                'Nombre',
-                'Precio',
-                'Duración estimada',
-                'Estado',
-                'Acciones',
-              ].map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+      <DataTable
+        headers={[
+          { label: 'Código' },
+          { label: 'Nombre' },
+          { label: 'Precio' },
+          { label: 'Duración estimada' },
+          { label: 'Estado' },
+          { label: 'Acciones' },
+        ]}
+      >
+        {services.map((service) => (
+          <DataTableRow key={service.id}>
+            <td className="px-3 font-medium text-foreground">{service.code}</td>
+            <td className="px-3 text-foreground">{service.name}</td>
+            <td className="px-3 font-mono text-foreground">
+              {formatPrice(service.price)}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {formatDuration(service.estimatedDuration)}
+            </td>
+            <td className="px-3">
+              <StatusBadge service={service} />
+            </td>
+            <td className="px-3">
+              <div className="flex items-center gap-2">
+                <Link
+                  to={`/services/${service.id}`}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((service) => (
-              <tr
-                key={service.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-              >
-                <td className="px-3 font-medium text-foreground">
-                  {service.code}
-                </td>
-                <td className="px-3 text-foreground">{service.name}</td>
-                <td className="px-3 font-mono text-foreground">
-                  {formatPrice(service.price)}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {formatDuration(service.estimatedDuration)}
-                </td>
-                <td className="px-3">
-                  <StatusBadge service={service} />
-                </td>
-                <td className="px-3">
-                  <div className="flex items-center gap-2">
-                    <Link
-                      to={`/services/${service.id}`}
-                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      <IconEye className="mr-1.5 h-3.5 w-3.5" />
-                      Ver
-                    </Link>
-                    <Link
-                      to={`/services/${service.id}/edit`}
-                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={`Editar ${service.name}`}
-                    >
-                      <IconEdit className="h-4 w-4" aria-hidden="true" />
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(service)}
-                      disabled={isDeleting}
-                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                      aria-label={`Eliminar ${service.name}`}
-                    >
-                      <IconTrash className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  <IconEye className="mr-1.5 h-3.5 w-3.5" />
+                  Ver
+                </Link>
+                <Link
+                  to={`/services/${service.id}/edit`}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label={`Editar ${service.name}`}
+                >
+                  <IconEdit className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(service)}
+                  disabled={isDeleting}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  aria-label={`Eliminar ${service.name}`}
+                >
+                  <IconTrash className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {services.map((service) => (

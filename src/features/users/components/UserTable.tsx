@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { Link } from 'react-router';
 import type { User } from '../types';
 
@@ -63,77 +64,65 @@ function Trash2({ className }: { className?: string }) {
 export function UserTable({ users, onDelete, onAssignRole }: UserTableProps) {
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {['Nombre', 'Email', 'Rol', 'Estado', 'Creado', 'Acciones'].map(
-                (header) => (
-                  <th
-                    key={header}
-                    className="h-11 px-3 text-caption font-semibold text-muted-foreground"
-                  >
-                    {header}
-                  </th>
-                )
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+      <DataTable
+        headers={[
+          { label: 'Nombre' },
+          { label: 'Email' },
+          { label: 'Rol' },
+          { label: 'Estado' },
+          { label: 'Creado' },
+          { label: 'Acciones' },
+        ]}
+      >
+        {users.map((user) => (
+          <DataTableRow key={user.id}>
+            <td className="px-3 font-medium text-foreground">
+              <Link
+                to={`/users/${user.id}`}
+                className="text-primary hover:underline"
               >
-                <td className="px-3 font-medium text-foreground">
-                  <Link
-                    to={`/users/${user.id}`}
-                    className="text-primary hover:underline"
-                  >
-                    {user.name}
-                  </Link>
-                </td>
-                <td className="px-3">{user.email}</td>
-                <td className="px-3 capitalize">{user.role.name}</td>
-                <td className="px-3">
-                  <span
-                    className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${
-                      user.isActive
-                        ? 'bg-success text-success-foreground'
-                        : 'bg-destructive text-destructive-foreground'
-                    }`}
-                  >
-                    {user.isActive ? 'Activo' : 'Inactivo'}
-                  </span>
-                </td>
-                <td className="px-3">{formatDate(user.createdAt)}</td>
-                <td className="px-3">
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onAssignRole(user.id)}
-                      className="h-8 w-8"
-                      title="Asignar rol"
-                    >
-                      <UserCog className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onDelete(user.id)}
-                      className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      title="Eliminar"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                {user.name}
+              </Link>
+            </td>
+            <td className="px-3">{user.email}</td>
+            <td className="px-3 capitalize">{user.role.name}</td>
+            <td className="px-3">
+              <span
+                className={`inline-flex items-center rounded-full px-2 py-1 text-caption font-semibold ${
+                  user.isActive
+                    ? 'bg-success text-success-foreground'
+                    : 'bg-destructive text-destructive-foreground'
+                }`}
+              >
+                {user.isActive ? 'Activo' : 'Inactivo'}
+              </span>
+            </td>
+            <td className="px-3">{formatDate(user.createdAt)}</td>
+            <td className="px-3">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onAssignRole(user.id)}
+                  className="h-8 w-8"
+                  title="Asignar rol"
+                >
+                  <UserCog className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onDelete(user.id)}
+                  className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  title="Eliminar"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {users.map((user) => (

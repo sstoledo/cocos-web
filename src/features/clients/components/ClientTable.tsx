@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { IconEye, IconPencil, IconTrash } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { Client } from '../types';
@@ -12,83 +13,64 @@ export type ClientTableProps = {
 export function ClientTable({ clients, canEdit, onDelete }: ClientTableProps) {
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {[
-                'Nombre',
-                'Identificación',
-                'Teléfono',
-                'Email',
-                'Acciones',
-              ].map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+      <DataTable
+        headers={[
+          { label: 'Nombre' },
+          { label: 'Identificación' },
+          { label: 'Teléfono' },
+          { label: 'Email' },
+          { label: 'Acciones' },
+        ]}
+      >
+        {clients.map((client) => (
+          <DataTableRow key={client.id}>
+            <td className="px-3 font-medium text-foreground">{client.name}</td>
+            <td className="px-3 text-muted-foreground">
+              {client.identification
+                ? `${client.identificationType ?? ''} ${client.identification}`
+                : '—'}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {client.phone ?? '—'}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {client.email ?? '—'}
+            </td>
+            <td className="px-3">
+              <div className="flex items-center gap-2">
+                <Link
+                  to={`/clients/${client.id}`}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {clients.map((client) => (
-              <tr
-                key={client.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-              >
-                <td className="px-3 font-medium text-foreground">
-                  {client.name}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {client.identification
-                    ? `${client.identificationType ?? ''} ${client.identification}`
-                    : '—'}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {client.phone ?? '—'}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {client.email ?? '—'}
-                </td>
-                <td className="px-3">
-                  <div className="flex items-center gap-2">
+                  <IconEye className="mr-1.5 h-3.5 w-3.5" />
+                  Ver
+                </Link>
+                {canEdit && (
+                  <>
                     <Link
-                      to={`/clients/${client.id}`}
+                      to={`/clients/${client.id}/edit`}
                       className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <IconEye className="mr-1.5 h-3.5 w-3.5" />
-                      Ver
+                      <IconPencil className="mr-1.5 h-3.5 w-3.5" />
+                      Editar
                     </Link>
-                    {canEdit && (
-                      <>
-                        <Link
-                          to={`/clients/${client.id}/edit`}
-                          className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        >
-                          <IconPencil className="mr-1.5 h-3.5 w-3.5" />
-                          Editar
-                        </Link>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onDelete?.(client)}
-                          aria-label={`Eliminar ${client.name}`}
-                        >
-                          <IconTrash className="mr-1.5 h-3.5 w-3.5" />
-                          Eliminar
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onDelete?.(client)}
+                      aria-label={`Eliminar ${client.name}`}
+                    >
+                      <IconTrash className="mr-1.5 h-3.5 w-3.5" />
+                      Eliminar
+                    </Button>
+                  </>
+                )}
+              </div>
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {clients.map((client) => (

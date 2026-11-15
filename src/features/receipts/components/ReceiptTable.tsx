@@ -1,3 +1,4 @@
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { Link } from 'react-router';
 import type { Receipt, ReceiptStatus } from '../types';
 
@@ -40,55 +41,38 @@ function statusBadge(receipt: Receipt) {
 export function ReceiptTable({ receipts }: { receipts: Receipt[] }) {
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {[
-                'Archivo',
-                'Fecha de carga',
-                'Estado',
-                'Datos extraídos',
-                'Acciones',
-              ].map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {receipts.map((receipt) => (
-              <tr
-                key={receipt.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+      <DataTable
+        headers={[
+          { label: 'Archivo' },
+          { label: 'Fecha de carga' },
+          { label: 'Estado' },
+          { label: 'Datos extraídos' },
+          { label: 'Acciones' },
+        ]}
+      >
+        {receipts.map((receipt) => (
+          <DataTableRow key={receipt.id}>
+            <td className="px-3 font-medium text-foreground">
+              {receipt.fileName}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {uploadDate(receipt)}
+            </td>
+            <td className="px-3">{statusBadge(receipt)}</td>
+            <td className="max-w-md px-3 text-muted-foreground">
+              {extractionSummary(receipt)}
+            </td>
+            <td className="px-3">
+              <Link
+                to={`/receipts/${receipt.id}`}
+                className="font-medium text-primary hover:underline"
               >
-                <td className="px-3 font-medium text-foreground">
-                  {receipt.fileName}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {uploadDate(receipt)}
-                </td>
-                <td className="px-3">{statusBadge(receipt)}</td>
-                <td className="max-w-md px-3 text-muted-foreground">
-                  {extractionSummary(receipt)}
-                </td>
-                <td className="px-3">
-                  <Link
-                    to={`/receipts/${receipt.id}`}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {receipt.status === 'pending' ? 'Revisar' : 'Ver detalle'}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                {receipt.status === 'pending' ? 'Revisar' : 'Ver detalle'}
+              </Link>
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {receipts.map((receipt) => (

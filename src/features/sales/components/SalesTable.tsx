@@ -1,3 +1,4 @@
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { cn } from '@/lib/utils';
 import { IconChevronRight, IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
@@ -43,90 +44,71 @@ export function SalesTable({ sales, mode = 'sales' }: SalesTableProps) {
 
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {headers.map((header) => (
-                <th
-                  key={header}
-                  className={cn(
-                    'h-11 px-3 text-caption font-semibold text-muted-foreground',
-                    header === 'Total' && 'text-right'
-                  )}
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {sales.map((sale) => (
-              <tr
-                key={sale.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-              >
-                <td className="px-3 font-medium text-foreground">
-                  {sale.saleNumber}
-                </td>
-                <td className="px-3 text-muted-foreground">{saleDate(sale)}</td>
-                <td className="px-3 text-muted-foreground">
-                  {clientName(sale)}
+      <DataTable
+        headers={headers.map((header) => ({
+          label: header,
+          ...(header === 'Total' && { className: 'text-right' }),
+        }))}
+      >
+        {sales.map((sale) => (
+          <DataTableRow key={sale.id}>
+            <td className="px-3 font-medium text-foreground">
+              {sale.saleNumber}
+            </td>
+            <td className="px-3 text-muted-foreground">{saleDate(sale)}</td>
+            <td className="px-3 text-muted-foreground">{clientName(sale)}</td>
+            <td className="px-3">
+              <PaymentMethodBadge
+                method={sale.paymentMethod}
+                variant={isRefunds ? 'badge' : 'plain'}
+              />
+            </td>
+            {isRefunds ? (
+              <>
+                <td className="px-3 text-right font-semibold text-foreground">
+                  {sale.totalAmount}
                 </td>
                 <td className="px-3">
-                  <PaymentMethodBadge
-                    method={sale.paymentMethod}
-                    variant={isRefunds ? 'badge' : 'plain'}
-                  />
+                  <SaleStatusBadge status={sale.status} />
                 </td>
+              </>
+            ) : (
+              <>
+                <td className="px-3">
+                  <SaleStatusBadge status={sale.status} />
+                </td>
+                <td className="px-3 text-right font-semibold text-foreground">
+                  {sale.totalAmount}
+                </td>
+              </>
+            )}
+            <td className="px-3">
+              <Link
+                to={`/sales/${sale.id}`}
+                aria-label={
+                  isRefunds ? undefined : `Ver venta ${sale.saleNumber}`
+                }
+                className={cn(
+                  'inline-flex h-8 items-center justify-center rounded-md text-foreground transition-colors',
+                  'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  isRefunds
+                    ? 'border border-border bg-card px-3 text-sm font-medium'
+                    : 'w-8'
+                )}
+              >
                 {isRefunds ? (
                   <>
-                    <td className="px-3 text-right font-semibold text-foreground">
-                      {sale.totalAmount}
-                    </td>
-                    <td className="px-3">
-                      <SaleStatusBadge status={sale.status} />
-                    </td>
+                    <IconEye className="mr-1.5 h-3.5 w-3.5" />
+                    Ver
                   </>
                 ) : (
-                  <>
-                    <td className="px-3">
-                      <SaleStatusBadge status={sale.status} />
-                    </td>
-                    <td className="px-3 text-right font-semibold text-foreground">
-                      {sale.totalAmount}
-                    </td>
-                  </>
+                  <IconChevronRight className="h-4 w-4" />
                 )}
-                <td className="px-3">
-                  <Link
-                    to={`/sales/${sale.id}`}
-                    aria-label={
-                      isRefunds ? undefined : `Ver venta ${sale.saleNumber}`
-                    }
-                    className={cn(
-                      'inline-flex h-8 items-center justify-center rounded-md text-foreground transition-colors',
-                      'hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                      isRefunds
-                        ? 'border border-border bg-card px-3 text-sm font-medium'
-                        : 'w-8'
-                    )}
-                  >
-                    {isRefunds ? (
-                      <>
-                        <IconEye className="mr-1.5 h-3.5 w-3.5" />
-                        Ver
-                      </>
-                    ) : (
-                      <IconChevronRight className="h-4 w-4" />
-                    )}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              </Link>
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {sales.map((sale) =>

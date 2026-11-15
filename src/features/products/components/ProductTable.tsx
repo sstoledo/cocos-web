@@ -1,3 +1,4 @@
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { cn } from '@/lib/utils';
 import { IconCheck, IconPhoto, IconX } from '@tabler/icons-react';
 import { Link } from 'react-router';
@@ -63,100 +64,73 @@ function StatusBadge({ product }: { product: ProductListItem }) {
   );
 }
 
-const HEADERS = [
-  'Código',
-  'Imagen',
-  'Nombre',
-  'Marca',
-  'Categoría',
-  'Presentación',
-  'Precio',
-  'Stock',
-  'Estado',
-  'Acciones',
-];
-
 export function ProductTable({ products, canEdit }: ProductTableProps) {
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {HEADERS.map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+      <DataTable
+        headers={[
+          { label: 'Código' },
+          { label: 'Imagen' },
+          { label: 'Nombre' },
+          { label: 'Marca' },
+          { label: 'Categoría' },
+          { label: 'Presentación' },
+          { label: 'Precio' },
+          { label: 'Stock' },
+          { label: 'Estado' },
+          { label: 'Acciones' },
+        ]}
+      >
+        {products.map((product) => (
+          <DataTableRow key={product.id}>
+            <td className="px-3 font-medium text-foreground">{product.code}</td>
+            <td className="px-3">
+              <ProductThumbnail product={product} />
+            </td>
+            <td className="px-3 text-foreground">{product.name}</td>
+            <td className="px-3 text-muted-foreground">{product.brand.name}</td>
+            <td className="px-3 text-muted-foreground">
+              {product.category.name}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {product.presentation.name}
+            </td>
+            <td className="px-3 text-right font-mono text-foreground">
+              {product.price}
+            </td>
+            <td className="px-3 text-right font-mono text-foreground">
+              {product.stock}
+            </td>
+            <td className="px-3">
+              <StatusBadge product={product} />
+            </td>
+            <td className="px-3">
+              <div className="flex items-center gap-2">
+                <Link
+                  to={`/products/${product.id}`}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  {header === 'Imagen' ? (
-                    <span className="sr-only">Imagen</span>
-                  ) : (
-                    header
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr
-                key={product.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-              >
-                <td className="px-3 font-medium text-foreground">
-                  {product.code}
-                </td>
-                <td className="px-3">
-                  <ProductThumbnail product={product} />
-                </td>
-                <td className="px-3 text-foreground">{product.name}</td>
-                <td className="px-3 text-muted-foreground">
-                  {product.brand.name}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {product.category.name}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {product.presentation.name}
-                </td>
-                <td className="px-3 text-right font-mono text-foreground">
-                  {product.price}
-                </td>
-                <td className="px-3 text-right font-mono text-foreground">
-                  {product.stock}
-                </td>
-                <td className="px-3">
-                  <StatusBadge product={product} />
-                </td>
-                <td className="px-3">
-                  <div className="flex items-center gap-2">
-                    <Link
-                      to={`/products/${product.id}`}
-                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      Ver
-                    </Link>
-                    <Link
-                      to={`/products/${product.id}/stock`}
-                      className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      Stock
-                    </Link>
-                    {canEdit && (
-                      <Link
-                        to={`/products/${product.id}/edit`}
-                        className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        Editar
-                      </Link>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  Ver
+                </Link>
+                <Link
+                  to={`/products/${product.id}/stock`}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  Stock
+                </Link>
+                {canEdit && (
+                  <Link
+                    to={`/products/${product.id}/edit`}
+                    className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Editar
+                  </Link>
+                )}
+              </div>
+            </td>
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {products.map((product) => (

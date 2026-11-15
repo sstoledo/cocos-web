@@ -1,4 +1,5 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { cn } from '@/lib/utils';
 import { IconCheck, IconEdit, IconTrash, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -69,75 +70,58 @@ export function VehicleTable({
   return (
     <>
       <div className="space-y-4">
-        <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-          <table className="w-full caption-bottom text-body-sm">
-            <thead className="bg-muted">
-              <tr className="text-left">
-                {[
-                  'Placa',
-                  'Marca',
-                  'Modelo',
-                  'Año',
-                  'Color',
-                  'Cliente',
-                  'Estado',
-                  'Acciones',
-                ].map((header) => (
-                  <th
-                    key={header}
-                    className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+        <DataTable
+          headers={[
+            { label: 'Placa' },
+            { label: 'Marca' },
+            { label: 'Modelo' },
+            { label: 'Año' },
+            { label: 'Color' },
+            { label: 'Cliente' },
+            { label: 'Estado' },
+            { label: 'Acciones' },
+          ]}
+        >
+          {vehicles.map((vehicle) => (
+            <DataTableRow key={vehicle.id}>
+              <td className="px-3 font-medium text-foreground">
+                {vehicle.plate}
+              </td>
+              <td className="px-3 text-foreground">{vehicle.brand}</td>
+              <td className="px-3 text-foreground">{vehicle.model}</td>
+              <td className="px-3 text-muted-foreground">
+                {formatYear(vehicle.year)}
+              </td>
+              <td className="px-3 text-muted-foreground">
+                {vehicle.color ?? 'N/A'}
+              </td>
+              <td className="px-3 text-foreground">{vehicle.clientId}</td>
+              <td className="px-3">
+                <StatusBadge vehicle={vehicle} />
+              </td>
+              <td className="px-3">
+                <div className="flex items-center gap-2">
+                  <Link
+                    to={`/vehicles/${vehicle.id}/edit`}
+                    className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-label={`Editar ${vehicle.plate}`}
                   >
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {vehicles.map((vehicle) => (
-                <tr
-                  key={vehicle.id}
-                  className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-                >
-                  <td className="px-3 font-medium text-foreground">
-                    {vehicle.plate}
-                  </td>
-                  <td className="px-3 text-foreground">{vehicle.brand}</td>
-                  <td className="px-3 text-foreground">{vehicle.model}</td>
-                  <td className="px-3 text-muted-foreground">
-                    {formatYear(vehicle.year)}
-                  </td>
-                  <td className="px-3 text-muted-foreground">
-                    {vehicle.color ?? 'N/A'}
-                  </td>
-                  <td className="px-3 text-foreground">{vehicle.clientId}</td>
-                  <td className="px-3">
-                    <StatusBadge vehicle={vehicle} />
-                  </td>
-                  <td className="px-3">
-                    <div className="flex items-center gap-2">
-                      <Link
-                        to={`/vehicles/${vehicle.id}/edit`}
-                        className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        aria-label={`Editar ${vehicle.plate}`}
-                      >
-                        <IconEdit className="h-4 w-4" aria-hidden="true" />
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(vehicle)}
-                        disabled={isDeleting}
-                        className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        aria-label={`Eliminar ${vehicle.plate}`}
-                      >
-                        <IconTrash className="h-4 w-4" aria-hidden="true" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <IconEdit className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(vehicle)}
+                    disabled={isDeleting}
+                    className="inline-flex h-8 items-center justify-center rounded-md border border-border bg-card px-3 text-sm font-medium text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    aria-label={`Eliminar ${vehicle.plate}`}
+                  >
+                    <IconTrash className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </div>
+              </td>
+            </DataTableRow>
+          ))}
+        </DataTable>
 
         <div className="space-y-3 md:hidden">
           {vehicles.map((vehicle) => (

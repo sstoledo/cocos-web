@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import type { Vehicle } from '../types';
 
@@ -19,78 +20,61 @@ export function VehicleList({
 
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {['Placa', 'Marca', 'Modelo', 'Año', 'Color', 'Notas'].map(
-                (header) => (
-                  <th
-                    key={header}
-                    className="h-11 px-3 text-caption font-semibold text-muted-foreground"
+      <DataTable
+        headers={[
+          { label: 'Placa' },
+          { label: 'Marca' },
+          { label: 'Modelo' },
+          { label: 'Año' },
+          { label: 'Color' },
+          { label: 'Notas' },
+        ]}
+      >
+        {activeVehicles.map((vehicle) => (
+          <DataTableRow key={vehicle.id}>
+            <td className="px-3 font-medium text-foreground">
+              {vehicle.plate}
+            </td>
+            <td className="px-3 text-muted-foreground">{vehicle.brand}</td>
+            <td className="px-3 text-muted-foreground">{vehicle.model}</td>
+            <td className="px-3 text-muted-foreground">
+              {vehicle.year ?? '—'}
+            </td>
+            <td className="px-3 text-muted-foreground">
+              {vehicle.color ?? '—'}
+            </td>
+            <td className="max-w-xs truncate px-3 text-muted-foreground">
+              {vehicle.notes ?? '—'}
+            </td>
+            {canEdit && (
+              <td className="px-3">
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onEdit?.(vehicle)}
+                    aria-label={`Editar ${vehicle.plate}`}
                   >
-                    {header}
-                  </th>
-                )
-              )}
-              {canEdit && (
-                <th className="h-11 px-3 text-caption font-semibold text-muted-foreground">
-                  Acciones
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {activeVehicles.map((vehicle) => (
-              <tr
-                key={vehicle.id}
-                className="h-14 border-b border-border transition-colors last:border-0 hover:bg-muted/50"
-              >
-                <td className="px-3 font-medium text-foreground">
-                  {vehicle.plate}
-                </td>
-                <td className="px-3 text-muted-foreground">{vehicle.brand}</td>
-                <td className="px-3 text-muted-foreground">{vehicle.model}</td>
-                <td className="px-3 text-muted-foreground">
-                  {vehicle.year ?? '—'}
-                </td>
-                <td className="px-3 text-muted-foreground">
-                  {vehicle.color ?? '—'}
-                </td>
-                <td className="max-w-xs truncate px-3 text-muted-foreground">
-                  {vehicle.notes ?? '—'}
-                </td>
-                {canEdit && (
-                  <td className="px-3">
-                    <div className="flex items-center gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEdit?.(vehicle)}
-                        aria-label={`Editar ${vehicle.plate}`}
-                      >
-                        <IconPencil className="mr-1.5 h-3.5 w-3.5" />
-                        Editar
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onDelete?.(vehicle)}
-                        aria-label={`Eliminar ${vehicle.plate}`}
-                      >
-                        <IconTrash className="mr-1.5 h-3.5 w-3.5" />
-                        Eliminar
-                      </Button>
-                    </div>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    <IconPencil className="mr-1.5 h-3.5 w-3.5" />
+                    Editar
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onDelete?.(vehicle)}
+                    aria-label={`Eliminar ${vehicle.plate}`}
+                  >
+                    <IconTrash className="mr-1.5 h-3.5 w-3.5" />
+                    Eliminar
+                  </Button>
+                </div>
+              </td>
+            )}
+          </DataTableRow>
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {activeVehicles.map((vehicle) => (
