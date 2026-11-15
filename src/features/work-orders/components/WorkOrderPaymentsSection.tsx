@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/Label';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { PAYMENT_METHOD_LABELS } from '@/features/sales/components/PaymentMethodBadge';
 import type { PaymentMethod } from '@/features/sales/types';
 import { formatCents, toCents } from '@/lib/cents';
@@ -177,32 +178,26 @@ export function WorkOrderPaymentsSection({
             No se pudieron cargar los pagos. Intentá de nuevo más tarde.
           </div>
         ) : paymentsQuery.data && paymentsQuery.data.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left text-muted-foreground">
-                  <th className="px-3 py-2 font-medium">Fecha</th>
-                  <th className="px-3 py-2 font-medium">Método</th>
-                  <th className="px-3 py-2 font-medium">Monto</th>
-                  <th className="px-3 py-2 font-medium">Nota</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paymentsQuery.data.map((payment) => (
-                  <tr key={payment.id} className="border-b border-border">
-                    <td className="px-3 py-2">
-                      {formatDateTime(payment.paidAt)}
-                    </td>
-                    <td className="px-3 py-2">
-                      {PAYMENT_METHOD_LABELS[payment.paymentMethod]}
-                    </td>
-                    <td className="px-3 py-2">{payment.amount}</td>
-                    <td className="px-3 py-2">{payment.note ?? '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            variant="section"
+            headers={[
+              { label: 'Fecha' },
+              { label: 'Método' },
+              { label: 'Monto' },
+              { label: 'Nota' },
+            ]}
+          >
+            {paymentsQuery.data.map((payment) => (
+              <DataTableRow variant="section" key={payment.id}>
+                <td className="px-3 py-2">{formatDateTime(payment.paidAt)}</td>
+                <td className="px-3 py-2">
+                  {PAYMENT_METHOD_LABELS[payment.paymentMethod]}
+                </td>
+                <td className="px-3 py-2">{payment.amount}</td>
+                <td className="px-3 py-2">{payment.note ?? '—'}</td>
+              </DataTableRow>
+            ))}
+          </DataTable>
         ) : (
           <p className="text-sm text-muted-foreground">
             No hay pagos registrados.

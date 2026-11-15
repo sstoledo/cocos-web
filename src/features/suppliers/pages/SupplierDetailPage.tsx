@@ -11,6 +11,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { useLots } from '@/features/lots/hooks/use-lots';
 import type { Lot } from '@/features/lots/types';
 import { usePurchaseOrders } from '@/features/purchase-orders/hooks/use-purchase-orders';
@@ -187,49 +188,37 @@ export function SupplierDetailPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        N° Orden
-                      </th>
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        Fecha
-                      </th>
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        Estado
-                      </th>
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        Total estimado
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {purchaseOrders.map((po) => (
-                      <tr key={po.id} className="border-b border-border/50">
-                        <td className="p-3 font-mono">
-                          {po.purchaseOrderNumber}
-                        </td>
-                        <td className="p-3">{formatDate(po.createdAt)}</td>
-                        <td className="p-3">
-                          <StatusBadge
-                            variant={STATUS_BADGES[po.status].variant}
-                          >
-                            {STATUS_BADGES[po.status].label}
-                          </StatusBadge>
-                        </td>
-                        <td className="p-3 tabular-nums">
-                          $
-                          {Number(po.estimatedTotal).toLocaleString('es-AR', {
-                            minimumFractionDigits: 2,
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <DataTable
+                variant="detail"
+                headers={[
+                  { label: 'N° Orden' },
+                  { label: 'Fecha' },
+                  { label: 'Estado' },
+                  { label: 'Total estimado' },
+                ]}
+              >
+                {purchaseOrders.map((po) => (
+                  <DataTableRow
+                    key={po.id}
+                    variant="detail"
+                    className="border-border/50"
+                  >
+                    <td className="p-3 font-mono">{po.purchaseOrderNumber}</td>
+                    <td className="p-3">{formatDate(po.createdAt)}</td>
+                    <td className="p-3">
+                      <StatusBadge variant={STATUS_BADGES[po.status].variant}>
+                        {STATUS_BADGES[po.status].label}
+                      </StatusBadge>
+                    </td>
+                    <td className="p-3 tabular-nums">
+                      $
+                      {Number(po.estimatedTotal).toLocaleString('es-AR', {
+                        minimumFractionDigits: 2,
+                      })}
+                    </td>
+                  </DataTableRow>
+                ))}
+              </DataTable>
               {poMeta && poMeta.totalPages > 1 && (
                 <Pagination meta={poMeta} onPageChange={handlePOPageChange} />
               )}
@@ -248,38 +237,32 @@ export function SupplierDetailPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        N° Lote
-                      </th>
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        Fecha recepción
-                      </th>
-                      <th className="text-left p-3 font-medium text-muted-foreground">
-                        Productos
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {lots.map((lot: Lot) => (
-                      <tr key={lot.id} className="border-b border-border/50">
-                        <td className="p-3 font-mono">{lot.lotNumber}</td>
-                        <td className="p-3">{formatDate(lot.receivedAt)}</td>
-                        <td className="p-3">
-                          {lot.items.map((item) => (
-                            <div key={item.id} className="text-sm">
-                              {item.product.name} × {item.quantity}
-                            </div>
-                          ))}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <DataTable
+                variant="detail"
+                headers={[
+                  { label: 'N° Lote' },
+                  { label: 'Fecha recepción' },
+                  { label: 'Productos' },
+                ]}
+              >
+                {lots.map((lot: Lot) => (
+                  <DataTableRow
+                    key={lot.id}
+                    variant="detail"
+                    className="border-border/50"
+                  >
+                    <td className="p-3 font-mono">{lot.lotNumber}</td>
+                    <td className="p-3">{formatDate(lot.receivedAt)}</td>
+                    <td className="p-3">
+                      {lot.items.map((item) => (
+                        <div key={item.id} className="text-sm">
+                          {item.product.name} × {item.quantity}
+                        </div>
+                      ))}
+                    </td>
+                  </DataTableRow>
+                ))}
+              </DataTable>
               {lotPaginationMeta && lotPaginationMeta.totalPages > 1 && (
                 <Pagination
                   meta={lotPaginationMeta}

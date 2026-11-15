@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 import { DataTable, DataTableRow } from './data-table';
 
 describe('DataTable', () => {
@@ -176,5 +177,20 @@ describe('DataTable variants', () => {
       expect(row).toHaveClass('border-b', 'border-border');
       expect(row).not.toHaveClass('h-14');
     }
+  });
+
+  it('card rows accept row-level onClick passthrough', async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
+    render(
+      <DataTable headers={[{ label: 'A' }]}>
+        <DataTableRow onClick={handleClick}>
+          <td>x</td>
+        </DataTableRow>
+      </DataTable>
+    );
+
+    await user.click(screen.getAllByRole('row')[1]);
+    expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });

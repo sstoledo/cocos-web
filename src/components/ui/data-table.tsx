@@ -130,10 +130,18 @@ export function DataTableRow({
   children,
   className,
   variant = 'card',
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
   variant?: DataTableVariant;
+  /** Row-level navigation convenience (CashClosingsListPage clickable rows). */
+  onClick?: () => void;
 }) {
-  return <tr className={cn(ROW_CLASSES[variant], className)}>{children}</tr>;
+  return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: rows stay navigable for keyboard/AT users via the real link inside the row; this onClick is a pointer-only convenience.
+    <tr className={cn(ROW_CLASSES[variant], className)} onClick={onClick}>
+      {children}
+    </tr>
+  );
 }

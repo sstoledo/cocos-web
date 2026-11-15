@@ -2,6 +2,7 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ApiError } from '@/lib/api-error';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
@@ -30,40 +31,29 @@ function SaleLinesTable({
 
   return (
     <>
-      <div className="hidden overflow-x-auto md:block">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr className="text-left text-caption font-semibold text-muted-foreground">
-              <th className="px-3 py-2">{entityLabel}</th>
-              <th className="px-3 py-2 text-center">Cantidad</th>
-              <th className="px-3 py-2 text-right">Precio unitario</th>
-              <th className="px-3 py-2 text-right">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lines.map((line) => (
-              <tr
-                key={line.id}
-                className="h-14 border-b border-border last:border-0"
-              >
-                <td className="px-3">
-                  <p className="font-medium text-foreground">
-                    {line.product.name}
-                  </p>
-                  <p className="text-caption text-muted-foreground">
-                    {line.product.code}
-                  </p>
-                </td>
-                <td className="px-3 text-center">{line.quantity}</td>
-                <td className="px-3 text-right">{line.unitPriceSnapshot}</td>
-                <td className="px-3 text-right font-semibold">
-                  {line.subtotal}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        variant="page"
+        headers={[
+          { label: entityLabel },
+          { label: 'Cantidad' },
+          { label: 'Precio unitario' },
+          { label: 'Subtotal' },
+        ]}
+      >
+        {lines.map((line) => (
+          <DataTableRow key={line.id} className="h-14">
+            <td className="px-3">
+              <p className="font-medium text-foreground">{line.product.name}</p>
+              <p className="text-caption text-muted-foreground">
+                {line.product.code}
+              </p>
+            </td>
+            <td className="px-3 text-center">{line.quantity}</td>
+            <td className="px-3 text-right">{line.unitPriceSnapshot}</td>
+            <td className="px-3 text-right font-semibold">{line.subtotal}</td>
+          </DataTableRow>
+        ))}
+      </DataTable>
       <div className="space-y-3 md:hidden">
         {lines.map((line) => (
           <article

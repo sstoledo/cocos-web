@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ProductCombobox } from '@/features/products/components/ProductCombobox';
 import type { Product } from '@/features/products/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -146,7 +147,7 @@ function ServiceProductRow({
   }
 
   return (
-    <tr className="border-b border-border">
+    <DataTableRow variant="section">
       <td className="px-3 py-2">
         {serviceProduct.product.code} — {serviceProduct.product.name}
       </td>
@@ -195,7 +196,7 @@ function ServiceProductRow({
           )}
         </td>
       )}
-    </tr>
+    </DataTableRow>
   );
 }
 
@@ -228,26 +229,22 @@ export function ServiceProductsSection({
             No se pudo cargar la receta. Intentá de nuevo más tarde.
           </div>
         ) : serviceProducts.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left text-muted-foreground">
-                  <th className="px-3 py-2 font-medium">Producto</th>
-                  <th className="px-3 py-2 font-medium">Cantidad</th>
-                  {canManage && <th className="px-3 py-2 font-medium" />}
-                </tr>
-              </thead>
-              <tbody>
-                {serviceProducts.map((serviceProduct) => (
-                  <ServiceProductRow
-                    key={serviceProduct.id}
-                    serviceProduct={serviceProduct}
-                    canManage={canManage}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            variant="section"
+            headers={
+              canManage
+                ? [{ label: 'Producto' }, { label: 'Cantidad' }, { label: '' }]
+                : [{ label: 'Producto' }, { label: 'Cantidad' }]
+            }
+          >
+            {serviceProducts.map((serviceProduct) => (
+              <ServiceProductRow
+                key={serviceProduct.id}
+                serviceProduct={serviceProduct}
+                canManage={canManage}
+              />
+            ))}
+          </DataTable>
         ) : (
           <p className="text-sm text-muted-foreground">
             Este servicio no tiene productos asociados.

@@ -2,6 +2,7 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { useCategories } from '@/features/categories/hooks/use-categories';
 import type { Category } from '@/features/categories/types';
 import { useProducts } from '@/features/products/hooks/use-products';
@@ -131,45 +132,37 @@ export function CategoryDetailPage() {
               No hay productos en esta categoría.
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left p-3 font-medium text-muted-foreground">
-                      Código
-                    </th>
-                    <th className="text-left p-3 font-medium text-muted-foreground">
-                      Nombre
-                    </th>
-                    <th className="text-left p-3 font-medium text-muted-foreground">
-                      Presentación
-                    </th>
-                    <th className="text-left p-3 font-medium text-muted-foreground">
-                      Precio
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {categoryProducts.map((product) => (
-                    <tr key={product.id} className="border-b border-border/50">
-                      <td className="p-3 font-mono">{product.code}</td>
-                      <td className="p-3">
-                        <Link
-                          to={`/products/${product.id}`}
-                          className="text-primary hover:underline"
-                        >
-                          {product.name}
-                        </Link>
-                      </td>
-                      <td className="p-3">{product.presentation.name}</td>
-                      <td className="p-3 tabular-nums">
-                        {formatPrice(product.price)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <DataTable
+              variant="detail"
+              headers={[
+                { label: 'Código' },
+                { label: 'Nombre' },
+                { label: 'Presentación' },
+                { label: 'Precio' },
+              ]}
+            >
+              {categoryProducts.map((product) => (
+                <DataTableRow
+                  variant="detail"
+                  key={product.id}
+                  className="border-border/50"
+                >
+                  <td className="p-3 font-mono">{product.code}</td>
+                  <td className="p-3">
+                    <Link
+                      to={`/products/${product.id}`}
+                      className="text-primary hover:underline"
+                    >
+                      {product.name}
+                    </Link>
+                  </td>
+                  <td className="p-3">{product.presentation.name}</td>
+                  <td className="p-3 tabular-nums">
+                    {formatPrice(product.price)}
+                  </td>
+                </DataTableRow>
+              ))}
+            </DataTable>
           )}
         </SectionCard>
       </PageContent>
