@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { cn } from '@/lib/utils';
 import { IconCashRegister } from '@tabler/icons-react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
@@ -37,8 +38,8 @@ function CashClosingRow({ closing }: { closing: CashClosing }) {
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard users navigate via the real link in the date cell; the row onClick is a pointer-only convenience.
-    <tr
-      className="cursor-pointer border-b border-border transition-colors hover:bg-muted/50"
+    <DataTableRow
+      className="cursor-pointer hover:bg-muted/50"
       onClick={() => navigate(`/cash-closings/${closing.id}`)}
     >
       <td className="px-3 font-medium text-foreground">
@@ -67,7 +68,7 @@ function CashClosingRow({ closing }: { closing: CashClosing }) {
       >
         {closing.difference}
       </td>
-    </tr>
+    </DataTableRow>
   );
 }
 
@@ -126,34 +127,20 @@ function CashClosingsTable({ cashClosings }: { cashClosings: CashClosing[] }) {
 
   return (
     <>
-      <div className="hidden overflow-x-auto rounded-lg border bg-card md:block">
-        <table className="w-full caption-bottom text-body-sm">
-          <thead className="bg-muted">
-            <tr className="text-left">
-              {[
-                'Fecha de cierre',
-                'Cerrado por',
-                'Ventas',
-                'Efectivo esperado',
-                'Efectivo declarado',
-                'Diferencia',
-              ].map((header) => (
-                <th
-                  key={header}
-                  className="h-11 px-3 text-caption font-semibold text-muted-foreground"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {cashClosings.map((closing) => (
-              <CashClosingRow key={closing.id} closing={closing} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        headers={[
+          { label: 'Fecha de cierre' },
+          { label: 'Cerrado por' },
+          { label: 'Ventas' },
+          { label: 'Efectivo esperado' },
+          { label: 'Efectivo declarado' },
+          { label: 'Diferencia' },
+        ]}
+      >
+        {cashClosings.map((closing) => (
+          <CashClosingRow key={closing.id} closing={closing} />
+        ))}
+      </DataTable>
 
       <div className="space-y-3 md:hidden">
         {cashClosings.map((closing) => (

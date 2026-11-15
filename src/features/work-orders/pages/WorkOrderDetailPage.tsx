@@ -4,6 +4,7 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { useUser } from '@/features/shell/hooks/useUser';
 import { formatCents, toCents } from '@/lib/cents';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
@@ -218,43 +219,37 @@ export function WorkOrderDetailPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-caption">
-                  <thead className="bg-muted">
-                    <tr className="text-left font-semibold text-muted-foreground">
-                      <th className="px-3 py-2">Código</th>
-                      <th className="px-3 py-2">Servicio</th>
-                      <th className="px-3 py-2 text-right">Cant.</th>
-                      <th className="px-3 py-2 text-right">Precio unit.</th>
-                      <th className="px-3 py-2 text-right">Subtotal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {workOrder.services.map((line: WorkOrderServiceLine) => (
-                      <tr
-                        key={line.id}
-                        className="h-12 border-b border-border last:border-0"
-                      >
-                        <td className="px-3 text-muted-foreground">
-                          {line.service.code}
-                        </td>
-                        <td className="px-3 font-medium text-foreground">
-                          {line.service.name}
-                        </td>
-                        <td className="px-3 text-right font-mono">
-                          {line.quantity}
-                        </td>
-                        <td className="px-3 text-right font-mono">
-                          {line.unitPriceSnapshot}
-                        </td>
-                        <td className="px-3 text-right font-mono font-semibold">
-                          {line.subtotal}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <DataTable
+                variant="page"
+                size="caption"
+                headers={[
+                  { label: 'Código' },
+                  { label: 'Servicio' },
+                  { label: 'Cant.' },
+                  { label: 'Precio unit.' },
+                  { label: 'Subtotal' },
+                ]}
+              >
+                {workOrder.services.map((line: WorkOrderServiceLine) => (
+                  <DataTableRow key={line.id}>
+                    <td className="px-3 text-muted-foreground">
+                      {line.service.code}
+                    </td>
+                    <td className="px-3 font-medium text-foreground">
+                      {line.service.name}
+                    </td>
+                    <td className="px-3 text-right font-mono">
+                      {line.quantity}
+                    </td>
+                    <td className="px-3 text-right font-mono">
+                      {line.unitPriceSnapshot}
+                    </td>
+                    <td className="px-3 text-right font-mono font-semibold">
+                      {line.subtotal}
+                    </td>
+                  </DataTableRow>
+                ))}
+              </DataTable>
               <div className="space-y-3 md:hidden">
                 {workOrder.services.map((line: WorkOrderServiceLine) => (
                   <article

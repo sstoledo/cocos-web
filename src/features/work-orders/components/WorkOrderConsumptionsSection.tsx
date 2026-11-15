@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { Select } from '@/components/ui/Select';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ProductCombobox } from '@/features/products/components/ProductCombobox';
 import type { Product } from '@/features/products/types';
 import { useOpenContainers } from '@/features/stock/hooks/use-open-containers';
@@ -246,32 +247,26 @@ export function WorkOrderConsumptionsSection({
             No se pudieron cargar los consumos. Intentá de nuevo más tarde.
           </div>
         ) : consumptions.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left text-muted-foreground">
-                  <th className="px-3 py-2 font-medium">Fecha</th>
-                  <th className="px-3 py-2 font-medium">Producto</th>
-                  <th className="px-3 py-2 font-medium">Evento</th>
-                  <th className="px-3 py-2 font-medium">Registrado por</th>
-                </tr>
-              </thead>
-              <tbody>
-                {consumptions.map((event) => (
-                  <tr key={event.id} className="border-b border-border">
-                    <td className="px-3 py-2">
-                      {formatDateTime(event.createdAt)}
-                    </td>
-                    <td className="px-3 py-2">
-                      {event.product.code} — {event.product.name}
-                    </td>
-                    <td className="px-3 py-2">{formatEventType(event)}</td>
-                    <td className="px-3 py-2">{event.registeredBy.name}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            variant="section"
+            headers={[
+              { label: 'Fecha' },
+              { label: 'Producto' },
+              { label: 'Evento' },
+              { label: 'Registrado por' },
+            ]}
+          >
+            {consumptions.map((event) => (
+              <DataTableRow variant="section" key={event.id}>
+                <td className="px-3 py-2">{formatDateTime(event.createdAt)}</td>
+                <td className="px-3 py-2">
+                  {event.product.code} — {event.product.name}
+                </td>
+                <td className="px-3 py-2">{formatEventType(event)}</td>
+                <td className="px-3 py-2">{event.registeredBy.name}</td>
+              </DataTableRow>
+            ))}
+          </DataTable>
         ) : (
           <p className="text-sm text-muted-foreground">
             No hay consumos registrados.

@@ -2,6 +2,7 @@ import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ApiError } from '@/lib/api-error';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
@@ -138,46 +139,38 @@ export function PurchaseOrderDetailPage() {
           </dl>
         </SectionCard>
         <SectionCard title="Líneas de la orden">
-          <div className="hidden overflow-x-auto md:block">
-            <table className="w-full text-caption">
-              <thead className="bg-muted">
-                <tr className="text-left font-semibold text-muted-foreground">
-                  <th className="px-3 py-2">Producto</th>
-                  <th className="px-3 py-2 text-right">Cantidad pedida</th>
-                  <th className="px-3 py-2 text-right">Cantidad recibida</th>
-                  <th className="px-3 py-2 text-right">Costo estimado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {purchaseOrder.lines.map((line) => (
-                  <tr
-                    key={line.id}
-                    className="h-12 border-b border-border last:border-0"
-                  >
-                    <td className="px-3">
-                      <p className="font-medium text-foreground">
-                        {line.product.name}
-                      </p>
-                      <p className="text-muted-foreground">
-                        {line.product.code}
-                      </p>
-                    </td>
-                    <td className="px-3 text-right font-mono">
-                      {line.quantityOrdered}
-                    </td>
-                    <td className="px-3 text-right font-mono">
-                      {line.quantityReceived}
-                    </td>
-                    {/* Money renders verbatim as a decimal string (list
+          <DataTable
+            variant="page"
+            size="caption"
+            headers={[
+              { label: 'Producto' },
+              { label: 'Cantidad pedida' },
+              { label: 'Cantidad recibida' },
+              { label: 'Costo estimado' },
+            ]}
+          >
+            {purchaseOrder.lines.map((line) => (
+              <DataTableRow key={line.id}>
+                <td className="px-3">
+                  <p className="font-medium text-foreground">
+                    {line.product.name}
+                  </p>
+                  <p className="text-muted-foreground">{line.product.code}</p>
+                </td>
+                <td className="px-3 text-right font-mono">
+                  {line.quantityOrdered}
+                </td>
+                <td className="px-3 text-right font-mono">
+                  {line.quantityReceived}
+                </td>
+                {/* Money renders verbatim as a decimal string (list
                         precedent) — no recomputation. */}
-                    <td className="px-3 text-right font-mono">
-                      {line.estimatedCostPrice}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                <td className="px-3 text-right font-mono">
+                  {line.estimatedCostPrice}
+                </td>
+              </DataTableRow>
+            ))}
+          </DataTable>
           <div className="space-y-3 md:hidden">
             {purchaseOrder.lines.map((line) => (
               <article
