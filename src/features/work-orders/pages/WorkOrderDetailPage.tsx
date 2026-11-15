@@ -231,7 +231,7 @@ export function WorkOrderDetailPage() {
                 ]}
               >
                 {workOrder.services.map((line: WorkOrderServiceLine) => (
-                  <DataTableRow key={line.id}>
+                  <DataTableRow key={line.id} variant="page">
                     <td className="px-3 text-muted-foreground">
                       {line.service.code}
                     </td>

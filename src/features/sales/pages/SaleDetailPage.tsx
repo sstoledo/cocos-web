@@ -41,7 +41,7 @@ function SaleLinesTable({
         ]}
       >
         {lines.map((line) => (
-          <DataTableRow key={line.id} className="h-14">
+          <DataTableRow key={line.id} variant="page" className="h-14">
             <td className="px-3">
               <p className="font-medium text-foreground">{line.product.name}</p>
               <p className="text-caption text-muted-foreground">

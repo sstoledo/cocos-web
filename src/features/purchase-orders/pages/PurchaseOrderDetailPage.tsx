@@ -150,7 +150,7 @@ export function PurchaseOrderDetailPage() {
             ]}
           >
             {purchaseOrder.lines.map((line) => (
-              <DataTableRow key={line.id}>
+              <DataTableRow key={line.id} variant="page">
                 <td className="px-3">
                   <p className="font-medium text-foreground">
                     {line.product.name}

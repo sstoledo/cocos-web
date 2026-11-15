@@ -121,6 +121,20 @@ describe('PurchaseOrderDetailPage', () => {
     expect(screen.getByText('Pedido mensual de filtros')).toBeInTheDocument();
   });
 
+  it('keeps the page line-table row classes without hover', async () => {
+    globalThis.fetch = mockFetchWithPurchaseOrder(purchaseOrder);
+
+    const { container } = renderDetailPage();
+
+    await waitFor(() =>
+      expect(container.querySelector('table tbody tr')).toBeInTheDocument()
+    );
+    const lineRow = container.querySelector('table tbody tr') as HTMLElement;
+    expect(lineRow).toHaveClass('h-12');
+    expect(lineRow).not.toHaveClass('hover:bg-muted/50');
+    expect(lineRow).not.toHaveClass('transition-colors');
+  });
+
   it('renders responsive line cards, back link and full-width actions', async () => {
     globalThis.fetch = mockFetchWithPurchaseOrder({
       ...purchaseOrder,
