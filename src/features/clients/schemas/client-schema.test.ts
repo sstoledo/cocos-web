@@ -19,10 +19,30 @@ describe('clientSchema', () => {
     const result = clientSchema.safeParse({
       ...validValues,
       identificationType: 'RUC',
-      identification: '12345678901',
+      identification: '20100070970',
     });
 
     expect(result.success).toBe(true);
+  });
+
+  it('rejects an RUC with an invalid check digit', () => {
+    const result = clientSchema.safeParse({
+      ...validValues,
+      identificationType: 'RUC',
+      identification: '20100070971',
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects an RUC with an invalid entity prefix', () => {
+    const result = clientSchema.safeParse({
+      ...validValues,
+      identificationType: 'RUC',
+      identification: '99123456789',
+    });
+
+    expect(result.success).toBe(false);
   });
 
   it('rejects a missing name', () => {

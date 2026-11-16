@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { isValidRuc } from '@/lib/ruc';
+
 export const clientSchema = z
   .object({
     name: z
@@ -20,10 +22,10 @@ export const clientSchema = z
       if (data.identificationType === 'DNI') {
         return /^\d{8}$/.test(data.identification);
       }
-      return /^\d{11}$/.test(data.identification);
+      return isValidRuc(data.identification);
     },
     {
-      message: 'DNI 8 dígitos o RUC 11 dígitos',
+      message: 'DNI 8 dígitos o RUC 11 dígitos con dígito verificador válido',
       path: ['identification'],
     }
   );
