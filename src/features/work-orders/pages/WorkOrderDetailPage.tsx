@@ -6,7 +6,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { useUser } from '@/features/shell/hooks/useUser';
-import { formatCents, toCents } from '@/lib/cents';
+import { formatCents, formatMoney, toCents } from '@/lib/cents';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
@@ -241,11 +241,11 @@ export function WorkOrderDetailPage() {
                     <td className="px-3 text-right font-mono">
                       {line.quantity}
                     </td>
-                    <td className="px-3 text-right font-mono">
-                      {line.unitPriceSnapshot}
+                    <td className="px-3 font-mono">
+                      {formatMoney(line.unitPriceSnapshot)}
                     </td>
-                    <td className="px-3 text-right font-mono font-semibold">
-                      {line.subtotal}
+                    <td className="px-3 font-mono font-semibold">
+                      {formatMoney(line.subtotal)}
                     </td>
                   </DataTableRow>
                 ))}
@@ -262,7 +262,7 @@ export function WorkOrderDetailPage() {
                         {line.service.code}
                       </span>
                       <span className="font-mono text-body-sm font-semibold">
-                        {line.subtotal}
+                        {formatMoney(line.subtotal)}
                       </span>
                     </div>
                     <p className="text-body-sm font-medium text-foreground">
@@ -270,7 +270,9 @@ export function WorkOrderDetailPage() {
                     </p>
                     <div className="flex justify-between gap-3 text-caption text-muted-foreground">
                       <span>Cantidad: {line.quantity}</span>
-                      <span>Precio unitario: {line.unitPriceSnapshot}</span>
+                      <span>
+                        Precio unitario: {formatMoney(line.unitPriceSnapshot)}
+                      </span>
                     </div>
                   </article>
                 ))}
@@ -286,7 +288,7 @@ export function WorkOrderDetailPage() {
                       data-testid="work-order-total-value"
                       className="font-mono text-foreground"
                     >
-                      Total: {workOrder.totalAmount}
+                      Total: {formatMoney(workOrder.totalAmount)}
                     </dd>
                   </div>
                   <div className="flex justify-between gap-4">
@@ -301,7 +303,7 @@ export function WorkOrderDetailPage() {
                       data-testid="work-order-remaining-value"
                       className="font-mono"
                     >
-                      Saldo pendiente: {remainingAmount}
+                      Saldo pendiente: {formatMoney(remainingAmount)}
                     </dd>
                   </div>
                 </dl>
@@ -318,7 +320,7 @@ export function WorkOrderDetailPage() {
               data-testid="work-order-total-value"
               className="font-mono text-h3 font-semibold text-foreground"
             >
-              {workOrder.totalAmount}
+              {formatMoney(workOrder.totalAmount)}
             </span>
           </div>
         )}

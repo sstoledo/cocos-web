@@ -64,7 +64,7 @@ test('mobile sale detail uses product cards and keeps navigation', async ({
   await expect(page.getByRole('table')).toBeHidden();
   await expect(page.getByRole('link', { name: 'Volver a ventas' }))
     .toHaveAttribute('href', '/sales');
-  await expect(page.getByTestId('sale-total-value')).toHaveText('18450.00');
+  await expect(page.getByTestId('sale-total-value')).toHaveText('S/ 18,450.00');
   await expect(page.getByRole('button', { name: 'Cancelar venta' }))
     .toBeVisible();
 });

@@ -44,7 +44,9 @@ describe('WorkOrderTable', () => {
     expect(screen.getAllByText('Ford Fiesta').length).toBeGreaterThan(0);
     // Two desktop badges and two mobile-card badges.
     expect(screen.getAllByText('Pendiente')).toHaveLength(4);
-    expect(screen.getByRole('cell', { name: '15000.00' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'S/ 15,000.00' })
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('cell', {
         name: new Date('2024-01-15T00:00:00.000Z').toLocaleDateString('es-AR'),
@@ -61,7 +63,7 @@ describe('WorkOrderTable', () => {
     expect(card).toHaveTextContent('ABC123');
     expect(card).toHaveTextContent('Ford Fiesta');
     expect(card).toHaveTextContent('Cobro: Pendiente');
-    expect(card).toHaveTextContent('15000.00');
+    expect(card).toHaveTextContent('S/ 15,000.00');
     expect(
       screen.getAllByRole('link', { name: /ver detalle/i })[0]
     ).toHaveAttribute('href', '/work-orders/wo1');

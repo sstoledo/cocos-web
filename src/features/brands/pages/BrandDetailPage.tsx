@@ -5,18 +5,10 @@ import { SectionCard } from '@/components/ui/SectionCard';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { useProducts } from '@/features/products/hooks/use-products';
 import type { Product } from '@/features/products/types';
+import { formatMoney } from '@/lib/cents';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { useBrand } from '../hooks/use-brand';
-
-function formatPrice(price: string): string {
-  const num = Number(price);
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2,
-  }).format(num);
-}
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('es-AR', {
@@ -120,7 +112,7 @@ export function BrandDetailPage() {
                   </td>
                   <td className="p-3">{product.presentation.name}</td>
                   <td className="p-3 tabular-nums">
-                    {formatPrice(product.price)}
+                    {formatMoney(product.price)}
                   </td>
                 </DataTableRow>
               ))}

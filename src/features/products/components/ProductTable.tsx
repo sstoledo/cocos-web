@@ -1,4 +1,5 @@
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { IconCheck, IconPhoto, IconX } from '@tabler/icons-react';
 import { Link } from 'react-router';
@@ -95,8 +96,8 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
             <td className="px-3 text-muted-foreground">
               {product.presentation.name}
             </td>
-            <td className="px-3 text-right font-mono text-foreground">
-              {product.price}
+            <td className="px-3 font-mono text-foreground">
+              {formatMoney(product.price)}
             </td>
             <td className="px-3 text-right font-mono text-foreground">
               {product.stock}
@@ -159,8 +160,8 @@ export function ProductTable({ products, canEdit }: ProductTableProps) {
               <span>{product.presentation.name}</span>
               <span>Stock: {product.stock}</span>
             </div>
-            <p className="text-right font-mono text-body font-semibold text-foreground">
-              {product.price}
+            <p className="font-mono text-body font-semibold text-foreground">
+              {formatMoney(product.price)}
             </p>
             <div className="flex flex-wrap gap-2">
               <Link

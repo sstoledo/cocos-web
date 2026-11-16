@@ -1,5 +1,6 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import {
   IconCheck,
@@ -12,15 +13,6 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { useDeleteService } from '../hooks/use-delete-service';
 import type { Service } from '../types';
-
-function formatPrice(price: string): string {
-  const num = Number(price);
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2,
-  }).format(num);
-}
 
 function formatDuration(duration: number | null | undefined): string {
   if (duration === null || duration === undefined) {
@@ -98,7 +90,7 @@ export function ServiceTable({ services }: ServiceTableProps) {
             <td className="px-3 font-medium text-foreground">{service.code}</td>
             <td className="px-3 text-foreground">{service.name}</td>
             <td className="px-3 font-mono text-foreground">
-              {formatPrice(service.price)}
+              {formatMoney(service.price)}
             </td>
             <td className="px-3 text-muted-foreground">
               {formatDuration(service.estimatedDuration)}
@@ -160,7 +152,7 @@ export function ServiceTable({ services }: ServiceTableProps) {
                 {formatDuration(service.estimatedDuration)}
               </span>
               <span className="font-mono text-body-sm font-semibold text-foreground">
-                {formatPrice(service.price)}
+                {formatMoney(service.price)}
               </span>
             </div>
             <div className="flex flex-wrap gap-2">

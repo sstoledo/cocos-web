@@ -85,9 +85,9 @@ describe('CashClosingsListPage', () => {
     expect(card).toHaveTextContent('Ana García');
     expect(card).toHaveTextContent('Ventas');
     expect(card).toHaveTextContent('12');
-    expect(card).toHaveTextContent('1250.00');
-    expect(card).toHaveTextContent('1300.00');
-    expect(card).toHaveTextContent('50.00');
+    expect(card).toHaveTextContent('S/ 1,250.00');
+    expect(card).toHaveTextContent('S/ 1,300.00');
+    expect(card).toHaveTextContent('S/ 50.00');
     expect(screen.queryByText(/2026-09-23T/)).not.toBeInTheDocument();
   });
 
@@ -116,9 +116,13 @@ describe('CashClosingsListPage', () => {
     }
 
     expect(screen.getByRole('cell', { name: '12' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '1250.00' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '1300.00' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '50.00' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'S/ 1,250.00' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'S/ 1,300.00' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 50.00' })).toBeInTheDocument();
     // periodEnd formatted as es-AR date, never raw ISO.
     expect(screen.queryByText(/2026-09-23T/)).not.toBeInTheDocument();
   });
@@ -134,8 +138,10 @@ describe('CashClosingsListPage', () => {
 
     render(<CashClosingsListPage />, { wrapper: createWrapper() });
 
+    const expected = `S/ ${Math.abs(Number(difference)).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    const cellName = difference.startsWith('-') ? `-${expected}` : expected;
     await waitFor(() =>
-      expect(screen.getByRole('cell', { name: difference })).toHaveClass(
+      expect(screen.getByRole('cell', { name: cellName })).toHaveClass(
         className
       )
     );
@@ -150,9 +156,9 @@ describe('CashClosingsListPage', () => {
     render(<CashClosingsListPage />, { wrapper: createWrapper() });
 
     await waitFor(() =>
-      expect(screen.getByRole('cell', { name: '0.00' })).toBeInTheDocument()
+      expect(screen.getByRole('cell', { name: 'S/ 0.00' })).toBeInTheDocument()
     );
-    const cell = screen.getByRole('cell', { name: '0.00' });
+    const cell = screen.getByRole('cell', { name: 'S/ 0.00' });
     expect(cell).not.toHaveClass('text-destructive');
     expect(cell).not.toHaveClass('text-green-700');
   });

@@ -3,20 +3,12 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { useProduct } from '../hooks/use-product';
 import { PRODUCT_CONSUMPTION_TYPE_LABELS } from '../types';
-
-function formatPrice(price: string): string {
-  const num = Number(price);
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2,
-  }).format(num);
-}
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('es-AR', {
@@ -121,7 +113,7 @@ export function ProductDetailPage() {
             <div>
               <dt className="text-sm text-muted-foreground">Precio</dt>
               <dd className="text-foreground tabular-nums">
-                {formatPrice(product.price)}
+                {formatMoney(product.price)}
               </dd>
             </div>
             <div>

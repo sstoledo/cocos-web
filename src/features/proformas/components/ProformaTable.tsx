@@ -1,4 +1,5 @@
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { Proforma } from '../types';
@@ -38,8 +39,8 @@ export function ProformaTable({ proformas }: ProformaTableProps) {
               {proformaDate(proforma)}
             </td>
             <td className="px-3 text-foreground">{clientName(proforma)}</td>
-            <td className="px-3 text-right font-mono font-medium text-foreground">
-              {proforma.totalAmount}
+            <td className="px-3 font-mono font-medium text-foreground">
+              {formatMoney(proforma.totalAmount)}
             </td>
             <td className="px-3">
               <ProformaStatusBadge status={proforma.status} />
@@ -86,7 +87,7 @@ export function ProformaTable({ proformas }: ProformaTableProps) {
             <div className="flex items-center justify-between gap-3">
               <span className="text-caption text-muted-foreground">Total</span>
               <span className="font-mono text-body font-semibold text-foreground">
-                {proforma.totalAmount}
+                {formatMoney(proforma.totalAmount)}
               </span>
             </div>
           </Link>

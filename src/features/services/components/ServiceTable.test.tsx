@@ -108,8 +108,8 @@ describe('ServiceTable', () => {
   it('formats price as currency', () => {
     renderTable();
 
-    expect(screen.getAllByText(/\$[\s\u00A0]150,00/)[0]).toBeInTheDocument();
-    expect(screen.getAllByText(/\$[\s\u00A0]50,00/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/S\/ 150\.00/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/S\/ 50\.00/)[0]).toBeInTheDocument();
   });
 
   it('shows N/A for null estimatedDuration', () => {

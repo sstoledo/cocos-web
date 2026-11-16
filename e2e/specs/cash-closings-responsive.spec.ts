@@ -50,8 +50,8 @@ test('mobile closings uses cards with verbatim money and navigation', async ({
 
   const card = page.getByTestId('closing-mobile-card');
   await expect(card).toBeVisible();
-  await expect(card).toContainText('1250.00');
-  await expect(card).toContainText('1300.00');
+  await expect(card).toContainText('S/ 1,250.00');
+  await expect(card).toContainText('S/ 1,300.00');
   await expect(page.getByRole('table')).toBeHidden();
 
   await page.route(/\/api\/cash-closings\/closing-1$/, async (route) => {

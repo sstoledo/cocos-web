@@ -6,6 +6,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { Textarea } from '@/components/ui/Textarea';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -55,11 +56,15 @@ function ClosingResult({ closing }: { closing: CashClosing }) {
       <dl className="grid gap-4 sm:grid-cols-3">
         <div>
           <dt className="text-sm text-muted-foreground">Efectivo esperado</dt>
-          <dd className="text-foreground">{closing.expectedCash}</dd>
+          <dd className="text-foreground">
+            {formatMoney(closing.expectedCash)}
+          </dd>
         </div>
         <div>
           <dt className="text-sm text-muted-foreground">Efectivo declarado</dt>
-          <dd className="text-foreground">{closing.declaredCash}</dd>
+          <dd className="text-foreground">
+            {formatMoney(closing.declaredCash)}
+          </dd>
         </div>
         <div>
           <dt className="text-sm text-muted-foreground">Diferencia</dt>
@@ -69,7 +74,7 @@ function ClosingResult({ closing }: { closing: CashClosing }) {
               differenceClassName(closing.difference)
             )}
           >
-            {closing.difference}
+            {formatMoney(closing.difference)}
           </dd>
         </div>
       </dl>
@@ -220,13 +225,13 @@ export function CloseCashClosingPage() {
                         Efectivo
                       </dt>
                       <dd className="text-foreground">
-                        {preview.workOrderPaymentsCash}
+                        {formatMoney(preview.workOrderPaymentsCash)}
                       </dd>
                     </div>
                     <div>
                       <dt className="text-sm text-muted-foreground">Tarjeta</dt>
                       <dd className="text-foreground">
-                        {preview.workOrderPaymentsCard}
+                        {formatMoney(preview.workOrderPaymentsCard)}
                       </dd>
                     </div>
                     <div>
@@ -234,7 +239,7 @@ export function CloseCashClosingPage() {
                         Transferencia
                       </dt>
                       <dd className="text-foreground">
-                        {preview.workOrderPaymentsTransfer}
+                        {formatMoney(preview.workOrderPaymentsTransfer)}
                       </dd>
                     </div>
                     <div>

@@ -164,7 +164,7 @@ describe('ProductListPage', () => {
       screen.getByRole('cell', { name: 'Lubricantes' })
     ).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'Litro' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '25.00' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 25.00' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '7' })).toBeInTheDocument();
     expect(screen.getAllByText('Activo').length).toBeGreaterThan(0);
   });

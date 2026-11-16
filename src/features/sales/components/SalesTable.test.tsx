@@ -45,7 +45,7 @@ describe('SalesTable', () => {
       screen.getByRole('cell', { name: 'Juan Pérez' })
     ).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'Efectivo' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '80.50' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 80.50' })).toBeInTheDocument();
     expect(screen.getAllByText('Completada').length).toBeGreaterThan(0);
   });
 

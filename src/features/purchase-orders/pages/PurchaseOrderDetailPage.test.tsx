@@ -185,8 +185,8 @@ describe('PurchaseOrderDetailPage', () => {
 
     expect(screen.getAllByText('Filtro de aire').length).toBeGreaterThan(0);
     // Decimal money strings render verbatim — no recomputation.
-    expect(screen.getByRole('cell', { name: '50.00' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '120.75' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 50.00' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 120.75' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '10' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: '4' })).toBeInTheDocument();
     expect(screen.getByTestId('purchase-order-total-value')).toHaveTextContent(

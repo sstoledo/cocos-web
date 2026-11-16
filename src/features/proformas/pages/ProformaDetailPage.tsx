@@ -5,6 +5,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ApiError } from '@/lib/api-error';
+import { formatMoney } from '@/lib/cents';
 import { IconArrowLeft, IconFileTypePdf } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router';
@@ -49,11 +50,11 @@ function ProformaLinesTable({
               <p className="text-muted-foreground">{line.product.code}</p>
             </td>
             <td className="px-3 text-center font-mono">{line.quantity}</td>
-            <td className="px-3 text-right font-mono">
-              {line.unitPriceSnapshot}
+            <td className="px-3 font-mono">
+              {formatMoney(line.unitPriceSnapshot)}
             </td>
-            <td className="px-3 text-right font-mono font-medium">
-              {line.subtotal}
+            <td className="px-3 font-mono font-medium">
+              {formatMoney(line.subtotal)}
             </td>
           </DataTableRow>
         ))}
@@ -79,13 +80,13 @@ function ProformaLinesTable({
               <div>
                 <dt className="text-muted-foreground">Precio unitario</dt>
                 <dd className="font-mono text-foreground">
-                  {line.unitPriceSnapshot}
+                  {formatMoney(line.unitPriceSnapshot)}
                 </dd>
               </div>
               <div className="text-right">
                 <dt className="text-muted-foreground">Subtotal</dt>
                 <dd className="font-mono font-medium text-foreground">
-                  {line.subtotal}
+                  {formatMoney(line.subtotal)}
                 </dd>
               </div>
             </dl>
@@ -227,7 +228,7 @@ export function ProformaDetailPage() {
             data-testid="proforma-total-value"
             className="font-mono text-h3 font-semibold text-foreground"
           >
-            {proforma.totalAmount}
+            {formatMoney(proforma.totalAmount)}
           </span>
         </div>
         <div className="flex sm:justify-end">
