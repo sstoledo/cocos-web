@@ -90,3 +90,15 @@ L4 (2026-11-15): Runtime note: `gentle-ai review assess` returns
   assign user, watch CI. Visual browser verification still pending
   (user dev stack was down); structural equivalence verified by
   class-copy + full suite.
+
+L5 (2026-11-15): Visual verification done in a real browser (vite dev +
+  backend + postgres up, Playwright login as admin, desktop 1440px) over
+  all 9 pages hosting migrated tables: list card shells, page/section/
+  detail containers, theads, th and row classes match the original
+  skeletons, including work-order list `h-[60px]` override and sale
+  detail `h-14` row. Found and fixed one real regression: the four
+  page-variant detail tables rendered rows as card (h-14 + hover)
+  because `DataTableRow` lacked `variant="page"` - fixed in PR #167 with
+  a PurchaseOrderDetailPage regression test (RED->GREEN, 49/49). DOM
+  classes re-verified after the fix. Cash closings had no data locally:
+  card classes verified by DOM probe; onClick pinned by primitive test.
