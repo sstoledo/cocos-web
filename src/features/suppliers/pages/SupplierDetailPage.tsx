@@ -16,6 +16,7 @@ import { useLots } from '@/features/lots/hooks/use-lots';
 import type { Lot } from '@/features/lots/types';
 import { usePurchaseOrders } from '@/features/purchase-orders/hooks/use-purchase-orders';
 import type { PurchaseOrderStatus } from '@/features/purchase-orders/types';
+import { formatMoney } from '@/lib/cents';
 import { toPaginationMeta } from '@/lib/pagination';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams, useSearchParams } from 'react-router';
@@ -211,10 +212,7 @@ export function SupplierDetailPage() {
                       </StatusBadge>
                     </td>
                     <td className="p-3 tabular-nums">
-                      $
-                      {Number(po.estimatedTotal).toLocaleString('es-AR', {
-                        minimumFractionDigits: 2,
-                      })}
+                      {formatMoney(po.estimatedTotal)}
                     </td>
                   </DataTableRow>
                 ))}

@@ -115,10 +115,10 @@ describe('CashClosingDetailPage', () => {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
 
-    expect(screen.getByText('1250.00')).toBeInTheDocument();
-    expect(screen.getByText('3400.50')).toBeInTheDocument();
-    expect(screen.getByText('800.00')).toBeInTheDocument();
-    expect(screen.getByText('1300.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 1,250.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 3,400.50')).toBeInTheDocument();
+    expect(screen.getByText('S/ 800.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 1,300.00')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('Cierre del turno')).toBeInTheDocument();
     // Dates render localized, never raw ISO.
@@ -136,9 +136,9 @@ describe('CashClosingDetailPage', () => {
       ).toBeInTheDocument()
     );
 
-    expect(screen.getByText('100.00')).toBeInTheDocument();
-    expect(screen.getByText('60.00')).toBeInTheDocument();
-    expect(screen.getByText('25.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 100.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 60.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 25.00')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
     expect(
       screen.getByText(/Los montos esperados ya incluyen estos pagos/)
@@ -151,7 +151,7 @@ describe('CashClosingDetailPage', () => {
     renderPage();
 
     await waitFor(() =>
-      expect(screen.getByText('50.00')).toHaveClass('text-green-700')
+      expect(screen.getByText('S/ 50.00')).toHaveClass('text-green-700')
     );
   });
 
@@ -163,7 +163,7 @@ describe('CashClosingDetailPage', () => {
     renderPage();
 
     await waitFor(() =>
-      expect(screen.getByText('-50.00')).toHaveClass('text-destructive')
+      expect(screen.getByText('-S/ 50.00')).toHaveClass('text-destructive')
     );
   });
 
@@ -174,8 +174,10 @@ describe('CashClosingDetailPage', () => {
 
     renderPage();
 
-    await waitFor(() => expect(screen.getByText('0.00')).toBeInTheDocument());
-    const difference = screen.getByText('0.00');
+    await waitFor(() =>
+      expect(screen.getByText('S/ 0.00')).toBeInTheDocument()
+    );
+    const difference = screen.getByText('S/ 0.00');
     expect(difference).not.toHaveClass('text-destructive');
     expect(difference).not.toHaveClass('text-green-700');
   });

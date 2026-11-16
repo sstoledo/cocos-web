@@ -1,4 +1,5 @@
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { PurchaseOrder } from '../types';
@@ -40,8 +41,8 @@ export function PurchaseOrderTable({
             </td>
             {/* Money is a decimal string in major units; rendered verbatim
                     like SalesTable does with totalAmount. */}
-            <td className="px-3 text-right font-mono font-medium text-foreground">
-              {purchaseOrder.estimatedTotal}
+            <td className="px-3 font-mono font-medium text-foreground">
+              {formatMoney(purchaseOrder.estimatedTotal)}
             </td>
             <td className="px-3">
               <PurchaseOrderStatusBadge status={purchaseOrder.status} />
@@ -90,7 +91,7 @@ export function PurchaseOrderTable({
                 Total estimado
               </span>
               <span className="font-mono text-body font-semibold text-foreground">
-                {purchaseOrder.estimatedTotal}
+                {formatMoney(purchaseOrder.estimatedTotal)}
               </span>
             </div>
           </Link>

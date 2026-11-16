@@ -129,7 +129,7 @@ describe('BrandDetailPage', () => {
     expect(screen.getByText('Filtro de aceite')).toBeInTheDocument();
     expect(screen.queryByText('Bujía NGK')).not.toBeInTheDocument();
     expect(screen.getByText('Unidad')).toBeInTheDocument();
-    expect(screen.getByText(/\$[\s\u00A0]?15\.000,00/)).toBeInTheDocument();
+    expect(screen.getByText(/S\/ 15,000\.00/)).toBeInTheDocument();
   });
 
   it('shows error state when request fails', async () => {

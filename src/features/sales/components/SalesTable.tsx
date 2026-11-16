@@ -1,4 +1,5 @@
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { IconChevronRight, IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
@@ -47,7 +48,6 @@ export function SalesTable({ sales, mode = 'sales' }: SalesTableProps) {
       <DataTable
         headers={headers.map((header) => ({
           label: header,
-          ...(header === 'Total' && { className: 'text-right' }),
         }))}
       >
         {sales.map((sale) => (
@@ -65,8 +65,8 @@ export function SalesTable({ sales, mode = 'sales' }: SalesTableProps) {
             </td>
             {isRefunds ? (
               <>
-                <td className="px-3 text-right font-semibold text-foreground">
-                  {sale.totalAmount}
+                <td className="px-3 font-semibold text-foreground">
+                  {formatMoney(sale.totalAmount)}
                 </td>
                 <td className="px-3">
                   <SaleStatusBadge status={sale.status} />
@@ -77,8 +77,8 @@ export function SalesTable({ sales, mode = 'sales' }: SalesTableProps) {
                 <td className="px-3">
                   <SaleStatusBadge status={sale.status} />
                 </td>
-                <td className="px-3 text-right font-semibold text-foreground">
-                  {sale.totalAmount}
+                <td className="px-3 font-semibold text-foreground">
+                  {formatMoney(sale.totalAmount)}
                 </td>
               </>
             )}
@@ -145,7 +145,7 @@ export function SalesTable({ sales, mode = 'sales' }: SalesTableProps) {
                 <div>
                   <dt className="text-muted-foreground">Total</dt>
                   <dd className="text-body font-semibold">
-                    {sale.totalAmount}
+                    {formatMoney(sale.totalAmount)}
                   </dd>
                 </div>
               </dl>
@@ -180,7 +180,7 @@ export function SalesTable({ sales, mode = 'sales' }: SalesTableProps) {
               <div className="flex items-center justify-between gap-3">
                 <PaymentMethodBadge method={sale.paymentMethod} />
                 <span className="text-body font-semibold text-foreground">
-                  {sale.totalAmount}
+                  {formatMoney(sale.totalAmount)}
                 </span>
               </div>
             </Link>

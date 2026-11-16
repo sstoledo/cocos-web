@@ -80,7 +80,7 @@ describe('WorkOrderPaymentsSection', () => {
 
     expect(screen.getByText('Pendiente')).toBeInTheDocument();
     expect(
-      screen.getByText(/Pagado 0\.00 de 300\.00 · Saldo 300\.00/)
+      screen.getByText(/Pagado S\/ 0\.00 de S\/ 300\.00 · Saldo S\/ 300\.00/)
     ).toBeInTheDocument();
     expect(
       await screen.findByText('No hay pagos registrados.')
@@ -95,13 +95,13 @@ describe('WorkOrderPaymentsSection', () => {
 
     expect(await screen.findByText('Parcial')).toBeInTheDocument();
     expect(
-      screen.getByText(/Pagado 100\.00 de 300\.00 · Saldo 200\.00/)
+      screen.getByText(/Pagado S\/ 100\.00 de S\/ 300\.00 · Saldo S\/ 200\.00/)
     ).toBeInTheDocument();
     expect(
       await screen.findByRole('cell', { name: 'Efectivo' })
     ).toBeInTheDocument();
     expect(
-      await screen.findByRole('cell', { name: '100.00' })
+      await screen.findByRole('cell', { name: 'S/ 100.00' })
     ).toBeInTheDocument();
     expect(
       await screen.findByRole('cell', { name: 'Seña' })
@@ -125,7 +125,7 @@ describe('WorkOrderPaymentsSection', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveTextContent('Saldo restante: 300.00');
+    expect(dialog).toHaveTextContent('Saldo restante: S/ 300.00');
 
     await user.type(within(dialog).getByLabelText('Monto'), '100.00');
     await user.selectOptions(

@@ -175,9 +175,9 @@ describe('CloseCashClosingPage', () => {
       ).toBeInTheDocument()
     );
 
-    expect(screen.getByText('100.00')).toBeInTheDocument();
-    expect(screen.getByText('50.00')).toBeInTheDocument();
-    expect(screen.getByText('25.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 100.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 50.00')).toBeInTheDocument();
+    expect(screen.getByText('S/ 25.00')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
   });
 
@@ -225,10 +225,10 @@ describe('CloseCashClosingPage', () => {
     expect(
       within(result).getByText('Cierre registrado correctamente.')
     ).toBeInTheDocument();
-    expect(within(result).getByText('1250.00')).toBeInTheDocument();
-    expect(within(result).getByText('1300.00')).toBeInTheDocument();
+    expect(within(result).getByText('S/ 1,250.00')).toBeInTheDocument();
+    expect(within(result).getByText('S/ 1,300.00')).toBeInTheDocument();
 
-    const difference = within(result).getByText('50.00');
+    const difference = within(result).getByText('S/ 50.00');
     expect(difference).toHaveClass('text-green-700');
 
     // No auto-navigation: the outcome stays on screen with a detail link.
@@ -273,7 +273,7 @@ describe('CloseCashClosingPage', () => {
     await fillAndSubmit('1200.00');
 
     const result = await screen.findByRole('status');
-    const difference = within(result).getByText('-50.00');
+    const difference = within(result).getByText('-S/ 50.00');
     expect(difference).toHaveClass('text-destructive');
   });
 
@@ -285,7 +285,7 @@ describe('CloseCashClosingPage', () => {
     await fillAndSubmit('1250.00');
 
     const result = await screen.findByRole('status');
-    const difference = within(result).getByText('0.00');
+    const difference = within(result).getByText('S/ 0.00');
     expect(difference).not.toHaveClass('text-destructive');
     expect(difference).not.toHaveClass('text-green-700');
   });

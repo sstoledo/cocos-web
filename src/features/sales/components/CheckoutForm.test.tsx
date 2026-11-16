@@ -87,9 +87,9 @@ describe('CheckoutForm', () => {
     await addProductLine(user, '2');
 
     // Catalog price renders read-only; money stays in plain decimal strings.
-    expect(screen.getByText('Precio: 80.50')).toBeInTheDocument();
-    expect(screen.getByText('Subtotal: 161.00')).toBeInTheDocument();
-    expect(screen.getByText('Total: 161.00')).toBeInTheDocument();
+    expect(screen.getByText('Precio: S/ 80.50')).toBeInTheDocument();
+    expect(screen.getByText('Subtotal: S/ 161.00')).toBeInTheDocument();
+    expect(screen.getByText('Total: S/ 161.00')).toBeInTheDocument();
     expect(screen.queryByLabelText('Precio unitario')).not.toBeInTheDocument();
   });
 
@@ -119,12 +119,12 @@ describe('CheckoutForm', () => {
     renderForm();
 
     await addProductLine(user, '2');
-    expect(screen.getByText('Total: 161.00')).toBeInTheDocument();
+    expect(screen.getByText('Total: S/ 161.00')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Eliminar' }));
 
     expect(screen.queryByText('Precio: 80.50')).not.toBeInTheDocument();
-    expect(screen.getByText('Total: 0.00')).toBeInTheDocument();
+    expect(screen.getByText('Total: S/ 0.00')).toBeInTheDocument();
   });
 
   it('S12: blocks submit and shows the no-lines error when the sale is empty', async () => {

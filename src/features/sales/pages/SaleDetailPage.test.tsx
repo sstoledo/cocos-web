@@ -172,7 +172,7 @@ describe('SaleDetailPage', () => {
     expect(screen.getAllByText('PRD-001').length).toBeGreaterThan(0);
     expect(screen.getByRole('cell', { name: '1' })).toBeInTheDocument();
     // Product line: unitPriceSnapshot 80.50 and subtotal 80.50.
-    expect(screen.getAllByRole('cell', { name: '80.50' })).toHaveLength(2);
+    expect(screen.getAllByRole('cell', { name: 'S/ 80.50' })).toHaveLength(2);
 
     expect(screen.getByTestId('sale-total-value')).toHaveTextContent('80.50');
   });

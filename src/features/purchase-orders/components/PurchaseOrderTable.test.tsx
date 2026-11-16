@@ -18,7 +18,7 @@ describe('PurchaseOrderTable', () => {
     expect(
       screen.getByRole('cell', { name: 'Repuestos SA' })
     ).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '500.00' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 500.00' })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
       'href',
       '/purchase-orders/po1'

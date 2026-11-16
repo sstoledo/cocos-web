@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatCents, toCents } from './cents';
+import { formatCents, formatMoney, toCents } from './cents';
 
 describe('toCents', () => {
   it('converts whole amounts', () => {
@@ -66,5 +66,20 @@ describe('integer-cents arithmetic (S10)', () => {
 
   it('0.1 + 0.2 equals 0.30 exactly', () => {
     expect(formatCents(toCents('0.1') + toCents('0.2'))).toBe('0.30');
+  });
+});
+
+describe('formatMoney', () => {
+  it('renders a soles amount with two decimals', () => {
+    expect(formatMoney('45')).toBe('S/ 45.00');
+  });
+
+  it('keeps the stored decimals and adds thousands separators', () => {
+    expect(formatMoney('1234.5')).toBe('S/ 1,234.50');
+    expect(formatMoney('0.00')).toBe('S/ 0.00');
+  });
+
+  it('accepts numbers for derived display values', () => {
+    expect(formatMoney(1234.56)).toBe('S/ 1,234.56');
   });
 });

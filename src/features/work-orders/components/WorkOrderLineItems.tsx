@@ -6,7 +6,7 @@ import {
   type ServiceComboboxValue,
 } from '@/features/services/components/ServiceCombobox';
 import type { Service } from '@/features/services/types';
-import { formatCents, toCents } from '@/lib/cents';
+import { formatCents, formatMoney, toCents } from '@/lib/cents';
 import {
   type Control,
   type FieldError,
@@ -131,7 +131,8 @@ function ServiceLineRow({
 
       <div className="flex items-end">
         <p className="text-sm text-muted-foreground">
-          Subtotal: {subtotal === null ? '—' : formatCents(subtotal)}
+          Subtotal:{' '}
+          {subtotal === null ? '—' : formatMoney(formatCents(subtotal))}
         </p>
       </div>
 

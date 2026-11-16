@@ -4,7 +4,7 @@ import { Select } from '@/components/ui/Select';
 import { ClientCombobox } from '@/features/clients/components/ClientCombobox';
 import type { Client } from '@/features/clients/types';
 import type { Product } from '@/features/products/types';
-import { formatCents } from '@/lib/cents';
+import { formatCents, formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -137,7 +137,9 @@ export function CheckoutForm({
         </p>
       )}
 
-      <p className="text-lg font-semibold">Total: {formatCents(totalCents)}</p>
+      <p className="text-lg font-semibold">
+        Total: {formatMoney(formatCents(totalCents))}
+      </p>
 
       <div className="flex items-center gap-4 pt-4">
         <Button type="submit" disabled={isPending}>

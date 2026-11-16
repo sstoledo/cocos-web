@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { ProductCombobox } from '@/features/products/components/ProductCombobox';
 import type { Product } from '@/features/products/types';
-import { formatCents, toCents } from '@/lib/cents';
+import { formatCents, formatMoney, toCents } from '@/lib/cents';
 import {
   type Control,
   type FieldError,
@@ -102,12 +102,15 @@ function ProductLineRow({
       </div>
 
       <div className="flex items-end">
-        <p className="text-sm text-muted-foreground">Precio: {price ?? '—'}</p>
+        <p className="text-sm text-muted-foreground">
+          Precio: {price != null ? formatMoney(price) : '—'}
+        </p>
       </div>
 
       <div className="flex items-end">
         <p className="text-sm text-muted-foreground">
-          Subtotal: {subtotal === null ? '—' : formatCents(subtotal)}
+          Subtotal:{' '}
+          {subtotal === null ? '—' : formatMoney(formatCents(subtotal))}
         </p>
       </div>
 

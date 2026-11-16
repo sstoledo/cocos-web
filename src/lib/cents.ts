@@ -19,3 +19,20 @@ export function formatCents(cents: number): string {
 
   return `${whole}.${frac.toString().padStart(2, '0')}`;
 }
+
+/** Shared money display: soles with the S/ prefix. Every read-only
+ * money column (tables, detail pages, sections) renders through this so
+ * the currency sign and decimal format live in one place. */
+const MONEY_FORMAT = new Intl.NumberFormat('es-PE', {
+  style: 'currency',
+  currency: 'PEN',
+  minimumFractionDigits: 2,
+});
+
+export function formatMoney(value: string | number): string {
+  // Number() here is display-only conversion of an already-validated
+  // decimal string; all money math stays in cents (WOF-F6).
+  // Intl renders the currency separator as U+00A0; normalize it so the
+  // output is a plain space everywhere.
+  return MONEY_FORMAT.format(Number(value)).replace(/\u00A0/g, ' ');
+}

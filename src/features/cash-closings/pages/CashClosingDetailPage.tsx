@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { ApiError } from '@/lib/api-error';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { IconFileTypePdf } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -120,25 +121,33 @@ export function CashClosingDetailPage() {
               <dt className="text-sm text-muted-foreground">
                 Efectivo esperado
               </dt>
-              <dd className="text-foreground">{closing.expectedCash}</dd>
+              <dd className="text-foreground">
+                {formatMoney(closing.expectedCash)}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">
                 Tarjeta esperada
               </dt>
-              <dd className="text-foreground">{closing.expectedCard}</dd>
+              <dd className="text-foreground">
+                {formatMoney(closing.expectedCard)}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">
                 Transferencia esperada
               </dt>
-              <dd className="text-foreground">{closing.expectedTransfer}</dd>
+              <dd className="text-foreground">
+                {formatMoney(closing.expectedTransfer)}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">
                 Efectivo declarado
               </dt>
-              <dd className="text-foreground">{closing.declaredCash}</dd>
+              <dd className="text-foreground">
+                {formatMoney(closing.declaredCash)}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">Diferencia</dt>
@@ -148,7 +157,7 @@ export function CashClosingDetailPage() {
                   differenceClassName(closing.difference)
                 )}
               >
-                {closing.difference}
+                {formatMoney(closing.difference)}
               </dd>
             </div>
             <div>
@@ -166,19 +175,19 @@ export function CashClosingDetailPage() {
             <div>
               <dt className="text-sm text-muted-foreground">Efectivo</dt>
               <dd className="text-foreground">
-                {closing.workOrderPaymentsCash}
+                {formatMoney(closing.workOrderPaymentsCash)}
               </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">Tarjeta</dt>
               <dd className="text-foreground">
-                {closing.workOrderPaymentsCard}
+                {formatMoney(closing.workOrderPaymentsCard)}
               </dd>
             </div>
             <div>
               <dt className="text-sm text-muted-foreground">Transferencia</dt>
               <dd className="text-foreground">
-                {closing.workOrderPaymentsTransfer}
+                {formatMoney(closing.workOrderPaymentsTransfer)}
               </dd>
             </div>
             <div>

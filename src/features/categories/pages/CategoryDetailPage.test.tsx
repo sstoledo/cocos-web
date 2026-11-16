@@ -162,7 +162,7 @@ describe('CategoryDetailPage', () => {
     expect(screen.getByText('Productos (1)')).toBeInTheDocument();
     expect(screen.getByText('Filtro de aceite sintético')).toBeInTheDocument();
     expect(screen.queryByText('Bujía NGK')).not.toBeInTheDocument();
-    expect(screen.getByText(/\$[\s\u00A0]?18\.000,00/)).toBeInTheDocument();
+    expect(screen.getByText(/S\/ 18,000\.00/)).toBeInTheDocument();
   });
 
   it('shows error state when request fails', async () => {

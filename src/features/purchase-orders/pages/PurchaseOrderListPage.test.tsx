@@ -92,7 +92,7 @@ describe('PurchaseOrderListPage', () => {
     expect(
       screen.getByRole('cell', { name: 'Repuestos SA' })
     ).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '500.00' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 500.00' })).toBeInTheDocument();
     const row = screen.getByRole('row', { name: /COM-2024-000001/ });
     expect(within(row).getByText('Borrador')).toBeInTheDocument();
     expect(screen.getByText('Página 1 de 3')).toBeInTheDocument();

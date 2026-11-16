@@ -58,7 +58,7 @@ test('mobile purchase order detail uses line cards and actions', async ({
   await expect(page.getByRole('link', { name: 'Registrar recepción' }))
     .toHaveClass(/w-full/);
   await expect(page.getByTestId('purchase-order-total-value'))
-    .toHaveText('455.00');
+    .toHaveText('S/ 455.00');
 });
 
 test('mobile receive form keeps full-width submit and back navigation', async ({

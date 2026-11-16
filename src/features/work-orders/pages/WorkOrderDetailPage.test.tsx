@@ -136,10 +136,10 @@ describe('WorkOrderDetailPage', () => {
       screen.getByTestId('work-order-service-mobile-card')
     ).toHaveTextContent('SRV-01');
     expect(screen.getByTestId('work-order-total-value')).toHaveTextContent(
-      '30500.50'
+      'S/ 30,500.50'
     );
     expect(screen.getByTestId('work-order-remaining-value')).toHaveTextContent(
-      '30500.50'
+      'S/ 30,500.50'
     );
     expect(screen.getByTestId('work-order-secondary-sections')).toHaveClass(
       'xl:grid-cols-2'
@@ -162,14 +162,18 @@ describe('WorkOrderDetailPage', () => {
       ).toBeInTheDocument()
     );
 
-    expect(screen.getByRole('cell', { name: '5000.00' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '10000.00' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'S/ 5,000.00' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'S/ 10,000.00' })
+    ).toBeInTheDocument();
     expect(screen.getByTestId('work-order-total-value')).toHaveTextContent(
-      '30500.50'
+      'S/ 30,500.50'
     );
     expect(
       screen.getByTestId('work-order-total-value').parentElement
-    ).toHaveTextContent('Total: 30500.50');
+    ).toHaveTextContent('Total: S/ 30,500.50');
   });
 
   it('shows placeholders when optional fields are null', async () => {
@@ -433,7 +437,7 @@ describe('WorkOrderDetailPage payments section', () => {
 
     expect((await screen.findAllByText('Parcial')).length).toBeGreaterThan(0);
     expect(
-      screen.getByText(/Pagado 100\.00 de 300\.00 · Saldo 200\.00/)
+      screen.getByText(/Pagado S\/ 100\.00 de S\/ 300\.00 · Saldo S\/ 200\.00/)
     ).toBeInTheDocument();
     expect(
       await screen.findByRole('cell', { name: 'Seña' })

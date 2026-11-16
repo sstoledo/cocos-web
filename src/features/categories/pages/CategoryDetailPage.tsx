@@ -7,18 +7,10 @@ import { useCategories } from '@/features/categories/hooks/use-categories';
 import type { Category } from '@/features/categories/types';
 import { useProducts } from '@/features/products/hooks/use-products';
 import type { Product } from '@/features/products/types';
+import { formatMoney } from '@/lib/cents';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { useCategory } from '../hooks/use-category';
-
-function formatPrice(price: string): string {
-  const num = Number(price);
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2,
-  }).format(num);
-}
 
 export function CategoryDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -158,7 +150,7 @@ export function CategoryDetailPage() {
                   </td>
                   <td className="p-3">{product.presentation.name}</td>
                   <td className="p-3 tabular-nums">
-                    {formatPrice(product.price)}
+                    {formatMoney(product.price)}
                   </td>
                 </DataTableRow>
               ))}

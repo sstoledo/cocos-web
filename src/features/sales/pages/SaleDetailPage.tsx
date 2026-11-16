@@ -4,6 +4,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ApiError } from '@/lib/api-error';
+import { formatMoney } from '@/lib/cents';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { PaymentMethodBadge } from '../components/PaymentMethodBadge';
@@ -49,8 +50,8 @@ function SaleLinesTable({
               </p>
             </td>
             <td className="px-3 text-center">{line.quantity}</td>
-            <td className="px-3 text-right">{line.unitPriceSnapshot}</td>
-            <td className="px-3 text-right font-semibold">{line.subtotal}</td>
+            <td className="px-3">{formatMoney(line.unitPriceSnapshot)}</td>
+            <td className="px-3 font-semibold">{formatMoney(line.subtotal)}</td>
           </DataTableRow>
         ))}
       </DataTable>
@@ -74,12 +75,14 @@ function SaleLinesTable({
               </div>
               <div>
                 <dt className="text-muted-foreground">Precio unitario</dt>
-                <dd className="text-foreground">{line.unitPriceSnapshot}</dd>
+                <dd className="text-foreground">
+                  {formatMoney(line.unitPriceSnapshot)}
+                </dd>
               </div>
               <div className="text-right">
                 <dt className="text-muted-foreground">Subtotal</dt>
                 <dd className="font-semibold text-foreground">
-                  {line.subtotal}
+                  {formatMoney(line.subtotal)}
                 </dd>
               </div>
             </dl>
@@ -206,7 +209,7 @@ export function SaleDetailPage() {
             data-testid="sale-total-value"
             className="text-h3 font-semibold text-foreground"
           >
-            {sale.totalAmount}
+            {formatMoney(sale.totalAmount)}
           </span>
         </div>
         <div className="flex sm:justify-end">

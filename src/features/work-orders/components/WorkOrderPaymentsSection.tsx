@@ -8,6 +8,7 @@ import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { PAYMENT_METHOD_LABELS } from '@/features/sales/components/PaymentMethodBadge';
 import type { PaymentMethod } from '@/features/sales/types';
 import { formatCents, toCents } from '@/lib/cents';
+import { formatMoney } from '@/lib/cents';
 import { Dialog } from '@base-ui/react/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -163,8 +164,9 @@ export function WorkOrderPaymentsSection({
         <div className="flex flex-wrap items-center gap-3">
           <WorkOrderPaymentStatusBadge status={workOrder.paymentStatus} />
           <p className="text-sm text-muted-foreground">
-            Pagado {workOrder.paidAmount} de {workOrder.totalAmount} · Saldo{' '}
-            {remainingAmount}
+            Pagado {formatMoney(workOrder.paidAmount)} de{' '}
+            {formatMoney(workOrder.totalAmount)} · Saldo{' '}
+            {formatMoney(remainingAmount)}
           </p>
         </div>
 
@@ -193,7 +195,7 @@ export function WorkOrderPaymentsSection({
                 <td className="px-3 py-2">
                   {PAYMENT_METHOD_LABELS[payment.paymentMethod]}
                 </td>
-                <td className="px-3 py-2">{payment.amount}</td>
+                <td className="px-3 py-2">{formatMoney(payment.amount)}</td>
                 <td className="px-3 py-2">{payment.note ?? '—'}</td>
               </DataTableRow>
             ))}
@@ -218,7 +220,7 @@ export function WorkOrderPaymentsSection({
                       Registrar pago
                     </Dialog.Title>
                     <Dialog.Description className="mt-2 text-sm text-muted-foreground">
-                      Saldo restante: {remainingAmount}
+                      Saldo restante: {formatMoney(remainingAmount)}
                     </Dialog.Description>
                     <PaymentForm
                       remainingAmount={remainingAmount}

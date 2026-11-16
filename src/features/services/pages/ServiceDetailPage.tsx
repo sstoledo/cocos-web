@@ -3,19 +3,11 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useUser } from '@/features/shell/hooks/useUser';
+import { formatMoney } from '@/lib/cents';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { ServiceProductsSection } from '../components/ServiceProductsSection';
 import { useService } from '../hooks/use-service';
-
-function formatPrice(price: string): string {
-  const num = Number(price);
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2,
-  }).format(num);
-}
 
 function formatDuration(duration: number | null | undefined): string {
   if (duration === null || duration === undefined) {
@@ -88,7 +80,7 @@ export function ServiceDetailPage() {
             <div>
               <dt className="text-sm text-muted-foreground">Precio</dt>
               <dd className="text-foreground tabular-nums">
-                {formatPrice(service.price)}
+                {formatMoney(service.price)}
               </dd>
             </div>
             <div>

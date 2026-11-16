@@ -80,7 +80,7 @@ describe('ServiceDetailPage', () => {
     );
 
     expect(screen.getByText('SRV-001')).toBeInTheDocument();
-    expect(screen.getByText(/\$[\s\u00A0]?25\.000,00/)).toBeInTheDocument();
+    expect(screen.getByText(/S\/ 25,000\.00/)).toBeInTheDocument();
     expect(screen.getByText('45 min')).toBeInTheDocument();
     expect(screen.getByText('Activo')).toBeInTheDocument();
     expect(screen.getByText('Cambio de aceite y filtro')).toBeInTheDocument();

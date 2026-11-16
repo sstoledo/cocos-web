@@ -4,6 +4,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { Pagination } from '@/components/ui/Pagination';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { cn } from '@/lib/utils';
 import { IconCashRegister } from '@tabler/icons-react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
@@ -56,17 +57,20 @@ function CashClosingRow({ closing }: { closing: CashClosing }) {
       </td>
       <td className="px-3 text-muted-foreground">{closing.closedBy.name}</td>
       <td className="px-3 text-muted-foreground">{closing.salesCount}</td>
-      {/* Money renders verbatim as decimal strings — no recomputation
-          (list precedent). */}
-      <td className="px-3 text-muted-foreground">{closing.expectedCash}</td>
-      <td className="px-3 text-muted-foreground">{closing.declaredCash}</td>
+      {/* Money renders through formatMoney (S/) — no recomputation. */}
+      <td className="px-3 text-muted-foreground">
+        {formatMoney(closing.expectedCash)}
+      </td>
+      <td className="px-3 text-muted-foreground">
+        {formatMoney(closing.declaredCash)}
+      </td>
       <td
         className={cn(
           'px-3 font-medium',
           differenceClassName(closing.difference)
         )}
       >
-        {closing.difference}
+        {formatMoney(closing.difference)}
       </td>
     </DataTableRow>
   );
@@ -91,7 +95,7 @@ function CashClosingCard({ closing }: { closing: CashClosing }) {
             differenceClassName(closing.difference)
           )}
         >
-          {closing.difference}
+          {formatMoney(closing.difference)}
         </span>
       </div>
       <p className="text-caption text-muted-foreground">
@@ -105,11 +109,11 @@ function CashClosingCard({ closing }: { closing: CashClosing }) {
         </div>
         <div>
           <dt>Esperado</dt>
-          <dd>{closing.expectedCash}</dd>
+          <dd>{formatMoney(closing.expectedCash)}</dd>
         </div>
         <div>
           <dt>Declarado</dt>
-          <dd>{closing.declaredCash}</dd>
+          <dd>{formatMoney(closing.declaredCash)}</dd>
         </div>
       </dl>
     </article>

@@ -25,7 +25,7 @@ describe('ProformaTable', () => {
     expect(
       screen.getByRole('cell', { name: 'PRO-2026-000001' })
     ).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '80.50' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'S/ 80.50' })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /ver/i })[0]).toHaveAttribute(
       'href',
       '/proformas/prof1'

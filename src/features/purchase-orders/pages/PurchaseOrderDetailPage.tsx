@@ -4,6 +4,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { DataTable, DataTableRow } from '@/components/ui/data-table';
 import { ApiError } from '@/lib/api-error';
+import { formatMoney } from '@/lib/cents';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useParams } from 'react-router';
 import { PurchaseOrderActions } from '../components/PurchaseOrderActions';
@@ -163,10 +164,9 @@ export function PurchaseOrderDetailPage() {
                 <td className="px-3 text-right font-mono">
                   {line.quantityReceived}
                 </td>
-                {/* Money renders verbatim as a decimal string (list
-                        precedent) — no recomputation. */}
-                <td className="px-3 text-right font-mono">
-                  {line.estimatedCostPrice}
+                {/* Money renders through formatMoney (S/) — no recomputation. */}
+                <td className="px-3 font-mono">
+                  {formatMoney(line.estimatedCostPrice)}
                 </td>
               </DataTableRow>
             ))}
@@ -197,7 +197,9 @@ export function PurchaseOrderDetailPage() {
                   </div>
                   <div className="text-right">
                     <dt className="text-muted-foreground">Costo estimado</dt>
-                    <dd className="font-mono">{line.estimatedCostPrice}</dd>
+                    <dd className="font-mono">
+                      {formatMoney(line.estimatedCostPrice)}
+                    </dd>
                   </div>
                 </dl>
               </article>
@@ -211,7 +213,7 @@ export function PurchaseOrderDetailPage() {
               data-testid="purchase-order-total-value"
               className="font-mono text-body font-semibold text-foreground"
             >
-              {purchaseOrder.estimatedTotal}
+              {formatMoney(purchaseOrder.estimatedTotal)}
             </span>
           </div>
         </SectionCard>

@@ -1,4 +1,5 @@
 import { DataTable } from '@/components/ui/data-table';
+import { formatMoney } from '@/lib/cents';
 import { IconCar, IconEye } from '@tabler/icons-react';
 import { Link } from 'react-router';
 import type { WorkOrder } from '../types';
@@ -54,8 +55,8 @@ export function WorkOrderTable({ workOrders }: WorkOrderTableProps) {
             <td className="px-3">
               <WorkOrderPaymentStatusBadge status={workOrder.paymentStatus} />
             </td>
-            <td className="px-3 text-right font-mono font-semibold text-foreground">
-              {workOrder.totalAmount}
+            <td className="px-3 font-mono font-semibold text-foreground">
+              {formatMoney(workOrder.totalAmount)}
             </td>
             <td className="px-3 text-muted-foreground">
               {orderDate(workOrder)}
@@ -110,7 +111,7 @@ export function WorkOrderTable({ workOrders }: WorkOrderTableProps) {
             <div className="flex items-center justify-between gap-3">
               <span className="text-caption text-muted-foreground">Total</span>
               <span className="font-mono text-body font-semibold text-foreground">
-                {workOrder.totalAmount}
+                {formatMoney(workOrder.totalAmount)}
               </span>
             </div>
             <Link

@@ -90,5 +90,5 @@ test('mobile work order detail uses service cards and full-width actions', async
     )
   ).toBeVisible();
   await expect(page.getByTestId('work-order-remaining-value'))
-    .toHaveText('Saldo pendiente: 65.00');
+    .toHaveText('Saldo pendiente: S/ 65.00');
 });
