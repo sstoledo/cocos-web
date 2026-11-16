@@ -52,6 +52,6 @@ test('mobile proformas uses cards with status and total', async ({ page }) => {
   await expect(card).toBeVisible();
   await expect(card).toContainText('PRO-2026-000045');
   await expect(card).toContainText('Aceptada');
-  await expect(card).toContainText('18450.00');
+  await expect(card).toContainText('S/ 18,450.00');
   await expect(page.getByRole('table')).toBeHidden();
 });
