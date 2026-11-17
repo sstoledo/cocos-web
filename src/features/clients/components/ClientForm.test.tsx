@@ -1,9 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ClientFormValues } from '../types';
 import { ClientForm } from './ClientForm';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 function renderForm(
   props: {
@@ -61,6 +65,91 @@ describe('ClientForm', () => {
     const values = onSubmit.mock.calls[0][0];
     expect(values.name).toBe('Juan Pérez');
     expect(values.identification).toBe('12345678');
+  });
+
+  it('autofills empty name and address from the SUNAT RUC lookup', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          ruc: '20131312955',
+          razonSocial: 'SUPERINTENDENCIA NACIONAL DE ADUANAS',
+          direccion: 'AV. GARCILASO DE LA VEGA NRO. 1472',
+          estado: 'ACTIVO',
+          condicion: 'HABIDO',
+        }),
+    });
+
+    renderForm();
+    await user.selectOptions(
+      screen.getByLabelText('Tipo de identificación'),
+      'RUC'
+    );
+    await user.type(screen.getByLabelText('Identificación'), '20131312955');
+
+    await waitFor(
+      () =>
+        expect(screen.getByLabelText('Nombre')).toHaveValue(
+          'SUPERINTENDENCIA NACIONAL DE ADUANAS'
+        ),
+      { timeout: 3000 }
+    );
+    expect(screen.getByLabelText('Dirección')).toHaveValue(
+      'AV. GARCILASO DE LA VEGA NRO. 1472'
+    );
+    expect(
+      screen.getByText(/SUNAT: SUPERINTENDENCIA NACIONAL/)
+    ).toHaveTextContent('ACTIVO · HABIDO');
+  });
+
+  it('never clobbers user input when autofilling from the RUC lookup', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          ruc: '20131312955',
+          razonSocial: 'SUPERINTENDENCIA NACIONAL DE ADUANAS',
+          direccion: 'AV. GARCILASO DE LA VEGA NRO. 1472',
+          estado: 'ACTIVO',
+          condicion: 'HABIDO',
+        }),
+    });
+
+    renderForm();
+    await user.type(screen.getByLabelText('Nombre'), 'Mi Empresa');
+    await user.selectOptions(
+      screen.getByLabelText('Tipo de identificación'),
+      'RUC'
+    );
+    await user.type(screen.getByLabelText('Identificación'), '20131312955');
+
+    await waitFor(
+      () => expect(screen.getByText(/SUNAT:/)).toBeInTheDocument(),
+      { timeout: 3000 }
+    );
+    expect(screen.getByLabelText('Nombre')).toHaveValue('Mi Empresa');
+  });
+
+  it('shows a non-blocking hint when the RUC is not found', async () => {
+    const user = userEvent.setup();
+    globalThis.fetch = vi.fn().mockResolvedValue({ ok: false, status: 404 });
+
+    renderForm();
+    await user.selectOptions(
+      screen.getByLabelText('Tipo de identificación'),
+      'RUC'
+    );
+    await user.type(screen.getByLabelText('Identificación'), '20131312955');
+
+    await waitFor(
+      () =>
+        expect(
+          screen.getByText('RUC no encontrado en el padrón de SUNAT')
+        ).toBeInTheDocument(),
+      { timeout: 3000 }
+    );
   });
 
   it('prefills the form in edit mode', () => {
