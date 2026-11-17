@@ -22,6 +22,11 @@ const BrandDetailPage = React.lazy(() =>
     default: m.BrandDetailPage,
   }))
 );
+const SettingsCompanyPage = React.lazy(() =>
+  import('@/features/settings/pages/SettingsCompanyPage').then((m) => ({
+    default: m.SettingsCompanyPage,
+  }))
+);
 const BrandFormPage = React.lazy(() =>
   import('@/features/brands/pages/BrandFormPage').then((m) => ({
     default: m.BrandFormPage,
@@ -426,6 +431,7 @@ const routes: RouteObject[] = [
         'Admin',
         'Reception',
       ]),
+      guardedRoute('settings/company', <SettingsCompanyPage />, 'Admin'),
       { path: 'unauthorized', element: <UnauthorizedPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],

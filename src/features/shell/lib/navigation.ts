@@ -7,6 +7,7 @@ import {
   IconPackage,
   IconPackages,
   IconReceiptRefund,
+  IconSettings,
   IconTag,
   IconTool,
   IconTools,
@@ -34,6 +35,17 @@ export const navigationGroups: NavGroup[] = [
           'Purchasing',
           'ReadOnly',
         ],
+      },
+    ],
+  },
+  {
+    label: 'Configuración',
+    items: [
+      {
+        label: 'Empresa',
+        path: '/settings/company',
+        icon: IconSettings,
+        allowedRoles: ['Admin'],
       },
     ],
   },
