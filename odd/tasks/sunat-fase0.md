@@ -17,11 +17,13 @@
 |----|------|-------|--------|--------|
 | T1 | S1 | inline (cocos-back) | done | fe3d04d |
 | T2 | S1 | inline (cocos-web) | done | 4adbb31 |
-| T3 | S2 | inline (cocos-back) | pending | |
-| T4 | S2 | inline (cocos-web) | pending | |
-| T5 | S3 | inline (cocos-back) | pending | |
+| T3 | S2 | inline (cocos-back) | done | c724bc5 |
+| T4 | S2 | inline (cocos-web) | done | 5002dfc |
+| T5 | S3 | inline (cocos-back) | done | 9526382 |
 
 ## Log
 
 - **L1** (2026-11-16) — User: "Vamos a enfocarnos ahora en una integracion con la Sunat". Assistant proposed 5-phase roadmap; user: "Si, vamos por tu sugerencia, empezamos fase 0" — authorizing Fase 0 as specified in S1–S3 above.
 - **L2** (2026-11-16) — Exploration: `IsValidIdentification` (cocos-back `src/clients/validators/identification.validator.ts`) checks length only; frontend `client-schema.ts` same. No Company/Settings model exists. `SaleNumberSequence` (year-based) is the numbering precedent. Backend `main` at `7dd2519`, clean.
+- **L3** (2026-11-17) — All 5 tasks done. T1 `fe3d04d` (backend RUC algo, RED→GREEN 2 failing→34/34), T2 `4adbb31` (frontend zod + `src/lib/ruc.ts`, suite 1564), T3 `c724bc5` (`CompanySettings` + GET/PATCH `/api/settings/company`, admin-only; RED observed via missing-module run), T4 `5002dfc` (settings page + sidebar "Configuración→Empresa"), T5 `9526382` (`FiscalDocumentType`/`SunatEmissionStatus` enums + nullable fiscal columns on `sales`, `sunat_status` default `pending`). Decision: correlativo counters deferred to Fase 2 (storing counters without emission creates dead data). Verification: backend 788/788, frontend 1564/1564, fresh-migration deploy on scratch DB verified (4 fiscal cols in sales, 4 in company_settings), scratch dropped.
+- **L4** (2026-11-17) — Known consequence (Risk item 1 adjacent): clients saved before T1 with an invalid RUC (e.g. `12345678901`) will now fail form validation when edited; they must be corrected to a valid RUC at edit time. Not a data migration — no existing rows touched.

@@ -3,8 +3,10 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { useRucLookup } from '@/features/clients/hooks/use-ruc-lookup';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { clientSchema } from '../schemas/client-schema';
@@ -30,6 +32,9 @@ export function ClientForm({
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<ClientFormValues>({
     resolver: zodResolver(clientSchema),
@@ -42,6 +47,26 @@ export function ClientForm({
       address: '',
     },
   });
+
+  const identificationType = watch('identificationType');
+  const identification = watch('identification');
+  const rucLookup = useRucLookup(
+    identificationType ?? '',
+    identification ?? ''
+  );
+
+  // Autofill only empty fields: never clobber what the user typed.
+  useEffect(() => {
+    if (rucLookup.status !== 'found') {
+      return;
+    }
+    if (!getValues('name')) {
+      setValue('name', rucLookup.result.razonSocial);
+    }
+    if (!getValues('address') && rucLookup.result.direccion) {
+      setValue('address', rucLookup.result.direccion);
+    }
+  }, [rucLookup, getValues, setValue]);
 
   function handleFormSubmit(values: ClientFormValues) {
     onSubmit(values);
@@ -96,6 +121,25 @@ export function ClientForm({
           {errors.identification && (
             <p className="text-sm text-destructive" role="alert">
               {errors.identification.message}
+            </p>
+          )}
+          {rucLookup.status === 'loading' && (
+            <p className="text-sm text-muted-foreground" aria-live="polite">
+              Consultando SUNAT…
+            </p>
+          )}
+          {rucLookup.status === 'found' && (
+            <p className="text-sm text-muted-foreground" aria-live="polite">
+              SUNAT: {rucLookup.result.razonSocial}
+              {rucLookup.result.estado ? ` · ${rucLookup.result.estado}` : ''}
+              {rucLookup.result.condicion
+                ? ` · ${rucLookup.result.condicion}`
+                : ''}
+            </p>
+          )}
+          {rucLookup.status === 'error' && (
+            <p className="text-sm text-muted-foreground" aria-live="polite">
+              {rucLookup.message}
             </p>
           )}
         </div>
