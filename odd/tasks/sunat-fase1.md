@@ -15,8 +15,8 @@
 
 | ID | Spec | Route | Status | Commit |
 |----|------|-------|--------|--------|
-| T1 | S1, S2 | inline (cocos-back) | pending | |
-| T2 | S3 | inline (cocos-web) | pending | |
+| T1 | S1, S2 | inline (cocos-back) | done | 2958515 |
+| T2 | S3 | inline (cocos-web) | done | 6d03754 |
 
 ## Log
 
