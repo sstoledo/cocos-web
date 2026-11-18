@@ -4,6 +4,11 @@
 // longer accepts serviceLines nor returns a services collection.
 export type SaleStatus = 'completed' | 'cancelled';
 
+/** SUNAT fiscal fields (backend contract). Null while not emitted. */
+export type SunatEmissionStatus = 'pending' | 'accepted' | 'rejected';
+
+export type FiscalDocumentType = 'factura' | 'boleta';
+
 export type PaymentMethod = 'cash' | 'card' | 'transfer';
 
 export interface SaleProductLine {
@@ -33,6 +38,10 @@ export interface Sale {
   paymentMethod: PaymentMethod;
   totalAmount: string;
   isActive: boolean;
+  documentType: FiscalDocumentType | null;
+  fiscalSeries: string | null;
+  fiscalNumber: number | null;
+  sunatStatus: SunatEmissionStatus;
   client: { id: string; name: string } | null;
   branch: { id: string; name: string } | null;
   employee: { id: string; name: string } | null;

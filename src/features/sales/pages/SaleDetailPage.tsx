@@ -10,6 +10,7 @@ import { Link, useParams } from 'react-router';
 import { PaymentMethodBadge } from '../components/PaymentMethodBadge';
 import { SaleCancelAction } from '../components/SaleCancelAction';
 import { SaleStatusBadge } from '../components/SaleStatusBadge';
+import { SaleSunatAction } from '../components/SaleSunatAction';
 import { useSale } from '../hooks/use-sale';
 import type { SaleProductLine } from '../types';
 
@@ -192,6 +193,14 @@ export function SaleDetailPage() {
                 <SaleStatusBadge status={sale.status} />
               </dd>
             </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">Estado SUNAT</dt>
+              <dd className="text-foreground">
+                {sale.fiscalSeries && sale.fiscalNumber
+                  ? `${sale.fiscalSeries}-${sale.fiscalNumber} · ${sale.sunatStatus === 'accepted' ? 'Aceptado' : sale.sunatStatus === 'rejected' ? 'Rechazado' : 'Pendiente'}`
+                  : 'Sin emitir'}
+              </dd>
+            </div>
           </dl>
         </SectionCard>
         <SectionCard title="Productos">
@@ -212,7 +221,8 @@ export function SaleDetailPage() {
             {formatMoney(sale.totalAmount)}
           </span>
         </div>
-        <div className="flex sm:justify-end">
+        <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-end">
+          <SaleSunatAction sale={sale} className="w-full sm:w-auto" />
           <SaleCancelAction sale={sale} className="w-full sm:w-auto" />
         </div>
       </PageContent>

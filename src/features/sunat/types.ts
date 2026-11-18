@@ -11,3 +11,11 @@ export type RucLookupState =
   | { status: 'loading' }
   | { status: 'found'; result: RucLookupResult }
   | { status: 'error'; message: string };
+
+/** Result of POST /api/sales/:id/emit. */
+export type EmissionResult = {
+  serie: string;
+  correlativo: number;
+  sunatStatus: 'accepted' | 'rejected';
+  description: string | null;
+};
