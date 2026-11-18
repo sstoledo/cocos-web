@@ -18,13 +18,15 @@
 
 | ID | Spec | Route | Status | Commit |
 |----|------|-------|--------|--------|
-| T1 | S2 | inline (cocos-back) | done | 42208b7 |
-| T2 | S1 | inline (cocos-back) | done | f1171e6 |
-| T3 | S1 | inline (cocos-back) | done | 3c0a791 |
-| T4 | S1 | inline (cocos-back) | done | 3730fef |
-| T5 | S1, S3 | inline (cocos-back) | done | 27f5bcc |
-| T6 | S3 | inline (cocos-back) | done | 84f9604, 8d99a99 |
-| T7 | S4 | inline (cocos-web) | done | 9990cc8, 3db0e08 |
+| T1 | S2 | inline (cocos-back) | done | cd18a6e |
+| T2 | S1 | inline (cocos-back) | done | 6a35e08 |
+| T3 | S1 | inline (cocos-back) | done | f333629 |
+| T4 | S1 | inline (cocos-back) | done | 8b72eb5 |
+| T5 | S1, S3 | inline (cocos-back) | done | dd348a7 |
+| T6 | S3 | inline (cocos-back) | done | d654ba8, 25383dd |
+| T7 | S4 | inline (cocos-web) | done | 5f74d46, 1b38803, 4e44ed4 |
+
+Commit hashes above are from the branch rebuilt on `origin/main` (backend `1d1da5d..25383dd`, frontend `5f74d46..4e44ed4`); the pre-rebuild hashes in L3–L4 history are obsolete.
 
 ## Log
 
@@ -40,3 +42,4 @@
   - Representation impresa = browser print of the sale detail (explicit `Imprimir` action), no PDF library.
 - **L4** (2026-11-18) — Verification: backend 69 suites / 835 tests green (47 in `src/sunat`); frontend 318 files / 1581 tests green. Signer tests use a committed self-signed test fixture (`src/sunat/__fixtures__`); no live SUNAT calls anywhere in the suite.
 - **L5** (2026-11-18) — Business prerequisites before real emission (outside code): SUNAT digital certificate (issued against the company RUC), SOL secondary user credentials with emission permission, and the homologación process in SUNAT's SEE QA environment. `SUNAT_BILL_SERVICE_URL` stays on beta until production access is granted.
+- **L6** (2026-11-18) — Delivery: both PRs rebuilt on current `origin/main` and green. cocos-back #115 (8 commits, 27 files, +1868): Lint/typecheck/build, Jest, Testcontainers all pass. cocos-web #171 (3 commits, 11 files, +461): Lint/typecheck/unit/build pass and Playwright e2e passes (11m51s). Both assigned to `sstoledo` and `MERGEABLE`. Backend PR title corrected from the stray chore headline to `feat: SUNAT CPE emission via SEE directo (UBL 2.1 + XMLDSig + billService)`.
