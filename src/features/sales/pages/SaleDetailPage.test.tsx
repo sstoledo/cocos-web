@@ -107,6 +107,32 @@ describe('SaleDetailPage', () => {
     useUserMock.mockReset();
   });
 
+  it('shows the SUNAT status and a print action on the detail', async () => {
+    const printSpy = vi.fn();
+    vi.stubGlobal('print', printSpy);
+    globalThis.fetch = mockFetchWithSale(
+      buildSale({
+        documentType: 'boleta',
+        fiscalSeries: 'B001',
+        fiscalNumber: 7,
+        sunatStatus: 'accepted',
+      })
+    );
+
+    renderDetailPage();
+
+    expect(await screen.findByText('Estado SUNAT')).toBeInTheDocument();
+    expect(screen.getByText('B001-7 · Aceptado')).toBeInTheDocument();
+
+    const { default: userEvent } = await import('@testing-library/user-event');
+    await userEvent
+      .setup()
+      .click(screen.getByRole('button', { name: 'Imprimir' }));
+    expect(printSpy).toHaveBeenCalled();
+
+    vi.unstubAllGlobals();
+  });
+
   it('S1: renders the cancel action for an Admin on a completed sale', async () => {
     globalThis.fetch = mockFetchWithSale(sale);
 

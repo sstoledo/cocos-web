@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/Button';
 import { PageContent } from '@/components/ui/PageContent';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageTitle } from '@/components/ui/PageTitle';
@@ -223,6 +224,14 @@ export function SaleDetailPage() {
         </div>
         <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-end">
           <SaleSunatAction sale={sale} className="w-full sm:w-auto" />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => window.print()}
+            className="w-full sm:w-auto"
+          >
+            Imprimir
+          </Button>
           <SaleCancelAction sale={sale} className="w-full sm:w-auto" />
         </div>
       </PageContent>
