@@ -18,15 +18,25 @@
 
 | ID | Spec | Route | Status | Commit |
 |----|------|-------|--------|--------|
-| T1 | S2 | inline (cocos-back) | pending | |
-| T2 | S1 | inline (cocos-back) | pending | |
-| T3 | S1 | inline (cocos-back) | pending | |
-| T4 | S1 | inline (cocos-back) | pending | |
-| T5 | S1, S3 | inline (cocos-back) | pending | |
-| T6 | S3 | inline (cocos-back) | pending | |
-| T7 | S4 | inline (cocos-web) | pending | |
+| T1 | S2 | inline (cocos-back) | done | 42208b7 |
+| T2 | S1 | inline (cocos-back) | done | f1171e6 |
+| T3 | S1 | inline (cocos-back) | done | 3c0a791 |
+| T4 | S1 | inline (cocos-back) | done | 3730fef |
+| T5 | S1, S3 | inline (cocos-back) | done | 27f5bcc |
+| T6 | S3 | inline (cocos-back) | done | 84f9604, 8d99a99 |
+| T7 | S4 | inline (cocos-web) | done | 9990cc8, 3db0e08 |
 
 ## Log
 
 - **L1** (2026-11-17) — User: "seguimos con la fase 2"; gate answer: "SEE directo a SUNAT" (over OSE/NubeFacT and postponing). Scope = S1–S5 above.
 - **L2** (2026-11-17) — Research: SUNAT billService endpoints beta `https://e-factura-test.sunat.gob.pe/ol-ti-itcpfegem/billService` / prod `https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService`; WS-Security UsernameToken with SOL credentials; CDR is a ZIP containing `R-<serie-correlativo>.xml` with ResponseCode (0 accepted). New deps: `xml-crypto` (XMLDSig), `fast-xml-parser` (CDR), `jszip` (zip/CDR).
+- **L3** (2026-11-18) — Implementation decisions recorded during Fase 2:
+  - Added `SUNAT_CERT_KEY_PATH` next to `SUNAT_CERT_PATH` (S5 extension): the digital certificate arrives as two PEM files (cert + key). `SUNAT_CERT_PASSWORD` unlocks a passphrase-protected key via `crypto.createPrivateKey`. Documented in `.env.template`.
+  - Per-line amounts: sale prices are IGV-inclusive; each line's taxable base and IGV are derived (`base = round2(total / 1.18)`), and document totals are the sum of line amounts so SUNAT's cross-check passes.
+  - Fiscal numbering (`FiscalNumberSequence`) is reserved before the SOAP call and consumed on transport failure (documented in the service). Reusing a number with different content is rejected by SUNAT (code 2385); a resend of identical content is safe.
+  - Buyer rules: any emission requires the client to have an identification document; facturas require the client RUC. Boleta with DNI is allowed.
+  - CDR: `ResponseCode` 0 = accepted, anything else = rejected with SUNAT's `Description` surfaced verbatim to the UI.
+  - `SaleResponseDto` now exposes `documentType`, `fiscalSeries`, `fiscalNumber`, `sunatStatus` (additive contract).
+  - Representation impresa = browser print of the sale detail (explicit `Imprimir` action), no PDF library.
+- **L4** (2026-11-18) — Verification: backend 69 suites / 835 tests green (47 in `src/sunat`); frontend 318 files / 1581 tests green. Signer tests use a committed self-signed test fixture (`src/sunat/__fixtures__`); no live SUNAT calls anywhere in the suite.
+- **L5** (2026-11-18) — Business prerequisites before real emission (outside code): SUNAT digital certificate (issued against the company RUC), SOL secondary user credentials with emission permission, and the homologación process in SUNAT's SEE QA environment. `SUNAT_BILL_SERVICE_URL` stays on beta until production access is granted.
