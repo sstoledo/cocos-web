@@ -56,3 +56,21 @@ Commit hashes above are from the branch rebuilt on `origin/main` (backend `1d1da
   - **El borde es correcto**: un único intento devolvió `401` con `SOAPAction: urn:sendBill`, mientras que con `SOAPAction` vacío siempre fue 500 — confirma que el ruteo depende de ese header y que el fix de L7 era necesario.
   - **Discriminador**: el mismo sobre enviado a **producción** con payload inválido devuelve un SOAP Fault estructurado (`env:Client` / `Internal Error (from client)`), no un eco. Es decir, nuestra red llega y SUNAT parsea el sobre; el fallo es específico del ambiente beta.
   - **Consecuencia**: no se puede afirmar que SUNAT acepte nuestros CPE. Queda pendiente (a) reintentar beta cuando su backend responda, (b) validar el XML contra los XSD oficiales offline —no requiere credenciales— antes de gastar más intentos.
+- **L9** (2026-11-19) — **Validación offline contra el XSD oficial: verde** (cocos-back `c1940a3`). Objetivo: separar los defectos de estructura del XML de cualquier problema de red o de SUNAT.
+  - **Fuente del esquema**: el portal de SUNAT (`cpe.sunat.gob.pe`) responde **403** a cualquier descarga automatizada, así que se usó la fuente upstream que SUNAT declara: el paquete OASIS UBL 2.1 (`https://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip`, 57.9 MB, 82 XSD). Se valida con `xmllint --noout --schema <...>/xsd/maindoc/UBL-Invoice-2.1.xsd our-invoice.xml`.
+  - **Cuatro defectos reales encontrados y corregidos**:
+    1. `<Invoice ... Id="_0">` — `xml-crypto` v6 ignora `uri: ''`; el flag que activa la referencia vacía es `isEmptyUri`, que por defecto es `false`, así que el firmador generaba un `Id` en la raíz. El `InvoiceType` de UBL **no admite atributos**, así que el documento era inválido por definición. Corregido a `isEmptyUri: true` → `<ds:Reference URI="">`.
+    2. `ext:ExtensionContent id="SignST"` — `ExtensionContent` no admite ese atributo. El `Id` se movió a `ds:Signature`, que XMLDSig sí lo permite, y `cac:Signature/cbc:URI>#SignST` sigue resolviendo.
+    3. `cbc:Line` dentro de `cac:PostalAddress` — ese elemento no existe en el esquema; es `cbc:StreetName`.
+    4. `cbc:Note` estaba al final del documento, pero el XSD exige el orden `…InvoiceTypeCode`, **`Note`**, `TaxPointDate`, `DocumentCurrencyCode`. Movido.
+  - **Resultado**: `our-invoice.xml validates`. Guardas añadidas: el spec fija `URI=""`, prohíbe `Id` en la raíz, exige `ds:Signature Id="SignST"`, `cbc:StreetName`, `ExtensionContent` sin atributos y la posición de `cbc:Note`. 51 tests de `src/sunat`, 841 en total.
+  - **Hallazgo que el XSD no puede ver**: un XML puede ser válido contra el esquema y aun así ser rechazado por SUNAT, porque SUNAT valida además contra sus catálogos. Comparando con un CPE real aceptado (`Factura-Gravada.xml`, forma que Greenter produce y SUNAT acepta), nuestro XML difiere en 8 puntos:
+    1. `cbc:InvoiceTypeCode` sin `listID="0101"` (tipo de operación).
+    2. Falta `cbc:IssueTime` (hora de emisión).
+    3. `cac:Signature/cbc:ID` debe ser el **RUC del emisor**, no una etiqueta propia.
+    4. El domicilio del emisor va como `cac:RegistrationAddress` dentro de `cac:PartyLegalEntity`, con **ubigeo en `cbc:ID`** y `cbc:AddressLine/cbc:Line`; nosotros usamos `cac:PostalAddress` dentro de `cac:Party` y **no tenemos ubigeo en los datos**.
+    5. Falta `cac:PaymentTerms` (`FormaPago` / `Contado`).
+    6. `cac:TaxScheme` debe ser `ID=1000`, `Name=IGV`, `TaxTypeCode=VAT`; hoy solo emitimos `ID=IGV`.
+    7. Falta `cbc:TaxExemptionReasonCode` (tipo de afectación IGV, catálogo 07) en la línea.
+    8. Falta `cac:PricingReference/AlternativeConditionPrice` con `PriceTypeCode=01`, necesario porque nuestros precios incluyen IGV.
+  - **Consecuencia**: aunque beta hubiera respondido, el CPE habría sido rechazado. De los 8 puntos, 7 son mecánicos (constantes y campos que ya tenemos); el **ubigeo** es el único que exige ampliar `CompanySettings` (hoy solo tiene `ruc`, `legalName`, `address` y series), es decir migración + campo en UI. Queda como decisión pendiente antes de homologación.
