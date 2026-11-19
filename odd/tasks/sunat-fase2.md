@@ -13,6 +13,9 @@
 - **S3** — Emission endpoint `POST /api/sales/:id/emit` (Admin + Reception): assigns fiscal numbering, builds + signs + zips the XML, sends to billService, parses the CDR, and updates the sale (`fiscalSeries`, `fiscalNumber`, `documentType`, `sunatStatus` accepted/observed/rejected). Unconfigured env (missing cert/SOL) → 503 with a clear message; emission failures never mutate the sale's stock/totals.
 - **S4** — UI: emit action on SaleDetailPage showing SUNAT status; the emitted CPE is printable (representation impresa) via the existing detail as a print view. Assumption: dedicated PDF generation is NOT part of this phase (browser print), recorded unless requested otherwise.
 - **S5** — Config via env: `SUNAT_BILL_SERVICE_URL` (default beta), `SUNAT_SOL_USER`, `SUNAT_SOL_PASSWORD`, `SUNAT_CERT_PATH` (+ optional `SUNAT_CERT_PASSWORD`). No secrets in code or committed fixtures.
+- **S6** — "El XML de nuestro CPE debe validar contra el esquema UBL 2.1 oficial." Verified offline against the OASIS schemas (L9); guarded by tests on the structural invariants that the four original defects broke.
+- **S7** — Domicilio fiscal del emisor: `CompanySettings` stores **only the 6-digit INEI ubigeo**; the XML emits `cac:RegistrationAddress` inside `cac:PartyLegalEntity` with `cbc:ID` = ubigeo, `cbc:AddressTypeCode` = `0000`, `cbc:CityName`/`cbc:CountrySubentity`/`cbc:District` derived from the catalog (province/department/district), and `cac:AddressLine/cbc:Line` with the configured address. Derived names are never stored, so they cannot contradict the code. The INEI catalog (1874 districts) is vendored in the backend and exposed as `GET /api/ubigeos?query=&limit=`; the UI chooses with a searchable combobox. Emission is blocked when the ubigeo is missing or not in the catalog.
+- **S8** — CPE structure aligned with a real accepted CPE (`Factura-Gravada.xml`): `cbc:InvoiceTypeCode listID="0101"`, `cbc:IssueTime`, `cac:Signature/cbc:ID` = issuer RUC, `cac:PaymentTerms` (`FormaPago`/`Contado`), `cac:TaxScheme` = `1000`/`IGV`/`VAT`, `cbc:TaxExemptionReasonCode` (`10`) per line, and `cac:PricingReference/AlternativeConditionPrice` with `PriceTypeCode` `01`. Assumption: every line is a gravada cash- payment operation (the current sale model has no credit terms and all prices are IGV-inclusive); revisit when credit sales or exonerated items exist.
 
 ## Tasks
 
@@ -25,6 +28,12 @@
 | T5 | S1, S3 | inline (cocos-back) | done | dd348a7 |
 | T6 | S3 | inline (cocos-back) | done | d654ba8, 25383dd |
 | T7 | S4 | inline (cocos-web) | done | 5f74d46, 1b38803, 4e44ed4 |
+| T8 | S6 | inline (cocos-back) | done | c1940a3 |
+| T9 | S7 | inline (cocos-back) | done | cfe0516 |
+| T10 | S7 | inline (cocos-back) | done | 7cec678 |
+| T11 | S8 | inline (cocos-back) | done | dea3bfe |
+| T12 | S7 | inline (cocos-web) | done | 6df4574, 97e4a78 |
+| T13 | S6-S8 | inline | done | L10 |
 
 Commit hashes above are from the branch rebuilt on `origin/main` (backend `1d1da5d..25383dd`, frontend `5f74d46..4e44ed4`); the pre-rebuild hashes in L3–L4 history are obsolete.
 
@@ -74,3 +83,13 @@ Commit hashes above are from the branch rebuilt on `origin/main` (backend `1d1da
     7. Falta `cbc:TaxExemptionReasonCode` (tipo de afectación IGV, catálogo 07) en la línea.
     8. Falta `cac:PricingReference/AlternativeConditionPrice` con `PriceTypeCode=01`, necesario porque nuestros precios incluyen IGV.
   - **Consecuencia**: aunque beta hubiera respondido, el CPE habría sido rechazado. De los 8 puntos, 7 son mecánicos (constantes y campos que ya tenemos); el **ubigeo** es el único que exige ampliar `CompanySettings` (hoy solo tiene `ruc`, `legalName`, `address` y series), es decir migración + campo en UI. Queda como decisión pendiente antes de homologación.
+- **L10** (2026-11-19) — **Ubigeo resuelto y 7 de los 8 huecos de catálogo cerrados** (cocos-back `cfe0516`, `7cec678`, `dea3bfe`; cocos-web `6df4574`, `97e4a78`).
+  - **Catálogo**: se descargó `geodir-ubigeo-inei.csv` de `geodir/ubigeo-peru` — **1874 distritos, 25 departamentos** — y se verificó contra códigos conocidos (`150101` Lima/Lima/Lima, `150122` Miraflores, `040101` Arequipa, `070101` Callao, `250101` Callería/Coronel Portillo). El portal de SUNAT sigue devolviendo **403** a descargas automatizadas. El catálogo se generó como datos tipados y no se edita a mano; "Miraflores" existe en 4 departamentos, por eso la etiqueta del selector lleva provincia, departamento y código.
+  - **Modelo**: `CompanySettings.ubigeo String?` guarda **solo el código INEI**; departamento, provincia y distrito se derivan del catálogo al construir el XML, así que un nombre guardado nunca puede contradecir al código. La migración (`20261119021655_add_company_settings_ubigeo`) se escribió a mano porque no hay Postgres accesible (`P1001` en `localhost:5432`); `prisma generate` basta para los tipos.
+  - **API**: `GET /api/ubigeos?query=&limit=` (20 por defecto, máximo 50, ignora mayúsculas y acentos, prioriza coincidencias por prefijo de distrito) y `GET /api/ubigeos/:code` (404 si no existe). Los 6 roles autenticados pueden leerlo: es dato de referencia.
+  - **Emisión**: se bloquea con 503 y mensaje explícito si falta el ubigeo o no está en el catálogo, igual que ya ocurría con el RUC y la razón social.
+  - **Fecha y hora**: `peruTimestamp()` calcula fecha y hora en `America/Lima`. Antes, después de las 19:00 de Lima, `toISOString()` fechaba el CPE con **el día siguiente**.
+  - **Builder**: `cac:RegistrationAddress` dentro de `PartyLegalEntity` con ubigeo, `AddressTypeCode` `0000`, provincia/departamento/distrito derivados y `AddressLine`; más `InvoiceTypeCode listID="0101"`, `IssueTime`, `Signature/cbc:ID` = RUC del emisor, `PaymentTerms` `FormaPago`/`Contado`, `TaxScheme` `1000`/`IGV`/`VAT`, `TaxExemptionReasonCode` `10` por línea y `PricingReference` con `PriceTypeCode` `01`. Los `TaxSubtotal` de documento omiten tasa y afectación, como el CPE aceptado.
+  - **Verificación**: backend **72 suites / 871 tests**, frontend **1594 tests**, `pnpm check` y build verdes en ambos repos, y `xmllint --noout --schema .../UBL-Invoice-2.1.xsd our-invoice.xml` → **`validates`**.
+  - **Abierto (decisión pendiente)**: el CPE aceptado trae `cac:RegistrationAddress` del **adquiriente**, y nuestro `Client` no tiene domicilio, así que la factura sale sin él. No está verificado que SUNAT la rechace; falta decidir si se agrega dirección al cliente o se deja fuera.
+  - **Abierto (bloqueo externo)**: la validación end-to-end sigue imposible — beta devuelve `X-Backside-Transport: FAIL FAIL`, y homologación SQA exige certificado emitido contra el RUC de la empresa, usuario SOL secundario con permiso de emisión y afiliación a SEE-Del-Contribuyente.
