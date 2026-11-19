@@ -2,8 +2,9 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SectionCard } from '@/components/ui/SectionCard';
+import { UbigeoCombobox } from '@/features/ubigeo/components/UbigeoCombobox';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useUpdateCompanySettings } from '../hooks/use-update-company-settings';
 import {
   type CompanySettingsFormValues,
@@ -24,6 +25,7 @@ export function SettingsCompanyForm({
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<CompanySettingsFormValues>({
@@ -32,6 +34,7 @@ export function SettingsCompanyForm({
       ruc: settings.ruc ?? '',
       legalName: settings.legalName ?? '',
       address: settings.address ?? '',
+      ubigeo: settings.ubigeo ?? '',
       facturaSeries: settings.facturaSeries,
       boletaSeries: settings.boletaSeries,
     },
@@ -71,6 +74,21 @@ export function SettingsCompanyForm({
                 {errors.address.message}
               </p>
             )}
+          </div>
+          <div className="sm:col-span-2">
+            <Controller
+              name="ubigeo"
+              control={control}
+              render={({ field }) => (
+                <UbigeoCombobox
+                  id="ubigeo"
+                  label="Ubigeo del domicilio fiscal"
+                  value={field.value || null}
+                  onChange={(code) => field.onChange(code ?? '')}
+                  error={errors.ubigeo?.message}
+                />
+              )}
+            />
           </div>
         </div>
       </SectionCard>
