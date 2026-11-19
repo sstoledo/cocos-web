@@ -5,6 +5,7 @@ const validValues = {
   ruc: '20100070970',
   legalName: 'Cocos SAC',
   address: 'Av. Principal 123',
+  ubigeo: '150122',
   facturaSeries: 'F001',
   boletaSeries: 'B001',
 };
@@ -48,5 +49,25 @@ describe('companySettingsSchema', () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it('accepts an empty ubigeo while it is not configured yet', () => {
+    const result = companySettingsSchema.safeParse({
+      ...validValues,
+      ubigeo: '',
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a ubigeo that is not 6 digits', () => {
+    for (const ubigeo of ['15010', '1501222', 'abcdef', '15-012']) {
+      const result = companySettingsSchema.safeParse({
+        ...validValues,
+        ubigeo,
+      });
+
+      expect(result.success).toBe(false);
+    }
   });
 });

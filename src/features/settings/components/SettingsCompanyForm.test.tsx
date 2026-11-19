@@ -12,10 +12,18 @@ const mockSettings = {
   ruc: null,
   legalName: null,
   address: null,
+  ubigeo: null,
   facturaSeries: 'F001',
   boletaSeries: 'B001',
   createdAt: '2026-11-16T00:00:00.000Z',
   updatedAt: '2026-11-16T00:00:00.000Z',
+};
+
+const MIRAFLORES = {
+  code: '150122',
+  department: 'Lima',
+  province: 'Lima',
+  district: 'Miraflores',
 };
 
 function wrapper({ children }: { children: React.ReactNode }) {
@@ -27,12 +35,41 @@ function wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Bodies of the PATCH calls to the settings endpoint. */
+const patchBodies = () =>
+  vi
+    .mocked(globalThis.fetch)
+    .mock.calls.filter(
+      ([input, init]) =>
+        String(input).includes('/settings/company') &&
+        (init as RequestInit | undefined)?.method === 'PATCH'
+    )
+    .map(([, init]) => (init as RequestInit).body as string);
+
 describe('SettingsCompanyForm', () => {
   beforeEach(() => {
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(mockSettings),
-    });
+    globalThis.fetch = vi.fn((input: RequestInfo | URL) => {
+      const url = String(input);
+
+      if (url.includes('/ubigeos/150122')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(MIRAFLORES),
+        });
+      }
+
+      if (url.includes('/ubigeos?')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve([MIRAFLORES]),
+        });
+      }
+
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockSettings),
+      });
+    }) as unknown as typeof fetch;
   });
 
   it('renders the fiscal fields with the current settings', () => {
@@ -40,6 +77,9 @@ describe('SettingsCompanyForm', () => {
 
     expect(screen.getByLabelText('RUC')).toBeInTheDocument();
     expect(screen.getByLabelText('Razón social')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Ubigeo del domicilio fiscal')
+    ).toBeInTheDocument();
     expect(screen.getByLabelText('Serie de facturas')).toHaveValue('F001');
     expect(screen.getByLabelText('Serie de boletas')).toHaveValue('B001');
   });
@@ -59,13 +99,29 @@ describe('SettingsCompanyForm', () => {
         'Configuración de la empresa actualizada correctamente'
       )
     );
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      'http://localhost:4000/api/settings/company',
-      expect.objectContaining({
-        method: 'PATCH',
-        body: expect.stringContaining('"legalName":"Cocos SAC"'),
-      })
+    expect(patchBodies()[0]).toContain('"legalName":"Cocos SAC"');
+  });
+
+  it('sends the configured ubigeo untouched', async () => {
+    const user = userEvent.setup();
+    render(
+      <SettingsCompanyForm settings={{ ...mockSettings, ubigeo: '150122' }} />,
+      {
+        wrapper,
+      }
     );
+
+    expect(
+      await screen.findByDisplayValue('Miraflores, Lima, Lima (150122)')
+    ).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText('Razón social'), 'Cocos SAC');
+    await user.click(
+      screen.getByRole('button', { name: 'Guardar configuración' })
+    );
+
+    await waitFor(() => expect(patchBodies()).toHaveLength(1));
+    expect(patchBodies()[0]).toContain('"ubigeo":"150122"');
   });
 
   it('rejects an invalid RUC without submitting', async () => {
@@ -81,6 +137,6 @@ describe('SettingsCompanyForm', () => {
     await waitFor(() =>
       expect(screen.getByText(/dígito verificador válido/)).toBeInTheDocument()
     );
-    expect(globalThis.fetch).not.toHaveBeenCalled();
+    expect(patchBodies()).toHaveLength(0);
   });
 });

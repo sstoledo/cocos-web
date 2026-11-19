@@ -18,6 +18,12 @@ export const companySettingsSchema = z.object({
     .string()
     .trim()
     .max(200, 'La dirección no puede tener más de 200 caracteres'),
+  ubigeo: z
+    .string()
+    .trim()
+    .refine((value) => value === '' || /^\d{6}$/.test(value), {
+      message: 'El ubigeo debe tener 6 dígitos',
+    }),
   facturaSeries: z
     .string()
     .trim()
